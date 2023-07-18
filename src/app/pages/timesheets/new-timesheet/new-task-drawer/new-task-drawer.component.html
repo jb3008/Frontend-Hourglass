@@ -1,0 +1,97 @@
+<div
+
+  id="kt_new_task_drawer"
+  class="bg-body"
+  data-kt-drawer="true"
+  data-kt-drawer-name="new_task_drawer"
+  data-kt-drawer-activate="true"
+  data-kt-drawer-overlay="true"
+  data-kt-drawer-width="{default:'300px', 'lg': '700px'}"
+  data-kt-drawer-direction="end"
+  data-kt-drawer-toggle="#kt_new_task_drawer_toggle"
+  data-kt-drawer-close="#kt_new_task_close"
+>
+  <div class="card shadow-none rounded-0 w-100">
+    <div class="d-flex justify-content-between px-7" >
+    <div>
+      <h3 class="card-title fw-bolder text-dark mt-4 "> 
+        Task Related to specify selected employee
+      </h3>
+      <div>Pick the assignment you'd like to incorporate into the timesheet.      </div>
+
+      <div class=" me-5 my-1 d-flex my-7">
+        <div class="symbol symbol-30px symbol-square me-3">
+          <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">DR </span>
+        </div>
+        <div>
+          <span class="d-flex text-muted fs-8">Employee</span>
+          <span class="fw-bold d-flex s-">Dianne Russell</span>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <button
+    type="button"
+    class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
+    id="kt_new_task_close"
+  >
+    <span
+      [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+      class="svg-icon svg-icon-1"
+    ></span>
+  </button>
+    
+  <div class="card-body position-relative pt-0"  id="kt_new_task_body">
+    <input type="input" placeholder="Search a task" class="form-control py-2 fs- fw-normal">    
+      
+    <div class="border">
+      <table mat-table [dataSource]="dataSource" class="table table-row-bordered text-gray-600">
+
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select"  class="align-middle">
+        <th mat-header-cell *matHeaderCellDef  class="align-middle">
+          <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        [aria-label]="checkboxLabel()"  color="primary">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row"  class="align-middle">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)"
+                        [aria-label]="checkboxLabel(row)" color="primary"> 
+          </mat-checkbox>
+        </td>
+      </ng-container>
+    
+      <!-- Position Column -->
+      <ng-container matColumnDef="taskname">
+        <th mat-header-cell *matHeaderCellDef  class="align-middle"> Task Name </th>
+        <td mat-cell *matCellDef="let element"  class="align-middle"> 
+          <span  class="badge badge-light-primary">{{element.taskname}} </span>
+          Some Task Name goes here
+        </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-light h-35px"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          (click)="selection.toggle(row)">
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons 
+    aria-label="Select page of periodic elements">
+</mat-paginator>
+  </div>
+
+  </div>
+   
+  </div>
+  <!-- <div class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_new_task_footer">
+    <button type="reset" class="btn  btn-sm btn-outline" id="kt_new_task_close">Cancel</button>
+    <button type="reset" class="btn  btn-sm btn-primary w-100px">Send</button>
+  </div> -->
+</div>

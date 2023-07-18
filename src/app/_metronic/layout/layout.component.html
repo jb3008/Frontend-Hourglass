@@ -1,0 +1,44 @@
+<!--begin::App-->
+<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+    <!--begin::Page-->
+    <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+      <ng-container *ngIf="appHeaderDisplay">
+        <!--begin::Header-->
+        <app-header id="kt_app_header" class="app-header " [ngClass]="appHeaderDefaultClass" data-kt-fixed="true">
+        </app-header>
+        <!--end::Header-->
+      </ng-container>
+  
+      <!--begin::Wrapper-->
+      <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+        <!-- <app-toolbar class="app-toolbar" [ngClass]="appToolbarCSSClass" id="kt_app_toolbar"
+        [appToolbarLayout]="appToolbarLayout"></app-toolbar> -->
+
+ <!--begin::sidebar-->
+ <!-- <app-sidebar #ktSidebar id="kt_app_sidebar" class="app-sidebar" [ngClass]="appSidebarDefaultClass">
+</app-sidebar> -->
+<!--end::sidebar-->
+
+      <div  >  <app-content id=" kt_app_content" class="app-content" [ngClass]="contentCSSClasses"
+        [contentContainerCSSClass]="'contentContainerCSSClass'" [appContentContiner]="'fluid'"
+        [appContentContainerClass]="appContentContainerClass">
+      </app-content></div>
+      </div>
+      <!--end::Wrapper-->
+      <app-footer class="app-footer" [ngClass]="appFooterCSSClass" id="kt_app_footer"
+      [appFooterContainerCSSClass]="appFooterContainerCSSClass"></app-footer>
+    </div>
+    <!--end::Page-->
+  </div>
+  <!--end::App-->
+  
+
+
+  <app-scripts-init></app-scripts-init>
+
+
+<!-- begin:: Drawers -->
+<!-- <app-activity-drawer></app-activity-drawer> -->
+  
+ 
+  

@@ -1,0 +1,146 @@
+<div *ngIf="loading" class="pause d-flex align-items-center justify-content-center">
+  <div class="spinner"></div>
+</div>
+<div
+
+  id="kt_application_drawer"
+  class="bg-body"
+  data-kt-drawer="true"
+  data-kt-drawer-name="application_drawer"
+  data-kt-drawer-activate="true"
+  data-kt-drawer-overlay="true"
+  data-kt-drawer-width="{default:'300px', 'lg': '700px'}"
+  data-kt-drawer-direction="end"
+  data-kt-drawer-toggle="#kt_application_drawer_toggle"
+  data-kt-drawer-close="#kt_application_close"
+>
+  <div class="card shadow-none rounded-0 w-100">
+    <button
+    type="button"
+    class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
+    id="kt_application_close"
+  >
+    <span
+      [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+      class="svg-icon svg-icon-1"
+    ></span>
+  </button>
+    <div class="card-body position-relative "  id="kt_activities_body">
+      <div class="d-flex  mb-6 justify-content-between">
+        <!--begin::Image-->
+        <div class="d-flex flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
+            <img class="w-100 h-100" src="../../../../../../assets/media/avatars/300-7.jpg" alt="image">
+        </div>
+        <!--end::Image-->
+
+      <div class="w-100">
+        <span class="text-muted">Application's Name</span>
+        <div  class="text-gray-800   fs-2 fw-bold">{{applicationDetails.firstName}} {{applicationDetails.lastName}}</div>
+        <a class="cursor-pointer"><span class="mb-3 badge badge-light-primary fw-normal"> Visit Profile <i class="bi bi-arrow-right"></i></span></a>
+        <div class=" row m-0">
+            <label class="col-4 col-form-label text-muted p-1">Application Id</label>
+            <div class="col-8"> <span class="  form-control-plaintext  p-1 fw-bold">{{applicationDetails.id}}</span></div>
+        </div>
+        <div class="row m-0 ">
+            <label class="col-4 col-form-label text-muted p-1">Work Experience</label>
+            <div class="col-8"> <span class="  form-control-plaintext  p-1 fw-bold">{{applicationDetails.workExpMonths}} Months</span></div>
+        </div>
+        <div class="row m-0 ">
+            <label class="col-4 col-form-label text-muted p-1">Availability</label>
+            <div class="col-8"> <span class="  form-control-plaintext  p-1 fw-bold">{{applicationDetails.availableDate | date:'MMMM d, yyyy'}}</span></div>
+        </div>
+        <div class="row m-0 ">
+            <label class="col-4 col-form-label text-muted p-1">Work Rate</label>
+            <div class="col-8"> <span class="  form-control-plaintext  p-1 fw-bold">{{applicationDetails.workRate}} {{applicationDetails.workRateCurrency}}</span></div>
+        </div>
+
+      </div>
+      <!-- <div class="w-100px ">
+        <button class="btn btn-sm d-flex flex-nowrap flex-grow-1 ">aa</button>
+        <button class="btn btn-sm d-flex flex-nowrap flex-grow-1 ">aa</button>
+        <button class="btn btn-sm d-flex flex-nowrap flex-grow-1 ">aa</button>
+      </div> -->
+
+      <div class="w-250px " *ngIf="isSelectedTab != 'Interviewed'">
+        <button class="btn btn-sm btn-primary w-100 mb-3" type="button"  id="kt_send_offer_letter_drawer_toggle" (click)="updateStatus(applicationDetails.id, 'OFFER_SENT')" > <span id="kt_application_close"> Send Offer Letter</span></button>
+        <button class="btn btn-sm btn-light-primary w-100 mb-3" type="button" (click)="updateStatus(applicationDetails.id, 'HOLD')">Hold It</button>
+        <button class="btn btn-sm btn-outline w-100 mb-3" type="button" (click)="updateStatus(applicationDetails.id, 'REJECTED')">Reject</button>
+      </div>
+    </div>
+
+
+    <h6  class="card-subtitle mb-2 ">Product Designer (UI/UX) -Test Project</h6>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+<div class="separator my-4"></div>
+
+<div  class="fw-bold    text-muted     mb-2 ">CONTACT DETAILS</div>
+
+<div class="row m-0 ">
+    <label class="col-4 col-form-label text-muted p-1">Work Phone</label>
+    <div class="col-8"> <span class="  form-control-plaintext  p-1 fw-bold">(702)199-25-95</span></div>
+</div>
+<div class="row m-0 ">
+    <label class="col-4 col-form-label text-muted p-1">Mobile Phone</label>
+    <div class="col-8"> <span class="  form-control-plaintext  p-1 fw-bold">(700)556-81-35</span></div>
+</div>
+<div class="row m-0 ">
+    <label class="col-4 col-form-label text-muted p-1">Work Email</label>
+    <div class="col-8"> <span class="  form-control-plaintext  p-1 fw-bold">lokibright@ddstudio.com</span></div>
+</div>
+<div class="row m-0 ">
+    <label class="col-4 col-form-label text-muted p-1">Personal Email</label>
+    <div class="col-8"> <span class="  form-control-plaintext  p-1 fw-bold">lokibright@outlook.com</span></div>
+</div>
+<div class="row m-0 ">
+  <label class="col-4 col-form-label text-muted p-1">Location</label>
+  <div class="col-8"> <span class="  form-control-plaintext  p-1 fw-bold">3517 W.Gray St.</span></div>
+</div>
+
+<div class="separator my-4"></div>
+
+<div  class="fw-bold    text-muted     mb-2 ">ATTACHMENTS</div>
+
+<div class="d-flex align-items-center mb-4 bg-white rounded p-3 border">
+    <span class="symbol symbol-30px align-middle mr-5 w-50px">
+        <img alt="" src="./assets/media/svg/files/pdf.svg"></span>
+        <div class="d-flex flex-column w-100 mr-2">
+            <span class="fw-bold">Loki_Bright_Resume</span>
+        </div>
+            <!-- <div class="d-flex w-sm-100 mr-2"><span class="badge badge-light-primary w-auto">Docktype name</span></div> -->
+            <div class="font-weight-bolder text-warning py-1 font-size-lg w-100px">
+                <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3">
+                    <i class="fas fa-download"></i></a>
+                    <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"><i class="far fa-eye"></i></a>
+                </div>
+            </div>
+
+
+
+
+
+<div class="separator my-4"></div>
+
+<div  class="fw-bold    text-muted     mb-2 ">REFERENCE DETAILS</div>
+
+<div class="row m-0 ">
+    <label class="col-4 col-form-label text-muted p-1">Vendor Code</label>
+    <div class="col-8"> <span class="  form-control-plaintext  p-1 fw-bold">{{applicationDetails.vendorId}}</span></div>
+</div>
+<div class="row m-0 ">
+    <label class="col-4 col-form-label text-muted p-1">Vendor Name</label>
+    <div class="col-8"> <span class="  form-control-plaintext  p-1 fw-bold">{{applicationDetails.vendorDetails?.title}}</span></div>
+</div>
+<div class="row m-0 ">
+    <label class="col-4 col-form-label text-muted p-1">Phone</label>
+    <div class="col-8"> <span class="  form-control-plaintext  p-1 fw-bold">(702)199-25-10</span></div>
+</div>
+
+
+
+    </div>
+    <!-- <div class="card-footer py-5   d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_activities_footer">
+      <button type="reset" class="btn  btn-sm btn-outline" id="kt_add_invoice_close">Cancel</button>
+      <button type="reset" class="btn  btn-sm btn-primary">Flip to Invoice</button>
+    </div> -->
+  </div>
+</div>

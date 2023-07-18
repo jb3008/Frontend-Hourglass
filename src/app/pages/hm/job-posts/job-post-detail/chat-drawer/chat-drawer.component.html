@@ -1,0 +1,149 @@
+<div
+
+  id="kt_chat_drawer"
+  class="bg-body"
+  data-kt-drawer="true"
+  data-kt-drawer-name="chat_drawer"
+  data-kt-drawer-activate="true"
+  data-kt-drawer-overlay="true"
+  data-kt-drawer-width="{default:'300px', 'lg': '700px'}"
+  data-kt-drawer-direction="end"
+  data-kt-drawer-toggle="#kt_chat_drawer_toggle"
+  data-kt-drawer-close="#kt_chat_close"
+>
+  <div class="card shadow-none rounded-0 w-100">
+    <div class="bg-light-primary px-4 pb-4 mb-5 chatShadow">
+      <div class="mt-4 d-flex">
+        <div  class="symbol symbol-40px symbol-square me-3">
+          <span  class="symbol-label fs-5 fw-bolder bg-light-danger fs-4">SL </span>
+        </div> 
+        <div>
+          <span class="d-flex text-muted fs-8">Worker</span>
+          <span class="fw-bold d-flex s-">Shirley Lopez</span>
+        </div>
+  
+      </div>
+      
+    </div>
+    <div class="d-flex justify-content-between px-7" >
+    <!-- <div class="mt-4 d-flex">
+      <div  class="symbol symbol-35px symbol-square me-3">
+        <span  class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">SL </span>
+      </div> 
+      <div>
+        <span class="d-flex text-muted fs-8">Worker</span>
+        <span class="fw-bold d-flex s-">Shirley Lopez</span>
+      </div>
+
+    </div> -->
+      <!-- <div class="card-toolbar">
+        <button
+          type="button"
+          class="btn btn-sm btn-icon btn-active-light-primary mt-5 "
+          id="kt_chat_close"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+            class="svg-icon svg-icon-1"
+          ></span>
+        </button>
+      </div> -->
+    </div>
+    <button
+    type="button"
+    class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
+    id="kt_chat_close"
+  >
+    <span
+      [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+      class="svg-icon svg-icon-1"
+    ></span>
+  </button>
+    <div class="card-body position-relative pt-0"  id="kt_activities_body">
+      <div class="timeline">
+      <!--begin::Timeline item-->
+       <div class="timeline-item">
+        <!-- <div class="timeline-line w-40px"></div> -->
+        <!--begin::Timeline icon-->
+        <div class="timeline-icon symbol symbol-square symbol-40px">
+            <div class="symbol-label badge-light-danger fs-6 fw-bolder ">
+             RR
+                </div>
+        </div>
+        <!--end::Timeline icon-->       
+    
+        <!--begin::Timeline content-->
+        <div class="timeline-content mb-8 px-1">
+                  <div class=" chatShadow text-break text-gray-800 my-1 p-3 rounded-3"> 
+                Do you provide any accomadation?
+                <div class="text-muted me-2 fs-7">12 Dec 2022  4:23 AM</div>
+                </div>
+        </div>
+        <!--end::Timeline content--> 
+    </div>
+    <!--end::Timeline item-->
+
+
+
+
+    <!--begin::Timeline item-->
+    <div class="timeline-item">
+      <!-- <div class="timeline-line w-40px"></div> -->
+    
+      <!--begin::Timeline content-->
+      <div class="timeline-content mb-8 d-flex d-flex justify-content-end">
+    
+            <div class="bg-primary text-white chatShadow text-break  my-2 p-3 rounded-3"> 
+              Yes, we have but the post is at the moment business unit in the job post.
+              <!-- <div class="text-muted me-2 fs-7">12 Dec 2022  4:23 AM</div> -->
+              </div>
+      </div>
+      <!--end::Timeline content--> 
+  </div>
+  <!--end::Timeline item-->
+    
+
+  <!--begin::Timeline item-->
+  <div class="timeline-item">
+    <!-- <div class="timeline-line w-40px"></div> -->
+    <!--begin::Timeline icon-->
+    <div class="timeline-icon symbol symbol-square symbol-40px">
+        <div class="symbol-label badge-light-danger fs-6 fw-bolder ">
+         RR
+            </div>
+    </div>
+    <!--end::Timeline icon-->       
+
+    <!--begin::Timeline content-->
+    <div class="timeline-content mb-8 px-1">
+              <div class=" chatShadow text-break text-gray-800 my-1 p-3 rounded-3"> 
+            Do you provide any accomadation?
+            <div class="text-muted me-2 fs-7">12 Dec 2022  4:23 AM</div>
+            </div>
+    </div>
+    <!--end::Timeline content--> 
+</div>
+<!--end::Timeline item-->
+
+
+
+
+  </div>
+   
+  </div>
+  <div class="card-footer py-5" id="kt_chat_footer">
+    <div class="chatShadow w-100">
+      <textarea name="" id="" cols="30" rows="7" class="chat-control p-2 fs- fw-normal" placeholder="Hit Enter to send Shift + Enter to add a new line."></textarea>
+      <div class=" d-flex text-sm-end gap-2 justify-content-end p-2 ">
+        <a class="btn btn-icon btn-active-color-primary btn-sm"><i class="bi bi-chat-dots"></i></a>
+
+        <a class="btn btn-icon btn-active-color-primary btn-sm"><i class="bi bi-paperclip fs-4"></i></a>
+        
+        <a class="btn btn-icon btn-active-color-primary btn-sm"><i class="bi bi-emoji-smile fs-5"></i></a>
+
+        <button type="reset" class="btn btn-sm btn-primary w-100px"><i class="bi bi-send"></i> Send</button>
+      </div>
+    </div>
+    <!-- <button type="reset" class="btn  btn-sm btn-outline" id="kt_chat_close">Cancel</button> -->
+  </div>
+</div>

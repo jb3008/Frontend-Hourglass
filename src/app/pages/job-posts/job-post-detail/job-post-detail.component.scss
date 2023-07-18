@@ -1,0 +1,20 @@
+:host {
+    width: 100%;
+  }
+
+
+  .chatShadow {box-shadow: 0 0 4px #bdbdbd} 
+  .chatShadowhdr {
+    box-shadow: 0px 3px 5px #bdbdbd;
+    // box-shadow:3px 1px 5px #bdbdbd,-3px 1px 5px #bdbdbd
+  } 
+  
+  .chat-control { 
+    width: 100%;
+// background-color: #bdbdbd;
+    border: 0;
+    height: 90px;
+    &:focus {outline: none;}
+  } 
+
+ 

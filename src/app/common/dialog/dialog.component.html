@@ -1,0 +1,19 @@
+<!--<h2 mat-dialog-title>Congratulations</h2>
+<mat-dialog-content class="mat-typography">
+  <h3 class="color-green">{{ message }}</h3>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <-!-- <button mat-button mat-dialog-close>Cancel</button> --!>
+  <button  type="button" class="btn btn-sm btn-primary w-100px" (click)="goTolisting()">OK</button>
+</mat-dialog-actions>
+-->
+<!-- <h2 mat-dialog-title>Alert</h2> -->
+<mat-dialog-content class="mat-typography">
+<div mat-dialog-content class="h-100 text-center">
+  <h3 class="color-green">{{ message }}</h3>
+  <div class="mt-5">
+    <button *ngIf="showCancel" class="btn btn-secondary" style="margin-right: '20px'" (click)="closeDialog(false)">Cancel</button>
+    <button class="btn btn-primary" cdkFocusInitial (click)="closeDialog(true)">OK</button>
+  </div>
+</div>

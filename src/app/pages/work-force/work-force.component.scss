@@ -1,0 +1,18 @@
+:host {
+    width: 100%;
+  }
+
+
+::ng-deep{
+  
+  @media (min-width: 576px) {
+  .modal-dialog {
+max-width: 700px;
+    .modal-header {
+      text-align: center;
+      h2{width: 100%;}
+    }
+  .modal-body {padding: 1.75rem   2.5rem;}
+  }
+}
+}

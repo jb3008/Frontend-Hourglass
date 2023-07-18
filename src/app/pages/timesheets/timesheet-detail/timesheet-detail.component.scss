@@ -1,0 +1,17 @@
+// @import "./../../../../assets/sass/";
+:host {
+    width: 100%;
+  }
+
+.custom-header{
+    background-color:#f5fbff;
+    margin-bottom: 5px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    cursor: auto;
+}
+::ng-deep{
+
+    .accordion-item{border: 0;}
+    .accordion-body{padding: 0;margin-bottom: 5px;}
+}

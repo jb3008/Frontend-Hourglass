@@ -1,0 +1,16 @@
+<svg width="62" height="62" xmlns="http://www.w3.org/2000/svg" fill="none">
+ <defs>
+  <filter id="svg_9_blur">
+   <feGaussianBlur stdDeviation="0" in="SourceGraphic"/>
+  </filter>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <path id="svg_1" fill="#E2E5E7" d="m15.5,0c-2.1313,0 -3.875,1.74375 -3.875,3.875l0,54.25c0,2.1312 1.7437,3.875 3.875,3.875l38.75,0c2.1312,0 3.875,-1.7438 3.875,-3.875l0,-42.625l-15.5,-15.5l-27.125,0z"/>
+  <path id="svg_2" fill="#B0B7BD" d="m46.5,15.5l11.625,0l-15.5,-15.5l0,11.625c0,2.1313 1.7437,3.875 3.875,3.875z"/>
+  <path id="svg_3" fill="#CAD1D8" d="m58.125,27.125l-11.625,-11.625l11.625,0l0,11.625z"/>
+  <path id="svg_4" fill="#00aa52" d="m50.375,50.30864c0,1.0656 -0.8719,1.9375 -1.9375,1.9375l-42.625,0c-1.06563,0 -1.9375,-0.8719 -1.9375,-1.9375l0,-19.375c0,-1.0656 0.87187,-1.9375 1.9375,-1.9375l42.625,0c1.0656,0 1.9375,0.8719 1.9375,1.9375l0,19.375z"/>
+  <path id="svg_8" fill="#CAD1D8" d="m48.4375,52.3125l-36.8125,0l0,1.9375l36.8125,0c1.0656,0 1.9375,-0.8719 1.9375,-1.9375l0,-1.9375c0,1.0656 -0.8719,1.9375 -1.9375,1.9375z"/>
+  <text filter="url(#svg_9_blur)" font-style="normal" font-weight="bold" xml:space="preserve" text-anchor="start" font-family="sans-serif" font-size="18" stroke-width="0" id="svg_9" y="46.89868" x="9.731" fill="#ffffff">XLS</text>
+ </g>
+</svg>

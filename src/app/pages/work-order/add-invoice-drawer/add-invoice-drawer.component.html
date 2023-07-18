@@ -1,0 +1,117 @@
+<div
+
+  id="kt_add_invoice_drawer"
+  class="bg-body"
+  data-kt-drawer="true"
+  data-kt-drawer-name="add_invoice"
+  data-kt-drawer-activate="true"
+  data-kt-drawer-overlay="true"
+  data-kt-drawer-width="{default:'300px', 'lg': '600px'}"
+  data-kt-drawer-direction="end"
+  data-kt-drawer-toggle="#kt_add_invoice_drawer_toggle"
+  data-kt-drawer-close="#kt_add_invoice_close"
+>
+  <div class="card shadow-none rounded-0">
+    <div class="d-flex justify-content-between px-7" >
+    <div>
+      <h3 class="card-title fw-bolder text-dark mt-4 mb-7"> Flip Timesheets to Invoice</h3>
+      <div> 
+        Invoice submission with Hourglass is more faster than ever,  just select the approved timesheet for the work order and flip them into an invoice.
+      </div>
+    </div>
+      <div class="card-toolbar">
+        <button
+          type="button"
+          class="btn btn-sm btn-icon btn-active-light-primary mt-5 "
+          id="kt_add_invoice_close"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+            class="svg-icon svg-icon-1"
+          ></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card-body position-relative "  id="kt_activities_body">
+        <table mat-table [dataSource]="dataSource" class="table border table-row-bordered gy-2 text-gray-600">
+          <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef class="align-middle px-4">
+        <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()"
+                      color="primary">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row" class="align-middle ps-4">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)"
+                      color="primary">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    
+          
+          <!-- timesheet Column -->
+            <ng-container matColumnDef="timesheet">
+                <th mat-header-cell *matHeaderCellDef class="align-middle w-50px pe-5"> Timesheet </th>
+                <td mat-cell *matCellDef="let element"  class="align-middle pe-5">
+                    <!-- <a routerLink="details" class=""> {{element.timesheet}} </a> -->
+                    <div class="d-flex align-items-center fw-bold cursor-pointer" routerLink="timesheets-details">
+                        <div class="symbol symbol-35px symbol-circle me-3">
+                              <span class="symbol-label fw-bolder bg-light-warning fs-4 fas fa-clipboard-list"> </span>  
+                             
+              </div> <span class="">{{element.timesheet}}</span>
+                       
+                    </div>
+                    <div>
+                    </div>
+                </td>
+            </ng-container>
+
+         
+
+
+            <!-- period Column -->
+            <ng-container matColumnDef="period">
+                <th mat-header-cell *matHeaderCellDef class="align-middle"> Period </th>
+                <td mat-cell *matCellDef="let element" class="align-middle"> {{element.period}} </td>
+            </ng-container>
+
+            <!-- workerhr Column -->
+            <ng-container matColumnDef="workerhr">
+                <th mat-header-cell *matHeaderCellDef class="align-middle w-100px">Worker (hr) </th>
+                <td mat-cell *matCellDef="let element" class="align-middle">
+                    <span class="fw-bold"> {{element.workerhr}}</span> </td>
+            </ng-container>
+
+
+            <!-- status Column -->
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef class="align-middle"> Status </th>
+                <td mat-cell *matCellDef="let element" class="align-middle">
+                    <span class="badge badge-light-danger" 
+                    [ngClass]="{' badge-light-warning': element.status === 'In-progress', 'badge-light-success' : element.status === 'Approved' , 'badge-light-danger' : element.status === 'Rejected' }">{{element.status}}</span>
+                </td>
+            </ng-container>
+
+        
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns" class=" fw-bold text-muted"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+
+
+
+    </div>
+    <div class="card-footer py-5   d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_activities_footer">
+      <button type="reset" class="btn  btn-sm btn-outline" id="kt_add_invoice_close">Cancel</button>
+      <button type="reset" class="btn  btn-sm btn-primary">Flip to Invoice</button>
+    </div>
+  </div>
+</div>

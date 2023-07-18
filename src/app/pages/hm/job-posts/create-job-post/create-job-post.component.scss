@@ -1,0 +1,10 @@
+:host {
+    width: 100%;
+  }
+
+  
+  .minus-icon{transform:rotate(45deg)}
+
+  ::ng-deep.mat-select-arrow {
+    display: none;
+  }

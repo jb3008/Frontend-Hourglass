@@ -1,0 +1,77 @@
+::ng-deep{
+
+    :host {
+        width: 100%;
+    }
+}
+.tolbar{
+    background-color: white;
+    margin-left: -15px;
+    margin-right: -15px;
+    // r-bottom: ;
+}
+
+
+
+
+
+.input-icon span {
+    left: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    width: calc(1.5em + 1.3rem + 2px);
+}
+.input-icon.input-icon-right span {
+    right: 0;
+    left: auto;
+}
+.pspw60{ width: 60%;}
+.pspmw90{ width: 90%;}
+.pspmw95{ max-width: 95%;}
+
+.pspdrawerclose{
+    margin-left: -34px;
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    opacity: 1;
+    border-radius: 0;
+}
+.input-icon span.pspinpClose{right: 0; left: unset; position: absolute;}
+.drawer{
+    background-color: #1e1e2d;
+    padding: 0 0px;
+    }
+// ::ng-deep{
+    .drawer{
+    .q_hdr_menu{
+        padding:0!important;
+        margin: 0!important;
+        .q_hdr{
+            background-color: #0b4a6f;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .q_menu  {
+            margin: 5px 20px !important;
+        }
+    }
+       
+        }
+
+// .menu-link {
+//     margin: 20px 0;
+//     &.active{background-color: #2A2A3C;}
+// }
+    
+// }
