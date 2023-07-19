@@ -1,15 +1,15 @@
 <div class="border-bottom tolbar mb-6 px-4   d-flex align-items-stretch justify-content-between">
     <div class="d-flex">
         <h4 class="pt-4 me-20">Work Force</h4>
-    <ul class="nav nav-line-tabs nav-line-tabs-1x nav-stretch ">
+    <ul class="nav nav-line-tabs nav-line-tabs-1x nav-stretch">
         <li class="nav-item">
             <a  class="nav-link px-4 cursor-pointer fw-bold active">Engaged Worker</a>
         </li>
         <li class="nav-item">
-            <a  class="nav-link px-4 cursor-pointer ">Free Worker </a>
+            <a  class="nav-link px-4 cursor-pointer">Free Worker </a>
         </li>
         <li class="nav-item">
-            <a  class="nav-link px-4 cursor-pointer "> All Worker </a>
+            <a  class="nav-link px-4 cursor-pointer"> All Worker </a>
         </li>
         
     </ul>
@@ -21,76 +21,80 @@
 <!-- end:: Modal example -->
     </div>
     <app-modal #modal [modalConfig]="modalConfig" style="max-width: 777px;" data-nnn="">
-        <div class="container  mb-6 " >
+        <form [formGroup]="workForceData">
+        <div class="container  mb-6">
             <div class="row justify-content-between">
                 <div class="col-6 p-0 pe-4">
                     <div class="form-group">
-                        <label class="mb-1">First Name </label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Fiirst Name">
+                        <label class="mb-1">First Name <span class="text-danger">*</span> </label>
+                        <input type="text"  formControlName="firstName" class="form-control py-2 fs- fw-normal" placeholder="Fiirst Name">
                     </div>
                 </div>
                 <div class="col-6 p-0  ps-4">
                     <div class="form-group">
-                        <label class="mb-1">Last Name</label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Last Name">
+                        <label class="mb-1">Last Name <span class="text-danger">*</span></label>
+                        <input type="text" formControlName="lastName" class="form-control py-2 fs- fw-normal" placeholder="Last Name">
                     </div>
                 </div>
             </div>
         </div>
 
        
-        <div class="container  mb-6 " >
+        <div class="container  mb-6">
             <div class="row justify-content-between">
                 <div class="col-6 p-0 pe-4">
                     <div class="form-group">
-                        <label class="mb-1">Work Email ID </label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Work Email ID">
+                        <label class="mb-1">Work Email ID <span class="text-danger">*</span></label>
+                        <input type="text" formControlName="workEmail" class="form-control py-2 fs- fw-normal" placeholder="Work Email ID">
                     </div>
                 </div>
                 <div class="col-6 p-0  ps-4">
                     <div class="form-group">
-                        <label class="mb-1">Professional Email ID</label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Professional Email ID">
+                        <label class="mb-1">Professional Email ID <span class="text-danger">*</span></label>
+                        <input type="text" formControlName="personalEmail" class="form-control py-2 fs- fw-normal" placeholder="Professional Email ID">
                     </div>
                 </div>
             </div>
         </div>
 
        
-        <div class="container  mb-6 " >
+        <div class="container  mb-6">
             <div class="row justify-content-between">
                 <div class="col-6 p-0 pe-4">
                     <div class="form-group">
                         <label class="mb-1">Work Phone </label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Work Phone">
+                        <input type="text" formControlName="workPhone" class="form-control py-2 fs- fw-normal" placeholder="Work Phone">
                     </div>
                 </div>
                 <div class="col-6 p-0  ps-4">
                     <div class="form-group">
                         <label class="mb-1">Mobile Phone</label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Mobile Phone">
+                        <input type="text" formControlName="mobilePhone" class="form-control py-2 fs- fw-normal" placeholder="Mobile Phone">
                     </div>
                 </div>
             </div>
         </div>
 
        
-        <div class="container  mb-6 " >
+        <div class="container  mb-6">
             <div class="row justify-content-between">
                 <div class="col-6 p-0 pe-4">
                     <div class="form-group">
-                        <label class="mb-1">Date of Birth </label>
-                        <div class="input-icon position-relative input-icon-right">
-
-                            <input type="text" class="form-control   py-2 fs- fw-normal" placeholder="Date of Birth ">
-                            <span><i class="fa fa-search"></i></span>
+                        <label class="mb-1">Date of Birth <span class="text-danger">*</span></label>
+                        <div class="input-icon position-relative date-text input-icon-right">
+                      
+                            <input formControlName="dateOfBirth" type="text" class="form-control  py-2 fs- fw-normal" (click)="dob.open()"
+                                [matDatepicker]="dob" placeholder="Date of Birth">
+                            <span><i class="far fa-calendar"></i></span>
+                            <mat-datepicker #dob></mat-datepicker>
+                          
                         </div>
                     </div>
                 </div>
                 <div class="col-6 p-0  ps-4">
                     <div class="form-group">
                         <label class="mb-1">Blood Group</label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Blood Group">
+                        <input type="text" formControlName="bloodGroup"  class="form-control py-2 fs- fw-normal" placeholder="Blood Group">
                     </div>
                 </div>
             </div>
@@ -98,25 +102,35 @@
 
        
         <div class="form-group mb-6">
-            <label class="mb-1">Designation </label>
-            <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Designation">
+            <label class="mb-1">Designation <span class="text-danger">*</span> </label>
+            <input type="text" formControlName="designation" class="form-control py-2 fs- fw-normal" placeholder="Designation">
         </div>
         
         <div class="form-group mb-6">
             <label class="mb-1">Location </label>
-            <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Location">
+            <input type="text" formControlName="location"  class="form-control py-2 fs- fw-normal" placeholder="Location">
         </div>
 
         <div class="form-group mb-6">
             <label class="mb-1">Current Address </label>
-            <textarea name="" id="" cols="30" rows="3"  class="form-control   py-2 fs- fw-normal"></textarea>
+            <textarea name="" id="" formControlName="currentAddress" cols="30" rows="3"  class="form-control   py-2 fs- fw-normal"></textarea>
         </div>
         <div class="form-group mb-6">
             <label class="mb-1">Parmanent Address </label>
-            <textarea name="" id="" cols="30" rows="3"  class="form-control   py-2 fs- fw-normal"></textarea>
+            <textarea name="" id=""  formControlName="permanentAddress" cols="30" rows="3"  class="form-control   py-2 fs- fw-normal"></textarea>
         </div>
-
-      
+        <div class="modal-footer bg-light p-3 px-5">
+        <button type="button" class="btn btn-outline-secondary" 
+           
+           >
+            Cancel
+        </button>
+        <button type="button" class="btn btn-primary" (click)="save()"
+          >
+          Save
+        </button>
+        </div>
+    </form>
        
       </app-modal>
     <div class="content flex-column-fluid auto container-lg mb-4">
@@ -134,14 +148,14 @@
                         data-kt-menu-trigger="click"
                         data-kt-menu-placement="bottom-end"
                         data-kt-menu-flip="top-end"
-                      >
+                     >
                       <span class="material-symbols-outlined">
                         more_vert
                         </span>
                       </button>
                    
                     </div>
-                    <div class="card-body text-center pt-4 cursor-pointer" routerLink="worker-profile" >
+                    <div class="card-body text-center pt-4 cursor-pointer" routerLink="worker-profile">
                         <!--begin::Toolbar-->
                   
                         <!--end::Toolbar-->

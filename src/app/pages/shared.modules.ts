@@ -1,8 +1,8 @@
-import { NgModule } from "@angular/core";
-import { DropzoneDirective } from "./directive/dropzone.directive";
+import { NgModule } from '@angular/core';
+import { DropzoneDirective } from './directive/dropzone.directive';
 
 @NgModule({
-    exports: [DropzoneDirective],
-    declarations: [DropzoneDirective]
-  })
-  export class SharedModule {}
+  exports: [DropzoneDirective],
+  declarations: [DropzoneDirective],
+})
+export class SharedModule {}

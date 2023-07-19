@@ -31,6 +31,9 @@ export class ModalComponent {
       this.modalRef.close(result);
     }
   }
+  async closeModal(): Promise<void> {
+    this.modalRef.close();
+  }
 
   async dismiss(): Promise<void> {
     if (this.modalConfig.disableDismissButton !== undefined) {
