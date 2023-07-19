@@ -15,7 +15,7 @@ export class ApiCallsService {
   constructor(private http: HttpClient) {
     const token: any = this.getAuthFromLocalStorage();
     this._headers = new HttpHeaders({
-      Authorization: token.token,
+      Authorization: `Bearer ${token.token}`,
     });
   }
 
