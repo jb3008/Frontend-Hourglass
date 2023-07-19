@@ -1,4 +1,4 @@
-import { AfterViewInit,Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit,ChangeDetectorRef,Component, OnInit, ViewChild } from '@angular/core';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { DrawerComponent, ToggleComponent } from 'src/app/_metronic/kt/components';
@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
 export class NewWorkOrderComponent implements OnInit, AfterViewInit {
 
   constructor(private fb: FormBuilder, private apiCalls: ApiCallsService, private utils: Utils, private snackBar: MatSnackBar,
-    private dialog: MatDialog, private router: Router) { }
+    private dialog: MatDialog, private router: Router, private cdr: ChangeDetectorRef) { }
 
   endpoints = EndPoints;
   hiringManager: any[] = [];
@@ -33,7 +33,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   siteList: any[] = [];
   businessUnits: any[] = [];
   jobLists: any[] = [];
-  vendorList: any;
+  vendorList: any[] = [];
   workOrderData: FormGroup;
   
   ngOnInit(): void {
@@ -60,7 +60,8 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     });
     
     const userId = this.utils.getUser()!;
-    this.getUserByUserId(userId);
+    // this.getUserByUserId(userId);
+    this.vendorsList();
     this.getHiringManagers();
     this.getAllJobs();
     this.getJobType();
@@ -189,15 +190,12 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((response) => {
-        this.vendorsList(response.vendorId);
+        // this.vendorsList(response.vendorId);
       });
   }
   
-  vendorsList(id: any){
-    let queryParam = {
-      vendorCode : id
-    }
-    this.apiCalls.get(this.endpoints.GET_VENDORS_LIST, queryParam)
+  vendorsList(){
+    this.apiCalls.get(this.endpoints.GET_VENDORS_LIST)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the vendors');
@@ -314,7 +312,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
 
   openSuccessPopup(status: string){
     let msg;
-    if(status == 'active'){
+    if(status == 'ACTIVE'){
       msg = 'Your Work Order is successfully created'
     }
 
@@ -330,12 +328,31 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     return utcDate;
   }
 
+  getTaskList(obj?: any){
+    this.isLoading = true;
+    this.apiCalls.get(this.endpoints.TASK_LIST_HM, obj)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(this.snackBar, 'failed to get the task list');
+          this.isLoading = false;
+          this.cdr.detectChanges();
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.dataSource = new MatTableDataSource<any>(response);
+        this.dataSource.paginator = this.paginator;
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      });
+  }
+
   editor = InlineEditor;
   // data: any = `<p>Hello, world!</p>`;
   data: any = '';
 
-  displayedColumns: string[] = ['taskId', 'taskName', 'priority', 'assignTo','startDate',  'eta'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = ['taskId', 'title', 'priority', 'assigneeId', 'startDate', 'finishDate'];
+  dataSource = new MatTableDataSource<any>;
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

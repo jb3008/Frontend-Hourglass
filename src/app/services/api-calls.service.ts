@@ -32,7 +32,12 @@ export class ApiCallsService {
       headers: this._headers,
     });
   }
-
+  
+  delete(endpoint: any, queryParams?: any): Observable<any> {
+    return this.http.delete(`${this.host_url}${endpoint}`, {
+      params: queryParams,
+    });
+    
   private getAuthFromLocalStorage(): AuthModel | undefined {
     try {
       const lsValue = localStorage.getItem(this.authLocalStorageToken);

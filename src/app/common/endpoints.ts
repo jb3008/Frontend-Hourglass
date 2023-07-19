@@ -28,7 +28,7 @@ const EndPoints = {
   ALL_WORK_ORDERS: '/hourglass/work-order/listWorkOrders.api',
   WORK_ORDER_STATUS: '/hourglass/work-order/listWorkOrderStatus',
   CREATE_WORK_ORDER: '/hourglass/work-order/create.api',
-  GET_VENDORS_LIST: '/vendor/getVendorDetails.api',
+  GET_VENDORS_LIST: '/vendor/listAllVendors',
   SEND_JOB_OFFER: '/hourglass/job-offer/create.api',
   GET_DOCUMENTS: '/hourglass/document/list',
   GET_APPL_DETAILS:
@@ -42,6 +42,10 @@ const EndPoints = {
   CREATE_WORK_FORCE: '/hourglass/work-force/create.api',
   LIST_WORK_FORCE: '/hourglass/work-force/listAllWorkForce.api',
   GET_WORK_FORCE: '/hourglass/work-force/getWorkForce',
+  TASK_LIST_HM: '/hourglass/task/listTasks.api',
+  CREATE_TASK: '/hourglass/task/create.api',
+  UPDATE_TASK: '/hourglass/task/updateTask.api',
+  DELETE_TASK: '/hourglass/task/delete.api'
 };
 
 export default EndPoints;

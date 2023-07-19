@@ -28,7 +28,7 @@
                             Details </a></li>
 
                     <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6"
-                            (click)="getSelectedTab('Task')" [ngClass]="{'active': isSelectedTab=='Task'}">Task
+                            (click)="getSelectedTab('Task'); getTaskList()" [ngClass]="{'active': isSelectedTab=='Task'}">Task
                         </a></li>
 
                 </ul>
@@ -94,8 +94,8 @@
                         <label class="col-4">Vendor <span class="text-danger">*</span></label>
                         <div class="col-8">
                             <mat-select formControlName="vendor" placeholder="Select" class="form-select fs- py-2">
-                                <mat-option [value]="vendorList?.vendorId">
-                                    {{vendorList?.vendorId}} - {{vendorList?.registerId}}
+                                <mat-option *ngFor="let vendor of vendorList" [value]="vendor?.vendorId">
+                                    {{vendor?.vendorId}} - {{vendor?.registerId}}
                                 </mat-option>
                             </mat-select>
                         </div>
@@ -324,15 +324,15 @@
                         <ng-container matColumnDef="taskId">
                             <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-hash"></i> Task
                                 Id </th>
-                            <td mat-cell *matCellDef="let element" class="align-middle" routerLink="details">
+                            <td mat-cell *matCellDef="let element" class="align-middle">
                                 {{element.taskId}} </td>
                         </ng-container>
 
                         <!-- taskName Column -->
-                        <ng-container matColumnDef="taskName">
+                        <ng-container matColumnDef="title">
                             <th mat-header-cell *matHeaderCellDef class="align-middle"><i
                                     class="bi bi-file-earmark-font"></i> Task Name </th>
-                            <td mat-cell *matCellDef="let element" class="align-middle"> {{element.taskName}} </td>
+                            <td mat-cell *matCellDef="let element" class="align-middle"> {{element.title}} </td>
                         </ng-container>
 
 
@@ -341,38 +341,39 @@
                             <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-tag"></i>
                                 Priority </th>
                             <td mat-cell *matCellDef="let element" class="align-middle">
-                                <span class="badge badge-light-danger" [ngClass]="{' badge-light-danger text-danger': (element.priority === 'High' || element.priority === 'Medium'),
-                 'badge-light-success text-success' : element.priority === 'Low'  }">
-                                    <i class="fas fa-yin-yangfas fa-circle px-1 fs-10" [ngClass]="{'text-danger': (element.priority === 'High' || element.priority === 'Medium'),
-                 'text-success' : element.priority === 'Low'  }"></i>
-
-                                    {{element.priority}}</span>
-
+                                <span class="badge badge-light-danger" 
+                                [ngClass]="{' badge-light-danger text-danger': (element.priority === 'High' || element.priority === 'Medium'),
+                                'badge-light-success text-success' : element.priority === 'Low'  }">
+                                <i class="fas fa-yin-yangfas fa-circle px-1 fs-10"
+                                [ngClass]="{'text-danger': (element.priority === 'High' || element.priority === 'Medium'),
+                                'text-success' : element.priority === 'Low'  }"></i>
+                                
+                                {{element.priority}}</span>
                             </td>
                         </ng-container>
 
                         <!-- assignTo Column -->
-                        <ng-container matColumnDef="assignTo">
+                        <ng-container matColumnDef="assigneeId">
                             <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-person"></i>
                                 Assign To </th>
                             <td mat-cell *matCellDef="let element" class="align-middle">
                                 <div class="symbol symbol-30px symbol-square me-3">
-                                    <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">SL </span>
-                                </div> {{element.assignTo}}
+                                    <!-- <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">SL </span> -->
+                                </div> {{element.assigneeId}}
                             </td>
                         </ng-container>
 
                         <!-- startDate Column -->
                         <ng-container matColumnDef="startDate">
                             <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> Start Date </th>
-                            <td mat-cell *matCellDef="let element" class="align-middle"> {{element.startDate}} </td>
+                            <td mat-cell *matCellDef="let element" class="align-middle"> {{element.startDate | date: 'MMM dd, yyyy'}} </td>
                         </ng-container>
 
                         <!-- eta Column -->
-                        <ng-container matColumnDef="eta">
+                        <ng-container matColumnDef="finishDate">
                             <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i>
                                 ETA. </th>
-                            <td mat-cell *matCellDef="let element" class="align-middle"> {{element.eta}} </td>
+                            <td mat-cell *matCellDef="let element" class="align-middle"> {{element.finishDate | date: 'MMM dd, yyyy'}} </td>
                         </ng-container>
 
                   
@@ -391,7 +392,7 @@
                 <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
                     <button type="reset" class="btn">Cancel</button>
                     <button type="reset" class="btn btn-light-primary ">Save as Draft</button>
-                    <button type="button" class="btn btn-primary" (click)="submitWorkOrder('active')">Submit</button>
+                    <button type="button" class="btn btn-primary" (click)="submitWorkOrder('ACTIVE')">Submit</button>
                 </div>
 
         </div>

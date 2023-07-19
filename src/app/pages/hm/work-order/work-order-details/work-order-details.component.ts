@@ -1,4 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -16,22 +18,35 @@ import { Utils } from 'src/app/services/utils';
 })
 export class WorkOrderDetailsComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute,private utils: Utils, private snackBar: MatSnackBar, private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef) { }
+  constructor(private route: ActivatedRoute,private utils: Utils, private snackBar: MatSnackBar, private dialog: MatDialog, private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef) { }
 
   endpoints = EndPoints;
   workOrderID: any;
   loading = false;
   workOrderDetails: any;
   documentsList: any[] = [];
+  statusLists: any[] = [];
+  taskDetails: any;
+  dataSource = new MatTableDataSource<any>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   timeSheetFrequencyList: any = {'W': 'Weekly', '2W': 'Bi-Weekly', 'M': 'Monthly'};
+
+  filterObj: FilterObj = {}
+
+  filterValue: FilterValue = {
+    priority: 'All Priorities',
+    status: 'All Status'
+  } as FilterValue;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(param => {
       this.workOrderID = param['workOrderId'];
     });
     this.getWorkOrderDetails();
+    this.getAllStatus();
   }
 
+  
   isSelectedTab:string ='Details';
   getSelectedTab(tab:string): void {
     console.log(tab)
@@ -91,12 +106,208 @@ export class WorkOrderDetailsComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  displayedColumns: string[] = ['taskId', 'taskName', 'priority', 'assignTo','timeSpent',  'eta', 'lastUpdate', 'status', 'action'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  getTaskList(obj?: any){
+    this.loading = true;
+    this.apiCalls.get(this.endpoints.TASK_LIST_HM, obj)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(this.snackBar, 'failed to get the task list');
+          this.loading = false;
+          this.cdr.detectChanges();
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.dataSource = new MatTableDataSource<any>(response);
+        this.dataSource.paginator = this.paginator;
+        this.loading = false;
+        this.cdr.detectChanges();
+      });
+  }
+
+  getAllStatus(){
+    this.apiCalls.get(this.endpoints.WORK_ORDER_STATUS)
+    .pipe(
+      catchError(async (err) => {
+        this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the work order status');
+        throw err;
+      })
+    )
+    .subscribe((response) => {
+      this.statusLists = response;
+      this.cdr.detectChanges();
+    });
+  }
+
+  applySearchFilter(event: any){
+    if(event.target.value){
+      this.filterObj.taskId = event.target.value;
+      this.getTaskList(this.filterObj);
+    }else{
+      if (Object.keys(this.filterObj).length > 0) {
+        delete this.filterObj.taskId;
+        this.getTaskList(this.filterObj);
+      } else {
+        this.clearSearch('taskId');
+      }
+    }
+  }
+
+  filterByPriority(event: any){
+    if(event.value == 'All Priorities'){
+      this.filterObj.priority = [];
+    }else{
+      this.filterObj.priority = event.value;
+    }
+    this.getTaskList(this.filterObj);
+  }
+
+  filterByAssignee(event: any){
+    console.log(this.filterObj);
+    if(event.target.value && event.target.value.length >= 3){
+      this.filterObj.assigneeId = event.target.value;
+      this.getTaskList(this.filterObj);
+    }else{
+      if (Object.keys(this.filterObj).length > 0) {
+        delete this.filterObj.assigneeId;
+        this.getTaskList(this.filterObj);
+      } else {
+        this.clearSearch('assigneeId');
+      }
+    }
+  }
+
+  filterByStatus(event: any){
+    if(event.value == 'All Status'){
+      this.filterObj.status = [];
+    }else{
+      this.filterObj.status = event.value;
+    }
+    this.getTaskList(this.filterObj);
+  }
+
+  filterByDate(event: any, dateType: 'finishDate'){
+    let date = this.changeDateToUtc(event);
+    this.filterObj[dateType] = date;
+    this.getTaskList(this.filterObj);
+  }
+
+  changeDateToUtc(dateObj: any){
+    const date = new Date(dateObj);
+    const utcDate = date.toISOString();
+    return utcDate;
+  }
+
+  truncateText(text: string, maxLength: number): string {
+    if (!text) return '';
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  }
+  
+  clearFilters(){
+    delete this.filterObj.taskId;
+    delete this.filterObj.assigneeId;
+    delete this.filterObj.priority;
+    delete this.filterObj.finishDate;
+    this.filterObj.status = [];
+    this.filterObj.priority = [];
+    this.filterValue.status = 'All Status';
+    this.filterValue.priority = 'All Priorities';
+    this.filterValue.taskId = '';
+    this.filterValue.assigneeId = '';
+    this.filterValue.finishDate = '';
+    this.getTaskList();
+  }
+
+  clearSearch(val: keyof FilterObj) {
+    delete this.filterObj[val];
+    this.getTaskList();
+  }
+
+  editTask(id: string){
+    this.loading = true;
+    let queryObj = {
+      taskId: id
+    }
+    this.apiCalls.get(this.endpoints.TASK_LIST_HM, queryObj)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(this.snackBar, 'failed to get the task details');
+          this.loading = false;
+          this.cdr.detectChanges();
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.taskDetails = response[0];
+        this.loading = false;
+        this.cdr.detectChanges();
+      });
+  }
+
+  deleteTask(id: string){
+    let msg = 'Do you want to delete this task?';
+    this.utils.showDialogWithCancelButton(this.dialog, msg, (res: any) => {
+      this.loading = false;
+      if(res){
+        this.deleteTheTask(id)
+      }
+      this.cdr.detectChanges();
+    });
+  }
+
+  deleteTheTask(id: string){
+    this.loading = true;
+    let queryObj = {
+      id : id
+    }
+    this.apiCalls.delete(this.endpoints.DELETE_TASK, queryObj)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(this.snackBar, 'failed to delete the task');
+          this.loading = false;
+          this.cdr.detectChanges();
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.loading = false;
+        setTimeout(() => {
+          this.openSuccessPopup();
+        }, 100);
+        this.cdr.detectChanges();
+      });
+  }
+
+  openSuccessPopup(){
+    let msg = 'Your Task is successfully deleted';
+    this.utils.showDialog(this.dialog, msg, () => {
+      this.loading = false;
+      this.getTaskList();
+      this.cdr.detectChanges();
+    });
+  }
+
+  displayedColumns: string[] = ['taskId', 'title', 'priority', 'assigneeId','timeSpent',  'finishDate', 'lastUpdate', 'status', 'action'];
+  // dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
 
 }
 
+type FilterValue = {
+  taskId?: string,
+  priority?: string,
+  assigneeId?: string,
+  status?: string,
+  finishDate?: string
+};
+
+type FilterObj = {
+  taskId?: string,
+  priority?: string[],
+  assigneeId?: string,
+  status?: string[],
+  finishDate?: string
+};
 
 export interface PeriodicElement {
   taskId: number;
