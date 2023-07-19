@@ -62,7 +62,7 @@
   <ng-container *ngIf="!hasError">
     <div class="mb-10 bg-light-info p-8 rounded">
       <div class="text-info">
-        Use account <strong>{{ defaultAuth.email }}</strong> and password
+        Use account <strong>{{ defaultAuth.userId }}</strong> and password
         <strong>{{ defaultAuth.password }}</strong> to continue.
       </div>
     </div>
@@ -82,18 +82,18 @@
 
   <!--begin::Form group-->
   <div class="fv-row mb-8">
-    <label class="form-label fs-6 fw-bolder text-dark">Email</label>
-    <input class="form-control bg-transparent" type="email" name="email" formControlName="email" autocomplete="off"
+    <label class="form-label fs-6 fw-bolder text-dark">User Id</label>
+    <input class="form-control bg-transparent" type="text" name="userId" formControlName="userId" autocomplete="off"
       [ngClass]="{
-        'is-invalid': loginForm.controls['email'].invalid,
-        'is-valid': loginForm.controls['email'].valid
+        'is-invalid': loginForm.controls['userId'].invalid,
+        'is-valid': loginForm.controls['userId'].valid
       }" />
     <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
         validation: 'required',
-        message: 'Email is required',
-        control: loginForm.controls['email']
+        message: 'User Id is required',
+        control: loginForm.controls['userId']
       }"></ng-container>
-    <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+    <!-- <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
         validation: 'email',
         message: 'Email is invalid',
         control: loginForm.controls['email']
@@ -107,7 +107,7 @@
         validation: 'maxLength',
         message: 'Email should have maximum 360 symbols',
         control: loginForm.controls['email']
-      }"></ng-container>
+      }"></ng-container> -->
   </div>
   <!--end::Form group-->
 
