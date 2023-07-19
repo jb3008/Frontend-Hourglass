@@ -37,6 +37,7 @@ export class ApiCallsService {
     return this.http.delete(`${this.host_url}${endpoint}`, {
       params: queryParams,
     });
+  }
     
   private getAuthFromLocalStorage(): AuthModel | undefined {
     try {
