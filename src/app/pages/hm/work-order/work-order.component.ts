@@ -164,6 +164,11 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
     this.getAllWorkOrders();
   }
 
+  truncateText(text: string, maxLength: number): string {
+    if (!text) return '';
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  }
+  
   goToDetails(element: any){
     this.router.navigate(['/hm/work-order/details'], {queryParams: {workOrderId: element.workOrderId}})
   }

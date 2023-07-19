@@ -24,5 +24,11 @@ export class ApiCallsService {
     });
   }
 
+  delete(endpoint: any, queryParams?: any): Observable<any> {
+    return this.http.delete(`${this.host_url}${endpoint}`, {
+      params: queryParams,
+    });
+  }
+
   // { 'headers': { "Content-Type": "multipart/form-data" } }
 }

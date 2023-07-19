@@ -1,3 +1,6 @@
+<div *ngIf="loading" class="pause d-flex align-items-center justify-content-center">
+  <div class="spinner"></div>
+</div>
 <div class="content flex-column-fluid auto container-lg mb-4">
     <!-- <div class="py-5 fw-bold">
         <a class="cursor-pointer " routerLink="/job-posts"> <i class="fas fa-arrow-left me-3"></i>
@@ -23,7 +26,7 @@
               (click)="getSelectedTab('Documents'); getDocuments()" [ngClass]="{'active': isSelectedTab=='Documents'}"> Documents </a>
           </li>
           <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6"
-            (click)="getSelectedTab('Task')" [ngClass]="{'active': isSelectedTab=='Task'}">Task
+            (click)="getSelectedTab('Task'); getTaskList()" [ngClass]="{'active': isSelectedTab=='Task'}">Task
           </a></li>
           <!-- <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6"
               (click)="getSelectedTab('JobSeekers')" [ngClass]="{'active': isSelectedTab=='JobSeekers'}"> Job Seekers
@@ -49,7 +52,7 @@
                 <div class="d-flex flex-wrap lign-items-center">
                   <div class=" me-5 my-1">
                     <span class="d-flex text-muted fs-8">Vendor</span>
-                    <span class="fw-bold d-flex s-">{{workOrderDetails?.managerDetails?.vendorId}}- Some Vendor Name</span>
+                    <span class="fw-bold d-flex s-">{{workOrderDetails?.managerDetails?.vendorId}}- {{workOrderDetails?.managerDetails?.firstName}} {{workOrderDetails?.managerDetails?.lastName}}</span>
                   </div>
                   <div class="vr me-5 mt-4 h-20px "></div>
 
@@ -260,28 +263,34 @@
 
       <ng-container *ngIf="isSelectedTab=='Task'">
 
-        <a id="kt_new_task_drawer_toggle" class="btn btn-primary btn-sm cursor-pointer mb-6"> <i class="bi bi-plus-lg"></i>New Task</a>
-<app-new-task-drawer></app-new-task-drawer>
+        <a id="kt_new_task_drawer_toggle" class="btn btn-primary btn-sm cursor-pointer mb-6" (click)="taskDetails = ''"> <i class="bi bi-plus-lg"></i>New Task</a>
+<app-new-task-drawer [vendorId]="workOrderDetails?.managerDetails?.vendorId" [taskDetails]="taskDetails" (getList)="getTaskList()"></app-new-task-drawer>
 
         <div class="d-flex align-items-start gap-4 ">
             <div class="position-relative input-icon input-icon-right">
-                <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4" placeholder="Search..."/>
+                <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4" [(ngModel)]="filterValue.taskId" (keyup)="applySearchFilter($event)" placeholder="Search By Task Id #"/>
                 <span><i class="fa fa-search "></i></span>
             </div>
-            <select  name="" id="" class="form-select fs- py-2  w-200px">
-                <option  value="">Select</option>
-            </select>
+            <mat-select class="form-select fs- py-2  w-200px" [(value)]="filterValue.priority" (selectionChange)="filterByPriority($event)">
+              <mat-option value="All Priorities">All Priorities</mat-option>
+              <mat-option value="High">High</mat-option>
+              <mat-option value="Low">Low</mat-option>
+              <mat-option value="Medium">Medium</mat-option>
+            </mat-select>
             <div class="position-relative input-icon input-icon-right">
-                <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4" placeholder="Search..."/>
+                <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4" [(ngModel)]="filterValue.assigneeId" (keyup)="filterByAssignee($event)" placeholder="Search By Assignee"/>
                 <span><i class="fa fa-search "></i></span>
             </div>
-            <select  name="" id="" class="form-select fs- py-2 w-200px">
-                <option  value="">Select</option>
-            </select>
+            <mat-select class="form-select fs- py-2  w-200px" [(value)]="filterValue.status" (selectionChange)="filterByStatus($event)">
+              <mat-option value="All Status">All Status</mat-option>
+              <mat-option *ngFor="let status of statusLists" [value]="status">
+                {{status}}
+              </mat-option>
+            </mat-select>
             <div class="position-relative input-icon input-icon-right">
                 <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4"
                  placeholder="Select ETA Dates"  (click)="picker3.open()"
-                 [matDatepicker]="picker3"/>
+                 [matDatepicker]="picker3" [(ngModel)]="filterValue.finishDate" (dateChange)="filterByDate($event.value,'finishDate')"/>
                  <span><i class="far fa-calendar"></i></span>
                  <mat-datepicker #picker3></mat-datepicker>
             </div>
@@ -289,7 +298,7 @@
           
 
             <a class="btn btn-light-primary btn-sm cursor-pointer" >Search</a>
-            <a class="btn btn-light-primary btn-sm cursor-pointer" > Reset</a>
+            <a class="btn btn-light-primary btn-sm cursor-pointer" (click)="clearFilters()"> Reset</a>
     
         </div>
         
@@ -300,13 +309,13 @@
               <!-- taskId Column -->
               <ng-container matColumnDef="taskId">
                 <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-hash"></i> Task Id </th>
-                <td mat-cell *matCellDef="let element" class="align-middle"  routerLink="details"> {{element.taskId}} </td>
+                <td mat-cell *matCellDef="let element" class="align-middle"> {{element.taskId}} </td>
               </ng-container>
               
               <!-- taskName Column -->
-              <ng-container matColumnDef="taskName">
+              <ng-container matColumnDef="title">
                 <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-file-earmark-font"></i> Task Name </th>
-                <td mat-cell *matCellDef="let element" class="align-middle"> {{element.taskName}} </td>
+                <td mat-cell *matCellDef="let element" class="align-middle"> {{truncateText(element.title, 35)}} </td>
               </ng-container>
             
               
@@ -327,13 +336,13 @@
                 </ng-container>
 
               <!-- assignTo Column -->
-              <ng-container matColumnDef="assignTo">
+              <ng-container matColumnDef="assigneeId">
                 <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-person"></i>
                   Assign To </th>
                 <td mat-cell *matCellDef="let element" class="align-middle">
                   <div  class="symbol symbol-30px symbol-square me-3">
-                    <span  class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">SL </span>
-                  </div> {{element.assignTo}} </td>
+                    <!-- <span  class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">SL </span> -->
+                  </div> {{element.assigneeId}} </td>
               </ng-container>
             
                 <!-- timeSpent Column -->
@@ -343,9 +352,9 @@
                   </ng-container>
                 
               <!-- eta Column -->
-              <ng-container matColumnDef="eta">
+              <ng-container matColumnDef="finishDate">
                 <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> ETA. </th>
-                <td mat-cell *matCellDef="let element" class="align-middle"> {{element.eta}} </td>
+                <td mat-cell *matCellDef="let element" class="align-middle"> {{element.finishDate | date:'MMM dd, yyyy'}} </td>
               </ng-container>
             
                  <!-- lastUpdate Column -->
@@ -358,8 +367,7 @@
               <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-sun"></i> Status </th>
                 <td mat-cell *matCellDef="let element" class="align-middle">
-                  <span class="badge badge-light-danger" 
-                  [ngClass]="{' badge-light-warning': element.status === 'In-progress', 'badge-light-success' : element.status === 'Approved' , 'badge-light-danger' : element.status === 'Rejected' }">{{element.status}}</span>
+                  <span class="badge badge-light-primary">{{element.status}}</span>
               </td>
               </ng-container>
             
@@ -368,10 +376,10 @@
               <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef class="align-middle text-center"> </th>
                 <td mat-cell *matCellDef="let element" class="align-middle text-center">
-                    <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3">
+                    <a id="kt_new_task_drawer_toggle" (click)="editTask(element.taskId)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3">
                         <i class="bi bi-pencil"></i>
                     </a>
-                    <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm "> 
+                    <a (click)="deleteTask(element.taskId)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm "> 
                         <i class="bi bi-trash"></i>
                     </a>
                     </td>
