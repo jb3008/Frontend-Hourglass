@@ -15,7 +15,7 @@
     <div class="modal-body">
       <ng-content></ng-content>
     </div>
-    <div class="modal-footer bg-light p-3 px-5">
+    <div class="modal-footer bg-light p-3 px-5" *ngIf="!modalConfig.hideFooter">
       <button type="button" class="btn btn-outline-secondary" (click)="dismiss()"
         *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()"
         [disabled]="modalConfig.disableDismissButton !== undefined && modalConfig.disableDismissButton()">

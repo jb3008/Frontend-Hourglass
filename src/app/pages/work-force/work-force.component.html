@@ -1,181 +1,298 @@
-<div class="border-bottom tolbar mb-6 px-4   d-flex align-items-stretch justify-content-between">
-    <div class="d-flex">
-        <h4 class="pt-4 me-20">Work Force</h4>
-    <ul class="nav nav-line-tabs nav-line-tabs-1x nav-stretch ">
-        <li class="nav-item">
-            <a  class="nav-link px-4 cursor-pointer fw-bold active">Engaged Worker</a>
-        </li>
-        <li class="nav-item">
-            <a  class="nav-link px-4 cursor-pointer ">Free Worker </a>
-        </li>
-        <li class="nav-item">
-            <a  class="nav-link px-4 cursor-pointer "> All Worker </a>
-        </li>
-        
+<div
+  class="border-bottom tolbar mb-6 px-4 d-flex align-items-stretch justify-content-between"
+>
+  <div class="d-flex">
+    <h4 class="pt-4 me-20">Work Force</h4>
+    <ul class="nav nav-line-tabs nav-line-tabs-1x nav-stretch">
+      <li class="nav-item">
+        <a class="nav-link px-4 cursor-pointer fw-bold active"
+          >Engaged Worker</a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link px-4 cursor-pointer">Free Worker </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link px-4 cursor-pointer"> All Worker </a>
+      </li>
     </ul>
+  </div>
+  <a class="btn btn-primary btn-sm cursor-pointer my-2" (click)="openModal()">
+    Add New Member</a
+  >
+  <!-- begin:: Modal example -->
+
+  <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
+  <!-- end:: Modal example -->
+</div>
+<app-modal
+  #modal
+  [modalConfig]="modalConfig"
+  style="max-width: 777px"
+  data-nnn=""
+>
+  <form [formGroup]="workForceData">
+    <div class="container mb-6">
+      <div class="row justify-content-between">
+        <div class="col-6 p-0 pe-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >First Name <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="firstName"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Fiirst Name"
+            />
+          </div>
+        </div>
+        <div class="col-6 p-0 ps-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Last Name <span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              formControlName="lastName"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Last Name"
+            />
+          </div>
+        </div>
+      </div>
     </div>
-    <a   class="btn btn-primary btn-sm cursor-pointer my-2" (click)="openModal()"> Add New Member</a>
-    <!-- begin:: Modal example -->
 
-<!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
-<!-- end:: Modal example -->
+    <div class="container mb-6">
+      <div class="row justify-content-between">
+        <div class="col-6 p-0 pe-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Work Email ID <span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              formControlName="workEmail"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Work Email ID"
+            />
+          </div>
+        </div>
+        <div class="col-6 p-0 ps-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Professional Email ID <span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              formControlName="personalEmail"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Professional Email ID"
+            />
+          </div>
+        </div>
+      </div>
     </div>
-    <app-modal #modal [modalConfig]="modalConfig" style="max-width: 777px;" data-nnn="">
-        <div class="container  mb-6 " >
-            <div class="row justify-content-between">
-                <div class="col-6 p-0 pe-4">
-                    <div class="form-group">
-                        <label class="mb-1">First Name </label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Fiirst Name">
-                    </div>
-                </div>
-                <div class="col-6 p-0  ps-4">
-                    <div class="form-group">
-                        <label class="mb-1">Last Name</label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Last Name">
-                    </div>
-                </div>
-            </div>
-        </div>
 
-       
-        <div class="container  mb-6 " >
-            <div class="row justify-content-between">
-                <div class="col-6 p-0 pe-4">
-                    <div class="form-group">
-                        <label class="mb-1">Work Email ID </label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Work Email ID">
-                    </div>
-                </div>
-                <div class="col-6 p-0  ps-4">
-                    <div class="form-group">
-                        <label class="mb-1">Professional Email ID</label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Professional Email ID">
-                    </div>
-                </div>
-            </div>
+    <div class="container mb-6">
+      <div class="row justify-content-between">
+        <div class="col-6 p-0 pe-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Work Phone <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="workPhone"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Work Phone"
+            />
+          </div>
         </div>
-
-       
-        <div class="container  mb-6 " >
-            <div class="row justify-content-between">
-                <div class="col-6 p-0 pe-4">
-                    <div class="form-group">
-                        <label class="mb-1">Work Phone </label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Work Phone">
-                    </div>
-                </div>
-                <div class="col-6 p-0  ps-4">
-                    <div class="form-group">
-                        <label class="mb-1">Mobile Phone</label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Mobile Phone">
-                    </div>
-                </div>
-            </div>
+        <div class="col-6 p-0 ps-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Mobile Phone <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="mobilePhone"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Mobile Phone"
+            />
+          </div>
         </div>
-
-       
-        <div class="container  mb-6 " >
-            <div class="row justify-content-between">
-                <div class="col-6 p-0 pe-4">
-                    <div class="form-group">
-                        <label class="mb-1">Date of Birth </label>
-                        <div class="input-icon position-relative input-icon-right">
-
-                            <input type="text" class="form-control   py-2 fs- fw-normal" placeholder="Date of Birth ">
-                            <span><i class="fa fa-search"></i></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 p-0  ps-4">
-                    <div class="form-group">
-                        <label class="mb-1">Blood Group</label>
-                        <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Blood Group">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-       
-        <div class="form-group mb-6">
-            <label class="mb-1">Designation </label>
-            <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Designation">
-        </div>
-        
-        <div class="form-group mb-6">
-            <label class="mb-1">Location </label>
-            <input type="text" class="form-control py-2 fs- fw-normal" placeholder="Location">
-        </div>
-
-        <div class="form-group mb-6">
-            <label class="mb-1">Current Address </label>
-            <textarea name="" id="" cols="30" rows="3"  class="form-control   py-2 fs- fw-normal"></textarea>
-        </div>
-        <div class="form-group mb-6">
-            <label class="mb-1">Parmanent Address </label>
-            <textarea name="" id="" cols="30" rows="3"  class="form-control   py-2 fs- fw-normal"></textarea>
-        </div>
-
-      
-       
-      </app-modal>
-    <div class="content flex-column-fluid auto container-lg mb-4">
-        <div class="row">
-            <ng-container *ngFor="let number of [0,1,2,3,4,5,7,8]">
-            <!--begin::Col-->
-            <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 mb-6">
-                <!--begin::Card-->
-                <div class="card card-custom gutter-b card-stretch">
-                    <!--begin::Body-->
-                    <div class="d-flex justify-content-end">
-                        <button
-                        type="button"
-                        class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
-                        data-kt-menu-trigger="click"
-                        data-kt-menu-placement="bottom-end"
-                        data-kt-menu-flip="top-end"
-                      >
-                      <span class="material-symbols-outlined">
-                        more_vert
-                        </span>
-                      </button>
-                   
-                    </div>
-                    <div class="card-body text-center pt-4 cursor-pointer" routerLink="worker-profile" >
-                        <!--begin::Toolbar-->
-                  
-                        <!--end::Toolbar-->
-        
-                        <!--begin::User-->
-                        <div class="mt-7">
-                            <div class="symbol symbol-circle symbol-lg-100px">
-                                <img src="../../../assets/media/avatars/300-{{number+1}}.jpg" alt="image">
-                            </div>
-                            <div class="symbol symbol-lg-100px symbol-circle symbol-primary d-none">
-                                <span class="font-size-h3 font-weight-boldest">JB</span>
-                            </div>
-                        </div>
-                        <!--end::User-->
-        
-                        <!--begin::Name-->
-                        <div class="my-2">
-                            <a   class="text-dark font-weight-bold text-hover-primary font-size-h4">John Beans</a>
-                        </div>
-                        <!--end::Name-->
-        
-                        <!--begin::Label-->
-                        <span class="text-muted d-block">Active</span>
-                        <span class="text-muted d-block">(700)-433-86-75</span>
-                        <!--end::Label-->
-        
-
-                    </div>
-                    <!--end::Body-->
-                </div>
-                <!--end::Card-->
-            </div>
-            <!--end::Col-->
-            </ng-container>
-        
-        </div>
+      </div>
     </div>
+
+    <div class="container mb-6">
+      <div class="row justify-content-between">
+        <div class="col-6 p-0 pe-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Date of Birth <span class="text-danger">*</span></label
+            >
+            <div
+              class="input-icon position-relative date-text input-icon-right"
+            >
+              <input
+                formControlName="dateOfBirth"
+                type="text"
+                class="form-control py-2 fs- fw-normal"
+                (click)="dob.open()"
+                [matDatepicker]="dob"
+                placeholder="Date of Birth"
+              />
+              <span><i class="far fa-calendar"></i></span>
+              <mat-datepicker #dob></mat-datepicker>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 p-0 ps-4">
+          <div class="form-group">
+            <label class="mb-1">Blood Group</label>
+            <input
+              type="text"
+              formControlName="bloodGroup"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Blood Group"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mb-6">
+      <label class="mb-1"
+        >Designation <span class="text-danger">*</span>
+      </label>
+      <input
+        type="text"
+        formControlName="designation"
+        class="form-control py-2 fs- fw-normal"
+        placeholder="Designation"
+      />
+    </div>
+
+    <div class="form-group mb-6">
+      <label class="mb-1">Location <span class="text-danger">*</span> </label>
+      <input
+        type="text"
+        formControlName="location"
+        class="form-control py-2 fs- fw-normal"
+        placeholder="Location"
+      />
+    </div>
+
+    <div class="form-group mb-6">
+      <label class="mb-1"
+        >Current Address <span class="text-danger">*</span>
+      </label>
+      <textarea
+        name=""
+        id=""
+        formControlName="currentAddress"
+        cols="30"
+        rows="3"
+        class="form-control py-2 fs- fw-normal"
+      ></textarea>
+    </div>
+    <div class="form-group mb-6">
+      <label class="mb-1"
+        >Parmanent Address <span class="text-danger">*</span>
+      </label>
+      <textarea
+        name=""
+        id=""
+        formControlName="permanentAddress"
+        cols="30"
+        rows="3"
+        class="form-control py-2 fs- fw-normal"
+      ></textarea>
+    </div>
+    <div class="modal-footer bg-light p-3 px-5">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="closeModal()"
+      >
+        Cancel
+      </button>
+      <button type="button" class="btn btn-primary" (click)="save()">
+        Save
+      </button>
+    </div>
+  </form>
+</app-modal>
+<div class="content flex-column-fluid auto container-lg mb-4">
+  <div class="row">
+    <ng-container *ngFor="let item of workForceList; let i = index">
+      <!--begin::Col-->
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-6">
+        <!--begin::Card-->
+        <div class="card card-custom gutter-b card-stretch">
+          <!--begin::Body-->
+          <div class="d-flex justify-content-end">
+            <button
+              type="button"
+              class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
+              data-kt-menu-trigger="click"
+              data-kt-menu-placement="bottom-end"
+              data-kt-menu-flip="top-end"
+            >
+              <span class="material-symbols-outlined"> more_vert </span>
+            </button>
+          </div>
+          <div
+            class="card-body text-center pt-4 cursor-pointer"
+            routerLink="worker-profile"
+            [queryParams]="{ workForceId: item.workForceId }"
+          >
+            <!--begin::Toolbar-->
+
+            <!--end::Toolbar-->
+
+            <!--begin::User-->
+            <div class="mt-7">
+              <div class="symbol symbol-circle symbol-lg-100px">
+                <img
+                  src="../../../assets/media/avatars/300-{{ i + 1 }}.jpg"
+                  alt="image"
+                />
+              </div>
+              <div
+                class="symbol symbol-lg-100px symbol-circle symbol-primary d-none"
+              >
+                <span class="font-size-h3 font-weight-boldest">JB</span>
+              </div>
+            </div>
+            <!--end::User-->
+
+            <!--begin::Name-->
+            <div class="my-2">
+              <a
+                class="text-dark font-weight-bold text-hover-primary font-size-h4"
+                >{{ item.firstName }} {{ item.lastName }}</a
+              >
+            </div>
+            <!--end::Name-->
+
+            <!--begin::Label-->
+            <span class="text-muted d-block">{{ item.workEmail }}</span>
+            <span class="text-muted d-block">{{ item.workPhone || "-" }}</span>
+            <!--end::Label-->
+          </div>
+          <!--end::Body-->
+        </div>
+        <!--end::Card-->
+      </div>
+      <!--end::Col-->
+    </ng-container>
+  </div>
+</div>
+<div
+  *ngIf="isLoading"
+  class="pause d-flex align-items-center justify-content-center"
+>
+  <div class="spinner"></div>
+</div>
