@@ -40,6 +40,8 @@ const EndPoints = {
   REJECT_OFFER_LETTER: '/hourglass/job-offer/rejectJobOffer',
   GET_VENDOR_STAFF_DETAILS: '/hourglass/user/listUserForVendor',
   CREATE_WORK_FORCE: '/hourglass/work-force/create.api',
+  LIST_WORK_FORCE: '/hourglass/work-force/listAllWorkForce.api',
+  GET_WORK_FORCE: '/hourglass/work-force/getWorkForce',
 };
 
 export default EndPoints;

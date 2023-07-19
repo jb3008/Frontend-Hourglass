@@ -20,6 +20,7 @@ import { AuthService } from 'src/app/modules/auth';
 })
 export class WorkForceComponent implements OnInit {
   workForceData: FormGroup;
+  workForceList: any = [];
   endPoints = EndPoints;
   isLoading = false;
 
@@ -62,16 +63,17 @@ export class WorkForceComponent implements OnInit {
         '',
         Validators.compose([Validators.required, Validators.email]),
       ],
-      workPhone: [''],
-      mobilePhone: [''],
+      workPhone: ['', Validators.required],
+      mobilePhone: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       bloodGroup: [''],
       designation: ['', Validators.required],
-      location: [''],
-      currentAddress: [''],
-      permanentAddress: [''],
+      location: ['', Validators.required],
+      currentAddress: ['', Validators.required],
+      permanentAddress: ['', Validators.required],
       vendorId: [auth?.vendorId, Validators.required],
     });
+    this.getAllWorkForceList();
   }
 
   async save() {
@@ -108,7 +110,9 @@ export class WorkForceComponent implements OnInit {
           })
         )
         .subscribe(async (response) => {
+          this.isLoading = false;
           await this.modalComponent.closeModal();
+          this.ngOnInit();
           this.utils.showSnackBarMessage(
             this.snackBar,
             'Member save successfully'
@@ -136,9 +140,33 @@ export class WorkForceComponent implements OnInit {
       return false;
     }
   }
+  async closeModal() {
+    return await this.modalComponent.closeModal();
+  }
   changeDateToUtc(dateObj: any) {
     const date = new Date(dateObj);
     const utcDate = date.toISOString();
     return utcDate;
+  }
+
+  getAllWorkForceList() {
+    this.isLoading = true;
+    this.apiCalls
+      .get(this.endPoints.LIST_WORK_FORCE, {})
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to fetch the work-force'
+          );
+          this.isLoading = false;
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.workForceList = response;
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      });
   }
 }
