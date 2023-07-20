@@ -16,7 +16,7 @@ export class AuthHTTPService {
 
   // public methods
   login(userId: string, password: string): Observable<any> {
-    return this.http.post<AuthModel>(`${API_URL}/${EndPoints.LOGIN}`, {
+    return this.http.post<AuthModel>(`${API_URL}${EndPoints.LOGIN}`, {
       userId,
       password,
     });
@@ -38,7 +38,7 @@ export class AuthHTTPService {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-    return this.http.get<UserModel>(`${API_URL}/${EndPoints.GET_USER_BY_ID}`, {
+    return this.http.get<UserModel>(`${API_URL}${EndPoints.GET_USER_BY_ID}`, {
       headers: httpHeaders,
       params: {
         userId: userId,

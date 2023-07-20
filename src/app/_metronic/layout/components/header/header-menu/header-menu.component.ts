@@ -11,33 +11,58 @@ import { Utils } from 'src/app/services/utils';
   styleUrls: ['./header-menu.component.scss'],
 })
 export class HeaderMenuComponent implements OnInit {
-  constructor(private router: Router, private layout: LayoutService, private layoutInit: LayoutInitService,
-    private  utils: Utils) {}
+  constructor(
+    private router: Router,
+    private layout: LayoutService,
+    private layoutInit: LayoutInitService,
+    private utils: Utils
+  ) {}
 
-  setHiringManager:boolean = true;
+  setHiringManager: boolean = true;
   switch_text = 'Switch to Vendor';
-  
-  jobPostsUrl:string = '/job-posts';
-  workOrderUrl:string = '/work-order';
+  logoutUrl: string = '/auth/logout';
+  jobPostsUrl: string = '/job-posts';
+  workOrderUrl: string = '/work-order';
   ngOnInit(): void {
-
+    let auth = this.utils.getAuth();
+    // console.log(auth?.vendorId);
+    if (auth?.vendorId) {
+      this.switch_text = 'Switch to Recruiter';
+      this.utils.setUser('user-1');
+      this.jobPostsUrl = '/job-posts';
+      this.workOrderUrl = '/work-order';
+      this.utils.setHiringManager('false');
+      this.router.navigate(['/job-posts']);
+      // this.setHiringManager = true;
+      this.setHiringManager = false;
+      this.utils.setVendorId(auth.vendorId);
+    } else {
+      this.switch_text = 'Switch to Vendor';
+      this.jobPostsUrl = '/hm/job-posts';
+      this.workOrderUrl = '/hm/work-order';
+      this.utils.setUser('user-11');
+      this.utils.setHiringManager('true');
+      this.router.navigate(['/hm/job-posts']);
+      // this.setHiringManager = false;
+      this.setHiringManager = true;
+    }
     let status = this.utils.isHiringManagerSet();
-    if(status){
-      if(status == 'true'){
+    console.log(auth);
+    if (status) {
+      if (status == 'true') {
         this.setHiringManager = true;
-      }else if(status == 'false'){
+      } else if (status == 'false') {
         this.setHiringManager = false;
         this.switch_text = 'Switch to Recruiter';
         this.utils.setVendorId('V101');
       }
     }
-    
-    if(this.setHiringManager)  {
+
+    if (this.setHiringManager) {
       this.jobPostsUrl = '/hm/job-posts';
       this.workOrderUrl = '/hm/work-order';
       this.utils.setUser('user-11');
-    }
-    else{
+    } else {
       this.utils.setUser('user-1');
       this.jobPostsUrl = '/job-posts';
       this.workOrderUrl = '/work-order';
@@ -52,16 +77,18 @@ export class HeaderMenuComponent implements OnInit {
     this.layoutInit.setBaseLayoutType(layoutType);
   }
 
-  setToolbar(toolbarLayout: 'classic' | 'accounting' | 'extended' | 'reports' | 'saas') {
-    const currentConfig = {...this.layout.layoutConfigSubject.value};
+  setToolbar(
+    toolbarLayout: 'classic' | 'accounting' | 'extended' | 'reports' | 'saas'
+  ) {
+    const currentConfig = { ...this.layout.layoutConfigSubject.value };
     if (currentConfig && currentConfig.app && currentConfig.app.toolbar) {
       currentConfig.app.toolbar.layout = toolbarLayout;
-      this.layout.saveBaseConfig(currentConfig)
+      this.layout.saveBaseConfig(currentConfig);
     }
   }
 
-  switchMode(event: any){
-    if(event.target.checked){
+  switchMode(event: any) {
+    if (event.target.checked) {
       this.switch_text = 'Switch to Recruiter';
       this.utils.setUser('user-1');
       this.jobPostsUrl = '/job-posts';
@@ -83,9 +110,6 @@ export class HeaderMenuComponent implements OnInit {
     }
   }
 }
-
-
-
 
 const getCurrentUrl = (pathname: string): string => {
   return pathname.split(/[?#]/)[0];

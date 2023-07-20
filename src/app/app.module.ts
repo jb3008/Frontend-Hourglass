@@ -1,5 +1,8 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+  MatSnackBarModule,
+} from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -12,7 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './modules/auth/services/auth.service';
 import { environment } from 'src/environments/environment';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 
 // #fake-start#
 import { FakeAPIService } from './_fake/fake-api.service';
@@ -41,12 +44,12 @@ function appInitializer(authService: AuthService) {
     MatDialogModule,
     // ClipboardModule,
     // #fake-start#
-    environment.isMockEnabled
-      ? HttpClientInMemoryWebApiModule.forRoot(FakeAPIService, {
-          passThruUnknownUrl: true,
-          dataEncapsulation: false,
-        })
-      : [],
+    // environment.isMockEnabled
+    //   ? HttpClientInMemoryWebApiModule.forRoot(FakeAPIService, {
+    //       passThruUnknownUrl: true,
+    //       dataEncapsulation: false,
+    //     })
+    //   : [],
     // #fake-end#
     AppRoutingModule,
     InlineSVGModule.forRoot(),
@@ -60,9 +63,9 @@ function appInitializer(authService: AuthService) {
       deps: [AuthService],
     },
     {
-      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, 
-      useValue: {duration: 3000}
-    }
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: { duration: 3000 },
+    },
   ],
   bootstrap: [AppComponent],
 })

@@ -22,14 +22,6 @@ const routes: Routes = [
         data: { returnUrl: window.location.pathname },
       },
       {
-        path: 'registration',
-        component: RegistrationComponent,
-      },
-      {
-        path: 'forgot-password',
-        component: ForgotPasswordComponent,
-      },
-      {
         path: 'logout',
         component: LogoutComponent,
       },

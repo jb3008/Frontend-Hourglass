@@ -90,29 +90,6 @@ export class AuthService implements OnDestroy {
       );
   }
 
-  // // need create new user then login
-  // registration(user: UserModel): Observable<any> {
-  //   this.isLoadingSubject.next(true);
-  //   return this.authHttpService.createUser(user).pipe(
-  //     map(() => {
-  //       this.isLoadingSubject.next(false);
-  //     }),
-  //     switchMap(() => this.login(user.email, user.password)),
-  //     catchError((err) => {
-  //       console.error('err', err);
-  //       return of(undefined);
-  //     }),
-  //     finalize(() => this.isLoadingSubject.next(false))
-  //   );
-  // }
-
-  // forgotPassword(email: string): Observable<boolean> {
-  //   this.isLoadingSubject.next(true);
-  //   return this.authHttpService
-  //     .forgotPassword(email)
-  //     .pipe(finalize(() => this.isLoadingSubject.next(false)));
-  // }
-
   // private methods
   private setAuthFromLocalStorage(auth: AuthModel): boolean {
     // store auth authToken/refreshToken/epiresIn in local storage to keep user logged in between page refreshes
