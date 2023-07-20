@@ -2,18 +2,18 @@ const EndPoints = {
   HOST_URL: 'http://172.105.36.16:8080',
   LOGIN: '/hourglass/authenticate/login.api',
   GET_USER_BY_ID: '/hourglass/user/getUserByUserId',
-  HIRING_MANGER: '/job-post/user/list-all-hmanager.api',
+  HIRING_MANGER: '/hourglass/job-post/user/list-all-hmanager.api',
   JOB_TYPE: '/common/rest/job-type.api',
   TIMESHEET_FREQ: '/common/rest/getTimeFrequencyList.api',
   PAY_TERMS: '/common/rest/list-pay-terms.api',
   LEGAL_ENTITY: '/common/rest/getCompanyList.api',
   PLANT_LIST: '/hourglass/plant/plant/listPlantsForCompnay', // Lokesh 11-Jul-23 -> Changed API as per Backend team request.
-  BUSINESS_UNIT: '/job-post/business-unit/list.api',
-  COST_CENTER: '/job-post/cost-center/list.api',
-  CREATE_JOB: '/job-post/create.api',
-  DRAFT_JOB: '/job-post/saveDraftJobPost.api',
-  LIST_JOBS: '/job-post/list.api',
-  GET_JOB_POST_COUNT: '/job-post/getJobPostCounts.api',
+  BUSINESS_UNIT: '/hourglass/job-post/business-unit/list.api',
+  COST_CENTER: '/hourglass/job-post/cost-center/list.api',
+  CREATE_JOB: '/hourglass/job-post/create.api',
+  DRAFT_JOB: '/hourglass/job-post/saveDraftJobPost.api',
+  LIST_JOBS: '/hourglass/job-post/list.api',
+  GET_JOB_POST_COUNT: '/hourglass/job-post/getJobPostCounts.api',
   GET_JOB_DETAILS: '/vendor/jobDetails.api',
   DOCUMENTS_LIST_JOB: '/hourglass/document/listJobPostDocuments',
   DOWNLOAD_DOC: '/hourglass/document/getAttachment',
@@ -24,7 +24,7 @@ const EndPoints = {
   UPDATE_APPL_STATUS: '/hourglass/job-application/updateStatus',
   GET_USER: '/hourglass/user/getUserByUserId',
   APPLY_JOB_VENDOR: '/vendor/createJobApplication.api',
-  JOB_COUNTS: '/job-post/getJobPostCounts.api',
+  JOB_COUNTS: '/hourglass/job-post/getJobPostCounts.api',
   ALL_WORK_ORDERS: '/hourglass/work-order/listWorkOrders.api',
   WORK_ORDER_STATUS: '/hourglass/work-order/listWorkOrderStatus',
   CREATE_WORK_ORDER: '/hourglass/work-order/create.api',
@@ -45,7 +45,7 @@ const EndPoints = {
   TASK_LIST_HM: '/hourglass/task/listTasks.api',
   CREATE_TASK: '/hourglass/task/create.api',
   UPDATE_TASK: '/hourglass/task/updateTask.api',
-  DELETE_TASK: '/hourglass/task/delete.api'
+  DELETE_TASK: '/hourglass/task/delete.api',
 };
 
 export default EndPoints;
