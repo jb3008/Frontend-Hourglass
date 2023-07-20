@@ -188,7 +188,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     }
 
     this.selectedTab = tab;
-    this.resetFilter();
+    this.resetFilter('selectedTab');
     // TODO: hack until backend API is ready to provide data based on proper status.
     const vendorId = this.utils.getVendorId();
     switch(tab) {
@@ -318,9 +318,10 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.getAllJobs();
   }
 
-  resetFilter() {
+  resetFilter(from?: any) {
     delete this.queryParam.site;
     delete this.queryParam.businessUnit;
+    delete this.queryParam.searchText;
     this.queryParam.types = [];
     this.queryParam.jobKind = [];
     this.queryParam.jobStatus = [];
@@ -332,7 +333,8 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.selectedJobKind = [false, false];
     this.selectedJobStatusAll = false;
     this.selectedJobStatus = [false, false, false];
-    this.getAllJobs();
+    if(!from)
+      this.getAllJobs();
   }
   
   // selectedTab: string = 'Active';

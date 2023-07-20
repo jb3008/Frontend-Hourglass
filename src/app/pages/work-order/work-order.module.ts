@@ -15,6 +15,7 @@ import { AddInvoiceDrawerComponent } from './add-invoice-drawer/add-invoice-draw
 import { TimesheetLogsComponent } from './timesheet-logs/timesheet-logs.component';
 import { NewTaskRecrDrawerComponent } from './work-order-detail/new-task-recr-drawer/new-task-recr-drawer.component';
 import { SharedModule } from '../shared.modules';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { SharedModule } from '../shared.modules';
     MatNativeDateModule,
     MatTableModule,
     MatCheckboxModule,
+    MatSelectModule
   ],
   providers: [  
     MatDatepickerModule,  
