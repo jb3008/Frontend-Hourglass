@@ -26,7 +26,7 @@
               (click)="getSelectedTab('Documents'); getDocuments()" [ngClass]="{'active': isSelectedTab=='Documents'}"> Documents </a>
           </li>
           <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6"
-            (click)="getSelectedTab('Task'); getTaskList()" [ngClass]="{'active': isSelectedTab=='Task'}">Task
+            (click)="getSelectedTab('Task'); getTaskList({workOrderId: workOrderDetails?.workOrderId})" [ngClass]="{'active': isSelectedTab=='Task'}">Task
           </a></li>
           <!-- <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6"
               (click)="getSelectedTab('JobSeekers')" [ngClass]="{'active': isSelectedTab=='JobSeekers'}"> Job Seekers
@@ -264,7 +264,7 @@
       <ng-container *ngIf="isSelectedTab=='Task'">
 
         <a id="kt_new_task_drawer_toggle" class="btn btn-primary btn-sm cursor-pointer mb-6" (click)="taskDetails = ''"> <i class="bi bi-plus-lg"></i>New Task</a>
-<app-new-task-drawer [vendorId]="workOrderDetails?.managerDetails?.vendorId" [taskDetails]="taskDetails" (getList)="getTaskList()"></app-new-task-drawer>
+<app-new-task-drawer [vendorId]="workOrderDetails?.managerDetails?.vendorId" [taskDetails]="taskDetails" (getList)="getTaskList({workOrderId: workOrderDetails?.workOrderId})"></app-new-task-drawer>
 
         <div class="d-flex align-items-start gap-4 ">
             <div class="position-relative input-icon input-icon-right">
