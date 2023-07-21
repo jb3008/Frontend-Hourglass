@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, O
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
@@ -15,7 +16,7 @@ import { Utils } from 'src/app/services/utils';
 export class NewTaskDrawerComponent implements OnInit, OnChanges {
 
   constructor(private fb: FormBuilder, private apiCalls: ApiCallsService, private utils: Utils, private snackBar: MatSnackBar,
-    private dialog: MatDialog, private cdr: ChangeDetectorRef) {}
+    private dialog: MatDialog, private cdr: ChangeDetectorRef, private route: ActivatedRoute) {}
   
   taskData: FormGroup;
   endpoints = EndPoints;
@@ -24,8 +25,12 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
   @Output() getList = new EventEmitter<any>;
   @Input() vendorId: any;
   @Input() taskDetails: any;
+  workOrderID: any;
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(param => {
+      this.workOrderID = param['workOrderId'];
+    });
     this.taskData = this.fb.group({
       title: ['', Validators.required],
       assigneeId: ['', Validators.required],
@@ -83,7 +88,7 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
       this.utils.showSnackBarMessage(this.snackBar, 'Maximum allowed file size is 2 MB. Please choose another file.');
     } else {
       const docList = this.taskData.controls['documentList']?.value;
-        if (docList.length < 6) {
+        if (docList?.length < 6) {
           if (this.utils.isFileExist(docList, file)) {
             this.utils.showSnackBarMessage(this.snackBar, 'This file "' + file.name + '" already exist.');
           } else {
@@ -127,8 +132,8 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
           const value = this.taskData.value[key];
           formData.append(key, value);
         }else{
-          const file = this.taskData.value['documentList'];
-          if(file.length != 0){
+          const file = this.taskData.controls['documentList'].value;
+          if(file && file?.length != 0){
             file.forEach((fileObj: File) => {
               const blob = new Blob([fileObj], { type: fileObj.type });
               formData.append(key, blob, fileObj.name);
@@ -140,6 +145,7 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
         formData.append('id', this.taskDetails.taskId);
       }
       formData.append('status', 'ACTIVE');
+      formData.append('workOrderId', this.workOrderID);
 
       this.apiCalls.post(this.taskDetails == '' ? this.endpoints.CREATE_TASK: this.endpoints.UPDATE_TASK,formData)
       .pipe(catchError(async (err) => {
@@ -150,23 +156,32 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
         this.cdr.detectChanges()
       }))
       .subscribe(response => {
-        if (this.isLoading) { // isLoading = true indicates no error.
-          this.openSuccessPopup();
+        if(response.success == "false"){
+          this.isLoading = false;
+          this.utils.showSnackBarMessage(this.snackBar, response.msg);      
+        }else{
+          if (this.isLoading) { // isLoading = true indicates no error.
+            this.openSuccessPopup();
+          }
         }
+        this.cdr.detectChanges();
       })
     }else{
+      this.isLoading = false;
+      this.cdr.detectChanges();
       this.utils.showSnackBarMessage(this.snackBar, 'Please enter all required data');
     }
   }
 
   openSuccessPopup(){
+    this.isLoading = false;
     let msg = 'Your Task is successfully created';
     this.utils.showDialog(this.dialog, msg, () => {
       this.isLoading = false;
       let closeBtn = document.getElementById('kt_new_task_close');
       closeBtn?.click();
-      this.getList.emit();
       this.cdr.detectChanges();
+      this.getList.emit();
     });
   }
 

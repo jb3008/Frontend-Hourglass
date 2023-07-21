@@ -1,104 +1,137 @@
-<div
+<div *ngIf="isLoading" class="pause d-flex align-items-center justify-content-center">
+  <div class="spinner"></div>
+</div>
 
-  id="kt_new_task_recr_drawerq"
-  class="bg-body"
-  data-kt-drawer="true"
-  data-kt-drawer-name="new_task_recr"
-  data-kt-drawer-activate="true"
-  data-kt-drawer-overlay="true"
-  data-kt-drawer-width="{default:'300px', 'lg': '600px'}"
-  data-kt-drawer-direction="end"
-  data-kt-drawer-toggle="#kt_new_task_recr_drawer_toggle"
-  data-kt-drawer-close="#kt_new_task_recr_close"
->
-  <div class="card shadow-none rounded-0">
-    <button
-    type="button"
-   class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
-    id="kt_new_task_recr_close"
+<form [formGroup]="taskData">
+  <div
+
+    id="kt_new_task_recr_drawerq"
+    class="bg-body"
+    data-kt-drawer="true"
+    data-kt-drawer-name="new_task_recr"
+    data-kt-drawer-activate="true"
+    data-kt-drawer-overlay="true"
+    data-kt-drawer-width="{default:'300px', 'lg': '600px'}"
+    data-kt-drawer-direction="end"
+    data-kt-drawer-toggle="#kt_new_task_recr_drawer_toggle"
+    data-kt-drawer-close="#kt_new_task_recr_close"
   >
-    <span
-      [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
-      class="svg-icon svg-icon-1"
-    ></span>
-  </button>
-    <div class="d-flex justify-content-between px-7" >
-    <div>
-      <h3 class="card-title fw-bolder text-dark mt-4  "> Task Creation red</h3>
-      <div> 
-        Specific activities or assignments to be completed withini a proect or worklow, ensuring clear objectives and responsibilities.
+    <div class="card shadow-none rounded-0">
+      <button
+      type="button"
+    class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
+      id="kt_new_task_recr_close"
+      (click)="taskData.reset()"
+    >
+      <span
+        [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+        class="svg-icon svg-icon-1"
+      ></span>
+    </button>
+      <div class="d-flex justify-content-between px-7" >
+      <div>
+        <h3 class="card-title fw-bolder text-dark mt-4  "> Task Creation</h3>
+        <div> 
+          Specific activities or assignments to be completed withini a proect or worklow, ensuring clear objectives and responsibilities.
+        </div>
       </div>
-    </div>
-      
+        
+        </div>
+
+      <div class="card-body position-relative "  id="kt_activities_body">
+          <div class="form-group  mb-5">
+              <label class="mb-1">Task Title <span class="text-danger">*</span></label>
+              <input type="input" class="form-control py-2 fs- fw-normal"
+              placeholder="Task Title" formControlName="title">
+          </div>
+          <div class="form-group  mb-5">
+              <label class="mb-1">Assignee<span class="text-danger">*</span></label>
+              <mat-select class="form-select fs- py-2" placeholder="Select" formControlName="assigneeId">
+                <mat-option *ngFor="let assignee of assigneeList" [value]="assignee.userId">
+                  {{assignee.firstName}} {{assignee.lastName}}
+                </mat-option>
+              </mat-select>
+          </div>
+
+          <div class="form-group  mb-5">
+            <label class="mb-1">Priority<span class="text-danger">*</span></label>
+              <mat-select formControlName="priority" class="form-select fs- py-2" placeholder="Select">
+                <mat-option value="Low">Low</mat-option>
+                <mat-option value="Medium">Medium</mat-option>
+                <mat-option value="High">High</mat-option>
+            </mat-select>
+          </div>
+
+          <div class="form-group d-flex justify-content-between align-items-center gap-3 mb-5">
+              <label class="col-2">Start Date <span class="text-danger">*</span></label>
+                  <div class="input-icon position-relative min-w-120px input-icon-right">
+
+                      <input type="text" formControlName="startDate" class="form-control   py-2 fs- fw-normal" (click)="picker1.open()"
+                  [matDatepicker]="picker1" placeholder="Start Date">
+              <span><i class="far fa-calendar"></i></span>
+              <mat-datepicker #picker1></mat-datepicker>
+              </div>
+
+              <label class="min-w-150px">Excepted to Finish on <span class="text-danger">*</span></label>
+                  <div class="input-icon position-relative min-w-120px input-icon-right">
+
+                      <input type="text" formControlName="expectedFinishDate" class="form-control   py-2 fs- fw-normal" (click)="picker2.open()"
+                  [matDatepicker]="picker2" placeholder="End Date">
+              <span><i class="far fa-calendar"></i></span>
+              <mat-datepicker #picker2></mat-datepicker>
+              </div>
       </div>
 
-    <div class="card-body position-relative "  id="kt_activities_body">
-        <div class="form-group  mb-5">
-            <label class="mb-1">Task Title <span class="text-danger">*</span></label>
-            <input type="input" class="form-control py-2 fs- fw-normal"
-             placeholder="Task Title" value="Installation of new OS for all employees">
-        </div>
-        <div class="form-group  mb-5">
-            <label class="mb-1">Assignee<span class="text-danger">*</span></label>
-            <select name="" id="" class="form-select fs- py-2">
-                <option value="">Select</option>
-            </select>
-        </div>
+      <div class="form-group  mb-5 d-flex">
+        <label class="mb-1 col-2 me-3">Time Spent <span class="text-danger">*</span></label>
+        <input type="input" formControlName="timeSpent" class="form-control w-50 me-3 py-2 fs- fw-normal" placeholder="Time Spent">
+        <div class="py-2 fs- fw-normal" >Hours</div>
+      </div>
 
-        <div class="form-group d-flex justify-content-between align-items-center gap-3 mb-5">
-            <label class="col-2">Start Date <span class="text-danger">*</span></label>
-                <div class="input-icon position-relative min-w-120px input-icon-right">
+      <div class="form-group  mb-5">
+          <label class="mb-1">Comments <span class="text-danger">*</span></label>
+      <textarea formControlName="comments" name="" id="" cols="30" rows="3" class="form-control py-2 fs- fw-normal" placeholder="Give some comments here..."></textarea>
 
-                    <input type="text" class="form-control   py-2 fs- fw-normal" (click)="picker.open()"
-                [matDatepicker]="picker" placeholder="Start Date">
-            <span><i class="far fa-calendar"></i></span>
-            <mat-datepicker #picker></mat-datepicker>
-            </div>
+      </div>
 
-            <label class="min-w-150px">Excepted to Finish on <span class="text-danger">*</span></label>
-                <div class="input-icon position-relative min-w-120px input-icon-right">
+    <div class="fw-bold mb-5 ">Attachments</div>
 
-                    <input type="text" class="form-control   py-2 fs- fw-normal" (click)="picker.open()"
-                [matDatepicker]="picker" placeholder="End Date">
-            <span><i class="far fa-calendar"></i></span>
-            <mat-datepicker #picker></mat-datepicker>
-            </div>
-    </div>
-
-    <div class="form-group  mb-5">
-        <label class="mb-1">Comments <span class="text-danger">*</span></label>
-     <textarea name="" id="" cols="30" rows="3" class="form-control py-2 fs- fw-normal" placeholder="Give some comments here..."></textarea>
-
-    </div>
-
-  <div class="fw-bold mb-5 ">Attachments</div>
-
-    <div class="fv-row mb-5 ">
-        <!--begin::Dropzone-->
-        <div class="dropzone dz-clickable bg-light-primary border border-dashed text-center" DropZone (onFileDropped)="droppedFiles($event)">
-            <!--begin::Message-->
-            <div class=" text-center w-100 text-muted">
-                <!--begin::Icon-->
-                <i class="fas fa-cloud-upload-alt  fs-2x"></i> <!--end::Icon-->
-                <!--begin::Info-->
-                <div class="ms-4">
-                    <h3 class="fs-5 mb-1"> <a class=" text-primary ">Click to upload </a> or Drop files
-                        here.</h3>
-                    <span class="fs-7 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size  less than 2mb)</span>
-                </div>
-                <!--end::Info-->
-            </div>
-        </div>
-        <!--end::Dropzone-->
-    </div>
+      <div class="fv-row mb-5 ">
+          <!--begin::Dropzone-->
+          <div class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
+          (click)="fileInput.click()" (change)="selectFile($event)" (click)="clearFileInput($event)">
+              <!--begin::Message-->
+              <div class=" text-center w-100 text-muted">
+                  <!--begin::Icon-->
+                  <i class="fas fa-cloud-upload-alt  fs-2x"></i> <!--end::Icon-->
+                  <!--begin::Info-->
+                  <div class="ms-4">
+                    <input type="file" hidden #fileInput accept=".pdf,.doc,.docx,.xls,.xlsx">
+                      <h3 class="fs-5 mb-1"> <a class=" text-primary ">Click to upload </a> or Drop files
+                          here.</h3>
+                      <span class="fs-7 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size  less than 2mb)</span>
+                  </div>
+                  <!--end::Info-->
+              </div>
+          </div>
+          <div *ngIf="taskData.controls['documentList'].value" class="d-flex flex-wrap ">
+            <a *ngFor="let doc of taskData.controls['documentList'].value; let index = index" class="me-3 mt-4 border rounded-1 py-1 px-3  text-active-primary">
+                   {{doc.name}}
+                   <span class="cursor-pointer ms-3 ">
+                    <i class="bi bi-x-circle" (click)="clearFile(index)"></i></span>
+            </a>
+         </div>
+          <!--end::Dropzone-->
+      </div>
 
 
 
 
-    </div>
-    <div class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_new_task_recr_footer">
-      <button type="reset" class="btn  btn-sm btn-outline" id="kt_new_task_recr_close">Cancel</button>
-      <button type="reset" class="btn  btn-sm btn-primary">Submit</button>
+      </div>
+      <div class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_new_task_recr_footer">
+        <button type="button" (click)="taskData.reset()" class="btn  btn-sm btn-outline" id="kt_new_task_recr_close">Cancel</button>
+        <button type="button" class="btn  btn-sm btn-primary" (click)="submitTask()">Submit</button>
+      </div>
     </div>
   </div>
-</div>
+</form>
