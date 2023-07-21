@@ -12,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AuthService } from './modules/auth/services/auth.service';
 import { environment } from 'src/environments/environment';
@@ -44,12 +45,12 @@ function appInitializer(authService: AuthService) {
     MatDialogModule,
     // ClipboardModule,
     // #fake-start#
-    // environment.isMockEnabled
-    //   ? HttpClientInMemoryWebApiModule.forRoot(FakeAPIService, {
-    //       passThruUnknownUrl: true,
-    //       dataEncapsulation: false,
-    //     })
-    //   : [],
+    environment.isMockEnabled
+      ? HttpClientInMemoryWebApiModule.forRoot(FakeAPIService, {
+          passThruUnknownUrl: true,
+          dataEncapsulation: false,
+        })
+      : [],
     // #fake-end#
     AppRoutingModule,
     InlineSVGModule.forRoot(),
@@ -66,6 +67,7 @@ function appInitializer(authService: AuthService) {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: { duration: 3000 },
     },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
   bootstrap: [AppComponent],
 })

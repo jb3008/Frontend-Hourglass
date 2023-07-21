@@ -28,7 +28,7 @@ export class HeaderMenuComponent implements OnInit {
     // console.log(auth?.vendorId);
     if (auth?.vendorId) {
       this.switch_text = 'Switch to Recruiter';
-      this.utils.setUser('user-1');
+      this.utils.setUser(auth?.['user-id'] || '');
       this.jobPostsUrl = '/job-posts';
       this.workOrderUrl = '/work-order';
       this.utils.setHiringManager('false');
@@ -40,7 +40,7 @@ export class HeaderMenuComponent implements OnInit {
       this.switch_text = 'Switch to Vendor';
       this.jobPostsUrl = '/hm/job-posts';
       this.workOrderUrl = '/hm/work-order';
-      this.utils.setUser('user-11');
+      this.utils.setUser(auth?.['user-id'] || '');
       this.utils.setHiringManager('true');
       this.router.navigate(['/hm/job-posts']);
       // this.setHiringManager = false;
@@ -54,16 +54,16 @@ export class HeaderMenuComponent implements OnInit {
       } else if (status == 'false') {
         this.setHiringManager = false;
         this.switch_text = 'Switch to Recruiter';
-        this.utils.setVendorId('V101');
+        this.utils.setVendorId(auth?.vendorId || '');
       }
     }
 
     if (this.setHiringManager) {
       this.jobPostsUrl = '/hm/job-posts';
       this.workOrderUrl = '/hm/work-order';
-      this.utils.setUser('user-11');
+      this.utils.setUser(auth?.['user-id'] || '');
     } else {
-      this.utils.setUser('user-1');
+      this.utils.setUser(auth?.['user-id'] || '');
       this.jobPostsUrl = '/job-posts';
       this.workOrderUrl = '/work-order';
     }
