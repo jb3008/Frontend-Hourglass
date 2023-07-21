@@ -72,6 +72,7 @@ export class WorkForceComponent implements OnInit {
       currentAddress: ['', Validators.required],
       permanentAddress: ['', Validators.required],
       vendorId: [auth?.vendorId, Validators.required],
+      documentList: [[]],
     });
     this.getAllWorkForceList();
   }
@@ -168,5 +169,93 @@ export class WorkForceComponent implements OnInit {
         this.isLoading = false;
         this.cdr.detectChanges();
       });
+  }
+
+  droppedFiles(allFiles: File[], name: string): void {
+    console.log('this.allFiles', allFiles);
+    console.log(this.workForceData.controls[name].value);
+    const fileLength = allFiles.length;
+    let flg: boolean = true;
+    for (let i = 0; i < fileLength; i++) {
+      const file = allFiles[i];
+
+      if (file.type.indexOf('image') == 0) {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Please upload documents only'
+        );
+        flg = false;
+        break;
+      } else if (file.size > 2 * 1024 * 1024) {
+        // check if file size is > 2 MB
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Maximum allowed file size is 2 MB. Please choose another file.'
+        );
+        flg = false;
+        break;
+      } else {
+        const docList = this.workForceData.controls[name].value;
+        if (docList.length < 6) {
+          if (this.utils.isFileExist(docList, file)) {
+            this.utils.showSnackBarMessage(
+              this.snackBar,
+              'This file "' + file.name + '" already exist.'
+            );
+            flg = false;
+            break;
+          }
+        } else {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'Maximum 6 files can be added.'
+          );
+          flg = false;
+          break;
+        }
+      }
+    }
+    if (flg) {
+      for (let i = 0; i < fileLength; i++) {
+        this.workForceData.controls[name].value.push(allFiles[i]);
+      }
+    }
+  }
+
+  selectFile(event: any, name: string) {
+    const file = event.target.files[0];
+    if (file.type.indexOf('image') == 0) {
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Please upload documents only'
+      );
+    } else if (file.size > 2 * 1024 * 1024) {
+      // check if file size is > 2 MB
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Maximum allowed file size is 2 MB. Please choose another file.'
+      );
+    } else {
+      const docList = this.workForceData.controls[name].value;
+      if (docList.length < 6) {
+        if (this.utils.isFileExist(docList, file)) {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'This file "' + file.name + '" already exist.'
+          );
+        } else {
+          this.workForceData.controls[name].value.push(file);
+        }
+      } else {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Maximum 6 files can be added.'
+        );
+      }
+    }
+  }
+
+  clearFile(name: string, index: number) {
+    this.workForceData.controls[name].value.splice(index, 1);
   }
 }

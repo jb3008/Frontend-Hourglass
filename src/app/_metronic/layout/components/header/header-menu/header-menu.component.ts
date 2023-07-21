@@ -32,7 +32,7 @@ export class HeaderMenuComponent implements OnInit {
       this.jobPostsUrl = '/job-posts';
       this.workOrderUrl = '/work-order';
       this.utils.setHiringManager('false');
-      this.router.navigate(['/job-posts']);
+
       // this.setHiringManager = true;
       this.setHiringManager = false;
       this.utils.setVendorId(auth.vendorId);
@@ -42,12 +42,12 @@ export class HeaderMenuComponent implements OnInit {
       this.workOrderUrl = '/hm/work-order';
       this.utils.setUser(auth?.['user-id'] || '');
       this.utils.setHiringManager('true');
-      this.router.navigate(['/hm/job-posts']);
+
       // this.setHiringManager = false;
       this.setHiringManager = true;
     }
     let status = this.utils.isHiringManagerSet();
-    console.log(auth);
+
     if (status) {
       if (status == 'true') {
         this.setHiringManager = true;

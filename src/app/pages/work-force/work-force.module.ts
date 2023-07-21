@@ -10,6 +10,7 @@ import { SharedModule } from '../shared.modules';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [WorkForceComponent, WorkerProfileComponent],
   imports: [
@@ -23,6 +24,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
+    NgbTooltipModule,
   ],
   providers: [MatDatepickerModule, MatNativeDateModule],
 })
