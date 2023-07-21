@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import { UserModel } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Utils } from 'src/app/services/utils';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private utils: Utils
   ) {
     this.isLoading$ = this.authService.isLoading$;
     // redirect to home if already logged in
@@ -73,8 +75,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       .login(this.f.userId.value, this.f.password.value)
       .pipe(first())
       .subscribe((user: UserModel | undefined) => {
-        if (user) {
-          this.router.navigate([this.returnUrl]);
+        const auth = this.utils.getAuth();
+        if (auth) {
+          if (auth.vendorId) {
+            this.router.navigate(['/job-posts']);
+          } else {
+            this.router.navigate(['/hm/job-posts']);
+          }
         } else {
           this.hasError = true;
         }
