@@ -75,6 +75,7 @@ export class WorkOrderDetailsComponent implements OnInit {
       )
       .subscribe((response) => {
         this.workOrderDetails = response[0];
+        this.filterObj.workOrderId = this.workOrderDetails.workOrderId
         this.loading = false;
         this.cdr.detectChanges();
       });
@@ -106,7 +107,7 @@ export class WorkOrderDetailsComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  getTaskList(obj?: any){
+  getTaskList(obj: any){
     this.loading = true;
     this.apiCalls.get(this.endpoints.TASK_LIST_HM, obj)
       .pipe(
@@ -215,12 +216,12 @@ export class WorkOrderDetailsComponent implements OnInit {
     this.filterValue.taskId = '';
     this.filterValue.assigneeId = '';
     this.filterValue.finishDate = '';
-    this.getTaskList();
+    this.getTaskList(this.filterObj);
   }
 
   clearSearch(val: keyof FilterObj) {
     delete this.filterObj[val];
-    this.getTaskList();
+    this.getTaskList(this.filterObj);
   }
 
   editTask(id: string){
@@ -282,7 +283,7 @@ export class WorkOrderDetailsComponent implements OnInit {
     let msg = 'Your Task is successfully deleted';
     this.utils.showDialog(this.dialog, msg, () => {
       this.loading = false;
-      this.getTaskList();
+      this.getTaskList(this.filterObj);
       this.cdr.detectChanges();
     });
   }
@@ -302,6 +303,7 @@ type FilterValue = {
 };
 
 type FilterObj = {
+  workOrderId?: string,
   taskId?: string,
   priority?: string[],
   assigneeId?: string,
