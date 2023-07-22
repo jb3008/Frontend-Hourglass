@@ -92,12 +92,12 @@
                     <div class="col-8">
                         <div class="radio-inline">
                             <label class="radio radio-outline radio-outline-2x radio-primary me-5">
-                                <input formControlName="jobKind" type="radio" value="Fixed" (click)="jobKind='Fixed'">
+                                <input formControlName="jobKind" type="radio" value="Fixed" (click)="jobKind='Fixed'; changeRateValue()">
                                 <span></span>
                                 Fixed
                             </label>
                             <label class="radio radio-outline radio-outline-2x radio-primary">
-                                <input formControlName="jobKind" type="radio" value="Hourly" (click)="jobKind='Hourly'">
+                                <input formControlName="jobKind" type="radio" value="Hourly" (click)="jobKind='Hourly'; changeRateValue()">
                                 <span></span>
                                 Hour based
                             </label>

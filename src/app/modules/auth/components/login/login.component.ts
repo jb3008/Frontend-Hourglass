@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { catchError, first } from 'rxjs/operators';
 import { UserModel } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Utils } from 'src/app/services/utils';
+import { ApiCallsService } from 'src/app/services/api-calls.service';
+import EndPoints from 'src/app/common/endpoints';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +24,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   hasError: boolean;
   returnUrl: string;
   isLoading$: Observable<boolean>;
+  endPoints = EndPoints;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -31,7 +34,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private utils: Utils
+    private utils: Utils,
+    private apiCalls: ApiCallsService
   ) {
     this.isLoading$ = this.authService.isLoading$;
     // redirect to home if already logged in
@@ -78,6 +82,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         const auth = this.utils.getAuth();
         if (auth) {
           if (auth.vendorId) {
+            this.getVendorDetails(auth.vendorId);
             this.router.navigate(['/job-posts']);
           } else {
             this.router.navigate(['/hm/job-posts']);
@@ -87,6 +92,19 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       });
     this.unsubscribe.push(loginSubscr);
+  }
+
+  getVendorDetails(id: any){
+    let queryParam = {
+      vendorCode : id
+    }
+    this.apiCalls.get(this.endPoints.GET_VENDOR_DETAILS, queryParam)
+      .pipe(catchError(async (error) => {
+        throw error;
+      }))
+      .subscribe((response) => {
+        sessionStorage.setItem('vendorDetails', JSON.stringify(response));
+      })
   }
 
   ngOnDestroy() {

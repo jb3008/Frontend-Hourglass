@@ -27,8 +27,8 @@
                             <!-- <input type="input" formControlName="firstName" placeholder="First Name" class="form-control py-2 fs- fw-normal"> -->
                             <div class="mb-5">
                                 <mat-select class="form-select fs- py-2"  formControlName="workerId" placeholder="Select Candidate">
-                                    <mat-option *ngFor="let staff of staffDetails" [value]="staff.userId">
-                                        {{staff.firstName}} {{staff.lastName}} ({{staff.userId}})
+                                    <mat-option *ngFor="let staff of staffDetails" [value]="staff.workForceId">
+                                        {{staff.firstName}} {{staff.lastName}}
                                     </mat-option>
                                 </mat-select>
                             </div>

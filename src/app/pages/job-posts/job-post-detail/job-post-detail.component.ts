@@ -1,8 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
-import { DrawerComponent } from 'src/app/_metronic/kt/components';
+import { DrawerComponent, ToggleComponent } from 'src/app/_metronic/kt/components';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from  'src/app/services/utils';
@@ -28,17 +29,20 @@ export class JobPostDetailComponent implements OnInit {
   timeSheetFrequencyList: any = {'W': 'Weekly', '2W': 'Bi-Weekly', 'M': 'Monthly'};
   
   isSelectedTab:string ='Details';
+  vendorDetails: any;
 
   constructor(private route: ActivatedRoute, private apiCalls: ApiCallsService, private router: Router, 
-    private cdr: ChangeDetectorRef, private utils: Utils) { }
+    private cdr: ChangeDetectorRef, private utils: Utils, private dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.vendorDetails = JSON.parse(sessionStorage.getItem('vendorDetails')!);
     this.route.queryParams.subscribe(param => {
       this.jobId = param['jobId'];
       this.parentTab = param['tab'];
       this.isSelectedTab = this.parentTab == 'AppliedJob' ? 'Application' : 'Details';
     });
     if(this.isSelectedTab == 'Application'){
+      this.getSelectedTab(this.isSelectedTab);
       this.getApplicationDetails();
     }
     this.getJobDetails();  
@@ -48,14 +52,13 @@ export class JobPostDetailComponent implements OnInit {
   // Details
 
   getSelectedTab(tab:string): void {
-    console.log(tab)
     this.isSelectedTab = tab
 
     setTimeout(() => {
       DrawerComponent.hideAll();
       DrawerComponent.reinitialization();
 
-    }, 0); 
+    }, 100); 
     
   }
 
@@ -83,7 +86,7 @@ export class JobPostDetailComponent implements OnInit {
   getApplicationCompleteDetails(){
     this.loading = true;
     let queryParam = {
-      workerId: this.applicationDetails.workerid
+      workForceId  : this.applicationDetails.workerid
     }
     this.apiCalls.get(this.endPoints.GET_FULL_APPL_DETAILS, queryParam)
       .pipe(catchError(async (error) => {
@@ -109,7 +112,10 @@ export class JobPostDetailComponent implements OnInit {
         return `${years} Y`;
       }
     } else {
-      return `${months} M`;
+      if(months)
+        return `${months} M`;
+      else
+        return "0 M";
     }
   }
 
@@ -171,18 +177,24 @@ export class JobPostDetailComponent implements OnInit {
   }
 
   offerLetterAction(status: string){
-    let queryParam = {
-      jobAppId : this.applicationDetails?.applicationid,
-      offerId : this.offerDetails[0].id
-    }
-    if(status == 'accept'){
-      this.acceptOrRejectOfferLetter(queryParam, this.endPoints.ACCEPT_OFFER_LETTER);
-    }else if(status == 'reject'){
-      this.acceptOrRejectOfferLetter(queryParam, this.endPoints.REJECT_OFFER_LETTER);
-    }
+    let msg = `Do you want to ${status} the offer ?`;
+    this.utils.showDialogWithCancelButton(this.dialog, msg, (res: any) => {
+      if(res){
+        let queryParam = {
+          jobAppId : this.applicationDetails?.applicationid,
+          offerId : this.offerDetails[0].id
+        }
+        if(status == 'accept'){
+          this.acceptOrRejectOfferLetter(status, queryParam, this.endPoints.ACCEPT_OFFER_LETTER);
+        }else if(status == 'reject'){
+          this.acceptOrRejectOfferLetter(status,queryParam, this.endPoints.REJECT_OFFER_LETTER);
+        }
+      }
+      this.cdr.detectChanges();
+    });
   }
 
-  acceptOrRejectOfferLetter(queryParam: any, endpoint: any){
+  acceptOrRejectOfferLetter(status: any, queryParam: any, endpoint: any){
     this.loading = true;
     this.apiCalls.post(endpoint, '', queryParam)
     .pipe(catchError(async (error) => {
@@ -193,8 +205,19 @@ export class JobPostDetailComponent implements OnInit {
     .subscribe((response) => {
       this.loading = false;
       this.actionTaken = true;
+      setTimeout(() => {
+        this.openSuccessPopup(status);
+      }, 100);
       this.cdr.detectChanges();
     })
+  }
+
+  openSuccessPopup(status: any){
+    let msg = `You have successfully ${status}ed the offer`
+    this.utils.showDialog(this.dialog, msg, () => {
+      this.loading = false;
+      this.cdr.detectChanges();
+    });
   }
 
   downloadDoc(id: string){
