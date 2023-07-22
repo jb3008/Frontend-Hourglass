@@ -4,6 +4,9 @@ import { LayoutType } from '../../../core/configs/config';
 import { LayoutInitService } from '../../../core/layout-init.service';
 import { LayoutService } from '../../../core/layout.service';
 import { Utils } from 'src/app/services/utils';
+import { ApiCallsService } from 'src/app/services/api-calls.service';
+import EndPoints from 'src/app/common/endpoints';
+import { catchError } from 'rxjs/internal/operators/catchError';
 
 @Component({
   selector: 'app-header-menu',
@@ -15,10 +18,12 @@ export class HeaderMenuComponent implements OnInit {
     private router: Router,
     private layout: LayoutService,
     private layoutInit: LayoutInitService,
-    private utils: Utils
+    private utils: Utils,
+    private apiCalls: ApiCallsService
   ) {}
 
   setHiringManager: boolean = true;
+  endPoints = EndPoints;
   switch_text = 'Switch to Vendor';
   logoutUrl: string = '/auth/logout';
   jobPostsUrl: string = '/job-posts';
@@ -35,6 +40,7 @@ export class HeaderMenuComponent implements OnInit {
 
       // this.setHiringManager = true;
       this.setHiringManager = false;
+      this.getVendorDetails(auth.vendorId);
       this.utils.setVendorId(auth.vendorId);
     } else {
       this.switch_text = 'Switch to Vendor';
@@ -67,6 +73,19 @@ export class HeaderMenuComponent implements OnInit {
       this.jobPostsUrl = '/job-posts';
       this.workOrderUrl = '/work-order';
     }
+  }
+
+  getVendorDetails(id: any){
+    let queryParam = {
+      vendorCode : id
+    }
+    this.apiCalls.get(this.endPoints.GET_VENDOR_DETAILS, queryParam)
+      .pipe(catchError(async (error) => {
+        throw error;
+      }))
+      .subscribe((response) => {
+        sessionStorage.setItem('vendorDetails', JSON.stringify(response));
+      })
   }
 
   calculateMenuItemCssClass(url: string): string {

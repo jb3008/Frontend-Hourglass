@@ -34,8 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private utils: Utils,
-    private apiCalls: ApiCallsService
+    private utils: Utils
   ) {
     this.isLoading$ = this.authService.isLoading$;
     // redirect to home if already logged in
@@ -82,7 +81,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         const auth = this.utils.getAuth();
         if (auth) {
           if (auth.vendorId) {
-            this.getVendorDetails(auth.vendorId);
             this.router.navigate(['/job-posts']);
           } else {
             this.router.navigate(['/hm/job-posts']);
@@ -92,19 +90,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       });
     this.unsubscribe.push(loginSubscr);
-  }
-
-  getVendorDetails(id: any){
-    let queryParam = {
-      vendorCode : id
-    }
-    this.apiCalls.get(this.endPoints.GET_VENDOR_DETAILS, queryParam)
-      .pipe(catchError(async (error) => {
-        throw error;
-      }))
-      .subscribe((response) => {
-        sessionStorage.setItem('vendorDetails', JSON.stringify(response));
-      })
   }
 
   ngOnDestroy() {
