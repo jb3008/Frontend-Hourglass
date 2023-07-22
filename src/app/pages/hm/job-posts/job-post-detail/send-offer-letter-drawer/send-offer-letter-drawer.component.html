@@ -30,18 +30,18 @@
         <div class="badge-light-danger text-gray-800 p-5 rounded-3 my-5">
           <div  class="text-gray-800 mb-5 fs-7 fw-bold">NEGOTATION</div>
           <div class="form-group row mb-3 d-flex align-items-center">
-            <!-- <label class="col-4">Preferred {{jobDetails?.jobKind == 'Fixed' ? 'Budget' : 'Work Rate'}}</label>
-            <div class="col-8 fw-bold"> {{jobDetails?.jobKind == 'Fixed' ? jobDetails?.minBudget + '~ ' + jobDetails?.maxBudget : jobDetails?.rate}} </div> -->
-             <label class="col-4">Preferred Work Rate</label>
-            <div class="col-8 fw-bold"> {{jobSeeker.workRate}} {{jobSeeker.workRateCurrency}}</div>
+            <label class="col-4">Preferred {{jobDetails?.jobKind == 'Fixed' ? 'Budget' : 'Work Rate'}}</label>
+            <!-- <div class="col-8 fw-bold"> {{jobDetails?.jobKind == 'Fixed' ? jobDetails?.minBudget + '~ ' + jobDetails?.maxBudget : jobDetails?.rate}} </div> -->
+             <!-- <label class="col-4">Preferred Work Rate</label> -->
+            <div class="col-8 fw-bold"> {{jobSeeker?.workRate}} {{jobSeeker?.workRateCurrency}}</div>
         </div>
 
         <div class="form-group row   d-flex align-items-center">
-          <!-- <label class="col-4">Revised {{jobDetails?.jobKind == 'Fixed' ? 'Budget' : 'Work Rate'}}<span class="text-danger">*</span></label> -->
-          <label class="col-4">Revised Work Rate<span class="text-danger">*</span></label>
+          <label class="col-4">Revised {{jobDetails?.jobKind == 'Fixed' ? 'Budget' : 'Work Rate'}}<span class="text-danger">*</span></label>
+          <!-- <label class="col-4">Revised Work Rate<span class="text-danger">*</span></label> -->
           <div class="col-8 d-flex align-items-center">
-            <input type="input"   class="form-control w-150px py-2 fs- fw-normal" 
-              placeholder="Number" value="{{jobSeeker.workRate}}">
+            <input type="input" id="revisedWorkRate"  class="form-control w-150px py-2 fs- fw-normal" 
+              placeholder="Number" value="{{jobSeeker?.workRate}}">
               <span class="text-muted ps-2">{{this.jobDetails?.currency}}</span>  
             <!-- <mat-select class="form-select fs- py-2 w-100px" placeholder="Select">
               <mat-option value="USD">USD</mat-option>
@@ -80,7 +80,7 @@
           </div>
           <a *ngIf="jobPostData.controls['offerLetter']?.value" 
           class=" border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between w-auto">
-          <div class="text-truncate pspmw95" [ngbTooltip]="jobPostData.controls['offerLetter']?.value.name" [openDelay]="600">
+          <div class="text-truncate pspmw95" [ngbTooltip]="jobPostData.controls['offerLetter'].value.name" [openDelay]="600">
               {{jobPostData.controls['offerLetter'].value.name}}
           </div>
               <span class="cursor-pointer ms-3 ">

@@ -196,7 +196,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
         openPosition: this.draftJobDetails.openPosition,
         jobType: this.draftJobDetails.type,
         jobKind: this.draftJobDetails.jobKind,
-        workRate: this.draftJobDetails.rate,
+        workRate: this.draftJobDetails?.rate,
         minBudget: this.draftJobDetails?.minBudget,
         maxBudget: this.draftJobDetails?.maxBudget,
         workRateCurrency: this.draftJobDetails.currency,
@@ -404,10 +404,22 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       this.saveJob('draft');
     }
   }
+
+  changeRateValue(){
+    if(this.jobKind == 'Fixed'){
+      this.jobPostData.controls['workRate'].setValue(null);
+    }else{
+      this.jobPostData.controls['minBudget'].setValue(null);
+      this.jobPostData.controls['maxBudget'].setValue(null);
+    }
+  }
   
   saveJob(status: string){
     const formData = new FormData();
-    if(this.jobPostData.valid){
+    let workRateValue = this.jobPostData.controls['workRate'].value;
+    let minBudget = this.jobPostData.controls['minBudget'].value;
+    let maxBudget = this.jobPostData.controls['maxBudget'].value;
+    if(this.jobPostData.valid && (workRateValue || (minBudget && maxBudget))){
       this.isLoading = true;
       this.jobPostData.controls['reportDate'].setValue(this.changeDateToUtc(this.jobPostData.controls['reportDate'].value))
       this.jobPostData.controls['startDate'].setValue(this.changeDateToUtc(this.jobPostData.controls['startDate'].value))

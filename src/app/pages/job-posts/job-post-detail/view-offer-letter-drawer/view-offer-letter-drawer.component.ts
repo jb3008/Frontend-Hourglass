@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
@@ -8,7 +8,7 @@ import { Utils } from  'src/app/services/utils';
   selector: 'app-view-offer-letter-drawer',
   templateUrl: './view-offer-letter-drawer.component.html',
 })
-export class ViewOfferLetterDrawerComponent implements OnInit {
+export class ViewOfferLetterDrawerComponent implements OnInit, OnChanges {
 
   constructor(private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef, private utils: Utils) {}
 
@@ -21,6 +21,18 @@ export class ViewOfferLetterDrawerComponent implements OnInit {
 
   ngOnInit(): void {
     this.getOfferDocuments();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes?.offerDetails?.currentValue.length > 0){
+      this.offerDetails = changes.offerDetails.currentValue;
+    }
+    if(changes?.rate?.currentValue){
+      this.rate = changes.rate.currentValue;
+    }
+    if(changes?.currency?.currentValue){
+      this.currency = changes.currency.currentValue;
+    }
   }
 
   getOfferDocuments(){

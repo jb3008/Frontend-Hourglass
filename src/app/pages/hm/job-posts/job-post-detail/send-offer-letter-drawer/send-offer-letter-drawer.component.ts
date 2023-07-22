@@ -51,8 +51,7 @@ export class SendOfferLetterDrawerComponent implements OnInit {
     Once again, congratulations on your selection for this role. We eagerly anticipate your positive response.
     `;
 
-    this.rate = this.jobDetails.jobKind == 'Hourly' ? this.jobDetails.rate : this.jobDetails.minBudget;
-    debugger
+    this.rate = this.jobDetails?.jobKind == 'Hourly' ? this.jobDetails?.rate : this.jobDetails?.minBudget;
   }
 
   selectFile(event: any, name: any){
@@ -94,13 +93,14 @@ export class SendOfferLetterDrawerComponent implements OnInit {
     }
 
     this.isLoading = true;
-    
+    let workRate = document.getElementById('revisedWorkRate') as HTMLInputElement;
+    this.rate = workRate.value;
     formData.append('status', 'OFFER_SENT');
     formData.append('jobPostId', this.jobDetails.id);
     formData.append('jobAppId', this.jobSeeker.id);
     formData.append('offerMsg', this.data);
-    formData.append('rate', this.jobDetails.jobKind == 'Hourly' ? this.rate : '0');
-    formData.append('budget', this.jobDetails.jobKind == 'Fixed' ? this.rate: '0');
+    formData.append('rate', this.rate);
+    // formData.append('budget', this.jobDetails.jobKind == 'Fixed' ? this.rate: '0');
     formData.append('otherDocList', this.jobPostData.value['offerLetter']);
 
     this.apiCalls.post(this.endPoints.SEND_JOB_OFFER, formData, { "Content-Type": "multipart/form-data" })

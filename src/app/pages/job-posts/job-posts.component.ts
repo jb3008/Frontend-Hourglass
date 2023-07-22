@@ -60,9 +60,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       if(param?.tab){
         this.selectedTab = param.tab;
         setTimeout(() => {
-          if (!this.getSelectedTab(this.selectedTab)) {
-            this.getAllJobs();  // if getAllJobs() not called, then we need to call it here now.
-          }
+          this.getSelectedTab(this.selectedTab);
         }, 100);
       } else {
         this.getAllJobs();
@@ -183,9 +181,9 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedTab(tab:string) {
-    if (this.selectedTab == tab) {
-      return false;
-    }
+    // if (this.selectedTab == tab) {
+    //   return false;
+    // }
 
     this.selectedTab = tab;
     this.resetFilter('selectedTab');

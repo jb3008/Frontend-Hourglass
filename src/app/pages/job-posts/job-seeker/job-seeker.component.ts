@@ -87,7 +87,7 @@ export class JobSeekerComponent implements OnInit {
       vendorId: this.utils.getVendorId()
     };
 
-    this.apiCalls.get(this.endPoints.GET_VENDOR_STAFF_DETAILS, queryParam)
+    this.apiCalls.get(this.endPoints.GET_USER_FOR_JOBS, queryParam)
       .pipe(catchError(async (error) => {
         this.loading = false;
         this.cdr.detectChanges();
@@ -143,29 +143,29 @@ export class JobSeekerComponent implements OnInit {
     const formData = new FormData();
     if(this.applyJobData.valid && this.applyJobData.controls['agreeTerms'].value){
       this.loading = true;
-      this.applyJobData.removeControl('agreeTerms');
       this.applyJobData.controls['availableDate'].setValue(this.utils.changeDateToUtc(this.applyJobData.controls['availableDate'].value));
       let totalMonths = (Number(this.applyJobData.controls['workExpYears'].value) * 12) + Number(this.applyJobData.controls['workExpMonths'].value);
       this.applyJobData.controls['workExpMonths'].setValue(totalMonths);
-      this.applyJobData.removeControl('workExpYears');
 
       for (const key of Object.keys(this.applyJobData.value) ) {
-        if(key !== 'resumeDoc' && key != 'profilePictureDoc' && key !== 'otherDocList'){
-          const value = this.applyJobData.value[key];
-          formData.append(key, value);
-        }else{
-          if(key == 'otherDocList'){
-            const file = this.applyJobData.get(key)?.value;
-            if(file.length != 0){
-              file.forEach((fileObj: File) => {
-                const blob = new Blob([fileObj], { type: fileObj.type });
-                formData.append(key, blob, fileObj.name);
-              })
-            }
+        if(key != 'agreeTerms' && key != 'workExpYears'){
+          if(key !== 'resumeDoc' && key != 'profilePictureDoc' && key !== 'otherDocList'){
+            const value = this.applyJobData.value[key];
+            formData.append(key, value);
           }else{
-            const file = this.applyJobData.get(key)?.value;
-            const blob = new Blob([file], { type: file.type });
-            formData.append(key, blob, file.name);
+            if(key == 'otherDocList'){
+              const file = this.applyJobData.get(key)?.value;
+              if(file && file?.length != 0){
+                file.forEach((fileObj: File) => {
+                  const blob = new Blob([fileObj], { type: fileObj.type });
+                  formData.append(key, blob, fileObj.name);
+                })
+              }
+            }else{
+              const file = this.applyJobData.get(key)?.value;
+              const blob = new Blob([file], { type: file.type });
+              formData.append(key, blob, file.name);
+            }
           }
         }
       }
@@ -195,7 +195,8 @@ export class JobSeekerComponent implements OnInit {
   }
 
   getWorkerDetails(workerId: any, key: string) {
-    const worker = find(this.staffDetails, {'userId': workerId});
+    workerId = Number(workerId);
+    const worker = find(this.staffDetails, {'workForceId': workerId});
 
     if (!!!worker) {
       return worker;
@@ -209,7 +210,7 @@ export class JobSeekerComponent implements OnInit {
   }
 
   openSuccessPopup(){
-     this.utils.showDialog('You have successfully applied for the job', (data:any) => {
+     this.utils.showDialog(this.dialog, 'You have successfully applied for the job', (data:any) => {
       this.loading = false;
       this.cdr.detectChanges();
       this.navigateBack();
