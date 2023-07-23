@@ -52,7 +52,7 @@
                 <div class="d-flex flex-wrap lign-items-center">
                   <div class=" me-5 my-1">
                     <span class="d-flex text-muted fs-8">Vendor</span>
-                    <span class="fw-bold d-flex s-">{{workOrderDetails?.managerDetails?.vendorId}}- {{workOrderDetails?.managerDetails?.firstName}} {{workOrderDetails?.managerDetails?.lastName}}</span>
+                    <span class="fw-bold d-flex s-">{{workOrderDetails?.vendorDetails?.vendorId}} {{workOrderDetails?.vendorDetails?.title}}</span>
                   </div>
                   <div class="vr me-5 mt-4 h-20px "></div>
 
@@ -202,7 +202,7 @@
                 <div class="form-group row ">
                   <label class="col-4 col-form-label text-muted">Cost Center</label>
                   <div class="col-8">
-                    <span class="form-control-plaintext text-end">{{workOrderDetails?.costCenter}}</span>
+                    <span class="form-control-plaintext text-end">({{workOrderDetails?.constCenterDetails?.code}}) {{workOrderDetails?.constCenterDetails?.name}}</span>
                   </div>
                 </div>
                 <div class="separator"></div>
@@ -264,7 +264,7 @@
       <ng-container *ngIf="isSelectedTab=='Task'">
 
         <a id="kt_new_task_drawer_toggle" class="btn btn-primary btn-sm cursor-pointer mb-6" (click)="taskDetails = ''"> <i class="bi bi-plus-lg"></i>New Task</a>
-<app-new-task-drawer [vendorId]="workOrderDetails?.managerDetails?.vendorId" [taskDetails]="taskDetails" (getList)="getTaskList({workOrderId: workOrderDetails?.workOrderId})"></app-new-task-drawer>
+<app-new-task-drawer [vendorId]="workOrderDetails?.vendorDetails?.vendorId" [taskDetails]="taskDetails" (getList)="getTaskList({workOrderId: workOrderDetails?.workOrderId})"></app-new-task-drawer>
 
         <div class="d-flex align-items-start gap-4 ">
             <div class="position-relative input-icon input-icon-right">

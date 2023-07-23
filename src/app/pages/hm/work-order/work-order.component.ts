@@ -166,7 +166,10 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
 
   truncateText(text: string, maxLength: number): string {
     if (!text) return '';
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    let truncateText =  text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    const div = document.createElement('div');
+    div.innerHTML = truncateText;
+    return div.textContent || div.innerText || '';
   }
   
   goToDetails(element: any){

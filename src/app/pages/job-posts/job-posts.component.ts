@@ -156,7 +156,10 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
 
   getJobCount(){
     this.isLoading = true;
-    this.apiCalls.get(this.endpoints.JOB_COUNTS)
+    let queryParam = {
+      vendorCode: sessionStorage.getItem('vendorId')
+    }
+    this.apiCalls.get(this.endpoints.GET_JOBAPPL_COUNTS, queryParam)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(this.snackBar, 'failed to get the job counts');

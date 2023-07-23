@@ -29,6 +29,7 @@ export class WorkOrderDetailComponent implements OnInit {
   documentsList: any[] = [];
   statusLists: any[] = [];
   taskDetails: any;
+  vendorDetails: any;
   timeSheetFrequencyList: any = {'W': 'Weekly', '2W': 'Bi-Weekly', 'M': 'Monthly'};
   displayedColumns: string[] = ['taskId', 'title', 'priority', 'assigneeId','timeSpent',  'finishDate', 'lastUpdate', 'status', 'action'];
   dataSource = new MatTableDataSource<any>;
@@ -42,6 +43,7 @@ export class WorkOrderDetailComponent implements OnInit {
   } as FilterValue;
 
   ngOnInit(): void {
+    this.vendorDetails = JSON.parse(sessionStorage.getItem('vendorDetails')!);
     this.route.queryParams.subscribe(param => {
       this.workOrderID = param['workOrderId'];
     });

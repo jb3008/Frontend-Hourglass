@@ -48,6 +48,7 @@ const EndPoints = {
   UPDATE_TASK: '/hourglass/task/updateTask.api',
   DELETE_TASK: '/hourglass/task/delete.api',
   GET_VENDOR_DETAILS: '/hourglass/vendor/getVendorDetails.api',
+  GET_JOBAPPL_COUNTS: '/hourglass/vendor/getJobApplicationCounts.api'
 };
 
 export default EndPoints;

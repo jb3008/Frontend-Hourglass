@@ -16,20 +16,20 @@
         <li class="nav-item">
             <a data-bs-toggle="tab" class="nav-link px-4" (click)="getSelectedTab('NewJob')"
                 [ngClass]="{'active': selectedTab=='NewJob', 'cursor-pointer': selectedTab !=='NewJob'}"> New Job <span class="badge badge-light-primary ms-3">
-                    <i class="bi bi-arrow-down-left px-1 text-primary fs-9 me-2"></i> {{jobCount?.activeCount}}</span> </a>
+                    <i class="bi bi-arrow-down-left px-1 text-primary fs-9 me-2"></i> {{jobCount?.activeJobPost}}</span> </a>
         </li>
 
         <li class="nav-item">
             <a data-bs-toggle="tab" class="nav-link px-4" (click)="getSelectedTab('AppliedJob')"
                 [ngClass]="{'active': selectedTab=='AppliedJob', 'cursor-pointer': selectedTab !=='AppliedJob'}"> Applied Job <span
                     class="badge badge-light-warning ms-3"><i
-                        class="bi bi-arrow-up-right px-1 text-warning fs-9 me-2"></i> {{jobCount?.draftCount}}</span></a>
+                        class="bi bi-arrow-up-right px-1 text-warning fs-9 me-2"></i> {{jobCount?.appliedjobcount}}</span></a>
         </li>
         <li class="nav-item">
             <a data-bs-toggle="tab" class="nav-link px-4" (click)="getSelectedTab('ConfirmedJob')"
                 [ngClass]="{'active': selectedTab=='ConfirmedJob', 'cursor-pointer': selectedTab !=='ConfirmedJob'}"> Confirmed Job
                 <span
-                    class="badge badge-light-success ms-3"><i class="bi bi-check2-circle fs-7 me-2"></i> {{jobCount?.closeCount}}</span></a>
+                    class="badge badge-light-success ms-3"><i class="bi bi-check2-circle fs-7 me-2"></i> {{jobCount?.confirmedjobcount}}</span></a>
         </li>
     </ul>
     <!-- <a href="" class="btn btn-primary btn-sm cursor-pointer my-2" routerLink="creat-job-post" > Create Job Post</a> -->

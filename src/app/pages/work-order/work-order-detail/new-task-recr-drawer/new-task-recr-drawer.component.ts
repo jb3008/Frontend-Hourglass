@@ -79,8 +79,9 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
   }
 
   getAssigneeList(){
+    let vendorId = JSON.parse(sessionStorage.getItem('vendorDetails')!);
     const queryParam = {
-      vendorId : this.vendorId
+      vendorId : vendorId.vendorId
     }
     this.apiCalls.get(this.endpoints.GET_VENDOR_STAFF_DETAILS, queryParam)
       .pipe(
