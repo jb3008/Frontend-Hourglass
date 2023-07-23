@@ -39,6 +39,7 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
       expectedFinishDate: ['', Validators.required],
       comments: ['', Validators.required],
       timeSpent: ['', Validators.required],
+      status: ['', Validators.required],
       documentList: [[]]
     });
     
@@ -48,6 +49,7 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
   ngOnChanges(changes: any){
     if(changes?.taskDetails?.currentValue){
       this.taskDetails = changes.taskDetails.currentValue;
+      this.taskData.addControl('status', ['', Validators.required]);
       this.setEditValuesOnUi();
     }
   }
@@ -123,6 +125,10 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
   submitTask(){
     this.isLoading = true;
     const formData = new FormData();
+    if(!this.taskDetails){
+      this.taskData.removeControl('status');
+      this.taskData.removeControl('timeSpent');
+    }
     if(this.taskData.valid){
       this.taskData.controls['startDate'].setValue(this.changeDateToUtc(this.taskData.controls['startDate'].value))
       this.taskData.controls['expectedFinishDate'].setValue(this.changeDateToUtc(this.taskData.controls['expectedFinishDate'].value))
@@ -144,7 +150,9 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
       if(this.taskDetails){
         formData.append('id', this.taskDetails.taskId);
       }
-      formData.append('status', 'ACTIVE');
+      if(!this.taskDetails)
+        formData.append('status', 'IN_PROGRESS');
+
       formData.append('workOrderId', this.workOrderID);
 
       this.apiCalls.post(this.taskDetails == '' ? this.endpoints.CREATE_TASK: this.endpoints.UPDATE_TASK,formData)
@@ -156,7 +164,7 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
         this.cdr.detectChanges()
       }))
       .subscribe(response => {
-        if(response.success == "false"){
+        if(response?.success == "false"){
           this.isLoading = false;
           this.utils.showSnackBarMessage(this.snackBar, response.msg);      
         }else{

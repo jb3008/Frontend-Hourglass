@@ -51,12 +51,18 @@
                 </mat-option>
               </mat-select>
           </div>
-          <div class="form-group  mb-5">
+          <div class="form-group  d-flex justify-content-between align-items-center gap-3 mb-5">
             <label class="mb-1">Priority<span class="text-danger">*</span></label>
               <mat-select formControlName="priority" class="form-select fs- py-2" placeholder="Select">
                 <mat-option value="Low">Low</mat-option>
                 <mat-option value="Medium">Medium</mat-option>
                 <mat-option value="High">High</mat-option>
+            </mat-select>
+
+            <label class="mb-1" *ngIf="taskDetails">Status<span class="text-danger">*</span></label>
+              <mat-select *ngIf="taskDetails" formControlName="status" class="form-select fs- py-2" placeholder="Select">
+                <mat-option value="IN_PROGRESS">IN_PROGRESS</mat-option>
+                <mat-option value="COMPLETED">COMPLETED</mat-option>
             </mat-select>
         </div>
           <div class="form-group d-flex justify-content-between align-items-center gap-3 mb-5">
@@ -79,7 +85,7 @@
               </div>
       </div>
 
-      <div class="form-group  mb-5 d-flex">
+      <div class="form-group  mb-5 d-flex" *ngIf="taskDetails">
         <label class="mb-1 col-2 me-3">Time Spent <span class="text-danger">*</span></label>
         <input type="input" formControlName="timeSpent" class="form-control w-50 me-3 py-2 fs- fw-normal" placeholder="Time Spent">
         <div class="py-2 fs- fw-normal" >Hours</div>
