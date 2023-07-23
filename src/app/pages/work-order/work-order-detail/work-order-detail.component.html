@@ -360,7 +360,7 @@
             <ng-container matColumnDef="lastUpdate">
               <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> Last Update
               </th>
-              <td mat-cell *matCellDef="let element" class="align-middle"> {{element.lastUpdate | date:'MMM dd, yyyy'}} </td>
+              <td mat-cell *matCellDef="let element" class="align-middle"> {{element.modifierDate | date:'MMM dd, yyyy'}} </td>
             </ng-container>
 
             <!-- status Column -->
@@ -381,7 +381,7 @@
                 <a id="kt_new_task_recr_drawer_toggle" (click)="editTask(element.taskId)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3">
                   <i class="bi bi-pencil"></i>
                 </a>
-                <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm ">
+                <a (click)="deleteTask(element.taskId)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm ">
                   <i class="bi bi-trash"></i>
                 </a>
               </td>

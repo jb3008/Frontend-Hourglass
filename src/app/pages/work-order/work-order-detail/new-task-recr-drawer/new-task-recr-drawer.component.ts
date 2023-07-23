@@ -39,6 +39,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
       expectedFinishDate: ['', Validators.required],
       comments: ['', Validators.required],
       timeSpent: ['', Validators.required],
+      status: ['', Validators.required],
       documentList: [[]]
     });
     
@@ -48,6 +49,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
   ngOnChanges(changes: any){
     if(changes?.taskDetails?.currentValue){
       this.taskDetails = changes.taskDetails.currentValue;
+      this.taskData.addControl('status', ['', Validators.required]);
       this.setEditValuesOnUi();
     }
   }
@@ -122,6 +124,10 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
 
   submitTask(){
     this.isLoading = true;
+    if(!this.taskDetails){
+      this.taskData.removeControl('status');
+      this.taskData.removeControl('timeSpent');
+    }
     const formData = new FormData();
     if(this.taskData.valid){
       this.taskData.controls['startDate'].setValue(this.changeDateToUtc(this.taskData.controls['startDate'].value))
@@ -144,7 +150,10 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
       if(this.taskDetails){
         formData.append('id', this.taskDetails.taskId);
       }
-      formData.append('status', 'ACTIVE');
+      
+      if(!this.taskDetails)
+        formData.append('status', 'IN_PROGRESS');
+        
       formData.append('workOrderId', this.workOrderID);
 
       this.apiCalls.post(this.taskDetails == '' ? this.endpoints.CREATE_TASK: this.endpoints.UPDATE_TASK,formData)

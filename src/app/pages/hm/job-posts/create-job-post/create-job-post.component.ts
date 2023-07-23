@@ -187,6 +187,11 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     this.getPlantsList(this.draftJobDetails.companyDetails.companyCode);
     this.getBusinessUnits(this.draftJobDetails.companyDetails.companyCode);
     this.jobKind = this.draftJobDetails.jobKind;
+    const oneDay = 24 * 60 * 60 * 1000;
+    const startDate: any = new Date(this.draftJobDetails.startDate);
+    const endDate: any = new Date(this.draftJobDetails.endDate);
+    const differenceInMilliseconds = Math.abs(endDate - startDate);
+    const differenceInDays = Math.round(differenceInMilliseconds / oneDay);
     setTimeout(() => {
       this.jobPostData.patchValue({
         jobTitle: this.draftJobDetails.title,
@@ -202,10 +207,10 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
         workRateCurrency: this.draftJobDetails.currency,
         reportDate: this.draftJobDetails.reportDate,
         startDate: this.draftJobDetails.startDate,
-        endDateNumber: 90,
+        endDateNumber: differenceInDays,
         endDate: this.draftJobDetails.endDate,
         timesheetFreq: this.draftJobDetails.timeSheetFreq,
-        workHourInterval: 'Weekly',
+        workHourInterval: this.draftJobDetails.workHourInterval,
         workHours: this.draftJobDetails.workHours,
         costCenter: this.draftJobDetails.costCenter,
         payTerms: this.draftJobDetails.payTerms,
@@ -489,7 +494,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     if(status == 'active'){
       msg = 'Your Job is posted successfully. Job Id = ' + id;
     } else if(status == 'draft'){
-      msg = 'Your Job is saved successfully. Job Id = ' + id;
+      msg = 'Your Job is saved successfully'
     }
     this.utils.showDialog(this.dialog, msg, () => {
       this.isLoading = false;

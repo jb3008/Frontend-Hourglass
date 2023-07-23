@@ -136,6 +136,49 @@ export class WorkOrderDetailComponent implements OnInit {
       });
   }
 
+  deleteTask(id: string){
+    let msg = 'Do you want to delete this task?';
+    this.utils.showDialogWithCancelButton(this.dialog, msg, (res: any) => {
+      this.loading = false;
+      if(res){
+        this.deleteTheTask(id)
+      }
+      this.cdr.detectChanges();
+    });
+  }
+
+  deleteTheTask(id: string){
+    this.loading = true;
+    let queryObj = {
+      id : id
+    }
+    this.apiCalls.delete(this.endpoints.DELETE_TASK, queryObj)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(this.snackBar, 'failed to delete the task');
+          this.loading = false;
+          this.cdr.detectChanges();
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.loading = false;
+        setTimeout(() => {
+          this.openSuccessPopup();
+        }, 100);
+        this.cdr.detectChanges();
+      });
+  }
+
+  openSuccessPopup(){
+    let msg = 'Your Task is successfully deleted';
+    this.utils.showDialog(this.dialog, msg, () => {
+      this.loading = false;
+      this.getTaskList(this.filterObj);
+      this.cdr.detectChanges();
+    });
+  }
+
   getDocuments(){
     this.loading = true;
     let queryObj = {
