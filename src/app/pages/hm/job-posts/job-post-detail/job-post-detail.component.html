@@ -354,7 +354,7 @@
             <td mat-cell *matCellDef="let element" class="align-middle"> 
               <div class="d-flex align-items-center justify-content-center gap-5">
 
-                <a id="kt_logs_drawer_toggle" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm  "><i class="bi bi-clock"></i></a>
+                <a id="kt_logs_drawer_toggle" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm" (click)="setApplicationId(element.id)"><i class="bi bi-clock"></i></a>
 
                 <a id="kt_chat_drawer_toggle" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm "><i class="bi bi-chat-left-text"></i> <span class="text-danger ms-2 fw-bold">5</span> </a>
               
@@ -459,7 +459,7 @@
                     <span  class="badge  fw-normal" [className]="getInterviewStatusClass(element.status)">
                     {{getInterviewStatus(element.status)}}</span>
             </div>
-            <app-logs-drawer></app-logs-drawer>
+            <app-logs-drawer [clickedApplication]="clickedApplication"></app-logs-drawer>
             <app-chat-drawer></app-chat-drawer>
           </td>
         </ng-container>
@@ -482,5 +482,5 @@
   <app-send-offer-letter-drawer [jobSeeker]="selectedJobSeeker" [jobDetails]="jobDetails">
                         </app-send-offer-letter-drawer>
   <app-chat-drawer></app-chat-drawer>
-  <app-logs-drawer></app-logs-drawer>
+  <app-logs-drawer [clickedApplication]="clickedApplication"></app-logs-drawer>
 </div>
