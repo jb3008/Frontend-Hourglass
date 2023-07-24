@@ -52,12 +52,12 @@
     <div class="mt-5 mb-7 border">
         <table mat-table [dataSource]="dataSource" class="table  border-bottom table-row-bordered text-gray-600 m-0" >
           <!-- timesheet Column -->
-          <ng-container matColumnDef="timesheet">
+          <ng-container matColumnDef="timeSheetId">
             <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-file-earmark"></i> Timesheet #</th>
             <td mat-cell *matCellDef="let element" class="align-middle">
                 <!-- <a routerLink="details" class="cursor-pointer"> -->
                 <a routerLink="timesheet-detail">
-                    {{element.timesheet}}  <i class="far fa-arrow-alt-circle-right"></i>
+                    {{element.timeSheetId}}  <i class="far fa-arrow-alt-circle-right"></i>
                 </a>
             </td>
           </ng-container>
@@ -68,11 +68,11 @@
             <td mat-cell *matCellDef="let element" class="align-middle"> 
               <div  class="me-10 my-1 d-flex">
                 <div  class="symbol symbol-35px symbol-square me-3">
-                    <span  class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">SL </span>
+                    <span  class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">{{element?.employee?.firstName?.[0]}}{{element?.employee?.lastName?.[0]}} </span>
                 </div>
                     <div >
-                        <span >{{element.employee}}</span>
-                        <span  class="d-flex text-muted fs-8">username@example.com</span>
+                        <span >{{element?.employee?.firstName}} {{element?.employee?.lastName}}</span>
+                        <span  class="d-flex text-muted fs-8">{{element?.employee?.workEmail}}</span>
                     </div>
                 </div>
               
@@ -81,11 +81,11 @@
           </ng-container>
                  
           <!-- workOrder Column -->
-          <ng-container matColumnDef="workOrder">
+          <ng-container matColumnDef="workOrderId">
             <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-file-earmark"></i> Work Order #</th>
             <td mat-cell *matCellDef="let element" class="align-middle">
                 <a>
-                    {{element.workOrder}}  <i class="far fa-arrow-alt-circle-right"></i>
+                    {{element.workOrderId}}  <i class="far fa-arrow-alt-circle-right"></i>
                 </a>
              </td>
           </ng-container>
@@ -94,19 +94,19 @@
     <!-- fromDate Column -->
     <ng-container matColumnDef="fromDate">
       <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> From  Date</th>
-      <td mat-cell *matCellDef="let element" class="align-middle"> {{element.fromDate}} </td>
+      <td mat-cell *matCellDef="let element" class="align-middle"> {{element.fromDate | date:'MMM,dd yyyy'}} </td>
     </ng-container>
 
-    <!-- dueDate Column -->
-    <ng-container matColumnDef="dueDate">
+    <!-- toDate Column -->
+    <ng-container matColumnDef="toDate">
       <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> Due Date</th>
-      <td mat-cell *matCellDef="let element" class="align-middle"> {{element.dueDate}} </td>
+      <td mat-cell *matCellDef="let element" class="align-middle"> {{element.toDate | date:'MMM,dd yyyy'}} </td>
     </ng-container>
 
     <!-- totalhr Column -->
-    <ng-container matColumnDef="totalhr">
+    <ng-container matColumnDef="totalTimeSpent">
       <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-clock"></i> Total Work hr</th>
-      <td mat-cell *matCellDef="let element" class="align-middle"> {{element.totalhr}} </td>
+      <td mat-cell *matCellDef="let element" class="align-middle"> {{element.totalTimeSpent}} </td>
     </ng-container>
      
       <!-- status Column -->
@@ -128,4 +128,7 @@
 
       </div>
 
+</div>
+<div *ngIf="isLoading" class="pause d-flex align-items-center justify-content-center">
+  <div class="spinner"></div>
 </div>

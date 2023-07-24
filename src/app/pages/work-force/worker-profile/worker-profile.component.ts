@@ -24,6 +24,7 @@ export class WorkerProfileComponent implements OnInit {
   ) {}
   endPoints = EndPoints;
   isLoading = false;
+  documentsList: any;
   ngOnInit(): void {
     this.route.queryParams.subscribe((param) => {
       this.workForceId = param['workForceId'];
@@ -60,7 +61,28 @@ export class WorkerProfileComponent implements OnInit {
       )
       .subscribe((response) => {
         this.workForceDetails = response;
+        this.cdr.detectChanges();
+        this.getDocuments();
+      });
+  }
+  getDocuments() {
+    let queryParam = {
+      id: this.workForceId,
+      attachmentType: 'WORK_FORCE',
+    };
+    this.apiCalls
+      .get(this.endPoints.GET_DOCUMENTS, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+          console.log(error);
+          throw error;
+        })
+      )
+      .subscribe((response) => {
         this.isLoading = false;
+        this.documentsList = response;
         this.cdr.detectChanges();
       });
   }

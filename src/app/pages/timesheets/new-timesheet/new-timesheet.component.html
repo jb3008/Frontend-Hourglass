@@ -1,100 +1,136 @@
 <div class="content flex-column-fluid auto container-lg mb-4">
-    <!-- <div class="py-5 fw-bold">
-        <a class="cursor-pointer " routerLink="/job-posts"> <i class="fas fa-arrow-left me-3"></i>
-            Create Job Posting for Worker <span class="badge badge-light-success fw-normal ms-3"><i
-                    class="fas fa-yin-yangfas fa-circle px-1 text-success  fs-10"></i> New Job</span></a>
-    </div> -->
-    <!--begin:: Top Card-->
-
+  <form [formGroup]="timeSheetData">
     <div class="card mb-5 mb-xl-10 text-gray-600">
-        <div class="card-body">
-            
-            <h3 class="card-title fs-4"> 
-                <a class="cursor-pointer " routerLink="/timesheets"> <i class="fas fa-arrow-left me-3"></i></a>
-                Timesheet Creation</h3>
-                <div class="mt-2 mb-7 text-muted block">
-                    Based on the selected timesheet period, you need to link task and mention  how much time you have spent for a particular and task status
+      <div class="card-body">
+        <h3 class="card-title fs-4">
+          <a class="cursor-pointer" routerLink="/timesheets">
+            <i class="fas fa-arrow-left me-3"></i
+          ></a>
+          Timesheet Creation
+        </h3>
+        <div class="mt-2 mb-7 text-muted block">
+          Based on the selected timesheet period, you need to link task and
+          mention how much time you have spent for a particular and task status
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="pspw60">
+            <div class="form-group row mb-5 d-flex align-items-center">
+              <label class="col-4"
+                >Employee <span class="text-danger">*</span></label
+              >
+              <div class="col-8 d-flex align-items-center gap-2">
+                <mat-select
+                  formControlName="employeeId"
+                  placeholder="Select"
+                  class="form-select fs- py-2"
+                  (selectionChange)="changeEmp($event.value)"
+                >
+                  <mat-option
+                    *ngFor="let list of workForceList"
+                    [value]="list.workForceId"
+                  >
+                   {{list.firstName}} {{list.lastName}}
+                  </mat-option>
+                </mat-select>
+                <a class="btn btn-icon btn-sm">
+                  <i class="bi bi-info-circle"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="form-group row mb-5 d-flex align-items-center">
+              <label class="col-4"
+                >Work Order <span class="text-danger">*</span></label
+              >
+              <div class="col-8 d-flex align-items-center gap-2">
+                <mat-select
+                  formControlName="workOrderId"
+                  placeholder="Select"
+                  class="form-select fs- py-2"
+                   (selectionChange)="changeWorkOrder($event.value)"
+                >
+                  <mat-option
+                    *ngFor="let list of workOrderList"
+                    [value]="list.workOrderId"
+                  >
+                    {{ list.title }}
+                  </mat-option>
+                </mat-select>
+                <a class="btn btn-icon btn-sm">
+                  <i class="bi bi-info-circle"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="form-group row d-flex align-items-center">
+              <label class="col-4"
+                >Timesheet Period <span class="text-danger">*</span></label
+              >
+              <div class="col-8 d-flex align-items-center">
+                <div
+                  class="input-icon position-relative min-w-100px input-icon-right"
+                >
+                  <input
+                    type="text"
+                    class="form-control py-2 fs- fw-normal"
+                    (click)="picker.open()"
+                    [matDatepicker]="picker"
+                    placeholder="Start Date"
+                    formControlName="fromDate"
+                  />
+                  <span><i class="far fa-calendar"></i></span>
+                  <mat-datepicker #picker></mat-datepicker>
                 </div>
-                <div class="d-flex justify-content-between align-items-center">
-                        <div class="pspw60 ">
-                            <div class="form-group row mb-5 d-flex align-items-center">
-                                <label class="col-4">Employee <span class="text-danger">*</span></label>
-                                <div class="col-8 d-flex align-items-center gap-2">
-                                    <select name="" id="" class="form-select fs- py-2">
-                                        <option value="">Select</option>
-                                    </select>
-                                    <a  class=" btn btn-icon btn-sm " >
-                                        <i class="bi bi-info-circle"></i>
-                                    </a>
-                                       
-                                </div>
-                            </div>
-            
-                            <div class="form-group row mb-5 d-flex align-items-center">
-                                <label class="col-4">Work Order  <span class="text-danger">*</span></label>
-                                <div class="col-8 d-flex align-items-center gap-2">
-                                    <select name="" id="" class="form-select fs- py-2">
-                                        <option value="">Select</option>
-                                    </select>
-                                    <a  class=" btn btn-icon btn-sm " >
-                                      <i class="bi bi-info-circle"></i>
-                                  </a>
-                                </div>
-                            </div>
 
-
-                            <div class="form-group row  d-flex align-items-center">
-                                <label class="col-4">Timesheet Period <span class="text-danger">*</span></label>
-                                <div class="col-8 d-flex align-items-center">
-                                    <div class="input-icon position-relative min-w-100px input-icon-right">
-            
-                                        <input type="text" class="form-control   py-2 fs- fw-normal" (click)="picker.open()"
-                                    [matDatepicker]="picker" placeholder="Start Date">
-                                <span><i class="far fa-calendar"></i></span>
-                                <mat-datepicker #picker></mat-datepicker>
-                                </div>
-            
-                                <label class="mb-1 ps-6 pe-4 min-w-50px ">to</label>
-                                <div class="input-icon position-relative min-w-100px input-icon-right">
-            
-                                    <input type="text" class="form-control   py-2 fs- fw-normal" (click)="picker1.open()"
-                                [matDatepicker]="picker1" placeholder="End Date">
-                            <span><i class="far fa-calendar"></i></span>
-                            <mat-datepicker #picker1></mat-datepicker>
-                            </div>
-                
-                               
-                               </div>
-                            </div>
-
-
-                        </div>
-                        <div class=" my-4 text-end">
-                          <i class="bi bi-clock-fill align-middle  text-light-warning fs-4x me-3"></i>
-                           <div class="mt-4 align-middle"><span class="text-muted me-3 fw-semibold">Total Time Spent</span> <span class="fs-2 fw-bold "> 63.0 hr</span></div>
-                        </div>
+                <label class="mb-1 ps-6 pe-4 min-w-50px">to</label>
+                <div
+                  class="input-icon position-relative min-w-100px input-icon-right"
+                >
+                  <input
+                    type="text"
+                    class="form-control py-2 fs- fw-normal"
+                    (click)="picker1.open()"
+                    [matDatepicker]="picker1"
+                    placeholder="End Date"
+                    formControlName="toDate"
+                  />
+                  <span><i class="far fa-calendar"></i></span>
+                  <mat-datepicker #picker1></mat-datepicker>
                 </div>
-                 <!-- <app-attachment-logs-drawer></app-attachment-logs-drawer> -->
-                 <!-- <app-timesheet-logs-drawer></app-timesheet-logs-drawer> -->
+              </div>
+            </div>
+          </div>
+          <div class="my-4 text-end">
+            <i
+              class="bi bi-clock-fill align-middle text-light-warning fs-4x me-3"
+            ></i>
+            <div class="mt-4 align-middle">
+              <span class="text-muted me-3 fw-semibold">Total Time Spent</span>
+              <span class="fs-2 fw-bold"> {{displayHrs}} hr</span>
+            </div>
+          </div>
+        </div>
+        <!-- <app-attachment-logs-drawer></app-attachment-logs-drawer> -->
+        <!-- <app-timesheet-logs-drawer></app-timesheet-logs-drawer> -->
 
+        <div class="separator my-5"></div>
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <div class="fw-bold mt-4">Task Linking and Time Spent</div>
+            <div class="mt-2 mb-7 text-muted block">
+              Based on the selected timesheet period, you need to link task and
+              mention how much time you have spent for a particular and task
+              status
+            </div>
+          </div>
 
-            <div class="separator my-5"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <div class="fw-bold   mt-4">  Task Linking and Time Spent</div>
-                    <div class="mt-2 mb-7 text-muted block">
-                        Based on the selected timesheet period, you need to link task and mention  how much time you have spent for a particular and task status
-                    </div>
-                </div>
-             
-
-                <!-- <div class=" my-4 text-end">
+          <!-- <div class=" my-4 text-end">
                     <i class="bi bi-clock-fill align-middle  text-light-warning fs-4x me-3"></i>
                     <span class="text-muted me-3 fw-semibold">Total Time Spent</span> <span class="fs-2 fw-bold "> 63.0 hr</span>
                   </div> -->
-            </div>
+        </div>
 
-            <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" [closeOthers]="true" class="b-0">
+        <!-- <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" [closeOthers]="true" class="b-0">
                 <ngb-panel *ngFor="let number of [0,1,2,3,4,5,6]">
                     <ng-template ngbPanelHeader  let-opened="opened">
                         <div class="d-flex custom-header align-items-center justify-content-between p-0 ps-7 py-1 pe-2" [class.collapsed]="!opened" >
@@ -119,139 +155,215 @@
                              <i class="bi fs-4 bi-chevron-down" [class.bi-chevron-right]="!opened"></i>
                             </button>
                           </div>
-                          <!-- <div>
-                            <button ngbPanelToggle class="btn btn-sm btn-outline-primary ms-2">Toggle second</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary ms-2" >
-      uio
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-danger ms-2">Collapse all</button>
-                          </div> -->
+                          
                         </div>
                       </ng-template>
-                  <ng-template ngbPanelContent>
-                  <div class="border">
-                    <table mat-table [dataSource]="dataSource" class="table table-row-bordered text-gray-600">
+                  <ng-template ngbPanelContent> -->
+        <div class="border">
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            class="table table-row-bordered text-gray-600"
+          >
+            <!-- taskId Column -->
+            <ng-container matColumnDef="taskId">
+              <th mat-header-cell *matHeaderCellDef class="align-middle">
+                <i class="bi bi-hash"></i> Task Id
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                class="align-middle"
+                routerLink="details"
+              >
+                {{ element.taskId }}
+              </td>
+            </ng-container>
 
-                        <!-- taskId Column -->
-                        <ng-container matColumnDef="taskId">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-hash"></i> Task Id </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle" routerLink="details"> {{element.taskId}} </td>
-                        </ng-container>
-            
-                        <!-- taskName Column -->
-                        <ng-container matColumnDef="taskName">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-file-earmark-font"></i> Task
-                            Name </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle"> {{element.taskName}} </td>
-                        </ng-container>
-            
-            
-                        <!-- priority Column -->
-                        <ng-container matColumnDef="priority">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-tag"></i> Priority </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle">
-                            <span class="badge badge-light-danger" [ngClass]="{' badge-light-danger text-danger': (element.priority === 'High' || element.priority === 'Medium'),
-                               'badge-light-success text-success' : element.priority === 'Low'  }">
-                              <i class="fas fa-yin-yangfas fa-circle px-1 fs-10" [ngClass]="{'text-danger': (element.priority === 'High' || element.priority === 'Medium'),
-                               'text-success' : element.priority === 'Low'  }"></i>
-            
-                              {{element.priority}}</span>
-            
-                          </td>
-                        </ng-container>
-                        
-                        <!-- timeSpent Column -->
-                        <ng-container matColumnDef="timeSpent">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-clock"></i> Time Spent </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle"> {{element.timeSpent}} </td>
-                        </ng-container>
-            
-                        <!-- eta Column -->
-                        <ng-container matColumnDef="eta">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> Start Date </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle"> {{element.eta}} </td>
-                        </ng-container>
-            
-                        <!-- lastUpdate Column -->
-                        <ng-container matColumnDef="lastUpdate">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> Due Date
-                          </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle"> {{element.lastUpdate}} </td>
-                        </ng-container>
-            
-                        <!-- status Column -->
-                        <ng-container matColumnDef="status">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-sun"></i> Status </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle">
-                            <span class="badge badge-light-danger"
-                              [ngClass]="{' badge-light-warning': element.status === 'In-progress', 'badge-light-success' : element.status === 'Approved' , 'badge-light-danger' : element.status === 'Rejected' }">{{element.status}}</span>
-                          </td>
-                        </ng-container>
-            
-            
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-light h-35px"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-                        </tr>
-                      </table>
-                  </div>
+            <!-- title Column -->
+            <ng-container matColumnDef="title">
+              <th mat-header-cell *matHeaderCellDef class="align-middle">
+                <i class="bi bi-file-earmark-font"></i> Task Name
+              </th>
+              <td mat-cell *matCellDef="let element" class="align-middle">
+                {{ element.title }}
+              </td>
+            </ng-container>
+
+            <!-- priority Column -->
+            <ng-container matColumnDef="priority">
+              <th mat-header-cell *matHeaderCellDef class="align-middle">
+                <i class="bi bi-tag"></i> Priority
+              </th>
+              <td mat-cell *matCellDef="let element" class="align-middle">
+                <span
+                  class="badge badge-light-danger"
+                  [ngClass]="{
+                    ' badge-light-danger text-danger':
+                      element.priority === 'High' ||
+                      element.priority === 'Medium',
+                    'badge-light-success text-success':
+                      element.priority === 'Low'
+                  }"
+                >
+                  <i
+                    class="fas fa-yin-yangfas fa-circle px-1 fs-10"
+                    [ngClass]="{
+                      'text-danger':
+                        element.priority === 'High' ||
+                        element.priority === 'Medium',
+                      'text-success': element.priority === 'Low'
+                    }"
+                  ></i>
+
+                  {{ element.priority }}</span
+                >
+              </td>
+            </ng-container>
+
+            <!-- timeSpent Column -->
+            <ng-container matColumnDef="timeSpent">
+              <th mat-header-cell *matHeaderCellDef class="align-middle">
+                <i class="bi bi-clock"></i> Time Spent
+              </th>
+              <td mat-cell *matCellDef="let element" class="align-middle">
+                {{ element.timeSpent }} hrs
+              </td>
+            </ng-container>
+
+            <!-- eta Column -->
+            <ng-container matColumnDef="startDate">
+              <th mat-header-cell *matHeaderCellDef class="align-middle">
+                <i class="bi bi-calendar"></i> Start Date
+              </th>
+              <td mat-cell *matCellDef="let element" class="align-middle">
+                {{ element.startDate | date:'DD/M/yyyy' }}
+              </td>
+            </ng-container>
+
+            <!-- lastUpdate Column -->
+            <ng-container matColumnDef="finishDate">
+              <th mat-header-cell *matHeaderCellDef class="align-middle">
+                <i class="bi bi-calendar"></i> Due Date
+              </th>
+              <td mat-cell *matCellDef="let element" class="align-middle">
+                {{ element.finishDate | date:'dd/M/yyyy' }}
+              </td>
+            </ng-container>
+
+            <!-- status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef class="align-middle">
+                <i class="bi bi-sun"></i> Status
+              </th>
+              <td mat-cell *matCellDef="let element" class="align-middle">
+                <span
+                  class="badge badge-light-danger"
+                  [ngClass]="{
+                    ' badge-light-warning': element.status === 'IN_PROGRESS',
+                    'badge-light-success': element.status === 'APPROVED',
+                    'badge-light-danger': element.status === 'REJECTED'
+                  }"
+                  >{{ element.status }}</span
+                >
+              </td>
+            </ng-container>
+
+            <tr
+              mat-header-row
+              *matHeaderRowDef="displayedColumns"
+              class="bg-light h-35px"
+            ></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-primary btn-sm my-5"
+          id="kt_new_task_drawer_toggle"
+          [disabled]="!timeSheetData.controls['workOrderId'].value || !timeSheetData.controls['employeeId'].value"
+        >
+          <i class="bi bi-plus-lg" ></i> Add Task
+        </button>
+        <app-new-task-drawer [workOrderId]="workOrderId" [selectedEmpObj]="selectedEmpObj"
+          (getSelectedTaskList)="getSelectedTaskList($event)"></app-new-task-drawer>
+        <!-- 
                   </ng-template>
                 </ngb-panel>
-              </ngb-accordion>
+              </ngb-accordion> 
               <div class="separator my-7"></div>
+            -->
 
-              <div class="fw-bold mb-5">Comments</div>
+        <div class="fw-bold mb-5">Comments</div>
 
-              <div class="form-group  mb-7">
-            
-             <textarea name="" id="" cols="30" rows="4" class="form-control py-2 px-3 fs- fw-normal" placeholder="Your Comments"></textarea>
-
-            </div>
-
-
-              <div class="fw-bold mb-2">Other Documents</div>
-
-              <div class="fv-row mb-5 ">
-                  <!--begin::Dropzone-->
-                  <div class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
-                    DropZone (onFileDropped)="droppedFiles($event)" (click)="fileInputOther.click()">
-                      <!--begin::Message-->
-                      <div class=" text-center w-100 text-muted">
-                          <!--begin::Icon-->
-                          <i class="fas fa-cloud-upload-alt  fs-2x"></i> <!--end::Icon-->
-                          <!--begin::Info-->
-                          <div class="ms-4">
-                              <input type="file" hidden #fileInputOther (change)="selectFile($event, 'otherDocList')" accept=".pdf,.doc,.docx,.xls,.xlsx">
-                              <h3 class="fs-5 mb-1"> <a class=" text-primary ">Click to upload </a> or Drop files
-                                  here.</h3>
-                              <span class="fs-7 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size  less than 2mb)</span>
-                          </div>
-                          <!--end::Info-->
-                      </div>
-                  </div>
-                  <!-- <div *ngIf="jobPostData.controls['otherDocList'].value" class="d-flex">
-                      <h4 *ngFor="let doc of jobPostData.controls['otherDocList'].value" class="me-3">
-                             {{doc.name}}
-                      </h4>
-                   </div> -->
-                  <!--end::Dropzone-->
-              </div>
-  
-
-
-
-
-
-              <app-new-task-drawer></app-new-task-drawer>
-
-
-
+        <div class="form-group mb-7">
+          <textarea
+            name=""
+            id=""
+            cols="30"
+            rows="4"
+            class="form-control py-2 px-3 fs- fw-normal"
+            placeholder="Your Comments"
+             formControlName="comments"
+          ></textarea>
         </div>
-        <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
-          <button type="button" class="btn btn-sm">Cancel</button>
-          <button type="button" class="btn btn-sm btn-light-primary ">Save as Draft</button>
-          <button type="button" class="btn btn-sm btn-primary">Submit</button>
+
+        <div class="fw-bold mb-2">Other Documents</div>
+
+      <div class="fv-row mb-5">
+        <!--begin::Dropzone-->
+        <div class="dropzone dz-clickable bg-light-primary border border-dashed text-center" DropZone
+          (onFileDropped)="droppedFiles($event, 'documentList')" (click)="fileInputOther.click()">
+          <!--begin::Message-->
+          <div class="text-center w-100 text-muted">
+            <!--begin::Icon-->
+            <i class="fas fa-cloud-upload-alt fs-2x"></i>
+            <!--end::Icon-->
+            <!--begin::Info-->
+            <div class="ms-4">
+              <input type="file" hidden #fileInputOther (change)="selectFile($event, 'documentList')"
+                accept=".pdf,.doc,.docx,.xls,.xlsx" />
+              <h3 class="fs-5 mb-1">
+                <a class="text-primary">Click to upload </a> or Drop files here.
+              </h3>
+              <span class="fs-7 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb); maximum 6
+                files</span>
+            </div>
+            <!--end::Info-->
+          </div>
+        </div>
+        <div *ngIf="timeSheetData.controls['documentList'].value" class="d-flex flex-wrap">
+          <a *ngFor="
+                  let doc of timeSheetData.controls['documentList'].value;
+                  let index = index
+                " class="me-3 mt-4 border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between mw-325px">
+            <div class="text-truncate pspmw95" [ngbTooltip]="doc.name" [openDelay]="600">
+              {{ doc.name }}
+            </div>
+            <span class="cursor-pointer ms-3">
+              <i class="bi bi-x-circle" (click)="clearFile('documentList', index)"></i></span>
+          </a>
+        </div>
+      
+        <!--end::Dropzone-->
+      </div>
+
+       
+      </div>
+      <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
+        <button type="button" class="btn btn-sm">Cancel</button>
+        <button type="button" class="btn btn-sm btn-light-primary">
+          Save as Draft
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" (click)="save()">Submit</button>
       </div>
     </div>
-    </div>
-
-
+  </form>
+</div>
+<div
+  *ngIf="isLoading"
+  class="pause d-flex align-items-center justify-content-center"
+>
+  <div class="spinner"></div>
+</div>

@@ -5,11 +5,11 @@ import { TimesheetsRoutingModule } from './timesheets-routing.module';
 import { TimesheetsComponent } from './timesheets.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule, MatOption } from '@angular/material/core';
+import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { TimesheetDetailComponent } from './timesheet-detail/timesheet-detail.component';
 import { NewTimesheetComponent } from './new-timesheet/new-timesheet.component';
@@ -18,8 +18,9 @@ import { AttachmentLogsDrawerComponent } from './timesheet-detail/attachment-log
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { NewTaskDrawerComponent } from './new-timesheet/new-task-drawer/new-task-drawer.component';
 import { SharedModule } from '../shared.modules';
-
-
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     TimesheetsComponent,
@@ -27,11 +28,12 @@ import { SharedModule } from '../shared.modules';
     NewTimesheetComponent,
     TimesheetLogsDrawerComponent,
     AttachmentLogsDrawerComponent,
-    NewTaskDrawerComponent
-
+    NewTaskDrawerComponent,
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     TimesheetsRoutingModule,
     SharedModule,
     MatTableModule,
@@ -41,7 +43,10 @@ import { SharedModule } from '../shared.modules';
     MatCheckboxModule,
     MatInputModule,
     MatPaginatorModule,
-    InlineSVGModule
-  ]
+    InlineSVGModule,
+    MatInputModule,
+    MatSelectModule,
+    NgbTooltipModule,
+  ],
 })
-export class TimesheetsModule { }
+export class TimesheetsModule {}

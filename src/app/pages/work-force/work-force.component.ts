@@ -64,6 +64,7 @@ export class WorkForceComponent implements OnInit {
         Validators.compose([Validators.required, Validators.email]),
       ],
       workPhone: ['', Validators.required],
+      workExperience: ['', Validators.required],
       mobilePhone: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       bloodGroup: [''],
@@ -89,10 +90,20 @@ export class WorkForceComponent implements OnInit {
       }
 
       for (const key of Object.keys(this.workForceData.value)) {
-        const value = this.workForceData.value[key];
-        if (value) {
-          formData.append(key, value);
+        if (key != 'documentList') {
+          const value = this.workForceData.value[key];
+
+          if (value) {
+            formData.append(key, value);
+          }
         }
+      }
+      const file = this.workForceData.get('documentList')?.value;
+      if (file.length != 0) {
+        file.forEach((fileObj: File) => {
+          const blob = new Blob([fileObj], { type: fileObj.type });
+          formData.append('documentList', blob, fileObj.name);
+        });
       }
 
       this.apiCalls

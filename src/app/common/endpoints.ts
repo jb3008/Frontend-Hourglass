@@ -42,13 +42,16 @@ const EndPoints = {
   GET_USER_FOR_JOBS: '/hourglass/work-force/listWorkForceForVendor',
   CREATE_WORK_FORCE: '/hourglass/work-force/create.api',
   LIST_WORK_FORCE: '/hourglass/work-force/listAllWorkForce.api',
-  GET_WORK_FORCE: '/hourglass/work-force/getWorkForce',
+  GET_WORK_FORCE: '/hourglass/work-force/getWorkForceDetails.api',
   TASK_LIST_HM: '/hourglass/task/listTasks.api',
   CREATE_TASK: '/hourglass/task/create.api',
   UPDATE_TASK: '/hourglass/task/updateTask.api',
   DELETE_TASK: '/hourglass/task/delete.api',
   GET_VENDOR_DETAILS: '/hourglass/vendor/getVendorDetails.api',
-  GET_JOBAPPL_COUNTS: '/hourglass/vendor/getJobApplicationCounts.api'
+  GET_JOBAPPL_COUNTS: '/hourglass/vendor/getJobApplicationCounts.api',
+  GET_TASK_FOR_WORK_ORDER_LIST: '/hourglass/task/tasksForWorkOrderId.api',
+  GET_TIME_SHEET: '/hourglass/timesheet/listTimeSheet.api',
+  CREATE_TIME_SHEET: '/hourglass/timesheet/create.api',
 };
 
 export default EndPoints;
