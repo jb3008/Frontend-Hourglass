@@ -32,6 +32,7 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
   paymentTermsList: any[] = [];
   timeSheetFrequencyList: any = {'W': 'Weekly', '2W': 'Bi-Weekly', 'M': 'Monthly'};
   selectedJobSeeker: any = null;
+  clickedApplication: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -310,6 +311,10 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
         statusClass = 'badge-light-secondary';
     }
     return statusClass;
+  }
+
+  setApplicationId(id: string){
+    this.clickedApplication = id;
   }
 
   getDocIcon(fileName: string) {

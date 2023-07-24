@@ -1,3 +1,7 @@
+<div *ngIf="loading" class="pause d-flex align-items-center justify-content-center">
+  <div class="spinner"></div>
+</div>
+
 <div
 
   id="kt_logs_drawer"
@@ -45,7 +49,7 @@
     <div class="card-body position-relative pt-0"  id="kt_activities_body">
       <div class="timeline">
       <!--begin::Timeline item-->
-       <div class="timeline-item">
+       <div *ngFor="let logs of logDetails" class="timeline-item">
         <!-- <div class="timeline-line w-40px"></div> -->
         <!--begin::Timeline icon-->
         <div class="timeline-icon symbol symbol-circle symbol-40px">
@@ -58,12 +62,12 @@
         <!--begin::Timeline content-->
         <div class="timeline-content mb-8">
           <div class="fs-7 fw-semibold"> 
-            <a href="">Collabrated with </a>  <span class="fw-bold"> Ronald Richerd</span> 
+            <!-- <a href="">Collabrated with </a>  <span class="fw-bold"> Ronald Richerd</span>  -->
            </div>
               <div class="badge-light-danger text-break text-gray-800 my-2 p-3 rounded-3"> 
-                Do you provide any accomadation?
+                {{logs.auditMsg}}
                 </div>
-                <div class="text-muted me-2 fs-7">12 Dec 2022  4:23 AM</div>
+                <div class="text-muted me-2 fs-7">{{logs.timeStamp | date:'d MMM y h:mm a'}}</div>  
         </div>
         <!--end::Timeline content--> 
     </div>
@@ -73,17 +77,12 @@
 
 
     <!--begin::Timeline item-->
-    <div class="timeline-item">
-      <!-- <div class="timeline-line w-40px"></div> -->
-      <!--begin::Timeline icon-->
+    <!-- <div class="timeline-item">
       <div class="timeline-icon symbol symbol-circle symbol-40px">
         <div class="symbol-label bg-light-primary ">
           <i class="bi bi-chat-left-text text-primary fs-4"></i>
             </div>
     </div>
-      <!--end::Timeline icon-->       
-  
-      <!--begin::Timeline content-->
       <div class="timeline-content mb-8">
         <div class="fs-7 fw-semibold"> 
           <a href="">Collabrated with </a>  <span class="fw-bold"> Command+R</span> 
@@ -93,25 +92,19 @@
               </div>
               <div class="text-muted me-2 fs-7">12 Dec 2022  4:23 AM</div>
       </div>
-      <!--end::Timeline content--> 
-  </div>
+  </div> -->
   <!--end::Timeline item-->
     
 
 
 
     <!--begin::Timeline item-->
-    <div class="timeline-item">
-      <!-- <div class="timeline-line w-40px"></div> -->
-      <!--begin::Timeline icon-->
+    <!-- <div class="timeline-item">
       <div class="timeline-icon symbol symbol-circle symbol-40px">
           <div class="symbol-label bg-light-warning ">
             <i class="bi bi-pencil text-warning fs-4"></i>
               </div>
       </div>
-      <!--end::Timeline icon-->       
-  
-      <!--begin::Timeline content-->
       <div class="timeline-content mb-8">
         <div class="fs-7 fw-semibold"> 
           <a href="" class="text-warning">Collabrated with </a>  <span class="fw-bold"> Ronald Richerd</span> 
@@ -121,24 +114,18 @@
               </div>
               <div class="text-muted me-2 fs-7">12 Dec 2022  4:23 AM</div>
       </div>
-      <!--end::Timeline content--> 
-  </div>
+  </div> -->
   <!--end::Timeline item-->
  
     
        
       <!--begin::Timeline item-->
-      <div class="timeline-item">
-        <!-- <div class="timeline-line w-40px"></div> -->
-        <!--begin::Timeline icon-->
+      <!-- <div class="timeline-item">
         <div class="timeline-icon symbol symbol-circle symbol-40px">
             <div class="symbol-label bg-light-primary ">
               <i class="bi bi-chat-left-text text-primary fs-4"></i>
                 </div>
         </div>
-        <!--end::Timeline icon-->       
-    
-        <!--begin::Timeline content-->
         <div class="timeline-content mb-8">
           <div class="fs-7 fw-semibold"> 
             <a href="">Collabrated with </a>  <span class="fw-bold"> Ronald Richerd</span> 
@@ -148,24 +135,18 @@
                 </div>
                 <div class="text-muted me-2 fs-7">12 Dec 2022  4:23 AM</div>
         </div>
-        <!--end::Timeline content--> 
-    </div>
+    </div> -->
     <!--end::Timeline item-->
  
     
        
       <!--begin::Timeline item-->
-      <div class="timeline-item">
-        <!-- <div class="timeline-line w-40px"></div> -->
-        <!--begin::Timeline icon-->
+      <!-- <div class="timeline-item">
         <div class="timeline-icon symbol symbol-circle symbol-40px">
             <div class="symbol-label badge-light-success ">
               <i class="bi bi-patch-check text-success fs-4"></i>
                 </div>
         </div>
-        <!--end::Timeline icon-->       
-    
-        <!--begin::Timeline content-->
         <div class="timeline-content mb-8">
           <div class="fs-7 fw-semibold"> 
             <a href="" class="text-success ">Collabrated with </a>  <span class="fw-bold"> Ronald Richerd</span> 
@@ -175,8 +156,7 @@
                 </div>
                 <div class="text-muted me-2 fs-7">12 Dec 2022  4:23 AM</div>
         </div>
-        <!--end::Timeline content--> 
-    </div>
+    </div> -->
     <!--end::Timeline item-->
 
 

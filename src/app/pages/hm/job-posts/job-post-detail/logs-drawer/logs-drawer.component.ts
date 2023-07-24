@@ -1,15 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import { catchError } from 'rxjs/internal/operators/catchError';
+import EndPoints from 'src/app/common/endpoints';
+import { ApiCallsService } from 'src/app/services/api-calls.service';
+import { Utils } from 'src/app/services/utils';
 
 @Component({
   selector: 'app-logs-drawer',
   templateUrl: './logs-drawer.component.html',
 })
-export class LogsDrawerComponent implements OnInit {
+export class LogsDrawerComponent implements OnInit, OnChanges {
 
-  constructor() {}
+  constructor(private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef, private utils: Utils, private snackBar: MatSnackBar) {}
+
+  @Input() clickedApplication: string;
+  loading = false;
+  endPoints = EndPoints;
+  logDetails: any[] = [];
 
   ngOnInit(): void {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes?.clickedApplication?.currentValue){
+      this.clickedApplication = changes.clickedApplication.currentValue;
+      this.getLogsDetails(this.clickedApplication);
+    }
+  }
 
   editor = InlineEditor;
   // data: any = `<p>Hello, world!</p>`;
@@ -44,6 +61,25 @@ export class LogsDrawerComponent implements OnInit {
       this.allFiles.push(file);
     }
     console.log(this.allFiles)
+  }
+
+  getLogsDetails(id: string){
+    this.loading = true;
+    let queryParam = {
+      jobAppId : id
+    }
+    
+    this.apiCalls.get(this.endPoints.GET_APPL_LOGS, queryParam)
+      .pipe(catchError(async (error) => {
+        this.loading = false;
+        this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the logs');
+        this.cdr.detectChanges();
+    }))
+    .subscribe((response) => {
+      this.logDetails = response;
+      this.loading = false;
+      this.cdr.detectChanges();
+    });
   }
 
 

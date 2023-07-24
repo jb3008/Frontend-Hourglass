@@ -52,6 +52,7 @@ const EndPoints = {
   GET_TASK_FOR_WORK_ORDER_LIST: '/hourglass/task/tasksForWorkOrderId.api',
   GET_TIME_SHEET: '/hourglass/timesheet/listTimeSheet.api',
   CREATE_TIME_SHEET: '/hourglass/timesheet/create.api',
+  GET_APPL_LOGS: '/hourglass/audit-log/auditLogForJobApplication.api'
 };
 
 export default EndPoints;
