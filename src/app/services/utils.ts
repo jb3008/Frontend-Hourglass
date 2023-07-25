@@ -110,7 +110,7 @@ export class Utils {
 
       case 'xls':
       case 'xlsx':
-        return './assets/media/svg/files/blank-image.svg'; // TODO: need  to change this icon when available.
+        return './assets/media/svg/files/xls.svg'; // TODO: need  to change this icon when available.
 
       default:
         return './assets/media/svg/files/blank-image.svg'; // TODO: need  to change this icon when available.

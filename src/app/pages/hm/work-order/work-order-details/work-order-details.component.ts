@@ -102,9 +102,23 @@ export class WorkOrderDetailsComponent implements OnInit {
       });
   }
   
-  downloadDoc(id:string){
-    const url = `http://172.105.36.16:8080/hourglass/document/getAttachment?documentId=${id}`
-    window.open(url, '_blank');
+  getAttachment(id: string){
+    let queryParam = {
+      documentId: id,
+    };
+    this.apiCalls
+      .getDocument(this.endpoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe((response) => {
+        const url = window.URL.createObjectURL(response);
+        window.open(url);
+        this.cdr.detectChanges();
+      });
   }
 
   getTaskList(obj: any){

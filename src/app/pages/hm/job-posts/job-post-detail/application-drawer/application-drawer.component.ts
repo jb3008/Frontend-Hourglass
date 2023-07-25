@@ -4,6 +4,8 @@ import {MatTableDataSource} from '@angular/material/table';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import EndPoints from 'src/app/common/endpoints';
 import { catchError } from 'rxjs/internal/operators/catchError';
+import { Utils } from 'src/app/services/utils';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-application-drawer',
@@ -14,11 +16,15 @@ export class ApplicationDrawerComponent implements OnInit, OnChanges {
   displayedColumns: string[] = ['select', 'timesheet',  'period','workerhr', 'status'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
   @Input() applicationDetails: any;
+  @Input() jobDetails: any;
+  @Input() applicantsDetails: any;
   @Input() isSelectedTab: any;
+  @Input() profilePic: any;
+  @Input() applicationAttachement: any;
   loading = false;
   endPoints = EndPoints;
   
-  constructor(private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef) {}
+  constructor(private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef, private utils: Utils, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     console.log(this.applicationDetails);
@@ -26,12 +32,24 @@ export class ApplicationDrawerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(change: any){
-    if(change?.applicationDetails?.currentValue.length > 0){
+    if(change?.applicationDetails?.currentValue?.length > 0){
       this.applicationDetails = change.applicationDetails.currentValue;
       // this.getApplicantDocuments(this.applicationDetails.id);
     }
+    if(change?.applicationAttachement?.currentValue?.length > 0){
+      this.applicationAttachement = change.applicationAttachement.currentValue;
+    }
     if(change?.isSelectedTab?.currentValue){
       this.isSelectedTab = change.isSelectedTab.currentValue;
+    }
+    if(change?.jobDetails?.currentValue){
+      this.jobDetails = change.jobDetails.currentValue;
+    }
+    if(change?.applicantsDetails?.currentValue){
+      this.applicantsDetails = change.applicantsDetails.currentValue;
+    }
+    if(change?.profilePic?.currentValue){
+      this.profilePic = change.profilePic.currentValue;
     }
   }
 
@@ -51,7 +69,36 @@ export class ApplicationDrawerComponent implements OnInit, OnChanges {
       })
   }
 
+  getAttachment(id: string){
+    let queryParam = {
+      documentId: id,
+    };
+    this.apiCalls
+      .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe((response) => {
+        const url = window.URL.createObjectURL(response);
+        window.open(url);
+        this.cdr.detectChanges();
+      });
+  }
+
   updateStatus(id: string, status: string){
+    let msg = `Do you want to ${status} the offer ?`;
+    this.utils.showDialogWithCancelButton(this.dialog, msg, (res: any) => {
+      if(res){
+        this.actionOnOfferLetter(id, status)
+      }
+      this.cdr.detectChanges();
+    });
+  }
+
+  actionOnOfferLetter(id: string, status: string){
     this.loading = true;
     let queryParam = {
       jobApplicationId : id,
@@ -66,8 +113,21 @@ export class ApplicationDrawerComponent implements OnInit, OnChanges {
       }))
       .subscribe((response) => {
         this.loading = false;
+        setTimeout(() => {
+          this.openSuccessPopup(status);
+        }, 100);
         this.cdr.detectChanges();
       })
+  }
+
+  openSuccessPopup(status: any){
+    let msg = `Offer letter ${status} successfully`
+    this.utils.showDialog(this.dialog, msg, () => {
+      this.loading = false;
+      let closeBtn = document.getElementById('kt_application_close');
+      closeBtn?.click();
+      this.cdr.detectChanges();
+    });
   }
 
   selection = new SelectionModel<PeriodicElement>(true, []);
@@ -96,6 +156,10 @@ export class ApplicationDrawerComponent implements OnInit, OnChanges {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.timesheet + 1}`;
   }
+
+  getDocIcon(fileName: string) {
+    return this.utils.getDocIcon(fileName)
+  }  
 
 
 }

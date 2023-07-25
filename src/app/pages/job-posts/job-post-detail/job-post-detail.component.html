@@ -294,9 +294,9 @@
         <!--begin::Lable-->
         <div class="font-weight-bolder text-warning py-1 font-size-lg w-250px">
           <a class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3"> <i
-              class="fas fa-download" (click)="downloadDoc(documents.id)"></i></a>
+              class="fas fa-download" (click)="getAttachment(documents.id)"></i></a>
           <a class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm "> <i
-              class="far fa-eye" (click)="downloadDoc(documents.id)"></i></a>
+              class="far fa-eye"></i></a>
         </div>
         <!--end::Lable-->
       </div>
@@ -318,7 +318,8 @@
               <!--begin::Image-->
               <div
                 class="d-flex flex-center flex-shrink-0 bg-light rounded w-120px h-150px w-lg-120px h-lg-120px me-7 mb-4">
-                <img class="w-100 h-100" src="../../../../../../assets/media/avatars/300-7.jpg" alt="image">
+                <img class="w-100 h-100" [src]="profilePic" alt="profile-pic">
+                <!-- <img class="w-100 h-100" src="../../../../../../assets/media/avatars/300-7.jpg" alt="image"> -->
               </div>
               <!--end::Image-->
 
@@ -339,7 +340,7 @@
                 </div>
                 <div class="row m-0 fs-7">
                   <label class="col-5 col-form-label text-muted p-1">Availability</label>
-                  <div class="col-7"> <span class="  form-control-plaintext  p-1 fw-bold">{{applicationCompleteDetails?.availability}}</span></div>
+                  <div class="col-7"> <span class="  form-control-plaintext  p-1 fw-bold">{{applicationDetails?.availabledate | date:'dd MMM, yyyy'}}</span></div>
                 </div>
                 <div class="row m-0 fs-7">
                   <label class="col-5 col-form-label text-muted p-1">Work Rate</label>
@@ -365,8 +366,8 @@
             </div>
 
             <div class="separator my-4"></div>
-            <h6 class="card-subtitle mb-2 ">{{applicationCompleteDetails?.title}}</h6>
-            <p class="card-text">{{applicationCompleteDetails?.description}}</p>
+            <h6 class="card-subtitle mb-2 ">{{jobDetails?.title}}</h6>
+            <p class="card-text" [innerHTML]="jobDetails?.description"></p>
             <div class="separator my-4"></div>
 
             <div class=" mb-2 ">CONTACT DETAILS</div>
@@ -392,15 +393,15 @@
 
             <div class=" mb-2 ">ATTACHMENTS</div>
 
-            <div class="d-flex align-items-center mb-4 bg-white rounded p-3 border">
+            <div *ngFor="let doc of applicationAttachement" class="d-flex align-items-center mb-4 bg-white rounded p-3 border">
               <span class="symbol symbol-30px align-middle mr-5 w-50px">
-                <img alt="" src="./assets/media/svg/files/pdf.svg"></span>
+                <img alt="" [src]="getDocIcon(doc.fileName)"></span>
               <div class="d-flex flex-column w-100 mr-2">
-                <span class="fw-bold">Loki_Bright_Resume</span>
+                <span class="fw-bold">{{doc.fileName}}</span>
               </div>
               <!-- <div class="d-flex w-sm-100 mr-2"><span class="badge badge-light-primary w-auto">Docktype name</span></div> -->
               <div class="font-weight-bolder text-warning py-1 font-size-lg min-w-100px">
-                <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3">
+                <a href="javascript:;" (click)="getAttachment(doc.id)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3">
                   <i class="fas fa-download"></i></a>
                 <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"><i
                     class="far fa-eye"></i></a>
