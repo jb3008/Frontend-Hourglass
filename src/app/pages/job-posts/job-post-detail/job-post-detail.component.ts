@@ -26,6 +26,8 @@ export class JobPostDetailComponent implements OnInit {
   applicationCompleteDetails: any;
   offerDetails: any[] = [];
   actionTaken = false;
+  profilePic: any;
+  applicationAttachement: any[] = [];
   timeSheetFrequencyList: any = {'W': 'Weekly', '2W': 'Bi-Weekly', 'M': 'Monthly'};
   
   isSelectedTab:string ='Details';
@@ -79,6 +81,7 @@ export class JobPostDetailComponent implements OnInit {
         this.applicationDetails = response;
         this.getApplicationCompleteDetails();
         this.getOfferDetails();
+        this.getApplicationAttachment(this.applicationDetails.workerid);
         this.cdr.detectChanges();
       })
   }
@@ -96,9 +99,58 @@ export class JobPostDetailComponent implements OnInit {
       }))
       .subscribe((response) => {
         this.loading = false;
-        this.applicationCompleteDetails = response;        
+        this.applicationCompleteDetails = response;  
+        this.getWorkForceProfilePic(this.applicationCompleteDetails.workForceId);      
         this.cdr.detectChanges();
       })
+  }
+
+  getApplicationAttachment(id: string){
+    this.loading = true;
+    let queryParam = {
+      id: id,
+      attachmentType: 'WORK_FORCE',
+    };
+    this.apiCalls
+      .get(this.endPoints.GET_DOCUMENTS, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.loading = false;
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe((response) => {
+        this.loading = false;
+        this.applicationAttachement = response;
+        this.cdr.detectChanges();
+      });
+  }
+
+  getWorkForceProfilePic(id: string){
+    this.loading = false;
+    this.apiCalls.getDocument(this.endPoints.GET_WORK_FORCE_PIC, {
+        workForceId: id,
+      })
+      .pipe(
+        catchError(async (err) => {
+          this.loading = false;
+          console.log(id, err);
+        })
+      )
+      .subscribe(async (response: any) => {
+        this.profilePic = response.size > 0 ? await this.blobToBase64(response) : undefined;
+        this.loading = false;
+        this.cdr.detectChanges();
+      });
+  }
+
+  blobToBase64(blob: any) {
+    return new Promise((resolve, _) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
   }
 
   getWorkExperience(){
@@ -220,9 +272,23 @@ export class JobPostDetailComponent implements OnInit {
     });
   }
 
-  downloadDoc(id: string){
-    const url = `http://172.105.36.16:8080/hourglass/document/getAttachment?documentId=${id}`
-    window.open(url, '_blank');
+  getAttachment(id: string){
+    let queryParam = {
+      documentId: id,
+    };
+    this.apiCalls
+      .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe((response) => {
+        const url = window.URL.createObjectURL(response);
+        window.open(url);
+        this.cdr.detectChanges();
+      });
   }
 
   applyJob(id: string){

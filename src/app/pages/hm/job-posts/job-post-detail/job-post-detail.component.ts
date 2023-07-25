@@ -27,9 +27,12 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
   documentsList: any[] = [];
   jobDetails: any;
   selectedTab: string;
-  applicationDetails: any[] = [];
+  applicationDetails: any;
+  applicantsDetails: any;
   costCenterList: any[] = [];
   paymentTermsList: any[] = [];
+  applicationAttachement: any[] = [];
+  profilePic: any;
   timeSheetFrequencyList: any = {'W': 'Weekly', '2W': 'Bi-Weekly', 'M': 'Monthly'};
   selectedJobSeeker: any = null;
   clickedApplication: string;
@@ -234,12 +237,95 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
         this.applicationDetails = response;
         this.loading = false;
         this.cdr.detectChanges();
+        this.getApplicantsDetails(this.applicationDetails.workerId);
       })
   }
 
-  downloadDoc(id: string){
-    const url = `http://172.105.36.16:8080/hourglass/document/getAttachment?documentId=${id}`
-    window.open(url, '_blank');
+  getApplicantsDetails(id: string){
+    this.loading = true;
+    let queryParam = {
+      workForceId  : id
+    }
+    this.apiCalls.get(this.endPoints.GET_FULL_APPL_DETAILS, queryParam)
+      .pipe(catchError(async (error) => {
+        this.loading = false;
+        this.cdr.detectChanges();
+        throw error;
+      }))
+      .subscribe((response) => {
+        this.loading = false;
+        this.applicantsDetails = response;   
+        this.getWorkForceProfilePic(this.applicantsDetails.workForceId);  
+        this.getApplicationAttachment(this.applicantsDetails.workForceId);  
+        this.cdr.detectChanges();
+      })
+  }
+
+  getApplicationAttachment(id: string){
+    this.loading = true;
+    let queryParam = {
+      id: id,
+      attachmentType: 'WORK_FORCE',
+    };
+    this.apiCalls
+      .get(this.endPoints.GET_DOCUMENTS, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.loading = false;
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe((response) => {
+        this.loading = false;
+        this.applicationAttachement = response;
+        this.cdr.detectChanges();
+      });
+  }
+  
+  getWorkForceProfilePic(id: string){
+    this.loading = false;
+    this.apiCalls.getDocument(this.endPoints.GET_WORK_FORCE_PIC, {
+        workForceId: id,
+      })
+      .pipe(
+        catchError(async (err) => {
+          this.loading = false;
+          console.log(id, err);
+        })
+      )
+      .subscribe(async (response: any) => {
+        this.profilePic = response.size > 0 ? await this.blobToBase64(response) : undefined;
+        this.loading = false;
+        this.cdr.detectChanges();
+      });
+  }
+
+  blobToBase64(blob: any) {
+    return new Promise((resolve, _) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  getAttachment(id: string){
+    let queryParam = {
+      documentId: id,
+    };
+    this.apiCalls
+      .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe((response) => {
+        const url = window.URL.createObjectURL(response);
+        window.open(url);
+        this.cdr.detectChanges();
+      });
   }
 
   takeAction(seekerId: string, action: string) {

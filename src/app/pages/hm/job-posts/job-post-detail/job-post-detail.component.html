@@ -286,9 +286,9 @@
         <!--begin::Lable-->
         <div class="font-weight-bolder text-warning py-1 font-size-lg w-250px">
           <a class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3"> <i
-              class="fas fa-download" (click)="downloadDoc(documents.id)"></i></a>
+              class="fas fa-download" (click)="getAttachment(documents.id)"></i></a>
           <a class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm "> <i
-              class="far fa-eye" (click)="downloadDoc(documents.id)"></i></a>
+              class="far fa-eye" ></i></a>
         </div>
         <!--end::Lable-->
       </div>
@@ -478,7 +478,7 @@
   </ng-container>
 
 
-  <app-application-drawer [applicationDetails]="applicationDetails" [isSelectedTab]="isSelectedTab"></app-application-drawer>
+  <app-application-drawer [applicationDetails]="applicationDetails" [applicationAttachement]="applicationAttachement" [profilePic]="profilePic" [applicantsDetails]="applicantsDetails" [jobDetails]="jobDetails" [isSelectedTab]="isSelectedTab"></app-application-drawer>
   <app-send-offer-letter-drawer [jobSeeker]="selectedJobSeeker" [jobDetails]="jobDetails">
                         </app-send-offer-letter-drawer>
   <app-chat-drawer></app-chat-drawer>
