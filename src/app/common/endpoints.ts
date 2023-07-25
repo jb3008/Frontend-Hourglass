@@ -52,7 +52,11 @@ const EndPoints = {
   GET_TASK_FOR_WORK_ORDER_LIST: '/hourglass/task/tasksForWorkOrderId.api',
   GET_TIME_SHEET: '/hourglass/timesheet/listTimeSheet.api',
   CREATE_TIME_SHEET: '/hourglass/timesheet/create.api',
-  GET_APPL_LOGS: '/hourglass/audit-log/auditLogForJobApplication.api'
+  GET_APPL_LOGS: '/hourglass/audit-log/auditLogForJobApplication.api',
+  GET_ATTACHMENT: '/hourglass/document/getAttachment',
+  UPLOAD_WORK_FORCE_PIC:
+    '/hourglass/work-force/uploadProfilePicForWorkForce.api',
+  GET_WORK_FORCE_PIC: '/hourglass/document/getProfilePicForWorkForce.api',
 };
 
 export default EndPoints;

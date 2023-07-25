@@ -79,6 +79,7 @@ export class WorkForceComponent implements OnInit {
       permanentAddress: ['', Validators.required],
       vendorId: [auth?.vendorId, Validators.required],
       documentList: [[]],
+      createUser: [true],
     });
     this.getAllWorkForceList();
   }

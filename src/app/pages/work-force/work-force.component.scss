@@ -39,3 +39,13 @@
   color: #026aa2;
   cursor: pointer;
 }
+
+.permissionBox {
+  background: lightyellow;
+  padding: 10px 0px;
+  line-height: 1.5;
+  border: 1px solid orange;
+  label {
+    padding: 10px;
+  }
+}
