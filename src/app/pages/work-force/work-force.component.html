@@ -35,12 +35,16 @@
     <div class="container mb-6">
       <div class="row justify-content-between">
         <div class="col-2 p-0 pe-2">
-          <div class="symbol symbol-circle symbol-lg-90px me-5">
+          <div  class="symbol symbol-circle symbol-lg-90px me-5 image-upload">
+          <div (click)="fileInputImage.click()">
+              <i class="fas fa-cloud-upload-alt fs-2x"></i>
+          </div>
             <img
-              src="../../../../assets/media/avatars/blank.png"
+              [src]="imagePath || '../../../../assets/media/avatars/blank.png'"
               class=""
               alt=""
             />
+              <input  #fileInputImage  type="file" (change)="selectImage($event)" accept="image/*" />
           </div>
         </div>
         <div class="col-5 p-0 pe-5">
@@ -192,7 +196,7 @@
               >Work Experience <span class="text-danger">*</span>
             </label>
             <input
-              type="text"
+              type="number"
               formControlName="workExperience"
               class="form-control py-2 fs- fw-normal"
               placeholder="Work Experience"
@@ -356,14 +360,15 @@
             <div class="mt-7">
               <div class="symbol symbol-circle symbol-lg-100px">
                 <img
-                  src="../../../assets/media/avatars/300-{{ i + 1 }}.jpg"
+                  
+                  [src]="item.profile || '../../../../assets/media/avatars/blank.png' "
                   alt="image"
                 />
               </div>
               <div
                 class="symbol symbol-lg-100px symbol-circle symbol-primary d-none"
               >
-                <span class="font-size-h3 font-weight-boldest">JB</span>
+                <span class="font-size-h3 font-weight-boldest">{{ item.firstName[0] }}{{ item.lastName[0] }}</span>
               </div>
             </div>
             <!--end::User-->
@@ -396,3 +401,4 @@
 >
   <div class="spinner"></div>
 </div>
+

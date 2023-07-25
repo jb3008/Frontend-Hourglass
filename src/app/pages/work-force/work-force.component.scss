@@ -29,3 +29,13 @@
 ::ng-deep.cdk-overlay-container {
   z-index: 999999;
 }
+.image-upload > input {
+  display: none;
+}
+.image-upload i {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  color: #026aa2;
+  cursor: pointer;
+}

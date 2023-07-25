@@ -26,19 +26,27 @@ export class ApiCallsService {
     });
   }
 
+  getDocument(endpoint: string, queryParams?: any): Observable<Blob> {
+    return this.http.get(`${this.host_url}${endpoint}`, {
+      params: queryParams,
+      headers: this._headers,
+      responseType: 'blob',
+    });
+  }
+
   post(endpoint: any, data?: any, queryParam?: any): Observable<any> {
     return this.http.post(`${this.host_url}${endpoint}`, data, {
       params: queryParam,
       headers: this._headers,
     });
   }
-  
+
   delete(endpoint: any, queryParams?: any): Observable<any> {
     return this.http.delete(`${this.host_url}${endpoint}`, {
       params: queryParams,
     });
   }
-    
+
   private getAuthFromLocalStorage(): AuthModel | undefined {
     try {
       const lsValue = localStorage.getItem(this.authLocalStorageToken);

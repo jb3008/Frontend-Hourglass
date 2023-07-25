@@ -25,6 +25,7 @@ export class WorkerProfileComponent implements OnInit {
   endPoints = EndPoints;
   isLoading = false;
   documentsList: any;
+  documentsAllList: any;
   ngOnInit(): void {
     this.route.queryParams.subscribe((param) => {
       this.workForceId = param['workForceId'];
@@ -63,6 +64,7 @@ export class WorkerProfileComponent implements OnInit {
         this.workForceDetails = response;
         this.cdr.detectChanges();
         this.getDocuments();
+        this.getAllWorkForceProfilePic(this.workForceId);
       });
   }
   getDocuments() {
@@ -76,14 +78,65 @@ export class WorkerProfileComponent implements OnInit {
         catchError(async (error) => {
           this.isLoading = false;
           this.cdr.detectChanges();
-          console.log(error);
           throw error;
         })
       )
       .subscribe((response) => {
         this.isLoading = false;
-        this.documentsList = response;
+        this.documentsList = response.filter(
+          (r: any) => r.type !== 'PROFILE_PIC_DOC'
+        );
+        this.documentsAllList = JSON.parse(JSON.stringify(this.documentsList));
         this.cdr.detectChanges();
       });
+  }
+  searchDoc() {
+    if (this.searchFilterInp.length > 2) {
+      this.documentsList = this.documentsAllList.filter((x: any) =>
+        new RegExp(this.searchFilterInp, 'i').test(x.fileName)
+      )[0];
+    } else if (this.searchFilterInp.length == 0) {
+      this.documentsList = this.documentsAllList;
+    }
+  }
+
+  getAttachment(documentId: any) {
+    let queryParam = {
+      documentId: documentId,
+    };
+    this.apiCalls
+      .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe((response) => {
+        const url = window.URL.createObjectURL(response);
+        window.open(url);
+        this.cdr.detectChanges();
+      });
+  }
+
+  getAllWorkForceProfilePic(workForceId: any, element: any = []) {
+    this.apiCalls
+      .getDocument(this.endPoints.GET_WORK_FORCE_PIC, {
+        workForceId: workForceId,
+      })
+      .pipe(catchError(async (err) => {}))
+      .subscribe(async (response: any) => {
+        this.workForceDetails.profile =
+          response.size > 0 ? await this.blobToBase64(response) : undefined;
+
+        this.cdr.detectChanges();
+      });
+  }
+  blobToBase64(blob: any) {
+    return new Promise((resolve, _) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
   }
 }
