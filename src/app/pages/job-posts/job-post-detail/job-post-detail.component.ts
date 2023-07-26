@@ -100,7 +100,7 @@ export class JobPostDetailComponent implements OnInit {
       .subscribe((response) => {
         this.loading = false;
         this.applicationCompleteDetails = response;  
-        this.getWorkForceProfilePic(this.applicationCompleteDetails.workForceId);      
+        this.getWorkForceProfilePic(this.applicationDetails.applicationid);      
         this.cdr.detectChanges();
       })
   }
@@ -128,9 +128,9 @@ export class JobPostDetailComponent implements OnInit {
   }
 
   getWorkForceProfilePic(id: string){
-    this.loading = false;
-    this.apiCalls.getDocument(this.endPoints.GET_WORK_FORCE_PIC, {
-        workForceId: id,
+    this.loading = true;
+    this.apiCalls.getDocument(this.endPoints.GET_JOB_APPL_PIC, {
+      jobApplicationId : id,
       })
       .pipe(
         catchError(async (err) => {
