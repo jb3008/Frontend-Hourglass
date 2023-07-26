@@ -1,19 +1,34 @@
 <div
   class="border-bottom tolbar mb-6 px-4 d-flex align-items-stretch justify-content-between"
 >
+
   <div class="d-flex">
     <h4 class="pt-4 me-20">Work Force</h4>
     <ul class="nav nav-line-tabs nav-line-tabs-1x nav-stretch">
       <li class="nav-item">
-        <a class="nav-link px-4 cursor-pointer fw-bold active"
+        <a
+          class="nav-link px-4 cursor-pointer fw-bold active"
+          (click)="isEngagedWorker = 'Engaged'; getAllWorkForceList()"
+          [class.active]="isEngagedWorker === 'Engaged'"
           >Engaged Worker</a
         >
       </li>
       <li class="nav-item">
-        <a class="nav-link px-4 cursor-pointer">Free Worker </a>
+        <a
+          class="nav-link px-4 cursor-pointer"
+          (click)="isEngagedWorker = 'Free'; getAllWorkForceList()"
+          [class.active]="isEngagedWorker === 'Free'"
+          >Free Worker
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link px-4 cursor-pointer"> All Worker </a>
+        <a
+          class="nav-link px-4 cursor-pointer"
+          (click)="isEngagedWorker = 'All'; getAllWorkForceList()"
+          [class.active]="isEngagedWorker === 'All'"
+        >
+          All Worker
+        </a>
       </li>
     </ul>
   </div>
@@ -35,16 +50,21 @@
     <div class="container mb-6">
       <div class="row justify-content-between">
         <div class="col-2 p-0 pe-2">
-          <div  class="symbol symbol-circle symbol-lg-90px me-5 image-upload">
-          <div (click)="fileInputImage.click()">
+          <div class="symbol symbol-circle symbol-lg-90px me-5 image-upload">
+            <div (click)="fileInputImage.click()">
               <i class="fas fa-cloud-upload-alt fs-2x"></i>
-          </div>
+            </div>
             <img
               [src]="imagePath || '../../../../assets/media/avatars/blank.png'"
               class=""
               alt=""
             />
-              <input  #fileInputImage  type="file" (change)="selectImage($event)" accept="image/*" />
+            <input
+              #fileInputImage
+              type="file"
+              (change)="selectImage($event)"
+              accept="image/*"
+            />
           </div>
         </div>
         <div class="col-5 p-0 pe-5">
@@ -59,6 +79,14 @@
               placeholder="Fiirst Name"
             />
           </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && f.firstName.errors"
+          >
+            <div class="fv-help-block" *ngIf="f.firstName.errors.required">
+              First name is required
+            </div>
+          </div>
         </div>
         <div class="col-5 p-0 pe-5">
           <div class="form-group">
@@ -71,6 +99,14 @@
               class="form-control py-2 fs- fw-normal"
               placeholder="Last Name"
             />
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && f.lastName.errors"
+          >
+            <div class="fv-help-block" *ngIf="f.lastName.errors.required">
+              Last name is required
+            </div>
           </div>
         </div>
       </div>
@@ -90,6 +126,17 @@
               placeholder="Work Email ID"
             />
           </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && f.workEmail.errors"
+          >
+            <div class="fv-help-block" *ngIf="f.workEmail.errors.required">
+              Work Email is required
+            </div>
+            <div class="fv-help-block" *ngIf="f.workEmail.errors.email">
+              Email must be a valid email address
+            </div>
+          </div>
         </div>
         <div class="col-6 p-0 ps-4">
           <div class="form-group">
@@ -102,6 +149,15 @@
               class="form-control py-2 fs- fw-normal"
               placeholder="Professional Email ID"
             />
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && f.personalEmail.errors"
+          >
+            <div class="fv-help-block">Professional Email ID is required</div>
+            <div class="fv-help-block" *ngIf="f.personalEmail.errors.email">
+              Email must be a valid email address
+            </div>
           </div>
         </div>
       </div>
@@ -121,6 +177,13 @@
               placeholder="Work Phone"
             />
           </div>
+          <div
+            class="fv-plugins-message-container"
+           *ngIf="submitted && f.workPhone.errors" 
+          >
+            <div class="fv-help-block" *ngIf="f.workPhone.errors.required">Work Phone is required</div>
+            <div class="fv-help-block" *ngIf="f.workPhone.errors.pattern">Only number allow!</div>
+          </div>
         </div>
         <div class="col-6 p-0 ps-4">
           <div class="form-group">
@@ -133,6 +196,13 @@
               class="form-control py-2 fs- fw-normal"
               placeholder="Mobile Phone"
             />
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && f.mobilePhone.errors" 
+          >
+            <div class="fv-help-block" *ngIf="f.mobilePhone.errors.required">Mobile Phone is required</div>
+              <div class="fv-help-block" *ngIf="f.mobilePhone.errors.pattern">Only number allow!</div>
           </div>
         </div>
       </div>
@@ -159,6 +229,12 @@
               <span><i class="far fa-calendar"></i></span>
               <mat-datepicker #dob></mat-datepicker>
             </div>
+          </div>
+          <div
+            class="fv-plugins-message-container"
+           *ngIf="submitted && f.dateOfBirth.errors" 
+          >
+            <div class="fv-help-block"  *ngIf="f.dateOfBirth.errors.required">Date of Birth is required</div>
           </div>
         </div>
         <div class="col-6 p-0 ps-4">
@@ -189,6 +265,12 @@
               placeholder="Designation"
             />
           </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && f.designation.errors" 
+          >
+            <div class="fv-help-block" *ngIf="f.designation.errors.required">Designation is required</div>
+          </div>
         </div>
         <div class="col-6 p-0 ps-4">
           <div class="form-group">
@@ -196,11 +278,18 @@
               >Work Experience <span class="text-danger">*</span>
             </label>
             <input
-              type="number"
+              type="text"
               formControlName="workExperience"
               class="form-control py-2 fs- fw-normal"
               placeholder="Work Experience"
             />
+          </div>
+          <div
+            class="fv-plugins-message-container"
+             *ngIf="submitted && f.workExperience.errors" 
+          >
+            <div class="fv-help-block" *ngIf="f.workExperience.errors.required">Work Experience is required</div>
+                <div class="fv-help-block" *ngIf="f.workExperience.errors.pattern">Only number allow!</div>
           </div>
         </div>
       </div>
@@ -214,6 +303,12 @@
         class="form-control py-2 fs- fw-normal"
         placeholder="Location"
       />
+    </div>
+    <div
+      class="fv-plugins-message-container"
+     *ngIf="submitted && f.location.errors" 
+    >
+      <div class="fv-help-block"  *ngIf="f.location.errors.required">Location is required</div>
     </div>
     <div class="container mb-6">
       <div class="row justify-content-between">
@@ -231,6 +326,12 @@
               class="form-control py-2 fs- fw-normal"
             ></textarea>
           </div>
+          <div
+            class="fv-plugins-message-container"
+             *ngIf="submitted && f.currentAddress.errors" 
+          >
+            <div class="fv-help-block" *ngIf="f.currentAddress.errors.required">Current Address is required</div>
+          </div>
         </div>
         <div class="col-6 p-0 ps-4">
           <div class="form-group">
@@ -246,16 +347,24 @@
               class="form-control py-2 fs- fw-normal"
             ></textarea>
           </div>
+          <div
+            class="fv-plugins-message-container"
+              *ngIf="submitted && f.permanentAddress.errors" 
+          >
+            <div class="fv-help-block" *ngIf="f.permanentAddress.errors.required">Permanent Address is required</div>
+          </div>
         </div>
       </div>
     </div>
-  <div class="container mb-6 permissionBox">
-        <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
-          <input type="checkbox" formControlName="createUser" value="All"  />
-          <span></span>
-          Create User (Allow access to application)
-        </label>
-  </div>
+    <div class="container mb-6 permissionBox">
+      <label
+        class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary"
+      >
+        <input type="checkbox" formControlName="createUser" value="All" />
+        <span></span>
+        Create User (Allow access to application)
+      </label>
+    </div>
     <div class="mb-1">Attachments</div>
     <div class="fv-row mb-5">
       <!--begin::Dropzone-->
@@ -366,15 +475,18 @@
             <div class="mt-7">
               <div class="symbol symbol-circle symbol-lg-100px">
                 <img
-                  
-                  [src]="item.profile || '../../../../assets/media/avatars/blank.png' "
+                  [src]="
+                    item.profile || '../../../../assets/media/avatars/blank.png'
+                  "
                   alt="image"
                 />
               </div>
               <div
                 class="symbol symbol-lg-100px symbol-circle symbol-primary d-none"
               >
-                <span class="font-size-h3 font-weight-boldest">{{ item.firstName[0] }}{{ item.lastName[0] }}</span>
+                <span class="font-size-h3 font-weight-boldest"
+                  >{{ item.firstName[0] }}{{ item.lastName[0] }}</span
+                >
               </div>
             </div>
             <!--end::User-->
@@ -407,4 +519,3 @@
 >
   <div class="spinner"></div>
 </div>
-

@@ -6,6 +6,7 @@ import { Utils } from 'src/app/services/utils';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, catchError, throwError } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth';
+import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 
 @Component({
   selector: 'app-worker-profile',
@@ -13,6 +14,14 @@ import { AuthService } from 'src/app/modules/auth';
   styleUrls: ['./worker-profile.component.scss'],
 })
 export class WorkerProfileComponent implements OnInit {
+  modalConfig: ModalConfig = {
+    modalTitle: 'View Document',
+    dismissButtonLabel: 'Cancel',
+    closeButtonLabel: 'Save',
+    hideFooter: this.hideFooter,
+  };
+  @ViewChild('modal') private modalComponent: ModalComponent;
+  pdfSrc = '';
   constructor(
     private route: ActivatedRoute,
 
@@ -22,6 +31,30 @@ export class WorkerProfileComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private authService: AuthService
   ) {}
+
+  async openModal(documentId: any) {
+    let queryParam = {
+      documentId: documentId,
+    };
+    this.apiCalls
+      .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe(async (response) => {
+        const src = window.URL.createObjectURL(response);
+        this.pdfSrc = src;
+        console.log(this.pdfSrc);
+        this.cdr.detectChanges();
+        return await this.modalComponent.open();
+      });
+  }
+  async hideFooter(): Promise<boolean> {
+    return true;
+  }
   endPoints = EndPoints;
   isLoading = false;
   documentsList: any;

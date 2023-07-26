@@ -25,7 +25,8 @@ export class WorkForceComponent implements OnInit {
   isLoading = false;
   imagePath: any;
   profilePicDoc: any = null;
-
+  isEngagedWorker: string = 'Engaged';
+  submitted = false;
   modalConfig: ModalConfig = {
     modalTitle: 'Employee',
     dismissButtonLabel: 'Cancel',
@@ -68,9 +69,27 @@ export class WorkForceComponent implements OnInit {
         '',
         Validators.compose([Validators.required, Validators.email]),
       ],
-      workPhone: ['', Validators.required],
-      workExperience: ['', Validators.required],
-      mobilePhone: ['', Validators.required],
+      workPhone: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
+      workExperience: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
+      mobilePhone: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
       dateOfBirth: ['', Validators.required],
       bloodGroup: [''],
       designation: ['', Validators.required],
@@ -83,120 +102,103 @@ export class WorkForceComponent implements OnInit {
     });
     this.getAllWorkForceList();
   }
-
+  get f() {
+    return this.workForceData.controls;
+  }
   async save() {
     const formData = new FormData();
+    this.submitted = true;
 
-    if (this.workForceData.valid) {
-      this.isLoading = true;
-      this.cdr.detectChanges();
-      if (this.workForceData.controls['dateOfBirth'].value) {
-        this.workForceData.controls['dateOfBirth'].setValue(
-          this.changeDateToUtc(this.workForceData.controls['dateOfBirth'].value)
-        );
-      }
+    // stop here if form is invalid
+    if (this.workForceData.invalid) {
+      return;
+    }
 
-      for (const key of Object.keys(this.workForceData.value)) {
-        if (key != 'documentList') {
-          const value = this.workForceData.value[key];
+    this.isLoading = true;
+    this.cdr.detectChanges();
+    if (this.workForceData.controls['dateOfBirth'].value) {
+      this.workForceData.controls['dateOfBirth'].setValue(
+        this.changeDateToUtc(this.workForceData.controls['dateOfBirth'].value)
+      );
+    }
 
-          if (value) {
-            formData.append(key, value);
-          }
+    for (const key of Object.keys(this.workForceData.value)) {
+      if (key != 'documentList') {
+        const value = this.workForceData.value[key];
+
+        if (value) {
+          formData.append(key, value);
         }
       }
-      const file = this.workForceData.get('documentList')?.value;
-      if (file.length != 0) {
-        file.forEach((fileObj: File) => {
-          const blob = new Blob([fileObj], { type: fileObj.type });
-          formData.append('documentList', blob, fileObj.name);
-        });
-      }
+    }
+    const file = this.workForceData.get('documentList')?.value;
+    if (file.length != 0) {
+      file.forEach((fileObj: File) => {
+        const blob = new Blob([fileObj], { type: fileObj.type });
+        formData.append('documentList', blob, fileObj.name);
+      });
+    }
 
-      this.apiCalls
-        .post(this.endPoints.CREATE_WORK_FORCE, formData)
-        .pipe(
-          catchError(async (err) => {
-            this.isLoading = false;
-            setTimeout(() => {
-              throw err;
-            }, 10);
-            this.utils.showSnackBarMessage(
-              this.snackBar,
-              'Something went wrong'
+    this.apiCalls
+      .post(this.endPoints.CREATE_WORK_FORCE, formData)
+      .pipe(
+        catchError(async (err) => {
+          this.isLoading = false;
+          setTimeout(() => {
+            throw err;
+          }, 10);
+          this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe(async (response) => {
+        if (this.isLoading) {
+          if (this.profilePicDoc) {
+            const imageFormData = new FormData();
+            const blob = new Blob([this.profilePicDoc], {
+              type: this.profilePicDoc.type,
+            });
+            imageFormData.append(
+              'profilePicDoc',
+              blob,
+              this.profilePicDoc.name
             );
-            this.cdr.detectChanges();
-          })
-        )
-        .subscribe(async (response) => {
-          if (this.isLoading) {
-            if (this.profilePicDoc) {
-              const imageFormData = new FormData();
-              const blob = new Blob([this.profilePicDoc], {
-                type: this.profilePicDoc.type,
-              });
-              imageFormData.append(
-                'profilePicDoc',
-                blob,
-                this.profilePicDoc.name
-              );
-              imageFormData.append('workForceId', response);
-              this.apiCalls
-                .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
-                .pipe(
-                  catchError(async (err) => {
-                    this.isLoading = false;
-                    setTimeout(() => {
-                      throw err;
-                    }, 10);
-                    this.utils.showSnackBarMessage(
-                      this.snackBar,
-                      'Something went wrong on upload profile-pic'
-                    );
-                    this.cdr.detectChanges();
-                  })
-                )
-                .subscribe(async (response) => {
+            imageFormData.append('workForceId', response);
+            this.apiCalls
+              .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
+              .pipe(
+                catchError(async (err) => {
                   this.isLoading = false;
-                  await this.modalComponent.closeModal();
-                  this.ngOnInit();
+                  setTimeout(() => {
+                    throw err;
+                  }, 10);
                   this.utils.showSnackBarMessage(
                     this.snackBar,
-                    'Employee save successfully'
+                    'Something went wrong on upload profile-pic'
                   );
-                });
-            } else {
-              this.isLoading = false;
-              await this.modalComponent.closeModal();
-              this.ngOnInit();
-              this.utils.showSnackBarMessage(
-                this.snackBar,
-                'Employee save successfully'
-              );
-            }
+                  this.cdr.detectChanges();
+                })
+              )
+              .subscribe(async (response) => {
+                this.isLoading = false;
+                await this.modalComponent.closeModal();
+                this.ngOnInit();
+                this.utils.showSnackBarMessage(
+                  this.snackBar,
+                  'Employee save successfully'
+                );
+              });
+          } else {
+            this.isLoading = false;
+            await this.modalComponent.closeModal();
+            this.ngOnInit();
+            this.utils.showSnackBarMessage(
+              this.snackBar,
+              'Employee save successfully'
+            );
           }
-        });
-    } else {
-      if (this.workForceData.controls['workEmail']?.errors?.email) {
-        this.utils.showSnackBarMessage(
-          this.snackBar,
-          'Personal Email is invalid'
-        );
-        return false;
-      }
-      if (this.workForceData.controls['personalEmail']?.errors?.email) {
-        this.utils.showSnackBarMessage(
-          this.snackBar,
-          'Personal Email is invalid'
-        );
-        return false;
-      }
-      this.utils.showSnackBarMessage(
-        this.snackBar,
-        'Please enter all required data'
-      );
-      return false;
-    }
+        }
+      });
   }
   async closeModal() {
     return await this.modalComponent.closeModal();
@@ -209,8 +211,18 @@ export class WorkForceComponent implements OnInit {
 
   getAllWorkForceList() {
     this.isLoading = true;
+    let q =
+      this.isEngagedWorker === 'All'
+        ? {}
+        : this.isEngagedWorker === 'Free'
+        ? {
+            isEngagedWorker: false,
+          }
+        : {
+            isEngagedWorker: true,
+          };
     this.apiCalls
-      .get(this.endPoints.LIST_WORK_FORCE, {})
+      .get(this.endPoints.LIST_WORK_FORCE, q)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(

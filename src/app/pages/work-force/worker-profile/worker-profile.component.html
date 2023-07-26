@@ -430,7 +430,7 @@
           ></a>
           <a
             href="javascript:;"
-            class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+            class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm" (click)="openModal(d.id)"
           >
             <i class="far fa-eye"></i
           ></a>
@@ -443,3 +443,8 @@
 <div *ngIf="isLoading" class="pause d-flex align-items-center justify-content-center">
   <div class="spinner"></div>
 </div>
+<app-modal #modal [modalConfig]="modalConfig" style="max-width: 777px" data-nnn="">
+<ngx-doc-viewer [url]="pdfSrc" viewer="url" style="width:100%;height:93vh;" >
+  <div>Loading</div>
+</ngx-doc-viewer>
+</app-modal>
