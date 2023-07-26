@@ -18,6 +18,7 @@ const Routing: Routes = [
 
   { path: 'business-admin', loadChildren: () => import('./hm/business-admin/business-admin.module').then(m => m.BusinessAdminModule) },
   { path: 'admin', loadChildren: () => import('./hm/admin/admin.module').then(m => m.AdminModule) },
+  { path: 'hm/inbox', loadChildren: () => import('./hm/inbox/inbox.module').then(m => m.InboxModule) },
   
     // { path: 'job-posts-details', component: JobPostDetailComponent },
   
