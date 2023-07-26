@@ -237,11 +237,11 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
         this.applicationDetails = response;
         this.loading = false;
         this.cdr.detectChanges();
-        this.getApplicantsDetails(this.applicationDetails.workerId);
+        this.getApplicantsDetails(this.applicationDetails.workerId, id);
       })
   }
 
-  getApplicantsDetails(id: string){
+  getApplicantsDetails(id: string, applicationId: string){
     this.loading = true;
     let queryParam = {
       workForceId  : id
@@ -255,7 +255,7 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
       .subscribe((response) => {
         this.loading = false;
         this.applicantsDetails = response;   
-        this.getWorkForceProfilePic(this.applicantsDetails.workForceId);  
+        this.getWorkForceProfilePic(applicationId);  
         this.getApplicationAttachment(this.applicantsDetails.workForceId);  
         this.cdr.detectChanges();
       })
@@ -285,8 +285,8 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
   
   getWorkForceProfilePic(id: string){
     this.loading = false;
-    this.apiCalls.getDocument(this.endPoints.GET_WORK_FORCE_PIC, {
-        workForceId: id,
+    this.apiCalls.getDocument(this.endPoints.GET_JOB_APPL_PIC, {
+      jobApplicationId : id,
       })
       .pipe(
         catchError(async (err) => {
