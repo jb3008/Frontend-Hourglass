@@ -11,7 +11,7 @@ export class NavbarComponent implements OnInit {
 
   itemClass: string = 'ms-1 ms-lg-3';
   btnClass: string =
-    'btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px';
+    'btn btn-icon btn-custom btn-icon-muted bg-white w-35px h-35px w-md-40px h-md-40px ';
   userAvatarClass: string = 'symbol-35px symbol-md-40px';
   btnIconClass: string = 'svg-icon-1';
 

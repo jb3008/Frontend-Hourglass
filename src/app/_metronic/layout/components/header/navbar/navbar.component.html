@@ -21,11 +21,11 @@
   <!--end::Search-->
   
   <!--begin::Activities-->
-  <div class="app-navbar-item" [ngClass]="itemClass">
+  <div class="app-navbar-item" [ngClass]="itemClass" routerLink="hm/inbox">
     <!--begin::Drawer toggle-->
-    <div [ngClass]="btnClass" id="kt_activities_toggle">
-      <span [inlineSVG]="'./assets/media/icons/duotune/general/gen032.svg'" class="svg-icon"
-        [ngClass]="btnIconClass"></span>
+    <div [ngClass]="btnClass">
+      <i class="bi bi-envelope bi bi-envelope fs-3 text-primary"></i>
+
     </div>
     <!--end::Drawer toggle-->
   </div>
