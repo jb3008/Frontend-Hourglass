@@ -50,7 +50,7 @@ export class NewTaskDrawerComponent implements OnInit {
   }
   ngOnChanges() {
     if (this.workOrderId) {
-      this.getAllTaskForWorkOrders();
+      this.getTaskList();
     }
     this.selection.clear();
     this.cdr.detectChanges();
@@ -83,17 +83,17 @@ export class NewTaskDrawerComponent implements OnInit {
     }`;
   }
 
-  getAllTaskForWorkOrders() {
+  getTaskList() {
     this.isLoading = true;
     this.apiCalls
-      .get(this.endPoints.GET_TASK_FOR_WORK_ORDER_LIST, {
+      .get(this.endPoints.TASK_LIST_HM, {
         workOrderId: this.workOrderId,
       })
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(
             this.snackBar,
-            'failed to fetch the work orders'
+            'failed to get the task list'
           );
           this.isLoading = false;
           this.cdr.detectChanges();
@@ -113,6 +113,7 @@ export class NewTaskDrawerComponent implements OnInit {
     closeBtn?.click();
     this.cdr.detectChanges();
     this.getSelectedTaskList.emit(this.selection?.selected);
+    this.selection.clear();
   }
   applyFilter(event: any) {
     this.dataSource.filter = event.target.value.trim().toLowerCase();

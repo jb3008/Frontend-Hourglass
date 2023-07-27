@@ -17,6 +17,7 @@ import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, catchError, throwError } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-new-timesheet',
   templateUrl: './new-timesheet.component.html',
@@ -29,8 +30,10 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {}
+  submitted = false;
   workForceList: any[];
   selectedEmpObj: any = null;
   workOrderList: any[];
@@ -51,10 +54,8 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       fromDate: ['', Validators.required],
       toDate: ['', Validators.required],
       comments: [''],
-      totalTimeSpent: ['0'],
-      vendorId: [auth?.vendorId, Validators.required],
       status: [''],
-      taskList: [[]],
+      newTimeSheetTaskList: [[]],
       documentList: [[]],
     });
     this.getAllWorkForceList();
@@ -67,10 +68,11 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     'taskId',
     'title',
     'priority',
-    'timeSpent',
+    'estimatedTime',
     'startDate',
     'finishDate',
     'status',
+    'actions',
   ];
   dataSource = new MatTableDataSource<any>();
 
@@ -125,18 +127,41 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
   }
   getSelectedTaskList(selectedTask: any) {
     if (selectedTask.length) {
+      this.timeSheetData.controls['newTimeSheetTaskList'].setValue([]);
       this.selectedTask = selectedTask;
       this.dataSource = new MatTableDataSource<any>(selectedTask);
       let totalHrs = 0;
       for (let index = 0; index < selectedTask.length; index++) {
         const element = selectedTask[index];
-
-        totalHrs += parseInt(element.timeSpent);
-        this.timeSheetData.controls['taskList'].value.push(element.taskId);
+        totalHrs += parseInt(element.estimatedTime);
+        this.timeSheetData.controls['newTimeSheetTaskList'].value.push({
+          taskId: element.taskId,
+          timeSpent: element.estimatedTime,
+          startDate: element.startDate,
+          dueDate: element.finishDate,
+        });
       }
       this.displayHrs = totalHrs.toFixed(1);
-      this.timeSheetData.controls['totalTimeSpent'].setValue(totalHrs);
     }
+    this.cdr.detectChanges();
+  }
+  removeTask(index: number) {
+    this.timeSheetData.controls['newTimeSheetTaskList'].setValue([]);
+    this.selectedTask.splice(index, 1);
+    this.dataSource = new MatTableDataSource<any>(this.selectedTask);
+    let totalHrs = 0;
+    for (let index = 0; index < this.selectedTask.length; index++) {
+      const element = this.selectedTask[index];
+
+      totalHrs += parseInt(element.estimatedTime);
+      this.timeSheetData.controls['newTimeSheetTaskList'].value.push({
+        taskId: element.taskId,
+        timeSpent: element.estimatedTime,
+        startDate: element.startDate,
+        dueDate: element.finishDate,
+      });
+    }
+    this.displayHrs = totalHrs.toFixed(1);
     this.cdr.detectChanges();
   }
 
@@ -236,77 +261,107 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     return utcDate;
   }
 
-  async save() {
-    const formData = new FormData();
+  async save(status: string) {
+    let formData: any = new Object();
+    this.submitted = true;
 
-    if (this.timeSheetData.valid) {
-      this.isLoading = true;
-      if (this.timeSheetData.controls['fromDate'].value) {
-        this.timeSheetData.controls['fromDate'].setValue(
-          this.changeDateToUtc(this.timeSheetData.controls['fromDate'].value)
-        );
-      }
-      if (this.timeSheetData.controls['toDate'].value) {
-        this.timeSheetData.controls['toDate'].setValue(
-          this.changeDateToUtc(this.timeSheetData.controls['toDate'].value)
-        );
-      }
+    // stop here if form is invalid
+    if (this.timeSheetData.invalid) {
+      return;
+    }
 
-      for (const key of Object.keys(this.timeSheetData.value)) {
-        if (key != 'documentList') {
-          const value = this.timeSheetData.value[key];
+    this.isLoading = true;
+    if (this.timeSheetData.controls['fromDate'].value) {
+      this.timeSheetData.controls['fromDate'].setValue(
+        this.changeDateToUtc(this.timeSheetData.controls['fromDate'].value)
+      );
+    }
+    if (this.timeSheetData.controls['toDate'].value) {
+      this.timeSheetData.controls['toDate'].setValue(
+        this.changeDateToUtc(this.timeSheetData.controls['toDate'].value)
+      );
+    }
 
-          if (value) {
-            formData.append(key, value);
-          }
+    for (const key of Object.keys(this.timeSheetData.value)) {
+      if (key != 'documentList') {
+        const value = this.timeSheetData.value[key];
+
+        if (value) {
+          formData[key] = value;
         }
       }
-      const file = this.timeSheetData.get('documentList')?.value;
-      if (file.length != 0) {
-        file.forEach((fileObj: File) => {
-          const blob = new Blob([fileObj], { type: fileObj.type });
-          formData.append('documentList', blob, fileObj.name);
-        });
-      }
+    }
+    formData['status'] = status;
+    this.apiCalls
+      .post(this.getEndpoint(status), formData)
+      .pipe(
+        catchError(async (err) => {
+          this.isLoading = false;
+          setTimeout(() => {
+            throw err;
+          }, 10);
+          this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe(async (response) => {
+        if (this.isLoading) {
+          const file = this.timeSheetData.get('documentList')?.value;
+          if (file.length) {
+            const docFormData = new FormData();
+            file.forEach((fileObj: File) => {
+              const blob = new Blob([fileObj], { type: fileObj.type });
+              docFormData.append('documentList', blob, fileObj.name);
+            });
 
-      this.apiCalls
-        .post(this.endPoints.CREATE_TIME_SHEET, formData)
-        .pipe(
-          catchError(async (err) => {
+            docFormData.append('timeSheetId', response);
+            this.apiCalls
+              .post(this.endPoints.UPLOAD_TIME_SHEET_DOCUMENT, docFormData)
+              .pipe(
+                catchError(async (err) => {
+                  this.isLoading = false;
+                  setTimeout(() => {
+                    throw err;
+                  }, 10);
+                  this.utils.showSnackBarMessage(
+                    this.snackBar,
+                    'Something went wrong on upload timesheet-document'
+                  );
+                  this.cdr.detectChanges();
+                })
+              )
+              .subscribe(async (response) => {
+                if (this.isLoading) {
+                  this.isLoading = false;
+                  this.ngOnInit();
+                  this.utils.showSnackBarMessage(
+                    this.snackBar,
+                    'Time sheet created successfully'
+                  );
+                  this.router.navigate(['/timesheets']);
+                }
+              });
+          } else {
             this.isLoading = false;
-            setTimeout(() => {
-              throw err;
-            }, 10);
+            this.ngOnInit();
             this.utils.showSnackBarMessage(
               this.snackBar,
-              'Something went wrong'
+              'Time sheet created successfully'
             );
-            this.cdr.detectChanges();
-          })
-        )
-        .subscribe(async (response) => {
-          this.isLoading = false;
-          this.ngOnInit();
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'Timesheet created successfully'
-          );
-        });
-    } else {
-      const invalid = [];
-      const controls = this.timeSheetData.controls;
-      for (const name in controls) {
-        if (controls[name].invalid) {
-          invalid.push(name);
+            this.router.navigate(['/timesheets']);
+          }
         }
-      }
-      console.log(invalid.length ? invalid : []);
-      this.utils.showSnackBarMessage(
-        this.snackBar,
-        'Please enter all required data'
-      );
-      return false;
-    }
+      });
+  }
+
+  get f() {
+    return this.timeSheetData.controls;
+  }
+
+  getEndpoint(status: string) {
+    return status === 'Draft'
+      ? this.endPoints.CREATE_TIME_SHEET_AS_DRAFT
+      : this.endPoints.CREATE_TIME_SHEET;
   }
 }
 
@@ -315,7 +370,7 @@ export interface PeriodicElement {
   title: string;
   priority: string;
   // assignTo: string;
-  timeSpent: string;
+  estimatedTime: string;
   startDate: string;
   finishDate: string;
   status: string;

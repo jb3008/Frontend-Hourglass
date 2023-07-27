@@ -6,12 +6,15 @@ import { NewTimesheetComponent } from './new-timesheet/new-timesheet.component';
 
 const routes: Routes = [
   { path: '', component: TimesheetsComponent },
-  { path: 'timesheet-detail', component: TimesheetDetailComponent },
+  {
+    path: 'timesheet-detail/:timeSheetId',
+    component: TimesheetDetailComponent,
+  },
   { path: 'new-timesheet', component: NewTimesheetComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class TimesheetsRoutingModule { }
+export class TimesheetsRoutingModule {}

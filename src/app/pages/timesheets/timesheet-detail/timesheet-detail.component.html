@@ -14,7 +14,7 @@
                     <a class="cursor-pointer " routerLink="/timesheets"> <i class="fas fa-arrow-left me-3"></i>
                         <span class="fs-8 fw-normal">Time Sheet ID</span>
                     </a>
-                    21542150 </h3>
+                    {{timeSheetDetails?.timeSheetId}} </h3>
                     <div>
                         <a  class=" btn btn-bg-light text-primary   btn-sm " id="kt_timesheet_logs_drawer_toggle" >
                             <i class="bi fs-4 bi-chat-left-text" ></i> Logs    </a>
@@ -30,36 +30,38 @@
         <div class=" me-5 my-1">
           <span class="d-flex text-muted fs-8">Work Order ID</span>
           <span class="fw-bold d-flex s-">
-            <a class="cursor-pointer"> 2786111763  <i class="far fa-arrow-alt-circle-right"></i>         </a>
+            <a class="cursor-pointer"> {{timeSheetDetails?.workOrderId}}  <i class="far fa-arrow-alt-circle-right"></i>         </a>
             </span>
         </div>
         <div class="vr me-5 mt-4 h-20px "></div>
 
         <div class=" me-5 my-1 d-flex">
           <div class="symbol symbol-30px symbol-square me-3">
-            <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">DR </span>
+            <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">{{timeSheetDetails?.employee?.firstName?.[0]
+            }}{{timeSheetDetails?.employee?.lastName?.[0]}} </span>
           </div>
           <div>
             <span class="d-flex text-muted fs-8">Employee</span>
-            <span class="fw-bold d-flex s-">Dianne Russell</span>
+            <span class="fw-bold d-flex s-">{{ timeSheetDetails?.employee?.firstName }}
+            {{ timeSheetDetails?.employee?.lastName }}</span>
           </div>
         </div>
             <div class="vr me-5 mt-4 h-20px "></div>
       
         <div class=" me-5 my-1">
           <span class="d-flex text-muted fs-8">Status</span>
-          <span class="fw-bold d-flex s-"><span class="badge badge-light-warning">
-              In-Progress</span> </span>
+          <span class="fw-bold d-flex s-"><span class="badge badge-primary">
+              {{timeSheetDetails?.status}}</span> </span>
         </div>
         <div class="vr me-5 mt-4 h-20px "></div>
         <div class=" me-5 my-1">
           <span class="d-flex text-muted fs-8">From Date</span>
-          <span class="fw-bold d-flex s-">Jun 12, 2023 </span>
+          <span class="fw-bold d-flex s-">{{timeSheetDetails?.fromDate | date : "MMM,dd yyyy"}} </span>
         </div>
         <div class="vr me-5 mt-4 h-20px "></div>
         <div class=" me-5 my-1">
           <span class="d-flex text-muted fs-8">To Date</span>
-          <span class="fw-bold d-flex s-">Jun 12, 2023 </span>
+          <span class="fw-bold d-flex s-">{{timeSheetDetails?.toDate | date : "MMM,dd yyyy"}} </span>
         </div>
 
       </div>

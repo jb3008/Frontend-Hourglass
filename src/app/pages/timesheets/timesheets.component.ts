@@ -8,6 +8,7 @@ import { Utils } from 'src/app/services/utils';
 import { Observable, catchError, throwError } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-timesheets',
   templateUrl: './timesheets.component.html',
@@ -19,9 +20,11 @@ export class TimesheetsComponent implements OnInit {
     private utils: Utils,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
-    private authService: AuthService
+    private authService: AuthService,
+    private fb: FormBuilder
   ) {}
   timeSheetList: any = [];
+
   displayedColumns: string[] = [
     'timeSheetId',
     'employee',
@@ -31,22 +34,60 @@ export class TimesheetsComponent implements OnInit {
     'totalTimeSpent',
     'status',
   ];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource = new MatTableDataSource<PeriodicElement>([]);
   endPoints = EndPoints;
   workForceList: any = [];
   isLoading = false;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
+  timeSheetFilter: FormGroup;
   ngAfterViewInit() {}
   ngOnInit(): void {
+    this.timeSheetFilter = this.fb.group({
+      timeSheetTaskId: [''],
+      timeSheetId: [''],
+      fromDate: [''],
+      toDate: [''],
+      workOrderId: [''],
+      status: ['All'],
+      searchByEmployee: [''],
+    });
     this.getAllWorkForceList();
-    this.getAllTimesheet();
+  }
+  changeDateToUtc(dateObj: any) {
+    const date = new Date(dateObj);
+    const utcDate = date.toISOString();
+    return utcDate;
   }
   getAllTimesheet() {
     this.isLoading = true;
+    let filter: any = {};
+    if (this.timeSheetFilter.controls['status'].value !== 'All') {
+      filter.status = [this.timeSheetFilter.controls['status'].value];
+    }
+    if (this.timeSheetFilter.controls['searchByEmployee'].value) {
+      filter.searchByEmployee =
+        this.timeSheetFilter.controls['searchByEmployee'].value;
+    }
+    if (this.timeSheetFilter.controls['timeSheetId'].value) {
+      filter.timeSheetId = this.timeSheetFilter.controls['timeSheetId'].value;
+    }
+    if (this.timeSheetFilter.controls['workOrderId'].value) {
+      filter.workOrderId = this.timeSheetFilter.controls['workOrderId'].value;
+    }
+    if (this.timeSheetFilter.controls['fromDate'].value) {
+      filter.fromDate = this.changeDateToUtc(
+        this.timeSheetFilter.controls['fromDate'].value
+      );
+    }
+    if (this.timeSheetFilter.controls['toDate'].value) {
+      filter.toDate = this.changeDateToUtc(
+        this.timeSheetFilter.controls['toDate'].value
+      );
+    }
+
     this.apiCalls
-      .get(this.endPoints.GET_TIME_SHEET, {})
+      .get(this.endPoints.GET_TIME_SHEET, filter)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(
@@ -91,7 +132,7 @@ export class TimesheetsComponent implements OnInit {
       )
       .subscribe((response) => {
         this.workForceList = response;
-
+        this.getAllTimesheet();
         this.cdr.detectChanges();
       });
   }
@@ -106,15 +147,3 @@ export interface PeriodicElement {
   totalTimeSpent: string;
   status: string;
 }
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    timeSheetId: 2786111763,
-    employee: 'Wade Warren',
-    workOrderId: 2786111763,
-    fromDate: 'May 30, 2023',
-    toDate: 'May 30, 2023',
-    totalTimeSpent: '16.0 (hr)',
-    status: 'In-Progress',
-  },
-];

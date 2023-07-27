@@ -51,7 +51,9 @@ const EndPoints = {
   GET_JOBAPPL_COUNTS: '/hourglass/vendor/getJobApplicationCounts.api',
   GET_TASK_FOR_WORK_ORDER_LIST: '/hourglass/task/tasksForWorkOrderId.api',
   GET_TIME_SHEET: '/hourglass/timesheet/listTimeSheet.api',
+  GET_TIME_SHEET_DETAILS: '/hourglass/timesheet/getTimeSheetDetails.api',
   CREATE_TIME_SHEET: '/hourglass/timesheet/create.api',
+  CREATE_TIME_SHEET_AS_DRAFT: '/hourglass/timesheet/saveDraftTimeSheet.api',
   GET_APPL_LOGS: '/hourglass/audit-log/auditLogForJobApplication.api',
   GET_ATTACHMENT: '/hourglass/document/getAttachment',
   UPLOAD_WORK_FORCE_PIC:
@@ -60,6 +62,8 @@ const EndPoints = {
   GET_JOB_APPL_PIC: '/hourglass/document/getProfilePicForJobApplication.api',
   UPLOAD_WORK_FORCE_DOCUMENT:
     '/hourglass/work-force/uploadFilesForWorkForce.api',
+  UPLOAD_TIME_SHEET_DOCUMENT:
+    '/hourglass/timesheet/uploadFilesForTimeSheet.api',
 };
 
 export default EndPoints;

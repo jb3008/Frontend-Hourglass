@@ -71,7 +71,7 @@
       <ng-container matColumnDef="title">
         <th mat-header-cell *matHeaderCellDef  class="align-middle"> Task Name </th>
         <td mat-cell *matCellDef="let element"  class="align-middle"> 
-          <span  class="badge badge-light-primary">{{element.title}} </span>
+          <span  class="badge badge-light-primary">{{element.taskId}} {{element.title}} </span>
      
         </td>
       </ng-container>
@@ -95,4 +95,7 @@
     <button type="button" class="btn  btn-sm btn-primary w-100px"  [disabled]="!selection.selected.length" (click)="continue()">Continue</button>
   </div>
   </div>
+</div>
+<div *ngIf="isLoading" class="pause d-flex align-items-center justify-content-center">
+  <div class="spinner"></div>
 </div>
