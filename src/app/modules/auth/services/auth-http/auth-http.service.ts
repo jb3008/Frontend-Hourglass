@@ -6,7 +6,7 @@ import { environment } from '../../../../../environments/environment';
 import { AuthModel } from '../../models/auth.model';
 import EndPoints from 'src/app/common/endpoints';
 
-const API_URL = `${EndPoints.HOST_URL}`;
+const API_URL = `${environment.apiUrl}`;
 
 @Injectable({
   providedIn: 'root',

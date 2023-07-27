@@ -284,7 +284,8 @@ export class JobPostDetailComponent implements OnInit {
     });
   }
 
-  getAttachment(id: string){
+  getAttachment(id: string, name: string){
+    this.loading = true;
     let queryParam = {
       documentId: id,
     };
@@ -292,13 +293,19 @@ export class JobPostDetailComponent implements OnInit {
       .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
       .pipe(
         catchError(async (error) => {
+          this.loading = false;
           this.cdr.detectChanges();
           throw error;
         })
       )
       .subscribe((response) => {
         const url = window.URL.createObjectURL(response);
-        window.open(url);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = name;
+        anchor.click();
+        window.URL.revokeObjectURL(url);
+        this.loading = false;
         this.cdr.detectChanges();
       });
   }

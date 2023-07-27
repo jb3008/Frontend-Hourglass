@@ -38,7 +38,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
       priority: ['', Validators.required],
       expectedFinishDate: ['', Validators.required],
       comments: ['', Validators.required],
-      timeSpent: ['', Validators.required],
+      estimatedTime: ['', Validators.required],
       status: ['', Validators.required],
       documentList: [[]]
     });
@@ -62,7 +62,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
       startDate: this.taskDetails.startDate,
       expectedFinishDate: this.taskDetails.finishDate,
       comments: this.taskDetails.comments,
-      timeSpent: this.taskDetails.timeSpent
+      estimatedTime: this.taskDetails.estimatedTime
     })
   }
 
@@ -127,7 +127,6 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
     this.isLoading = true;
     if(!this.taskDetails){
       this.taskData.removeControl('status');
-      this.taskData.removeControl('timeSpent');
     }
     const formData = new FormData();
     if(this.taskData.valid){

@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ApiCallsService {
   private authLocalStorageToken = `${environment.appVersion}-${environment.USERDATA_KEY}`;
-  host_url = EndPoints.HOST_URL;
+  host_url = environment.apiUrl;
   _headers: any;
   constructor(private http: HttpClient) {
     const token: any = this.getAuthFromLocalStorage();
