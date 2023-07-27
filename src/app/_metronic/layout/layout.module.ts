@@ -35,6 +35,11 @@ import { SidebarLogoComponent } from './components/sidebar/sidebar-logo/sidebar-
 import { SidebarMenuComponent } from './components/sidebar/sidebar-menu/sidebar-menu.component';
 import { SidebarFooterComponent } from './components/sidebar/sidebar-footer/sidebar-footer.component';
 import { NavbarComponent } from './components/header/navbar/navbar.component';
+import { InboxLogsDrawerComponent } from 'src/app/pages/inbox-drawer/inbox-logs-drawer/inbox-logs-drawer.component';
+import { InboxAttachmentLogsDrawerComponent } from 'src/app/pages/inbox-drawer/inbox-attachment-logs-drawer/inbox-attachment-logs-drawer.component';
+import { InboxCollaborateDrawerComponent } from 'src/app/pages/inbox-drawer/inbox-collaborate-drawer/inbox-collaborate-drawer.component';
+import { InboxRejectDrawerComponent } from 'src/app/pages/inbox-drawer/inbox-reject-drawer/inbox-reject-drawer.component';
+import { InboxApproveDrawerComponent } from 'src/app/pages/inbox-drawer/inbox-approve-drawer/inbox-approve-drawer.component';
 // import { AccountingComponent } from './components/toolbar/accounting/accounting.component';
 // import { ClassicComponent } from './components/toolbar/classic/classic.component';
 // import { ExtendedComponent } from './components/toolbar/extended/extended.component';
@@ -88,7 +93,16 @@ const routes: Routes = [
     DropdownMenusModule,
     NgbTooltipModule,
     TranslateModule,
-    ThemeModeModule
+    ThemeModeModule,
+
+
+    // InboxLogsDrawerComponent,
+    // InboxAttachmentLogsDrawerComponent,
+    // InboxCollaborateDrawerComponent,
+    // InboxRejectDrawerComponent,
+    // InboxApproveDrawerComponent,
+
+
   ],
   exports: [RouterModule],
 })

@@ -10,16 +10,17 @@ const Routing: Routes = [
   { path: 'hm/job-posts', loadChildren: () => import('./hm/job-posts/job-posts.module').then(m => m.JobPostsModule) },
 
   { path: 'hm/work-order', loadChildren: () => import('./hm/work-order/work-order.module').then(m => m.WorkOrderModule) },
+  { path: 'hm/inbox', loadChildren: () => import('./hm/inbox/inbox.module').then(m => m.InboxModule) },
 
   { path: 'work-order', loadChildren: () => import('./work-order/work-order.module').then(m => m.WorkOrderModule) },
   { path: 'work-force', loadChildren: () => import('./work-force/work-force.module').then(m => m.WorkForceModule) },
   { path: 'timesheets', loadChildren: () => import('./timesheets/timesheets.module').then(m => m.TimesheetsModule) },
   { path: 'invoices', loadChildren: () => import('./invoices/invoices.module').then(m => m.InvoicesModule) },
-
+  
   { path: 'business-admin', loadChildren: () => import('./hm/business-admin/business-admin.module').then(m => m.BusinessAdminModule) },
   { path: 'admin', loadChildren: () => import('./hm/admin/admin.module').then(m => m.AdminModule) },
-  { path: 'hm/inbox', loadChildren: () => import('./hm/inbox/inbox.module').then(m => m.InboxModule) },
   
+  { path: 'inbox', loadChildren: () => import('./inbox/inbox.module').then(m => m.InboxModule) },
     // { path: 'job-posts-details', component: JobPostDetailComponent },
   
 
