@@ -34,6 +34,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   businessUnits: any[] = [];
   jobLists: any[] = [];
   vendorList: any[] = [];
+  workOrderKind = 'Hourly';
   workOrderData: FormGroup;
   
   ngOnInit(): void {
@@ -46,6 +47,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       vendor: [''],
       jobPostId: [''],
       startDate: ['', Validators.required],
+      kind: ['', Validators.required],
       endDate: ['', Validators.required],
       timesheetFreq: ['Weekly (Default)', Validators.required],
       workHourInterval: ['', Validators.required],
@@ -53,6 +55,10 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       costCenter: ['', Validators.required],
       payTerms: ['30', Validators.required],
       legalEntity: ['', Validators.required],
+      workRate: [''],
+      minBudget: [''],
+      maxBudget: [''],
+      workRateCurrency: ['', Validators.required],
       site: ['', Validators.required],
       location: [{value: '', disabled: true}, Validators.required],
       businessUnit: ['', Validators.required],
@@ -268,10 +274,22 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     this.workOrderData.controls['location'].setValue(event.value.city);
   }
 
+  changeRateValue(){
+    if(this.workOrderKind == 'Fixed'){
+      this.workOrderData.controls['workRate'].setValue(null);
+    }else{
+      this.workOrderData.controls['minBudget'].setValue(null);
+      this.workOrderData.controls['maxBudget'].setValue(null);
+    }
+  }
+
   isLoading = false;
   submitWorkOrder(status: string){
     const formData = new FormData();
-    if(this.workOrderData.valid){
+    let workRateValue = this.workOrderData.controls['workRate'].value;
+    let minBudget = this.workOrderData.controls['minBudget'].value;
+    let maxBudget = this.workOrderData.controls['maxBudget'].value;
+    if(this.workOrderData.valid && (workRateValue || (minBudget && maxBudget))){
       this.isLoading = true;
       this.workOrderData.controls['startDate'].setValue(this.changeDateToUtc(this.workOrderData.controls['startDate'].value))
       this.workOrderData.controls['endDate'].setValue(this.changeDateToUtc(this.workOrderData.controls['endDate'].value));
@@ -290,6 +308,17 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
           }
         }
       }
+
+      if (this.workOrderKind == 'Fixed') {
+        formData.delete('workRate');  
+        formData.append('workRate', '0');  
+      } else if (this.workOrderKind == 'Hourly') {
+        formData.delete('minBudget');  
+        formData.append('minBudget', '0');  
+        formData.delete('maxBudget');  
+        formData.append('maxBudget', '0');  
+      }
+
       formData.append('status', status);
 
       this.apiCalls.post(this.endpoints.CREATE_WORK_ORDER,formData)

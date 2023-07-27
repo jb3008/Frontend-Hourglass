@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { DrawerComponent } from 'src/app/_metronic/kt/components/_DrawerComponent';
 import { ToggleComponent } from 'src/app/_metronic/kt/components/_ToggleComponent';
+import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
@@ -29,6 +30,13 @@ export class WorkOrderDetailsComponent implements OnInit {
   taskDetails: any;
   dataSource = new MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  modalConfig: ModalConfig = {
+    modalTitle: 'View Document',
+    dismissButtonLabel: 'Cancel',
+    closeButtonLabel: 'Save',
+    hideFooter: this.hideFooter,
+  };
+  @ViewChild('modal') private modalComponent: ModalComponent;
   timeSheetFrequencyList: any = {'W': 'Weekly', '2W': 'Bi-Weekly', 'M': 'Monthly'};
 
   filterObj: FilterObj = {}
@@ -60,6 +68,10 @@ export class WorkOrderDetailsComponent implements OnInit {
 
   }
 
+  async hideFooter(): Promise<boolean> {
+    return true;
+  }
+
   getWorkOrderDetails(){
     this.loading = true;
     let queryObj = {
@@ -75,6 +87,7 @@ export class WorkOrderDetailsComponent implements OnInit {
       )
       .subscribe((response) => {
         this.workOrderDetails = response[0];
+        debugger
         this.filterObj.workOrderId = this.workOrderDetails.workOrderId
         this.loading = false;
         this.cdr.detectChanges();
@@ -118,6 +131,27 @@ export class WorkOrderDetailsComponent implements OnInit {
         const url = window.URL.createObjectURL(response);
         window.open(url);
         this.cdr.detectChanges();
+      });
+  }
+
+  pdfSrc = '';
+  async openModal(documentId: any) {
+    let queryParam = {
+      documentId: documentId,
+    };
+    this.apiCalls
+      .getDocument(this.endpoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe(async (response) => {
+        const src = window.URL.createObjectURL(response);
+        this.pdfSrc = src;
+        this.cdr.detectChanges();
+        return await this.modalComponent.open();
       });
   }
 

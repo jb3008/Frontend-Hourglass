@@ -15,7 +15,7 @@ export class ApiCallsService {
   constructor(private http: HttpClient) {
     const token: any = this.getAuthFromLocalStorage();
     this._headers = new HttpHeaders({
-      Authorization: `Bearer ${token.token}`,
+      ['Auth-Token']: token.token,
     });
   }
 
@@ -44,6 +44,7 @@ export class ApiCallsService {
   delete(endpoint: any, queryParams?: any): Observable<any> {
     return this.http.delete(`${this.host_url}${endpoint}`, {
       params: queryParams,
+      headers: this._headers
     });
   }
 

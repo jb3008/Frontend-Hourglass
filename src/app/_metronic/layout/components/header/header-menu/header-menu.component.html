@@ -30,20 +30,20 @@
 </div>
 <ng-container *ngIf="setHiringManager">
 
-  <div class="menu-item me-lg-1 q_menu">
+  <!-- <div class="menu-item me-lg-1 q_menu">
     <a class="menu-link py-2" routerLinkActive="active menu-here" routerLink="/business-admin"><span class="menu-title">Business Admin</span></a>
   </div>
   
   <div class="menu-item me-lg-1 q_menu">
     <a class="menu-link py-2" routerLinkActive="active menu-here" routerLink="/admin"><span class="menu-title">Admin</span></a>
-  </div>
+  </div> -->
 
 
 
 
 </ng-container>
 <div class="menu-item me-lg-1 q_menu">
-  <a class="menu-link py-2" routerLinkActive="active menu-here" [routerLink]="logoutUrl"><span class="menu-title">
+  <a class="menu-link py-2" routerLinkActive="active menu-here" [routerLink]="logoutUrl" (click)="logout()"><span class="menu-title">
      Logout
     </span></a>
 </div>

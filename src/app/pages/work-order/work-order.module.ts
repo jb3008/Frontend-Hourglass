@@ -16,6 +16,8 @@ import { TimesheetLogsComponent } from './timesheet-logs/timesheet-logs.componen
 import { NewTaskRecrDrawerComponent } from './work-order-detail/new-task-recr-drawer/new-task-recr-drawer.component';
 import { SharedModule } from '../shared.modules';
 import { MatSelectModule } from '@angular/material/select';
+import { ModalsModule } from 'src/app/_metronic/partials';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 
 @NgModule({
@@ -40,7 +42,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatNativeDateModule,
     MatTableModule,
     MatCheckboxModule,
-    MatSelectModule
+    MatSelectModule,
+    ModalsModule,
+    NgxDocViewerModule
   ],
   providers: [  
     MatDatepickerModule,  

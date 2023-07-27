@@ -1,6 +1,7 @@
 const EndPoints = {
   HOST_URL: 'http://172.105.36.16:8080',
   LOGIN: '/hourglass/authenticate/login.api',
+  LOGOUT: '/hourglass/authenticate/logout',
   GET_USER_BY_ID: '/hourglass/user/getUserByUserId',
   HIRING_MANGER: '/hourglass/job-post/user/list-all-hmanager.api',
   JOB_TYPE: '/hourglass/common/rest/job-type.api',

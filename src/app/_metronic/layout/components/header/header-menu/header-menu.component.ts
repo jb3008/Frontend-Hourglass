@@ -128,6 +128,15 @@ export class HeaderMenuComponent implements OnInit {
       this.setHiringManager = true;
     }
   }
+
+  logout(){
+    this.apiCalls.get(this.endPoints.LOGOUT)
+      .pipe(catchError(async (error) => {
+        throw error;
+      }))
+      .subscribe((response) => {
+      })
+  }
 }
 
 const getCurrentUrl = (pathname: string): string => {

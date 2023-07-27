@@ -14,6 +14,7 @@ import { ApiCallsService } from 'src/app/services/api-calls.service';
 import EndPoints from 'src/app/common/endpoints';
 import { catchError } from 'rxjs';
 import { Utils } from  'src/app/services/utils';
+import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 
 @Component({
   selector: 'app-job-post-detail',
@@ -39,6 +40,13 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  modalConfig: ModalConfig = {
+    modalTitle: 'View Document',
+    dismissButtonLabel: 'Cancel',
+    closeButtonLabel: 'Save',
+    hideFooter: this.hideFooter,
+  };
+  @ViewChild('modal') private modalComponent: ModalComponent;
 
   // displayedColumns: string[] = ['firstName', 'id', 'worker', 'appliedBy','lastUpdate', 'costing', 'action'];
   displayedColumns: string[] = ['title', 'id', 'worker', 'appliedBy', 'modifierDate', 'workRate', 'status'];
@@ -91,6 +99,10 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }, 0);
+  }
+
+  async hideFooter(): Promise<boolean> {
+    return true;
   }
 
   getJobDetails(){
@@ -325,6 +337,27 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
         const url = window.URL.createObjectURL(response);
         window.open(url);
         this.cdr.detectChanges();
+      });
+  }
+
+  pdfSrc = '';
+  async openModal(documentId: any) {
+    let queryParam = {
+      documentId: documentId,
+    };
+    this.apiCalls
+      .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe(async (response) => {
+        const src = window.URL.createObjectURL(response);
+        this.pdfSrc = src;
+        this.cdr.detectChanges();
+        return await this.modalComponent.open();
       });
   }
 

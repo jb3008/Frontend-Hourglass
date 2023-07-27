@@ -20,6 +20,8 @@ import { ViewOfferLetterDrawerComponent } from './job-post-detail/view-offer-let
 import { JobSeekerComponent } from './job-seeker/job-seeker.component';
 // import { MatDialogModule } from '@angular/material/dialog';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { ModalsModule } from 'src/app/_metronic/partials';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 
 @NgModule({
@@ -47,7 +49,9 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
     MatTabsModule,
     InlineSVGModule,
     // MatDialogModule,
-    NgbTooltipModule
+    NgbTooltipModule,
+    ModalsModule,
+    NgxDocViewerModule
   ]
 })
 export class JobPostsModule { }

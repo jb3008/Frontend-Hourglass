@@ -21,6 +21,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { WorkOrderNewTaskDrawerComponent } from './new-work-order/work-order-new-task-drawer/work-order-new-task-drawer.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ModalsModule } from 'src/app/_metronic/partials';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 
 @NgModule({
@@ -50,7 +52,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatNativeDateModule,
     MatTabsModule,
     MatSelectModule,
-    MatDialogModule
+    MatDialogModule,
+    ModalsModule,
+    NgxDocViewerModule
   ],
   providers: [  
     MatDatepickerModule,  

@@ -214,9 +214,13 @@
                 </div>
                 <div class="separator"></div>
                 <div class="form-group row ">
-                  <label class="col-4 col-form-label text-muted">Work Rate</label>
+                  <label class="col-4 col-form-label text-muted">
+                    {{workOrderDetails?.kind == 'Fixed' ? 'Budget' : 'Working Rate'}}
+                  </label>
                   <div class="col-8">
-                    <span class="form-control-plaintext text-end">{{workOrderDetails?.minBudget ? (workOrderDetails?.minBudget + '-' + workOrderDetails?.maxBudget) : workOrderDetails?.rate}} {{workOrderDetails?.currency}}</span>
+                    <span class="form-control-plaintext text-end">
+                      {{workOrderDetails?.kind == 'Fixed' ? workOrderDetails?.minBudget + '-' + workOrderDetails?.maxBudget : workOrderDetails?.rate + ' ' + workOrderDetails?.rateCurrency}}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -246,9 +250,9 @@
     
               <!--begin::Lable-->
               <div class="font-weight-bolder text-warning py-1 font-size-lg w-250px">
-                <a class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3" (click)="getAttachment(documents.id)"> <i
+                <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3" (click)="getAttachment(documents.id)"> <i
                     class="fas fa-download"></i></a>
-                <a class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm "> <i
+                <a href="javascript:;" (click)="openModal(documents.id)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm "> <i
                     class="far fa-eye"></i></a>
               </div>
               <!--end::Lable-->
@@ -420,3 +424,14 @@
 
     </div>
 </div>
+
+<app-modal
+  #modal
+  [modalConfig]="modalConfig"
+  style="max-width: 777px"
+  data-nnn=""
+>
+  <ngx-doc-viewer [url]="pdfSrc" viewer="url" style="width: 100%; height: 93vh">
+    <div>Loading</div>
+  </ngx-doc-viewer>
+</app-modal>

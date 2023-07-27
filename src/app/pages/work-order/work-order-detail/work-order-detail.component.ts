@@ -12,6 +12,7 @@ import { Utils } from 'src/app/services/utils';
 import EndPoints from 'src/app/common/endpoints';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { MatPaginator } from '@angular/material/paginator';
+import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 
 @Component({
   selector: 'app-work-order-detail',
@@ -34,7 +35,13 @@ export class WorkOrderDetailComponent implements OnInit {
   displayedColumns: string[] = ['taskId', 'title', 'priority', 'assigneeId','timeSpent',  'finishDate', 'lastUpdate', 'status', 'action'];
   dataSource = new MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  
+  modalConfig: ModalConfig = {
+    modalTitle: 'View Document',
+    dismissButtonLabel: 'Cancel',
+    closeButtonLabel: 'Save',
+    hideFooter: this.hideFooter,
+  };
+  @ViewChild('modal') private modalComponent: ModalComponent;
   filterObj: FilterObj = {}
 
   filterValue: FilterValue = {
@@ -63,6 +70,10 @@ export class WorkOrderDetailComponent implements OnInit {
 
   }
 
+  async hideFooter(): Promise<boolean> {
+    return true;
+  }
+
   getWorkOrderDetails(){
     this.loading = true;
     let queryObj = {
@@ -78,6 +89,7 @@ export class WorkOrderDetailComponent implements OnInit {
       )
       .subscribe((response) => {
         this.workOrderDetails = response[0];
+        debugger
         this.filterObj.workOrderId = this.workOrderDetails.workOrderId
         this.loading = false;
         this.cdr.detectChanges();
@@ -218,6 +230,27 @@ export class WorkOrderDetailComponent implements OnInit {
         const url = window.URL.createObjectURL(response);
         window.open(url);
         this.cdr.detectChanges();
+      });
+  }
+
+  pdfSrc = '';
+  async openModal(documentId: any) {
+    let queryParam = {
+      documentId: documentId,
+    };
+    this.apiCalls
+      .getDocument(this.endpoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe(async (response) => {
+        const src = window.URL.createObjectURL(response);
+        this.pdfSrc = src;
+        this.cdr.detectChanges();
+        return await this.modalComponent.open();
       });
   }
 
