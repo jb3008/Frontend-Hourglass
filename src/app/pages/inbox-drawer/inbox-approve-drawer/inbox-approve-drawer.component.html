@@ -1,0 +1,112 @@
+<div
+
+  id="kt_inbox_approve_drawer"
+  class="bg-body"
+  data-kt-drawer="true"
+  data-kt-drawer-name="attachment_logs_drawer"
+  data-kt-drawer-activate="true"
+  data-kt-drawer-overlay="true"
+  data-kt-drawer-width="{default:'300px', 'lg': '500px'}"
+  data-kt-drawer-direction="end"
+  data-kt-drawer-toggle="#kt_inbox_approve_drawer_toggle"
+  data-kt-drawer-close="#kt_inbox_approve_close"
+>
+  <div class="card shadow-none rounded-0 w-100">
+    <div class="d-flex justify-content-between px-7" >
+    <div>
+      <h3 class="card-title fw-bolder text-dark mt-4 mb-7"> Approve</h3>
+      <!-- <div> 
+        Invoice submission with Hourglass is more faster than ever,  just select the approved timesheet for the work order and flip them into an invoice.
+      </div> -->
+    </div>
+      <!-- <div class="card-toolbar">
+        <button
+          type="button"
+          class="btn btn-sm btn-icon btn-active-light-primary mt-5 "
+          id="kt_inbox_approve_close"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+            class="svg-icon svg-icon-1"
+          ></span>
+        </button>
+      </div> -->
+    </div>
+    <button
+    type="button"
+    class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
+    id="kt_inbox_approve_close"
+  >
+  <img src="./assets/media/icons/duotune/arrows/arr061.svg" alt="">
+
+  </button>
+    <div class="card-body position-relative pt-0"  id="kt_activities_body">
+      <div class="d-flex text-body gap-3 align-items-center">
+        <img src="../../../../assets/images/icons/inbox-approve.svg" alt=""> 
+        <span class="fs-4">Yupe, This is good to go...</span>
+      </div>
+      <div  class="form-group my-6">
+        <label  class="mb-1">Comment </label>
+        <textarea  name="" id="" cols="30" rows="3" class="form-control py-2 fs- fw-normal"></textarea>
+      </div>
+
+
+
+      <div class="border w-100 rounded-1 p-/2">
+        <div class="d-flex justify-content-between align-items-center ">
+          <div class="bg-light-primary w-100">
+
+            <label class="py-2 px-5">
+              <i class="bi bi-paperclip fs-3 "></i>
+              Attachments</label>
+          </div>
+
+        </div>
+        <div class="fv-row p-4 ">
+    <!--begin::Dropzone-->
+    <div class="dropzone dz-clickable bg-white  border border-dashed text-center mb-2" 
+     DropZone   (click)="fileInputOrg.click()">
+        <!--begin::Message-->
+        <div class=" text-center w-100 text-muted">
+            <!--begin::Icon-->
+            <i class="fas fa-cloud-upload-alt  fs-2x"></i> <!--end::Icon-->
+            <!--begin::Info-->
+            <div class="ms-4">
+                <input type="file" hidden #fileInputOrg  
+                    accept=".pdf,.doc,.docx,.xls,.xlsx" >
+                <h3 class="fs-7 mb-1"> <a class=" text-primary ">Click to upload </a> or Drop files
+                    here.</h3>
+                <span class="fs-9 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size  less than 2mb)</span>
+            </div>
+            <!--end::Info-->
+        </div>
+    </div>
+    <a class="border rounded-1 py-1 px-3 mb-2 text-active-primary d-flex justify-content-between">
+     <div class="text-truncate pspmw95"  >
+Doc_some_name.pd
+        </div>
+        <span class="cursor-pointer ms-3 ">
+          <i class="bi bi-x-circle" ></i></span>
+    </a>
+    <a class="border rounded-1 py-1 px-3 mb-2 text-active-primary d-flex justify-content-between">
+     <div class="text-truncate pspmw95"  >
+Doc_some_name.pd
+        </div>
+        <span class="cursor-pointer ms-3 ">
+          <i class="bi bi-x-circle" ></i></span>
+    </a>
+    <!--end::Dropzone-->
+</div>
+
+    </div>
+
+
+
+
+   
+  </div>
+  <div class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_inbox_approve_footer">
+    <button type="reset" class="btn  btn-sm btn-outline" id="kt_inbox_approve_close">Cancel</button>
+    <button type="reset" class="btn  btn-sm btn-primary w-100px">Approve</button>
+  </div>
+</div>
