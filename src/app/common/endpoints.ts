@@ -58,6 +58,8 @@ const EndPoints = {
     '/hourglass/work-force/uploadProfilePicForWorkForce.api',
   GET_WORK_FORCE_PIC: '/hourglass/document/getProfilePicForWorkForce.api',
   GET_JOB_APPL_PIC: '/hourglass/document/getProfilePicForJobApplication.api',
+  UPLOAD_WORK_FORCE_DOCUMENT:
+    '/hourglass/work-force/uploadFilesForWorkForce.api',
 };
 
 export default EndPoints;

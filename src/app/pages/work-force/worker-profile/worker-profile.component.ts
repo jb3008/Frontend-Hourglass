@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
@@ -14,6 +15,7 @@ import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
   styleUrls: ['./worker-profile.component.scss'],
 })
 export class WorkerProfileComponent implements OnInit {
+  workForceDocument: FormGroup;
   modalConfig: ModalConfig = {
     modalTitle: 'View Document',
     dismissButtonLabel: 'Cancel',
@@ -21,10 +23,18 @@ export class WorkerProfileComponent implements OnInit {
     hideFooter: this.hideFooter,
   };
   @ViewChild('modal') private modalComponent: ModalComponent;
+  documentModalConfig: ModalConfig = {
+    modalTitle: 'Document',
+    dismissButtonLabel: 'Cancel',
+    closeButtonLabel: 'Save',
+    hideFooter: this.hideFooter,
+  };
+  @ViewChild('modalDocument') private documentModalComponent: ModalComponent;
+
   pdfSrc = '';
   constructor(
     private route: ActivatedRoute,
-
+    private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private apiCalls: ApiCallsService,
     private utils: Utils,
@@ -52,6 +62,16 @@ export class WorkerProfileComponent implements OnInit {
         return await this.modalComponent.open();
       });
   }
+
+  async openDocumentModal() {
+    this.workForceDocument.controls['documentList'].setValue([]);
+    return await this.documentModalComponent.open();
+  }
+
+  async closeDocumentModal() {
+    return await this.documentModalComponent.closeModal();
+  }
+
   async hideFooter(): Promise<boolean> {
     return true;
   }
@@ -59,9 +79,16 @@ export class WorkerProfileComponent implements OnInit {
   isLoading = false;
   documentsList: any;
   documentsAllList: any;
+
   ngOnInit(): void {
     this.route.queryParams.subscribe((param) => {
       this.workForceId = param['workForceId'];
+
+      this.workForceDocument = this.fb.group({
+        id: [this.workForceId, Validators.required],
+        documentList: [[]],
+      });
+
       this.geWorkForce();
     });
   }
@@ -171,5 +198,145 @@ export class WorkerProfileComponent implements OnInit {
       reader.onloadend = () => resolve(reader.result);
       reader.readAsDataURL(blob);
     });
+  }
+
+  droppedFiles(allFiles: File[], name: string): void {
+    console.log('this.allFiles', allFiles);
+    console.log(this.workForceDocument.controls[name].value);
+    const fileLength = allFiles.length;
+    let flg: boolean = true;
+    for (let i = 0; i < fileLength; i++) {
+      const file = allFiles[i];
+
+      if (file.type.indexOf('image') == 0) {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Please upload documents only'
+        );
+        flg = false;
+        break;
+      } else if (file.size > 2 * 1024 * 1024) {
+        // check if file size is > 2 MB
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Maximum allowed file size is 2 MB. Please choose another file.'
+        );
+        flg = false;
+        break;
+      } else {
+        const docList = this.workForceDocument.controls[name].value;
+        if (docList.length < 6) {
+          if (this.utils.isFileExist(docList, file)) {
+            this.utils.showSnackBarMessage(
+              this.snackBar,
+              'This file "' + file.name + '" already exist.'
+            );
+            flg = false;
+            break;
+          }
+        } else {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'Maximum 6 files can be added.'
+          );
+          flg = false;
+          break;
+        }
+      }
+    }
+    if (flg) {
+      for (let i = 0; i < fileLength; i++) {
+        this.workForceDocument.controls[name].value.push(allFiles[i]);
+      }
+    }
+  }
+
+  selectFile(event: any, name: string) {
+    const file = event.target.files[0];
+    if (file.type.indexOf('image') == 0) {
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Please upload documents only'
+      );
+    } else if (file.size > 2 * 1024 * 1024) {
+      // check if file size is > 2 MB
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Maximum allowed file size is 2 MB. Please choose another file.'
+      );
+    } else {
+      const docList = this.workForceDocument.controls[name].value;
+      if (docList.length < 6) {
+        if (this.utils.isFileExist(docList, file)) {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'This file "' + file.name + '" already exist.'
+          );
+        } else {
+          this.workForceDocument.controls[name].value.push(file);
+        }
+      } else {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Maximum 6 files can be added.'
+        );
+      }
+    }
+  }
+
+  clearFile(name: string, index: number) {
+    this.workForceDocument.controls[name].value.splice(index, 1);
+  }
+
+  async save() {
+    const formData = new FormData();
+
+    // stop here if form is invalid
+    if (this.workForceDocument.invalid) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    for (const key of Object.keys(this.workForceDocument.value)) {
+      if (key != 'documentList') {
+        const value = this.workForceDocument.value[key];
+
+        if (value) {
+          formData.append(key, value);
+        }
+      }
+    }
+    const file = this.workForceDocument.get('documentList')?.value;
+    if (file.length != 0) {
+      file.forEach((fileObj: File) => {
+        const blob = new Blob([fileObj], { type: fileObj.type });
+        formData.append('documentList', blob, fileObj.name);
+      });
+    }
+
+    this.apiCalls
+      .post(this.endPoints.UPLOAD_WORK_FORCE_DOCUMENT, formData)
+      .pipe(
+        catchError(async (err) => {
+          this.isLoading = false;
+          setTimeout(() => {
+            throw err;
+          }, 10);
+          this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe(async (response) => {
+        if (this.isLoading) {
+          this.isLoading = false;
+          await this.documentModalComponent.closeModal();
+          this.ngOnInit();
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'Document save successfully'
+          );
+        }
+      });
   }
 }

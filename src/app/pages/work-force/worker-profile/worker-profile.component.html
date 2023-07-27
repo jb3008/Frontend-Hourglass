@@ -21,7 +21,10 @@
           <div class="d-flex align-items-center mb-6">
             <div class="symbol symbol-circle symbol-lg-90px me-5">
               <img
-               [src]="workForceDetails?.profile || '../../../../assets/media/avatars/blank.png' "
+                [src]="
+                  workForceDetails?.profile ||
+                  '../../../../assets/media/avatars/blank.png'
+                "
                 class=""
                 alt=""
               />
@@ -391,46 +394,62 @@
         <span><i class="fa fa-search"></i> </span>
         <span
           class="cursor-pointer text-active-primary pspinpClose"
-          (click)="searchFilterInp = '';getDocuments();"
+          (click)="searchFilterInp = ''; getDocuments()"
           *ngIf="searchFilterInp"
         >
           <i class="bi bi-x-lg text-active-primary"></i
         ></span>
       </div>
+      <a
+        class="btn btn-primary btn-sm cursor-pointer my-2"
+        (click)="openDocumentModal()"
+        ><i class="fas fa-upload"></i> Upload Documents</a
+      >
     </div>
 
     <ng-container *ngFor="let d of documentsList">
       <div class="d-flex align-items-center mb-4 bg-white rounded p-5">
         <!--begin::Icon-->
         <span class="symbol align-middle mr-5 w-70px">
-          <img alt="" src="./assets/media/svg/files/doc.svg" *ngIf="d.fileType !== 'pdf'">
-          <img alt="" src="./assets/media/svg/files/pdf.svg" *ngIf="d.fileType === 'pdf'">
-
+          <img
+            alt=""
+            src="./assets/media/svg/files/doc.svg"
+            *ngIf="d.fileType !== 'pdf'"
+          />
+          <img
+            alt=""
+            src="./assets/media/svg/files/pdf.svg"
+            *ngIf="d.fileType === 'pdf'"
+          />
         </span>
         <!--end::Icon-->
 
         <!--begin::Title-->
         <div class="d-flex flex-column min-w-50 mr-2">
-          <a href="#" class="text-dark text-hover-primary mb-1 font-size-lg"
-            >{{d.fileName}}</a
-          >
+          <a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">{{
+            d.fileName
+          }}</a>
           <span class="text-muted"
-            >Uploaded by <a href="">{{d.userDetails?.firstName
-}} {{d.userDetails?.lastName
-}}</a> on {{d.modifierDate | date:'fullDate'}}</span
+            >Uploaded by
+            <a href=""
+              >{{ d.userDetails?.firstName }} {{ d.userDetails?.lastName }}</a
+            >
+            on {{ d.modifierDate | date : "fullDate" }}</span
           >
         </div>
-   
+
         <div class="font-weight-bolder text-warning py-1 font-size-lg w-250px">
           <a
             href="javascript:;"
-            class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3" (click)="getAttachment(d.id)"
+            class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3"
+            (click)="getAttachment(d.id)"
           >
             <i class="fas fa-download"></i
           ></a>
           <a
             href="javascript:;"
-            class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm" (click)="openModal(d.id)"
+            class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+            (click)="openModal(d.id)"
           >
             <i class="far fa-eye"></i
           ></a>
@@ -440,11 +459,110 @@
     </ng-container>
   </ng-container>
 </div>
-<div *ngIf="isLoading" class="pause d-flex align-items-center justify-content-center">
+<app-modal
+  #modalDocument
+  [modalConfig]="documentModalConfig"
+  style="max-width: 777px"
+  data-nnn=""
+>
+  <form [formGroup]="workForceDocument">
+    <div class="mb-1">Attachments</div>
+    <div class="fv-row mb-5">
+      <!--begin::Dropzone-->
+      <div
+        class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
+        DropZone
+        (onFileDropped)="droppedFiles($event, 'documentList')"
+        (click)="fileInputOther.click()"
+      >
+        <!--begin::Message-->
+        <div class="text-center w-100 text-muted">
+          <!--begin::Icon-->
+          <i class="fas fa-cloud-upload-alt fs-2x"></i>
+          <!--end::Icon-->
+          <!--begin::Info-->
+          <div class="ms-4">
+            <input
+              type="file"
+              hidden
+              #fileInputOther
+              (change)="selectFile($event, 'documentList')"
+              accept=".pdf,.doc,.docx,.xls,.xlsx"
+            />
+            <h3 class="fs-5 mb-1">
+              <a class="text-primary">Click to upload </a> or Drop files here.
+            </h3>
+            <span class="fs-7 fw-semibold text-gray-400"
+              >.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb); maximum 6
+              files</span
+            >
+          </div>
+          <!--end::Info-->
+        </div>
+      </div>
+      <div
+        *ngIf="workForceDocument.controls['documentList'].value"
+        class="d-flex flex-wrap"
+      >
+        <a
+          *ngFor="
+            let doc of workForceDocument.controls['documentList'].value;
+            let index = index
+          "
+          class="me-3 mt-4 border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between mw-325px"
+        >
+          <div
+            class="text-truncate pspmw95"
+            [ngbTooltip]="doc.name"
+            [openDelay]="600"
+          >
+            {{ doc.name }}
+          </div>
+          <span class="cursor-pointer ms-3">
+            <i
+              class="bi bi-x-circle"
+              (click)="clearFile('documentList', index)"
+            ></i
+          ></span>
+        </a>
+      </div>
+
+      <!--end::Dropzone-->
+    </div>
+
+    <div class="modal-footer bg-light p-3 px-5">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="closeDocumentModal()"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="!workForceDocument.controls['documentList'].value.length"
+        (click)="save()"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</app-modal>
+
+<div
+  *ngIf="isLoading"
+  class="pause d-flex align-items-center justify-content-center"
+>
   <div class="spinner"></div>
 </div>
-<app-modal #modal [modalConfig]="modalConfig" style="max-width: 777px" data-nnn="">
-<ngx-doc-viewer [url]="pdfSrc" viewer="url" style="width:100%;height:93vh;" >
-  <div>Loading</div>
-</ngx-doc-viewer>
+<app-modal
+  #modal
+  [modalConfig]="modalConfig"
+  style="max-width: 777px"
+  data-nnn=""
+>
+  <ngx-doc-viewer [url]="pdfSrc" viewer="url" style="width: 100%; height: 93vh">
+    <div>Loading</div>
+  </ngx-doc-viewer>
 </app-modal>
