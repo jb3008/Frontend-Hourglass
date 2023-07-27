@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { DrawerComponent, ToggleComponent } from 'src/app/_metronic/kt/components';
+import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from  'src/app/services/utils';
@@ -32,6 +33,13 @@ export class JobPostDetailComponent implements OnInit {
   
   isSelectedTab:string ='Details';
   vendorDetails: any;
+  modalConfig: ModalConfig = {
+    modalTitle: 'View Document',
+    dismissButtonLabel: 'Cancel',
+    closeButtonLabel: 'Save',
+    hideFooter: this.hideFooter,
+  };
+  @ViewChild('modal') private modalComponent: ModalComponent;
 
   constructor(private route: ActivatedRoute, private apiCalls: ApiCallsService, private router: Router, 
     private cdr: ChangeDetectorRef, private utils: Utils, private dialog: MatDialog) { }
@@ -53,6 +61,10 @@ export class JobPostDetailComponent implements OnInit {
   // Application
   // Details
 
+  async hideFooter(): Promise<boolean> {
+    return true;
+  }
+  
   getSelectedTab(tab:string): void {
     this.isSelectedTab = tab
 
@@ -288,6 +300,27 @@ export class JobPostDetailComponent implements OnInit {
         const url = window.URL.createObjectURL(response);
         window.open(url);
         this.cdr.detectChanges();
+      });
+  }
+
+  pdfSrc = '';
+  async openModal(documentId: any) {
+    let queryParam = {
+      documentId: documentId,
+    };
+    this.apiCalls
+      .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe(async (response) => {
+        const src = window.URL.createObjectURL(response);
+        this.pdfSrc = src;
+        this.cdr.detectChanges();
+        return await this.modalComponent.open();
       });
   }
 

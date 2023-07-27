@@ -24,6 +24,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { SendOfferLetterDrawerComponent } from './job-post-detail/send-offer-letter-drawer/send-offer-letter-drawer.component';
 import { LogsDrawerComponent } from './job-post-detail/logs-drawer/logs-drawer.component';
 import { ChatDrawerComponent } from './job-post-detail/chat-drawer/chat-drawer.component';
+import { ModalsModule } from 'src/app/_metronic/partials';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 
 @NgModule({
@@ -55,7 +57,9 @@ import { ChatDrawerComponent } from './job-post-detail/chat-drawer/chat-drawer.c
     InlineSVGModule,
     MatSelectModule,
     MatDialogModule,
-    NgbTooltipModule
+    NgbTooltipModule,
+    ModalsModule,
+    NgxDocViewerModule
   ]
 })
 export class JobPostsModule { }
