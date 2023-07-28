@@ -1,201 +1,414 @@
 <div class="content flex-column-fluid auto container-lg mb-4">
-    <!-- <div class="py-5 fw-bold">
+  <!-- <div class="py-5 fw-bold">
         <a class="cursor-pointer " routerLink="/job-posts"> <i class="fas fa-arrow-left me-3"></i>
             Create Job Posting for Worker <span class="badge badge-light-success fw-normal ms-3"><i
                     class="fas fa-yin-yangfas fa-circle px-1 text-success  fs-10"></i> New Job</span></a>
     </div> -->
-    <!--begin:: Top Card-->
+  <!--begin:: Top Card-->
 
-    <div class="card mb-5 mb-xl-10 text-gray-600">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-
-                <h3 class="card-title fs-4"> 
-                    <a class="cursor-pointer " routerLink="/timesheets"> <i class="fas fa-arrow-left me-3"></i>
-                        <span class="fs-8 fw-normal">Time Sheet ID</span>
-                    </a>
-                    {{timeSheetDetails?.timeSheetId}} </h3>
-                    <div>
-                        <a  class=" btn btn-bg-light text-primary   btn-sm " id="kt_timesheet_logs_drawer_toggle" >
-                            <i class="bi fs-4 bi-chat-left-text" ></i> Logs    </a>
-                        <a  class=" btn btn-bg-light text-primary btn-sm ms-5 " id="kt_attachment_logs_drawer_toggle">
-                             <i class="bi fs-4 bi-paperclip"></i> Attachments     </a>
-                    </div>
-                </div>
-                 <app-attachment-logs-drawer></app-attachment-logs-drawer>
-                 <app-timesheet-logs-drawer></app-timesheet-logs-drawer>
-<div class="d-flex flex-wrap flex-stack mt-7 ">
-    <div class="d-flex flex-column flex-grow-1 pe-8">
-      <div class="d-flex flex-wrap lign-items-center">
-        <div class=" me-5 my-1">
-          <span class="d-flex text-muted fs-8">Work Order ID</span>
-          <span class="fw-bold d-flex s-">
-            <a class="cursor-pointer"> {{timeSheetDetails?.workOrderId}}  <i class="far fa-arrow-alt-circle-right"></i>         </a>
-            </span>
+  <div class="card mb-5 mb-xl-10 text-gray-600">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center">
+        <h3 class="card-title fs-4">
+          <a class="cursor-pointer" routerLink="/timesheets">
+            <i class="fas fa-arrow-left me-3"></i>
+            <span class="fs-8 fw-normal">Time Sheet ID</span>
+          </a>
+          {{ timeSheetDetails?.timeSheetId }}
+        </h3>
+        <div>
+          <a
+            class="btn btn-bg-light text-primary btn-sm"
+            id="kt_timesheet_logs_drawer_toggle"
+          >
+            <i class="bi fs-4 bi-chat-left-text"></i> Logs
+          </a>
+          <a
+            class="btn btn-bg-light text-primary btn-sm ms-5"
+            id="kt_attachment_logs_drawer_toggle"
+          >
+            <i class="bi fs-4 bi-paperclip"></i> Attachments
+          </a>
         </div>
-        <div class="vr me-5 mt-4 h-20px "></div>
-
-        <div class=" me-5 my-1 d-flex">
-          <div class="symbol symbol-30px symbol-square me-3">
-            <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">{{timeSheetDetails?.employee?.firstName?.[0]
-            }}{{timeSheetDetails?.employee?.lastName?.[0]}} </span>
-          </div>
-          <div>
-            <span class="d-flex text-muted fs-8">Employee</span>
-            <span class="fw-bold d-flex s-">{{ timeSheetDetails?.employee?.firstName }}
-            {{ timeSheetDetails?.employee?.lastName }}</span>
-          </div>
-        </div>
-            <div class="vr me-5 mt-4 h-20px "></div>
-      
-        <div class=" me-5 my-1">
-          <span class="d-flex text-muted fs-8">Status</span>
-          <span class="fw-bold d-flex s-"><span class="badge badge-primary">
-              {{timeSheetDetails?.status}}</span> </span>
-        </div>
-        <div class="vr me-5 mt-4 h-20px "></div>
-        <div class=" me-5 my-1">
-          <span class="d-flex text-muted fs-8">From Date</span>
-          <span class="fw-bold d-flex s-">{{timeSheetDetails?.fromDate | date : "MMM,dd yyyy"}} </span>
-        </div>
-        <div class="vr me-5 mt-4 h-20px "></div>
-        <div class=" me-5 my-1">
-          <span class="d-flex text-muted fs-8">To Date</span>
-          <span class="fw-bold d-flex s-">{{timeSheetDetails?.toDate | date : "MMM,dd yyyy"}} </span>
-        </div>
-
       </div>
-    </div>
-  </div>
-
-
-            <div class="separator my-5"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <div class="fw-bold   mt-4">  Details</div>
-                    <div class="mt-2 mb-7 text-muted block"> Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Nam quod architecto saepe necessitatibus dolore.
-                    </div>
-                </div>
-             
-
-                <div class=" my-4 text-end">
-                    <i class="bi bi-clock-fill align-middle  text-light-warning fs-4x me-3"></i>
-                    <span class="text-muted me-3 fw-semibold">Total Time Spent</span> <span class="fs-2 fw-bold "> 63.0 hr</span>
-                  </div>
+      <app-attachment-logs-drawer
+        [timeSheetId]="timeSheetId"
+      ></app-attachment-logs-drawer>
+      <app-timesheet-logs-drawer></app-timesheet-logs-drawer>
+      <div class="d-flex flex-wrap flex-stack mt-7">
+        <div class="d-flex flex-column flex-grow-1 pe-8">
+          <div class="d-flex flex-wrap lign-items-center">
+            <div class="me-5 my-1">
+              <span class="d-flex text-muted fs-8">Work Order ID</span>
+              <span class="fw-bold d-flex s-">
+                <a class="cursor-pointer">
+                  {{ timeSheetDetails?.workOrderId }}
+                  <i class="far fa-arrow-alt-circle-right"></i>
+                </a>
+              </span>
             </div>
+            <div class="vr me-5 mt-4 h-20px"></div>
 
-            <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" [closeOthers]="true" class="b-0">
-                <ngb-panel *ngFor="let number of [0,1,2,3,4,5,6]">
-                    <ng-template ngbPanelHeader  let-opened="opened">
-                        <div class="d-flex custom-header align-items-center justify-content-between p-0 ps-7 py-1 pe-2" [class.collapsed]="!opened" >
-                          <div class="d-flex gap-3 align-items-center">
-                            <i class="bi bi-calendar fs-4"></i>
-                            <span class="fs-4 fw-bold">DAY {{number +1}} </span> <span class="text-muted">24/5/2023</span>
-                          </div>
-                          <div>
-                            <span class="fw-bold">9 hr</span>
-                            <button type="button"
-                             ngbPanelToggle class="btn btn-icon   btn-active-color-primary btn-sm " >
-                             <i class="bi fs-4 bi-chevron-down" [class.bi-chevron-right]="!opened"></i>
+            <div class="me-5 my-1 d-flex">
+              <div class="symbol symbol-30px symbol-square me-3">
+                <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
+                  >{{timeSheetDetails?.employee?.firstName?.[0]
 
-                                                    
-                            </button>
-                          </div>
-                          <!-- <div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  }}{{timeSheetDetails?.employee?.lastName?.[0]}}
+                </span>
+              </div>
+              <div>
+                <span class="d-flex text-muted fs-8">Employee</span>
+                <span class="fw-bold d-flex s-"
+                  >{{ timeSheetDetails?.employee?.firstName }}
+                  {{ timeSheetDetails?.employee?.lastName }}</span
+                >
+              </div>
+            </div>
+            <div class="vr me-5 mt-4 h-20px"></div>
+
+            <div class="me-5 my-1">
+              <span class="d-flex text-muted fs-8">Status</span>
+              <span class="fw-bold d-flex s-"
+                ><span class="badge badge-primary">
+                  {{ timeSheetDetails?.status }}</span
+                >
+              </span>
+            </div>
+            <div class="vr me-5 mt-4 h-20px"></div>
+            <div class="me-5 my-1">
+              <span class="d-flex text-muted fs-8">From Date</span>
+              <span class="fw-bold d-flex s-"
+                >{{ timeSheetDetails?.fromDate | date : "MMM,dd yyyy" }}
+              </span>
+            </div>
+            <div class="vr me-5 mt-4 h-20px"></div>
+            <div class="me-5 my-1">
+              <span class="d-flex text-muted fs-8">To Date</span>
+              <span class="fw-bold d-flex s-"
+                >{{ timeSheetDetails?.toDate | date : "MMM,dd yyyy" }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="separator my-5"></div>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <div class="fw-bold mt-4">Details</div>
+          <div class="mt-2 mb-7 text-muted block">
+            The below are the tasks and its status updated for the mentioned
+            timesheet period
+          </div>
+        </div>
+
+        <div class="my-4 text-end">
+          <i
+            class="bi bi-clock-fill align-middle text-light-warning fs-4x me-3"
+          ></i>
+          <span class="text-muted me-3 fw-semibold">Total Time Spent</span>
+          <span class="fs-2 fw-bold"> {{ totalTimeSpent.toFixed(1) }} hr</span>
+        </div>
+      </div>
+
+      <ngb-accordion
+        #acc="ngbAccordion"
+        activeIds="ngb-panel-0"
+        [closeOthers]="true"
+        class="b-0"
+      >
+        <ngb-panel
+          *ngFor="let d of taskListDetails; let number = index"
+          (click)="startDate = d.date"
+        >
+          <ng-template ngbPanelHeader let-opened="opened">
+            <div
+              class="d-flex custom-header align-items-center justify-content-between p-0 ps-7 py-1 pe-2"
+              [class.collapsed]="!opened"
+            >
+              <div class="d-flex gap-3 align-items-center">
+                <i class="bi bi-calendar fs-4"></i>
+                <span class="fs-4 fw-bold">DAY {{ number + 1 }} </span>
+                <span class="text-muted">{{ d.date }}</span>
+              </div>
+              <div>
+                <span class="fw-bold">{{ d.timeSpent }} hr</span>
+                <button
+                  type="button"
+                  ngbPanelToggle
+                  class="btn btn-icon btn-active-color-primary btn-sm"
+                >
+                  <i
+                    class="bi fs-4 bi-chevron-down"
+                    [class.bi-chevron-right]="!opened"
+                  ></i>
+                </button>
+              </div>
+              <!-- <div>
                             <button ngbPanelToggle class="btn btn-sm btn-outline-primary ms-2">Toggle second</button>
                             <button type="button" class="btn btn-sm btn-outline-secondary ms-2" >
       uio
                             </button>
                             <button type="button" class="btn btn-sm btn-outline-danger ms-2">Collapse all</button>
                           </div> -->
-                        </div>
-                      </ng-template>
-                  <ng-template ngbPanelContent>
-                  <div class="border">
-                    <table mat-table [dataSource]="dataSource" class="table table-row-bordered text-gray-600">
+            </div>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <div class="border">
+              <table
+                mat-table
+                [dataSource]="dataSource[d.date]"
+                class="table table-row-bordered text-gray-600"
+              >
+                <!-- taskId Column -->
+                <ng-container matColumnDef="taskId">
+                  <th mat-header-cell *matHeaderCellDef class="align-middle">
+                    <i class="bi bi-hash"></i> Task Id
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element"
+                    class="align-middle"
+                    routerLink="details"
+                  >
+                    {{ element.taskId }}
+                  </td>
+                </ng-container>
 
-                        <!-- taskId Column -->
-                        <ng-container matColumnDef="taskId">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-hash"></i> Task Id </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle" routerLink="details"> {{element.taskId}} </td>
-                        </ng-container>
-            
-                        <!-- taskName Column -->
-                        <ng-container matColumnDef="taskName">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-file-earmark-font"></i> Task
-                            Name </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle"> {{element.taskName}} </td>
-                        </ng-container>
-            
-            
-                        <!-- priority Column -->
-                        <ng-container matColumnDef="priority">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-tag"></i> Priority </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle">
-                            <span class="badge badge-light-danger" [ngClass]="{' badge-light-danger text-danger': (element.priority === 'High' || element.priority === 'Medium'),
-                               'badge-light-success text-success' : element.priority === 'Low'  }">
-                              <i class="fas fa-yin-yangfas fa-circle px-1 fs-10" [ngClass]="{'text-danger': (element.priority === 'High' || element.priority === 'Medium'),
-                               'text-success' : element.priority === 'Low'  }"></i>
-            
-                              {{element.priority}}</span>
-            
-                          </td>
-                        </ng-container>
-                        
-                        <!-- timeSpent Column -->
-                        <ng-container matColumnDef="timeSpent">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-clock"></i> Time Spent </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle"> {{element.timeSpent}} </td>
-                        </ng-container>
-            
-                        <!-- eta Column -->
-                        <ng-container matColumnDef="eta">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> Start Date </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle"> {{element.eta}} </td>
-                        </ng-container>
-            
-                        <!-- lastUpdate Column -->
-                        <ng-container matColumnDef="lastUpdate">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> Due Date
-                          </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle"> {{element.lastUpdate}} </td>
-                        </ng-container>
-            
-                        <!-- status Column -->
-                        <ng-container matColumnDef="status">
-                          <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-sun"></i> Status </th>
-                          <td mat-cell *matCellDef="let element" class="align-middle">
-                            <span class="badge badge-light-danger"
-                              [ngClass]="{' badge-light-warning': element.status === 'In-progress', 'badge-light-success' : element.status === 'Approved' , 'badge-light-danger' : element.status === 'Rejected' }">{{element.status}}</span>
-                          </td>
-                        </ng-container>
-            
-            
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-light h-35px"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-                        </tr>
-                      </table>
-                  </div>
-                  </ng-template>
-                </ngb-panel>
-              </ngb-accordion>
+                <!-- title Column -->
+                <ng-container matColumnDef="title">
+                  <th mat-header-cell *matHeaderCellDef class="align-middle">
+                    <i class="bi bi-file-earmark-font"></i> Task Name
+                  </th>
+                  <td mat-cell *matCellDef="let element" class="align-middle">
+                    {{ element.title }}
+                  </td>
+                </ng-container>
 
+                <!-- priority Column -->
+                <ng-container matColumnDef="priority">
+                  <th mat-header-cell *matHeaderCellDef class="align-middle">
+                    <i class="bi bi-tag"></i> Priority
+                  </th>
+                  <td mat-cell *matCellDef="let element" class="align-middle">
+                    <span
+                      class="badge badge-light-danger"
+                      [ngClass]="{
+                        ' badge-light-danger text-danger':
+                          element.priority === 'High' ||
+                          element.priority === 'Medium',
+                        'badge-light-success text-success':
+                          element.priority === 'Low'
+                      }"
+                    >
+                      <i
+                        class="fas fa-yin-yangfas fa-circle px-1 fs-10"
+                        [ngClass]="{
+                          'text-danger':
+                            element.priority === 'High' ||
+                            element.priority === 'Medium',
+                          'text-success': element.priority === 'Low'
+                        }"
+                      ></i>
 
+                      {{ element.priority }}</span
+                    >
+                  </td>
+                </ng-container>
 
+                <!-- timeSpent Column -->
+                <ng-container matColumnDef="timeSpent">
+                  <th mat-header-cell *matHeaderCellDef class="align-middle">
+                    <i class="bi bi-clock"></i> Time Spent
+                  </th>
+                  <td mat-cell *matCellDef="let element" class="align-middle">
+                    <input
+                      type="text"
+                      [(ngModel)]="element.timeSpent"
+                      style="width: 100%"
+                      class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10"
+                      placeholder="hrs"
+                    />
+                  </td>
+                </ng-container>
+                <!-- eta Column -->
+                <ng-container matColumnDef="startDate">
+                  <th mat-header-cell *matHeaderCellDef class="align-middle">
+                    <i class="bi bi-calendar"></i> Start Date
+                  </th>
+                  <td mat-cell *matCellDef="let element" class="align-middle">
+                    <div class="position-relative input-icon input-icon-right">
+                      <input
+                        type="text"
+                        class="form-control pe-10 py-2 fs- fw-normal"
+                        (click)="picker.open()"
+                        style="width: 100%"
+                        [(ngModel)]="element.startDate"
+                        [matDatepicker]="picker"
+                        placeholder="Select Due Date"
+                      />
+                      <span><i class="far fa-calendar"></i></span>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </div>
+                  </td>
+                </ng-container>
 
+                <!-- lastUpdate Column -->
+                <ng-container matColumnDef="finishDate">
+                  <th mat-header-cell *matHeaderCellDef class="align-middle">
+                    <i class="bi bi-calendar"></i> Due Date
+                  </th>
+                  <td mat-cell *matCellDef="let element" class="align-middle">
+                    <div class="position-relative input-icon input-icon-right">
+                      <input
+                        type="text"
+                        class="form-control pe-10 py-2 fs- fw-normal"
+                        (click)="picker.open()"
+                        style="width: 100%"
+                        [(ngModel)]="element.finishDate"
+                        [matDatepicker]="picker"
+                        placeholder="Select Due Date"
+                      />
+                      <span><i class="far fa-calendar"></i></span>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </div>
+                  </td>
+                </ng-container>
 
+                <!-- status Column -->
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef class="align-middle">
+                    <i class="bi bi-sun"></i> Status
+                  </th>
+                  <td mat-cell *matCellDef="let element" class="align-middle">
+                    <span
+                      class="badge badge-light-primary"
+                      [ngClass]="{
+                        ' badge-light-warning':
+                          element.status?.toUpperCase() === 'IN_PROGRESS',
+                        'badge-light-success':
+                          element.status?.toUpperCase() === 'APPROVED',
+                        'badge-light-danger':
+                          element.status?.toUpperCase() === 'REJECTED'
+                      }"
+                      >{{ element.status?.toUpperCase() }}</span
+                    >
+                  </td>
+                </ng-container>
 
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td mat-cell *matCellDef="let element; let i = index">
+                    <div>
+                      <span>
+                        <i
+                          class="bi bi-trash actions"
+                          (click)="removeTaskFromTimeSheet(element, d.date, i)"
+                        ></i>
+                      </span>
+                    </div>
+                  </td>
+                </ng-container>
 
-
-
-
-
-
-
-
-        </div>
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="displayedColumns"
+                  class="bg-light h-35px"
+                ></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                ></tr>
+              </table>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+      <button
+        type="button"
+        class="btn btn-primary btn-sm my-5"
+        id="kt_new_task_drawer_toggle"
+      >
+        <i class="bi bi-plus-lg"></i> Add Task
+      </button>
+      <app-new-task-drawer-detail
+        [workOrderId]="workOrderId"
+        [selectedEmpObj]="selectedEmpObj"
+        [alreadyTaskList]="alreadyTaskList"
+        (getSelectedTaskList)="getSelectedTaskList($event)"
+      ></app-new-task-drawer-detail>
+      <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
+        <button type="button" routerLink="/timesheets" class="btn btn-sm">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-light-primary"
+          (click)="save('DRAFT')"
+          *ngIf="timeSheetDetails?.status === 'DRAFT'"
+        >
+          Save as Draft
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-primary"
+          (click)="save('ACTIVE')"
+        >
+          Submit
+        </button>
+      </div>
     </div>
-    </div>
-
-
+  </div>
+</div>
+<div
+  *ngIf="isLoading"
+  class="pause d-flex align-items-center justify-content-center"
+>
+  <div class="spinner"></div>
+</div>

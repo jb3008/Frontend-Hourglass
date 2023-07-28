@@ -107,7 +107,13 @@ export class TimesheetsComponent implements OnInit {
           const emp: any = this.workForceList.find(
             (o: any) => parseInt(o.workForceId) === parseInt(element.employeeId)
           );
+          element.timeSpent = 0;
 
+          for (let i = 0; i < element.taskListDetails.length; i++) {
+            element.timeSpent += element.taskListDetails[i].timeSpent
+              ? parseInt(element.taskListDetails[i].timeSpent)
+              : 0;
+          }
           response[index].employee = emp;
         }
         this.dataSource = new MatTableDataSource<any>(response);

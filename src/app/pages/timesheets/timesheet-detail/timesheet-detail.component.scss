@@ -1,22 +1,28 @@
 // @import "./../../../../assets/sass/";
 :host {
-    width: 100%;
-  }
-
-.custom-header{
-    background-color:#f5fbff;
-    margin-bottom: 5px;
-    border-radius: 6px;
-    border: 1px solid #eee;
-    cursor: auto;
+  width: 100%;
 }
-::ng-deep{
 
-    .accordion-item{border: 0;}
-    .accordion-body{padding: 0;margin-bottom: 5px;}
+.custom-header {
+  background-color: #f5fbff;
+  margin-bottom: 5px;
+  border-radius: 6px;
+  border: 1px solid #eee;
+  cursor: auto;
+}
+::ng-deep {
+  .accordion-item {
+    border: 0;
+  }
+  .accordion-body {
+    padding: 0;
+    margin-bottom: 5px;
+  }
 }
 .actions {
-    font-size: 20px;
-    cursor: pointer;
-    margin-top: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  margin-top: 15px;
+
+  display: block;
 }

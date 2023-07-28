@@ -65,6 +65,7 @@ const EndPoints = {
     '/hourglass/work-force/uploadFilesForWorkForce.api',
   UPLOAD_TIME_SHEET_DOCUMENT:
     '/hourglass/timesheet/uploadFilesForTimeSheet.api',
+  REMOVE_TASK_FROM_TIMESHEET: '/hourglass/timesheet/removeTaskForTimeSheet.api',
 };
 
 export default EndPoints;

@@ -21,6 +21,9 @@ import { SharedModule } from '../shared.modules';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NewTaskDrawerDetailComponent } from './timesheet-detail/new-task-drawer-detail/new-task-drawer-detail.component';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { ModalsModule } from 'src/app/_metronic/partials';
 @NgModule({
   declarations: [
     TimesheetsComponent,
@@ -29,6 +32,7 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
     TimesheetLogsDrawerComponent,
     AttachmentLogsDrawerComponent,
     NewTaskDrawerComponent,
+    NewTaskDrawerDetailComponent,
   ],
   imports: [
     CommonModule,
@@ -47,6 +51,8 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
     MatInputModule,
     MatSelectModule,
     NgbTooltipModule,
+    NgxDocViewerModule,
+    ModalsModule,
   ],
 })
 export class TimesheetsModule {}

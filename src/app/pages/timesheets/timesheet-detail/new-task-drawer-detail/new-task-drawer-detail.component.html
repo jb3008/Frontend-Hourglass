@@ -1,0 +1,101 @@
+<div
+
+  id="kt_new_task_drawer"
+  class="bg-body"
+  data-kt-drawer="true"
+  data-kt-drawer-name="new_task_drawer"
+  data-kt-drawer-activate="true"
+  data-kt-drawer-overlay="true"
+  data-kt-drawer-width="{default:'300px', 'lg': '700px'}"
+  data-kt-drawer-direction="end"
+  data-kt-drawer-toggle="#kt_new_task_drawer_toggle"
+  data-kt-drawer-close="#kt_new_task_close"
+>
+  <div class="card shadow-none rounded-0 w-100">
+    <div class="d-flex justify-content-between px-7" >
+    <div>
+      <h3 class="card-title fw-bolder text-dark mt-4 "> 
+        Task Related to specify selected employee
+      </h3>
+      <div>Pick the assignment you'd like to incorporate into the timesheet.      </div>
+
+      <div class=" me-5 my-1 d-flex my-7">
+        <div class="symbol symbol-30px symbol-square me-3">
+          <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4" *ngIf="selectedEmpObj">{{selectedEmpObj.firstName[0]}} {{selectedEmpObj.lastName[0]}} </span>
+        </div>
+        <div>
+          <span class="d-flex text-muted fs-8">Employee</span>
+          <span class="fw-bold d-flex s-" *ngIf="selectedEmpObj">{{selectedEmpObj.firstName}} {{selectedEmpObj.lastName}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="mt-3"><img src="../../../../../assets/images/add-timesheet.svg" alt=""></div>
+
+    </div>
+    <button
+    type="button"
+    class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
+    id="kt_new_task_close"
+  >
+    <span
+      [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+      class="svg-icon svg-icon-1"
+    ></span>
+  </button>
+    
+  <div class="card-body position-relative pt-0"  id="kt_new_task_body">
+    <input type="input"   (keyup)="applyFilter($event)"  placeholder="Search a task" class="form-control py-2 fs- fw-normal mb-5">    
+      
+    <div class="border">
+      <table mat-table [dataSource]="dataSource" class="table table-row-bordered text-gray-600">
+
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select"  class="align-middle">
+        <th mat-header-cell *matHeaderCellDef  class="align-middle">
+          <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        [aria-label]="checkboxLabel()"  color="primary">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row"  class="align-middle">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)"
+                        [aria-label]="checkboxLabel(row)" color="primary"> 
+          </mat-checkbox>
+        </td>
+      </ng-container>
+    
+      <!-- Position Column -->
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef  class="align-middle"> Task Name </th>
+        <td mat-cell *matCellDef="let element"  class="align-middle"> 
+          <span  class="badge badge-light-primary">{{element.taskId}} {{element.title}} </span>
+     
+        </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-light h-35px"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          (click)="selection.toggle(row)">
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons 
+    aria-label="Select page of periodic elements">
+</mat-paginator>
+  </div>
+
+  </div>
+   
+  <div class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_new_task_footer">
+    <button type="reset" class="btn  btn-sm btn-outline" id="kt_new_task_close">Cancel</button>
+    <button type="button" class="btn  btn-sm btn-primary w-100px"  [disabled]="!selection.selected.length" (click)="continue()">Continue</button>
+  </div>
+  </div>
+</div>
+<div *ngIf="isLoading" class="pause d-flex align-items-center justify-content-center">
+  <div class="spinner"></div>
+</div>
