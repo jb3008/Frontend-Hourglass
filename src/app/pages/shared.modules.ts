@@ -6,6 +6,7 @@ import { InboxCollaborateDrawerComponent } from './inbox-drawer/inbox-collaborat
 import { InboxRejectDrawerComponent } from './inbox-drawer/inbox-reject-drawer/inbox-reject-drawer.component';
 import { InboxApproveDrawerComponent } from './inbox-drawer/inbox-approve-drawer/inbox-approve-drawer.component';
 import { InlineSVGModule } from 'ng-inline-svg-2';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   exports: [ 
@@ -24,5 +25,8 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
     InboxRejectDrawerComponent,
     InboxApproveDrawerComponent,
     ],
+    imports:[
+      CommonModule
+    ]
 })
 export class SharedModule {}

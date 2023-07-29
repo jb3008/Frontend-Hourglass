@@ -68,7 +68,7 @@
 
         <div class="form-group  mb-5 d-flex align-items-center">
           <label class="mb-1 col-3">Estimates (in hr) <span class="text-danger">*</span></label>
-          <input type="input" formControlName="estimatedTime" class="form-control w-50 me-3 py-2 fs- fw-normal" placeholder="Estimated Time">
+          <input type="input" formControlName="estimatedTime" (keypress)="numbersOnly($event)" class="form-control w-50 me-3 py-2 fs- fw-normal" placeholder="Estimated Time">
           <div class="py-2 fs- fw-normal" >Hour</div>
         </div>
 
@@ -77,7 +77,7 @@
                   <div class="input-icon position-relative min-w-120px input-icon-right">
 
                       <input type="text" formControlName="startDate" class="form-control   py-2 fs- fw-normal" (click)="picker1.open()"
-                  [matDatepicker]="picker1" placeholder="Start Date">
+                  [matDatepicker]="picker1" placeholder="Start Date" [max]="taskData.controls['expectedFinishDate'].value" readonly>
               <span><i class="far fa-calendar"></i></span>
               <mat-datepicker #picker1></mat-datepicker>
               </div>
@@ -86,7 +86,8 @@
                   <div class="input-icon position-relative min-w-120px input-icon-right">
 
                       <input type="text" class="form-control   py-2 fs- fw-normal" (click)="picker2.open()"
-                  [matDatepicker]="picker2" formControlName="expectedFinishDate" placeholder="End Date">
+                  [matDatepicker]="picker2" formControlName="expectedFinishDate" placeholder="End Date"
+                  [min]="taskData.controls['startDate'].value" readonly>
               <span><i class="far fa-calendar"></i></span>
               <mat-datepicker #picker2></mat-datepicker>
               </div>

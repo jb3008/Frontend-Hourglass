@@ -47,11 +47,11 @@
                     <label class="col-4">Working Experience <span class="text-danger">*</span></label>
                     <div class="col-8 d-flex align-items-center justify-content-start gap-4">
                         <div class="input-group mb-3 mw-125px">
-                            <input type="text" formControlName="workExpYears" class="form-control mw-60px py-2 px-4  fw-normal" aria-describedby="basic-addon2">
+                            <input type="text" formControlName="workExpYears" (keypress)="numbersOnly($event)" class="form-control mw-60px py-2 px-4  fw-normal" aria-describedby="basic-addon2">
                             <span class="input-group-text p-0 px-3 fw-normal" id="basic-addon2">Years</span>
                           </div>
                         <div class="input-group mb-3">
-                            <input type="text" formControlName="workExpMonths" class="form-control mw-60px py-2  px-4 fw-normal" aria-describedby="basic-addon2">
+                            <input type="text" formControlName="workExpMonths" (keypress)="numbersOnly($event)" class="form-control mw-60px py-2  px-4 fw-normal" aria-describedby="basic-addon2">
                             <span class="input-group-text  p-0 px-3 fw-normal" id="basic-addon2">Months</span>
                           </div>
                     </div>
@@ -62,7 +62,7 @@
                     <div class="col-8 d-flex align-items-center gap-4">
                         <div class="input-icon position-relative w-150px input-icon-right ">
                             <input formControlName="availableDate"  type="text" class="form-control  py-2 fs- fw-normal" (click)="pickerrd.open()"
-                                [matDatepicker]="pickerrd" placeholder="MM/DD/YYYY">
+                                [matDatepicker]="pickerrd" placeholder="MM/DD/YYYY" readonly>
                             <span><i class="far fa-calendar"></i></span>
                             <mat-datepicker #pickerrd></mat-datepicker> 
                     </div>
@@ -75,7 +75,7 @@
                     <div class="col-8 d-flex align-items-center">
                   
                         <input type="input" formControlName="workRate"  class="form-control w-150px py-2 fs- fw-normal rounded-end-0" 
-                        placeholder="Number" > 
+                        placeholder="Number" (keypress)="numbersOnly($event)"> 
                         <span class="text-muted ps-2" style="margin-left: '10px'">{{jobDetails?.currency}}</span>
                         <!-- <mat-select class="form-select fs- py-2 w-100px rounded-start-0"  formControlName="workRateCurrency" placeholder="Select">
                             <mat-option value="USD">USD</mat-option>

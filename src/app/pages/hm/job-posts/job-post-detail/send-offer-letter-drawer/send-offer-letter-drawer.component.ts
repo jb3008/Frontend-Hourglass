@@ -84,6 +84,10 @@ export class SendOfferLetterDrawerComponent implements OnInit {
     console.log(this.allFiles)
   }
 
+  numbersOnly(event: any){
+    return this.utils.numberOnly(event);
+  }
+
   sendOfferLetter() {
     const formData = new FormData();
 

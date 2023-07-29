@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
@@ -16,7 +16,7 @@ import { Utils } from 'src/app/services/utils';
 export class WorkOrderComponent implements OnInit, AfterViewInit {
 
   constructor(private apiCalls: ApiCallsService,private utils: Utils, private snackBar: MatSnackBar, private cdr: ChangeDetectorRef,
-      private router: Router) { }
+      private router: Router, private route: ActivatedRoute) { }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns: string[] = ['workOrderId', 'type', 'title', 'jobPostId', 'priority', 'startDate', 'endDate', 'managerDetails', 'status'];
@@ -25,6 +25,7 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
   jobTypes: any[] = [];
   workOrderStatus: any[] = [];
   endPoints = EndPoints;
+  isFromInbox = false;
   filterObj: FilterObj = {
     status: [],
     type: []
@@ -36,6 +37,13 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
   } as FilterValue;
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(param => {
+      if(param['from'] == 'inbox'){
+        this.isFromInbox = true;
+      }else{
+        this.isFromInbox = false;
+      }
+    });
     this.getJobTypes();
     this.getWorkOrderStatus();
     this.getAllWorkOrders();
@@ -101,6 +109,10 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
     }else{
       this.clearSearch('workOrderId');
     }
+  }
+
+  numbersOnly(event: any){
+    return this.utils.numberOnly(event);
   }
 
   filterByManager(event: any){
@@ -173,7 +185,8 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
   }
   
   goToDetails(element: any){
-    this.router.navigate(['/hm/work-order/details'], {queryParams: {workOrderId: element.workOrderId}})
+    const queryParams = this.isFromInbox ? { workOrderId: element.workOrderId, from: 'inbox' } : { workOrderId: element.workOrderId };
+    this.router.navigate(['/hm/work-order/details'], { queryParams })
   }
 
 }

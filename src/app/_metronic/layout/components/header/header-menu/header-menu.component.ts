@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { LayoutType } from '../../../core/configs/config';
 import { LayoutInitService } from '../../../core/layout-init.service';
 import { LayoutService } from '../../../core/layout.service';
@@ -19,7 +19,8 @@ export class HeaderMenuComponent implements OnInit {
     private layout: LayoutService,
     private layoutInit: LayoutInitService,
     private utils: Utils,
-    private apiCalls: ApiCallsService
+    private apiCalls: ApiCallsService,
+    private route:  ActivatedRoute
   ) {}
 
   setHiringManager: boolean = true;
@@ -28,7 +29,16 @@ export class HeaderMenuComponent implements OnInit {
   logoutUrl: string = '/auth/logout';
   jobPostsUrl: string = '/job-posts';
   workOrderUrl: string = '/work-order';
+  isActiveLink = false;
+  
   ngOnInit(): void {
+    this.setWorkOrderActive()
+    this.router.events.subscribe((ev) => {
+      if (ev instanceof NavigationEnd) { 
+        this.setWorkOrderActive();
+      }
+    });
+
     let auth = this.utils.getAuth();
     // console.log(auth?.vendorId);
     if (auth?.vendorId) {
@@ -72,6 +82,20 @@ export class HeaderMenuComponent implements OnInit {
       this.utils.setUser(auth?.['user-id'] || '');
       this.jobPostsUrl = '/job-posts';
       this.workOrderUrl = '/work-order';
+    }
+  }
+
+  setWorkOrderActive(){
+    if(this.router.url.includes('work-order')){
+      this.route.queryParams.subscribe(param => {
+        if(param['from'] == 'inbox'){
+          this.isActiveLink = false;
+        }else{
+          this.isActiveLink = true;
+        }
+      });
+    }else{
+      this.isActiveLink  = false;
     }
   }
 

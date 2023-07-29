@@ -56,7 +56,8 @@
                     <!--begin::Input-->
                     <div class="input-icon position-relative input-icon-right">
                         <input class="form-control py-2 px-3 fs- fw-normal" (click)="picker.open()" [matDatepicker]="picker" 
-                            placeholder="Start Date" [value]="filter?.startDate" (dateChange)="getDate($event.value,'startDate')">
+                            placeholder="Start Date" [value]="filter?.startDate" (dateChange)="getDate($event.value,'startDate')"
+                            [max]="queryParam.endDate">
                         <span><i class="far fa-calendar"></i></span>
                         <mat-datepicker #picker></mat-datepicker>
                             </div>      

@@ -283,6 +283,10 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     }
   }
 
+  numbersOnly(event: any){
+    return this.utils.numberOnly(event);
+  }
+
   isLoading = false;
   submitWorkOrder(status: string){
     const formData = new FormData();

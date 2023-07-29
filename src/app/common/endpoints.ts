@@ -56,6 +56,7 @@ const EndPoints = {
   CREATE_TIME_SHEET: '/hourglass/timesheet/create.api',
   CREATE_TIME_SHEET_AS_DRAFT: '/hourglass/timesheet/saveDraftTimeSheet.api',
   GET_APPL_LOGS: '/hourglass/audit-log/auditLogForJobApplication.api',
+  GET_WORKORDER_LOGS: '/hourglass/audit-log/auditLogForWorkOrder.api',
   GET_ATTACHMENT: '/hourglass/document/getAttachment',
   UPLOAD_WORK_FORCE_PIC:
     '/hourglass/work-force/uploadProfilePicForWorkForce.api',

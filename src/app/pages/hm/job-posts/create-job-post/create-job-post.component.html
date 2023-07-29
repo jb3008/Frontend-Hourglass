@@ -79,7 +79,7 @@
                       <i class="bi bi-slash-circle minus-icon" (click)="changeInputValue(openPosition, '-')"></i>
 
                       </a>
-                        <input type="input" formControlName="openPosition" #openPosition class="form-control w-70px py-2 fs- fw-normal" 
+                        <input type="input" formControlName="openPosition" (keypress)="numberOnly($event)" #openPosition class="form-control w-70px py-2 fs- fw-normal" 
                         placeholder="Number">
                         <a  class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary">
                       <i class="bi bi-plus-circle" (click)="changeInputValue(openPosition, '+')"></i>
@@ -134,7 +134,7 @@
                         <div class="input-icon position-relative w-150px input-icon-right">
 
                             <input  formControlName="reportDate" type="text" class="form-control  py-2 fs- fw-normal" (click)="pickerrd.open()"
-                                [matDatepicker]="pickerrd" placeholder="Reporting Date">
+                                [matDatepicker]="pickerrd" placeholder="Reporting Date" readonly>
                             <span><i class="far fa-calendar"></i></span>
                             <mat-datepicker #pickerrd></mat-datepicker>
                     </div>
@@ -147,7 +147,7 @@
                         <div class="input-icon position-relative min-w-150px input-icon-right">
 
                             <input type="text" formControlName="startDate" class="form-control   py-2 fs- fw-normal" (click)="picker.open()"
-                        [matDatepicker]="picker" placeholder="Start Date">
+                        [matDatepicker]="picker" placeholder="Start Date" readonly>
                     <span><i class="far fa-calendar"></i></span>
                     <mat-datepicker #picker></mat-datepicker>
                     </div>

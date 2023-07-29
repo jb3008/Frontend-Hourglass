@@ -40,7 +40,7 @@
           <label class="col-4">Revised {{jobDetails?.jobKind == 'Fixed' ? 'Budget' : 'Work Rate'}}<span class="text-danger">*</span></label>
           <!-- <label class="col-4">Revised Work Rate<span class="text-danger">*</span></label> -->
           <div class="col-8 d-flex align-items-center">
-            <input type="input" id="revisedWorkRate"  class="form-control w-150px py-2 fs- fw-normal" 
+            <input type="input" id="revisedWorkRate" (keypress)="numbersOnly($event)"  class="form-control w-150px py-2 fs- fw-normal" 
               placeholder="Number" value="{{jobSeeker?.workRate}}">
               <span class="text-muted ps-2">{{this.jobDetails?.currency}}</span>  
             <!-- <mat-select class="form-select fs- py-2 w-100px" placeholder="Select">

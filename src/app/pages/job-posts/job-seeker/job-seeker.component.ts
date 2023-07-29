@@ -139,6 +139,10 @@ export class JobSeekerComponent implements OnInit {
     this.router.navigate(['/job-posts/details'], { queryParams: { jobId: this.jobId, tab: this.parentTab}});
   }
 
+  numbersOnly(event: any){
+    return this.utils.numberOnly(event);
+  }
+
   submitApplication(){
     const formData = new FormData();
     if(this.applyJobData.valid && this.applyJobData.controls['agreeTerms'].value){

@@ -11,6 +11,7 @@ import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-work-order-details',
@@ -19,7 +20,8 @@ import { Utils } from 'src/app/services/utils';
 })
 export class WorkOrderDetailsComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute,private utils: Utils, private snackBar: MatSnackBar, private dialog: MatDialog, private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef) { }
+  constructor(private route: ActivatedRoute,private utils: Utils, private snackBar: MatSnackBar, private dialog: MatDialog, private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef,
+              private location: Location) { }
 
   endpoints = EndPoints;
   workOrderID: any;
@@ -28,6 +30,7 @@ export class WorkOrderDetailsComponent implements OnInit {
   documentsList: any[] = [];
   statusLists: any[] = [];
   taskDetails: any;
+  isFromInbox = false;
   dataSource = new MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   modalConfig: ModalConfig = {
@@ -49,6 +52,15 @@ export class WorkOrderDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(param => {
       this.workOrderID = param['workOrderId'];
+      if(param['from'] == 'inbox'){
+        this.isFromInbox = true;
+        setTimeout(() => {
+          DrawerComponent.reinitialization();
+          ToggleComponent.reinitialization();
+        }, 0);
+      }else{
+        this.isFromInbox = false;
+      }
     });
     this.getWorkOrderDetails();
     this.getAllStatus();
@@ -66,6 +78,14 @@ export class WorkOrderDetailsComponent implements OnInit {
       ToggleComponent.reinitialization();
     }, 0);
 
+  }
+
+  goBack(){
+    this.location.back();
+  }
+
+  numbersOnly(event: any){
+    return this.utils.numberOnly(event);
   }
 
   async hideFooter(): Promise<boolean> {

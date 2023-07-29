@@ -385,8 +385,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   }
 
   numberOnly(event: any) {
-    const charCode = (event.which) ? event.which : event.keyCode;
-    return !(charCode > 31 && (charCode < 48 || charCode > 57));
+    return this.utils.numberOnly(event);
   }
 
   showConsent() {

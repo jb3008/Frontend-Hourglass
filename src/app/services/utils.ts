@@ -99,6 +99,11 @@ export class Utils {
     return utcDate;
   }
 
+  numberOnly(event: any) {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    return !(charCode > 31 && (charCode < 48 || charCode > 57));
+  }
+
   getDocIcon(fileName: string) {
     switch (fileName.substring(fileName.lastIndexOf('.') + 1)) {
       case 'doc':

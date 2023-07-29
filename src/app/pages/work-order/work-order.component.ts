@@ -56,6 +56,10 @@ export class WorkOrderComponent implements OnInit {
     });
   }
 
+  numbersOnly(event: any){
+    return this.utils.numberOnly(event);
+  }
+  
   getWorkOrderStatus(){
     this.apiCalls.get(this.endPoints.WORK_ORDER_STATUS)
     .pipe(
