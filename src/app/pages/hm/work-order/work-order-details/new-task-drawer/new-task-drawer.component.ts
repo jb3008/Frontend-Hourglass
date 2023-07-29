@@ -82,6 +82,10 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
       });
   }
 
+  numbersOnly(event: any){
+    return this.utils.numberOnly(event);
+  }
+
   selectFile(event: any){
     const file = event.target.files[0];
     if(file.type.indexOf('image') == 0){

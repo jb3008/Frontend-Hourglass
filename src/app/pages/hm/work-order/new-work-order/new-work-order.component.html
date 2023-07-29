@@ -102,14 +102,14 @@
                         <div class="col-8 d-flex align-items-center">
                       
                             <input *ngIf="workOrderKind == 'Hourly'" type="input" formControlName="workRate" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                            placeholder="Number">
+                            placeholder="Number" (keypress)="numbersOnly($event)">
                             
                             <ng-container *ngIf="workOrderKind == 'Fixed'">
                                 <input type="input" formControlName="minBudget" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                            placeholder="Number">
+                            placeholder="Number" (keypress)="numbersOnly($event)">
                             <span> ~ </span>
                             <input type="input" formControlName="maxBudget" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                            placeholder="Number">
+                            placeholder="Number" (keypress)="numbersOnly($event)">
                             </ng-container>
     
                             <mat-select class="form-select fs- py-2 w-100px rounded-start-0" formControlName="workRateCurrency" placeholder="Select">
@@ -159,7 +159,7 @@
                             <div class="input-icon position-relative min-w-150px input-icon-right">
 
                                 <input formControlName="startDate" type="text" class="form-control   py-2 fs- fw-normal" (click)="picker.open()"
-                                    [matDatepicker]="picker" placeholder="Start Date">
+                                    [matDatepicker]="picker" placeholder="Start Date" [max]="workOrderData.controls['endDate'].value" readonly>
                                 <span><i class="far fa-calendar"></i></span>
                                 <mat-datepicker #picker></mat-datepicker>
                             </div>
@@ -169,7 +169,7 @@
                                     <div class="input-icon position-relative min-w-150px input-icon-right">
 
                                         <input formControlName="endDate" type="text" class="form-control   py-2 fs- fw-normal" (click)="picker1.open()"
-                                            [matDatepicker]="picker1" placeholder="End Date">
+                                            [matDatepicker]="picker1" placeholder="End Date" [min]="workOrderData.controls['startDate'].value" readonly>
                                         <span><i class="far fa-calendar"></i></span>
                                         <mat-datepicker #picker1></mat-datepicker>
                                     </div>
@@ -210,7 +210,7 @@
                                 <i class="bi bi-slash-circle minus-icon" (click)="changeInputValue('-')"></i>
 
                             </a>
-                            <input formControlName="workHours" type="input" class="form-control w-70px py-2 fs- fw-normal" placeholder="Number"
+                            <input formControlName="workHours" (keypress)="numbersOnly($event)" type="input" class="form-control w-70px py-2 fs- fw-normal" placeholder="Number"
                                 value="8">
                             <a class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary">
                                 <i class="bi bi-plus-circle" (click)="changeInputValue('+')"></i>

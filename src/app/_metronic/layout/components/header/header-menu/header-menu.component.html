@@ -11,7 +11,7 @@
 </div>
 
 <div class="menu-item me-lg-1 q_menu">
-  <a class="menu-link py-2" routerLinkActive="active menu-here" [routerLink]="workOrderUrl"><span class="menu-title">
+  <a class="menu-link py-2" [class.active]="isActiveLink" routerLinkActive="menu-here" [routerLink]="workOrderUrl"><span class="menu-title">
     Work Order</span></a>
 </div>
 <ng-container *ngIf="!setHiringManager">
