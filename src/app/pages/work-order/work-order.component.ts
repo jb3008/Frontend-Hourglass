@@ -44,10 +44,10 @@ export class WorkOrderComponent implements OnInit {
       }else{
         this.isFromInbox = false;
       }
+      this.getAllWorkOrders(this.filterObj);
     });
     this.getJobTypes();
     this.getWorkOrderStatus();
-    this.getAllWorkOrders(this.filterObj);
   }
 
   getJobTypes(){

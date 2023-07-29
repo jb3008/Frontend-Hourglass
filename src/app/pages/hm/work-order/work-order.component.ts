@@ -43,10 +43,10 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
       }else{
         this.isFromInbox = false;
       }
+      this.getAllWorkOrders();
     });
     this.getJobTypes();
     this.getWorkOrderStatus();
-    this.getAllWorkOrders();
   }
 
   ngAfterViewInit() {
