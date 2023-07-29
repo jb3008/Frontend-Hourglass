@@ -11,14 +11,21 @@
 
   <div class="card mb-5 mb-xl-10 text-gray-600">
     <div class="card-body">
+      <div [ngClass]="{'d-flex justify-content-between align-items-center': isFromInbox}">
       <h3 class="card-title fs-4">
-        <a class="cursor-pointer " routerLink="/work-order"> <i class="fas fa-arrow-left me-3"></i> </a>
+        <a class="cursor-pointer " (click)="goBack()"> <i class="fas fa-arrow-left me-3"></i> </a>
         Work Order - {{workOrderDetails?.workOrderId}}
       </h3>
-      <span class="text-muted">
+      <span *ngIf="!isFromInbox" class="text-muted">
         Work orders are detailed instruction or request that outline specific task repairs or service to be performed in
         a structured or organized manner.
       </span>
+      <div *ngIf="isFromInbox">
+        <a  class=" btn btn-bg-light text-primary   btn-sm " id="kt_inbox_logs_drawer_toggle" >
+          <i class="bi fs-4 bi-chat-left-text" ></i> Logs    </a>
+          <app-inbox-logs-drawer [workOrderId]="workOrderDetails?.workOrderId"></app-inbox-logs-drawer>
+      </div>
+    </div>
       <!-- Tabs Start:: -->
       <div class="d-flex overflow-auto border-bottom my-7">
         <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5  flex-nowrap">

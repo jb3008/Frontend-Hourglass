@@ -13,6 +13,7 @@ import EndPoints from 'src/app/common/endpoints';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { MatPaginator } from '@angular/material/paginator';
 import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-work-order-detail',
@@ -21,7 +22,8 @@ import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 })
 export class WorkOrderDetailComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute,private utils: Utils, private snackBar: MatSnackBar, private dialog: MatDialog, private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef) { }
+  constructor(private route: ActivatedRoute,private utils: Utils, private snackBar: MatSnackBar, private dialog: MatDialog, private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef,
+              private location: Location) { }
 
   endpoints = EndPoints;
   workOrderID: any;
@@ -31,6 +33,7 @@ export class WorkOrderDetailComponent implements OnInit {
   statusLists: any[] = [];
   taskDetails: any;
   vendorDetails: any;
+  isFromInbox = false;
   timeSheetFrequencyList: any = {'W': 'Weekly', '2W': 'Bi-Weekly', 'M': 'Monthly'};
   displayedColumns: string[] = ['taskId', 'title', 'priority', 'assigneeId','timeSpent',  'finishDate', 'lastUpdate', 'status', 'action'];
   dataSource = new MatTableDataSource<any>;
@@ -50,6 +53,19 @@ export class WorkOrderDetailComponent implements OnInit {
   } as FilterValue;
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(param => {
+      this.workOrderID = param['workOrderId'];
+      if(param['from'] == 'inbox'){
+        this.isFromInbox = true;
+        setTimeout(() => {
+          DrawerComponent.reinitialization();
+          ToggleComponent.reinitialization();
+        }, 0);
+      }else{
+        this.isFromInbox = false;
+      }
+    });
+
     this.vendorDetails = JSON.parse(sessionStorage.getItem('vendorDetails')!);
     this.route.queryParams.subscribe(param => {
       this.workOrderID = param['workOrderId'];
@@ -212,6 +228,10 @@ export class WorkOrderDetailComponent implements OnInit {
         this.loading = false;
         this.cdr.detectChanges();
       });
+  }
+
+  goBack(){
+    this.location.back();
   }
 
   getAttachment(id: string, name: string){

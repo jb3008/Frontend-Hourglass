@@ -83,7 +83,8 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
 
   getAllWorkOrders(filterObj?: any){
     this.loading = true;
-    this.apiCalls.get(this.endPoints.ALL_WORK_ORDERS, filterObj)
+    const endPoint = this.isFromInbox ? this.endPoints.WORKORDER_NOTIFICATION : this.endPoints.ALL_WORK_ORDERS;
+    this.apiCalls.get(endPoint, filterObj)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the work orders');

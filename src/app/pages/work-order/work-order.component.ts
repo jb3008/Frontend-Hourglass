@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
@@ -16,12 +16,13 @@ import { Utils } from 'src/app/services/utils';
 export class WorkOrderComponent implements OnInit {
 
   constructor(private apiCalls: ApiCallsService,private utils: Utils, private snackBar: MatSnackBar, private cdr: ChangeDetectorRef,
-    private router: Router) { }
+    private router: Router, private route: ActivatedRoute) { }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns: string[] = ['workOrderId', 'type', 'title', 'jobPostId', 'priority', 'startDate', 'endDate', 'managerDetails', 'status'];
   dataSource = new MatTableDataSource<any>();
   loading= false;
+  isFromInbox = false;
   jobTypes: any[] = [];
   workOrderStatus: any[] = [];
   endPoints = EndPoints;
@@ -37,6 +38,13 @@ export class WorkOrderComponent implements OnInit {
   } as FilterValue;
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(param => {
+      if(param['from'] == 'inbox'){
+        this.isFromInbox = true;
+      }else{
+        this.isFromInbox = false;
+      }
+    });
     this.getJobTypes();
     this.getWorkOrderStatus();
     this.getAllWorkOrders(this.filterObj);
@@ -76,7 +84,8 @@ export class WorkOrderComponent implements OnInit {
 
   getAllWorkOrders(filterObj: any){
     this.loading = true;
-    this.apiCalls.get(this.endPoints.ALL_WORK_ORDERS, filterObj)
+    const endPoint = this.isFromInbox ? this.endPoints.WORKORDER_NOTIFICATION : this.endPoints.ALL_WORK_ORDERS;
+    this.apiCalls.get(endPoint, filterObj)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the work orders');
@@ -94,7 +103,8 @@ export class WorkOrderComponent implements OnInit {
   }
 
   goToDetails(element: any){
-    this.router.navigate(['/work-order/details'], {queryParams: {workOrderId: element.workOrderId}})
+    const queryParams = this.isFromInbox ? { workOrderId: element.workOrderId, from: 'inbox' } : { workOrderId: element.workOrderId };
+    this.router.navigate(['/work-order/details'], {queryParams})
   }
 
   truncateText(text: string, maxLength: number): string {
