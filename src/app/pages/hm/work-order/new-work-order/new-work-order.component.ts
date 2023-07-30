@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { MatSelect } from '@angular/material/select';
 @Component({
   selector: 'app-new-work-order',
   templateUrl: './new-work-order.component.html',
@@ -36,6 +37,8 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   vendorList: any[] = [];
   workOrderKind = 'Hourly';
   workOrderData: FormGroup;
+
+  @ViewChild('siteSelect') siteSelect: MatSelect;
   
   ngOnInit(): void {
     this.workOrderData = this.fb.group({
@@ -44,7 +47,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       hiringManager: ['', Validators.required],
       priority: ['Medium'],
       type: ['', Validators.required],
-      vendor: [''],
+      vendor: ['', Validators.required],
       jobPostId: [''],
       startDate: ['', Validators.required],
       kind: ['', Validators.required],
@@ -285,6 +288,63 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
 
   numbersOnly(event: any){
     return this.utils.numberOnly(event);
+  }
+
+  getJobDetails(id: string){
+    this.isLoading = true;
+    let queryParam = {
+      id: id
+    }
+    this.apiCalls.get(this.endpoints.GET_JOB_DETAILS, queryParam)
+      .pipe(catchError(async (error) => {
+        this.isLoading = false;
+        this.cdr.detectChanges();
+        console.log(error);
+        throw error;
+      }))
+      .subscribe((response) => {
+        this.isLoading = false;
+        this.cdr.detectChanges();
+        this.setJobDataOnUi(response);
+      })
+  }
+
+  setJobDataOnUi(data: any){
+    //   documentList: [[]],
+    this.isLoading = true;
+    this.workOrderKind = data.jobKind;
+    this.getPlantsList(data.companyDetails?.companyCode);
+    this.getBusinessUnits(data.companyDetails?.companyCode);
+    setTimeout(() => {
+      this.workOrderData.patchValue({
+        title: data.title,
+        hiringManager: data.managerId,
+        description: data.description,
+        priority: data.priority,
+        type: data.type,
+        // vendor: data.,
+        startDate: data.startDate,
+        kind: data.jobKind,
+        endDate: data.endDate,
+        timesheetFreq: data.timeSheetFreq,
+        workHourInterval: data.workHourInterval,
+        workHours: data.workHours,
+        costCenter: data.costCenterDetails?.code,
+        payTerms: data.payTerms,
+        legalEntity: data.companyDetails?.companyCode,
+        workRate: data?.rate,
+        minBudget: data?.minBudget,
+        maxBudget: data?.maxBudget,
+        workRateCurrency: data?.currency,
+        site: data.siteDetails?.code,
+        location: data.siteDetails?.city,
+        businessUnit: data.businessUnitDetails?.code
+      })      
+      let site = this.siteList.filter(obj => obj.code == data.siteDetails?.code);
+      this.siteSelect.value = site[0];
+      this.isLoading = false;
+    }, 500);
+    this.cdr.detectChanges();
   }
 
   isLoading = false;
