@@ -58,6 +58,23 @@
           >
             REJECTED
           </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-primary mr-5"
+            (click)="openStatusModal('APPROVED')"
+            *ngIf="timeSheetDetails?.status === 'APPROVED_BY_VENDOR'"
+          >
+            APPROVED
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-sm btn-primary"
+            (click)="openStatusModal('REJECTED')"
+            *ngIf="timeSheetDetails?.status === 'APPROVED_BY_VENDOR'"
+          >
+            REJECTED
+          </button>
         </div>
       </div>
       <app-attachment-logs-drawer
@@ -84,6 +101,12 @@
               <div class="symbol symbol-30px symbol-square me-3">
                 <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
                   >{{timeSheetDetails?.workForceDetails?.firstName?.[0]
+
+
+
+
+
+
 
 
 

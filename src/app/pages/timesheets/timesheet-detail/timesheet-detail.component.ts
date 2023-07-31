@@ -150,6 +150,11 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.timeSheetDetails = response;
+        this.timeSheetDetails.status = this.lstTimeSheetStatus.length
+          ? this.lstTimeSheetStatus.find(
+              (r: any) => r.code === this.timeSheetDetails.status
+            ).title
+          : '';
         this.timeSheetDetails.taskListDetails =
           this.timeSheetDetails.taskListDetails.filter((r: any) => {
             r.isNew = false;

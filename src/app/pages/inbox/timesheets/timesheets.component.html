@@ -170,6 +170,7 @@
 
 
 
+
                 }}{{element?.workForceDetails?.lastName?.[0]}}
               </span>
             </div>
@@ -257,7 +258,8 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <mat-paginator
-      [pageSizeOptions]="[5, 10, 20]"
+      [pageSize]="30"
+      [pageSizeOptions]="[30, 50, 100]"
       showFirstLastButtons
       aria-label="Select page of periodic elements"
     >

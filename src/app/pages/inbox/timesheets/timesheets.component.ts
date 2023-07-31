@@ -42,6 +42,7 @@ export class TimesheetsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   timeSheetFilter: FormGroup;
+  lstTimeSheetStatus: any;
   ngAfterViewInit() {}
   ngOnInit(): void {
     this.auth = this.utils.getAuth();
@@ -54,6 +55,7 @@ export class TimesheetsComponent implements OnInit {
       status: ['All'],
       searchByEmployee: [''],
     });
+    this.getAllTimeSheetStatus();
     this.getAllTimesheet();
   }
   changeDateToUtc(dateObj: any) {
@@ -113,6 +115,11 @@ export class TimesheetsComponent implements OnInit {
               ? parseInt(element.taskListDetails[i].timeSpent)
               : 0;
           }
+          element.status = this.lstTimeSheetStatus.length
+            ? this.lstTimeSheetStatus.find(
+                (r: any) => r.code === element.status
+              ).title
+            : '';
         }
         this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;
@@ -137,6 +144,23 @@ export class TimesheetsComponent implements OnInit {
       .subscribe((response) => {
         this.workForceList = response;
         this.getAllTimesheet();
+        this.cdr.detectChanges();
+      });
+  }
+  getAllTimeSheetStatus() {
+    this.apiCalls
+      .get(this.endPoints.GET_TIMESHEET_STATUS, {})
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to fetch the timesheet-status'
+          );
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.lstTimeSheetStatus = response;
         this.cdr.detectChanges();
       });
   }
