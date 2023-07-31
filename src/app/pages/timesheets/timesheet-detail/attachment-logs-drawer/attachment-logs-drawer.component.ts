@@ -106,4 +106,24 @@ export class AttachmentLogsDrawerComponent implements OnInit {
         this.cdr.detectChanges();
       });
   }
+  async openModal(documentId: any) {
+    let queryParam = {
+      documentId: documentId,
+    };
+    this.apiCalls
+      .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe(async (response) => {
+        const src = window.URL.createObjectURL(response);
+        this.pdfSrc = src;
+
+        this.cdr.detectChanges();
+        return await this.modalComponent.open();
+      });
+  }
 }

@@ -1,7 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -16,12 +15,11 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 
-
 import { InboxRoutingModule } from './inbox-routing.module';
 import { InboxComponent } from './inbox.component';
 
 import { TimesheetsComponent } from './timesheets/timesheets.component';
-import { TimesheetsDetailsComponent } from './timesheets-details/timesheets-details.component';
+import { TimesheetDetailComponent } from './timesheets-details/timesheets-details.component';
 import { InvoicesDetailsComponent } from './invoices-details/invoices-details.component';
 import { InvoicesComponent } from './invoices/invoices.component';
 import { SharedModule } from '../shared.modules';
@@ -32,16 +30,17 @@ import { InboxCollaborateDrawerComponent } from '../inbox-drawer/inbox-collabora
 import { InboxAttachmentLogsDrawerComponent } from '../inbox-drawer/inbox-attachment-logs-drawer/inbox-attachment-logs-drawer.component';
 import { InboxRejectDrawerComponent } from '../inbox-drawer/inbox-reject-drawer/inbox-reject-drawer.component';
 import { InboxApproveDrawerComponent } from '../inbox-drawer/inbox-approve-drawer/inbox-approve-drawer.component';
-
-
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { ModalsModule } from 'src/app/_metronic/partials';
 @NgModule({
   declarations: [
     InboxComponent,
     TimesheetsComponent,
-    TimesheetsDetailsComponent,
+    TimesheetDetailComponent,
     InvoicesDetailsComponent,
     InvoicesComponent,
-    
+
     // InboxLogsDrawerComponent,
     // InboxAttachmentLogsDrawerComponent,
     // InboxCollaborateDrawerComponent,
@@ -67,10 +66,15 @@ import { InboxApproveDrawerComponent } from '../inbox-drawer/inbox-approve-drawe
     MatNativeDateModule,
     MatTabsModule,
     MatSelectModule,
-    MatDialogModule
+    MatDialogModule,
+    MatPaginatorModule,
+    InlineSVGModule,
+    MatInputModule,
+    MatSelectModule,
+    NgbTooltipModule,
+    NgxDocViewerModule,
+    ModalsModule,
   ],
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA
-  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class InboxModule { }
+export class InboxModule {}

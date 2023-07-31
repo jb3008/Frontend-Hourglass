@@ -10,16 +10,19 @@ import { WorkOrdersDetailsComponent } from './work-orders-details/work-orders-de
 
 const routes: Routes = [
   { path: '', component: InboxComponent },
-  { path: 'work-orders', component: WorkOrdersComponent, 
-//   children: [
-//     { path: 'dd', component: WorkOrdersDetailsComponent},
-    
-//     // { path: 'user-information', component: UserInformationComponent},
-//     // { path: 'companys-information', component: CompanysInformationComponent}
-// ] 
-},
+  {
+    path: 'work-orders',
+    component: WorkOrdersComponent,
+    //   children: [
+    //     { path: 'dd', component: WorkOrdersDetailsComponent},
+
+    //     // { path: 'user-information', component: UserInformationComponent},
+    //     // { path: 'companys-information', component: CompanysInformationComponent}
+    // ]
+  },
   { path: 'work-orders-details', component: WorkOrdersDetailsComponent },
   { path: 'timesheets', component: TimesheetsComponent },
+  { path: 'hm/timesheets', component: TimesheetsComponent },
   { path: 'timesheets-details', component: TimesheetsDetailsComponent },
   { path: 'invoices', component: InvoicesComponent },
   { path: 'invoices-details', component: InvoicesDetailsComponent },
@@ -27,6 +30,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class InboxRoutingModule { }
+export class InboxRoutingModule {}

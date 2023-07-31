@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -15,6 +16,7 @@ import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheet-detail.component.html',
@@ -31,6 +33,16 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private _formBuilder: FormBuilder
   ) {}
+  statusModalConfig: ModalConfig = {
+    modalTitle: 'Document',
+    dismissButtonLabel: 'Cancel',
+    closeButtonLabel: 'Save',
+    hideFooter: this.hideFooter,
+  };
+  async hideFooter(): Promise<boolean> {
+    return true;
+  }
+  @ViewChild('modalStatus') private statusModalComponent: ModalComponent;
   endPoints = EndPoints;
   timeSheetDetails: any = {};
   workForceList: any = [];
@@ -45,12 +57,21 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
   VOForm: FormGroup;
   startDate: any;
   isEditableNew: boolean = true;
+  lstTimeSheetStatus: any;
+  auth: any;
+  statusModal: FormGroup;
   ngOnInit(): void {
     // DrawerComponent.reinitialization();
+    this.auth = this.utils.getAuth();
 
     this.timeSheetId = this.route.snapshot.paramMap.get('timeSheetId');
-
-    this.getAllWorkForceList();
+    this.getAllTimeSheetStatus();
+    this.getAllTimesheetDetails();
+    this.statusModal = this.fb.group({
+      timeSheetId: [this.timeSheetId, Validators.required],
+      status: ['', Validators.required],
+      documentList: [[]],
+    });
   }
 
   ngAfterViewInit() {
@@ -92,6 +113,23 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
         this.cdr.detectChanges();
       });
   }
+  getAllTimeSheetStatus() {
+    this.apiCalls
+      .get(this.endPoints.GET_TIMESHEET_STATUS, {})
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to fetch the timesheet-status'
+          );
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.lstTimeSheetStatus = response;
+        this.cdr.detectChanges();
+      });
+  }
   getAllTimesheetDetails() {
     this.isLoading = true;
 
@@ -112,12 +150,6 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.timeSheetDetails = response;
-        const emp: any = this.workForceList.find(
-          (o: any) =>
-            parseInt(o.workForceId) ===
-            parseInt(this.timeSheetDetails.employeeId)
-        );
-        this.timeSheetDetails.employee = emp;
         this.timeSheetDetails.taskListDetails =
           this.timeSheetDetails.taskListDetails.filter((r: any) => {
             r.isNew = false;
@@ -184,9 +216,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
 
         this.alreadyTaskList = ids;
         this.workOrderId = this.timeSheetDetails.workOrderId;
-        this.selectedEmpObj = this.workForceList.find(
-          (o: any) => o.workForceId === this.timeSheetDetails.workForceId
-        );
+        this.selectedEmpObj = this.timeSheetDetails.workForceDetails;
 
         this.startDate = this.taskListDetails.length
           ? this.taskListDetails[0].date
@@ -228,8 +258,6 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
       }
     }
 
-    console.log(this.alreadyTaskList);
-    console.log(this.timeSheetDetails.taskListDetails);
     this.timeSheetDetails.taskListDetails =
       this.timeSheetDetails.taskListDetails.sort(function (a: any, b: any) {
         // Turn your strings into dates, and then subtract them
@@ -290,6 +318,10 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
     const date = new Date(dateObj);
     const utcDate = date.toISOString();
     return utcDate;
+  }
+  clickAccordion(date: any) {
+    this.startDate = date;
+    this.cdr.detectChanges();
   }
 
   async save(status: string) {
@@ -523,13 +555,165 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
         'Task Removed successfully'
       );
       this.cdr.detectChanges();
-      console.log(obj);
     }
   }
   getEndpoint(status: string) {
     return status === 'Draft'
       ? this.endPoints.CREATE_TIME_SHEET_AS_DRAFT
       : this.endPoints.CREATE_TIME_SHEET;
+  }
+  async openStatusModal(status: string) {
+    this.statusModal.controls['documentList'].setValue([]);
+    this.statusModal.controls['status'].setValue(status);
+    this.statusModalConfig.modalTitle = status;
+    return await this.statusModalComponent.open();
+  }
+
+  async closeStatusModal() {
+    return await this.statusModalComponent.closeModal();
+  }
+
+  droppedFiles(allFiles: File[], name: string): void {
+    console.log('this.allFiles', allFiles);
+    console.log(this.statusModal.controls[name].value);
+    const fileLength = allFiles.length;
+    let flg: boolean = true;
+    for (let i = 0; i < fileLength; i++) {
+      const file = allFiles[i];
+
+      if (file.type.indexOf('image') == 0) {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Please upload documents only'
+        );
+        flg = false;
+        break;
+      } else if (file.size > 2 * 1024 * 1024) {
+        // check if file size is > 2 MB
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Maximum allowed file size is 2 MB. Please choose another file.'
+        );
+        flg = false;
+        break;
+      } else {
+        const docList = this.statusModal.controls[name].value;
+        if (docList.length < 6) {
+          if (this.utils.isFileExist(docList, file)) {
+            this.utils.showSnackBarMessage(
+              this.snackBar,
+              'This file "' + file.name + '" already exist.'
+            );
+            flg = false;
+            break;
+          }
+        } else {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'Maximum 6 files can be added.'
+          );
+          flg = false;
+          break;
+        }
+      }
+    }
+    if (flg) {
+      for (let i = 0; i < fileLength; i++) {
+        this.statusModal.controls[name].value.push(allFiles[i]);
+      }
+    }
+  }
+
+  selectFile(event: any, name: string) {
+    if (event.target.files.length) {
+      const file = event.target.files[0];
+      if (file.type.indexOf('image') == 0) {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Please upload documents only'
+        );
+      } else if (file.size > 2 * 1024 * 1024) {
+        // check if file size is > 2 MB
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Maximum allowed file size is 2 MB. Please choose another file.'
+        );
+      } else {
+        console.log(this.statusModal.controls);
+        const docList = this.statusModal.controls[name].value;
+        if (docList.length < 6) {
+          if (this.utils.isFileExist(docList, file)) {
+            this.utils.showSnackBarMessage(
+              this.snackBar,
+              'This file "' + file.name + '" already exist.'
+            );
+          } else {
+            this.statusModal.controls[name].value.push(file);
+          }
+        } else {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'Maximum 6 files can be added.'
+          );
+        }
+      }
+    }
+  }
+
+  clearFile(name: string, index: number) {
+    this.statusModal.controls[name].value.splice(index, 1);
+  }
+
+  async updateStatus() {
+    const formData = new FormData();
+
+    // stop here if form is invalid
+    if (this.statusModal.invalid) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    for (const key of Object.keys(this.statusModal.value)) {
+      if (key != 'documentList') {
+        const value = this.statusModal.value[key];
+
+        if (value) {
+          formData.append(key, value);
+        }
+      }
+    }
+    const file = this.statusModal.get('documentList')?.value;
+    if (file.length != 0) {
+      file.forEach((fileObj: File) => {
+        const blob = new Blob([fileObj], { type: fileObj.type });
+        formData.append('documentList', blob, fileObj.name);
+      });
+    }
+
+    this.apiCalls
+      .post(this.endPoints.UPDATE_TIMESHEET_STATUS, formData)
+      .pipe(
+        catchError(async (err) => {
+          this.isLoading = false;
+          setTimeout(() => {
+            throw err;
+          }, 10);
+          this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe(async (response) => {
+        if (this.isLoading) {
+          this.isLoading = false;
+          await this.statusModalComponent.closeModal();
+          this.ngOnInit();
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'Time sheet status updated successfully'
+          );
+        }
+      });
   }
 }
 

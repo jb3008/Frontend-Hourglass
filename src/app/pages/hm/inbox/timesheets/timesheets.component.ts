@@ -1,19 +1,26 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-timesheets',
   templateUrl: './timesheets.component.html',
-  styleUrls: ['./timesheets.component.scss']
+  styleUrls: ['./timesheets.component.scss'],
 })
 export class TimesheetsComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  displayedColumns: string[] = ['timesheet', 'employee', 'workorder',  'fromdate', 'todate', 'workhr', 'status'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = [
+    'timeSheetId',
+    'employee',
+    'workOrderId',
+    'fromDate',
+    'toDate',
+    'timeSpent',
+    'status',
+  ];
+  dataSource = new MatTableDataSource<PeriodicElement>([]);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -23,11 +30,9 @@ export class TimesheetsComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
   ngOnInit(): void {
+    console.log('CALLED');
   }
-
 }
-
-
 
 export interface PeriodicElement {
   timesheet: number;
@@ -37,28 +42,169 @@ export interface PeriodicElement {
   todate: string;
   workhr: string;
   status: string;
-
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  {timesheet: 2786111763, employee: 'Wade Warren',workorder: 2786111763, fromdate:'May 30, 2023', todate:'May 30, 2023',workhr: '16.0 (hr)', status: 'In-Progress'},
-  
-  
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
+  {
+    timesheet: 2786111763,
+    employee: 'Wade Warren',
+    workorder: 2786111763,
+    fromdate: 'May 30, 2023',
+    todate: 'May 30, 2023',
+    workhr: '16.0 (hr)',
+    status: 'In-Progress',
+  },
 ];

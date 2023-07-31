@@ -3,33 +3,63 @@
   <a class="menu-link py-2" routerLinkActive="active menu-here" routerLink="/dashboard"><span class="menu-title"
       translate="MENU.DASHBOARD"></span></a>
 </div> -->
-<div class="menu-item q_hdr me-lg-8"><img src="../../../../../../assets/hourglass-logo.PNG" alt=""></div>
+<div class="menu-item q_hdr me-lg-8">
+  <img src="../../../../../../assets/hourglass-logo.PNG" alt="" />
+</div>
 <div class="menu-item me-lg-1 q_menu">
-  <a class="menu-link py-2" routerLinkActive="active menu-here" [routerLink]="jobPostsUrl"><span class="menu-title">
-    Job Posts
-  </span></a>
+  <a
+    class="menu-link py-2"
+    routerLinkActive="active menu-here"
+    [routerLink]="jobPostsUrl"
+    ><span class="menu-title"> Job Posts </span></a
+  >
 </div>
 
 <div class="menu-item me-lg-1 q_menu">
-  <a class="menu-link py-2" [class.active]="isActiveLink" routerLinkActive="menu-here" [routerLink]="workOrderUrl"><span class="menu-title">
-    Work Order</span></a>
+  <a
+    class="menu-link py-2"
+    [class.active]="isActiveLink"
+    routerLinkActive="menu-here"
+    [routerLink]="workOrderUrl"
+    ><span class="menu-title"> Work Order</span></a
+  >
 </div>
 <ng-container *ngIf="!setHiringManager">
-<div class="menu-item me-lg-1 q_menu">
-  <a class="menu-link py-2" routerLinkActive="active menu-here" routerLink="/work-force"><span class="menu-title">
-    Work Force</span></a>
-</div>
+  <div class="menu-item me-lg-1 q_menu">
+    <a
+      class="menu-link py-2"
+      routerLinkActive="active menu-here"
+      routerLink="/work-force"
+      ><span class="menu-title"> Work Force</span></a
+    >
+  </div>
 </ng-container>
 
-<div class="menu-item me-lg-1 q_menu">
-  <a class="menu-link py-2" routerLinkActive="active menu-here" routerLink="/timesheets"><span class="menu-title">Timesheets</span></a>
+<div class="menu-item me-lg-1 q_menu" *ngIf="!setHiringManager">
+  <a
+    class="menu-link py-2"
+    routerLinkActive="active menu-here"
+    routerLink="/timesheets"
+    ><span class="menu-title">Timesheets</span></a
+  >
 </div>
-
+<div class="menu-item me-lg-1 q_menu" *ngIf="setHiringManager">
+  <a
+    class="menu-link py-2"
+    routerLinkActive="active menu-here"
+    routerLink="hm/timesheets"
+    ><span class="menu-title">Timesheets</span></a
+  >
+</div>
 <div class="menu-item me-lg-1 q_menu">
-  <a class="menu-link py-2" routerLinkActive="active menu-here" routerLink="/invoices"><span class="menu-title">Invoices</span></a>
+  <a
+    class="menu-link py-2"
+    routerLinkActive="active menu-here"
+    routerLink="/invoices"
+    ><span class="menu-title">Invoices</span></a
+  >
 </div>
 <ng-container *ngIf="setHiringManager">
-
   <!-- <div class="menu-item me-lg-1 q_menu">
     <a class="menu-link py-2" routerLinkActive="active menu-here" routerLink="/business-admin"><span class="menu-title">Business Admin</span></a>
   </div>
@@ -37,15 +67,15 @@
   <div class="menu-item me-lg-1 q_menu">
     <a class="menu-link py-2" routerLinkActive="active menu-here" routerLink="/admin"><span class="menu-title">Admin</span></a>
   </div> -->
-
-
-
-
 </ng-container>
 <div class="menu-item me-lg-1 q_menu">
-  <a class="menu-link py-2" routerLinkActive="active menu-here" [routerLink]="logoutUrl" (click)="logout()"><span class="menu-title">
-     Logout
-    </span></a>
+  <a
+    class="menu-link py-2"
+    routerLinkActive="active menu-here"
+    [routerLink]="logoutUrl"
+    (click)="logout()"
+    ><span class="menu-title"> Logout </span></a
+  >
 </div>
 <!-- 
 <div class="form-check form-check-custom form-check-solid form-check-success form-switch">

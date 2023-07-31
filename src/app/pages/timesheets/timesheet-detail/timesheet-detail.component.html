@@ -24,17 +24,36 @@
             <i class="bi fs-4 bi-chat-left-text"></i> Logs
           </a>
           <a
-            class="btn btn-bg-light text-primary btn-sm ms-5"
+            class="btn btn-bg-light text-primary btn-sm ms-5 mr-5"
             id="kt_attachment_logs_drawer_toggle"
           >
             <i class="bi fs-4 bi-paperclip"></i> Attachments
           </a>
+          <!-- <button
+            type="button"
+            class="btn btn-sm btn-primary mr-5"
+            (click)="openStatusModal('APPROVED_BY_VENDOR')"
+            *ngIf="auth?.vendorId && timeSheetDetails?.status === 'ACTIVE'"
+          >
+            APPROVED
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-sm btn-primary"
+            (click)="openStatusModal('REJECTED')"
+            *ngIf="auth?.vendorId && timeSheetDetails?.status === 'ACTIVE'"
+          >
+            REJECTED
+          </button> -->
         </div>
       </div>
       <app-attachment-logs-drawer
         [timeSheetId]="timeSheetId"
       ></app-attachment-logs-drawer>
-      <app-timesheet-logs-drawer></app-timesheet-logs-drawer>
+      <app-timesheet-logs-drawer
+        [timeSheetId]="timeSheetId"
+      ></app-timesheet-logs-drawer>
       <div class="d-flex flex-wrap flex-stack mt-7">
         <div class="d-flex flex-column flex-grow-1 pe-8">
           <div class="d-flex flex-wrap lign-items-center">
@@ -52,7 +71,7 @@
             <div class="me-5 my-1 d-flex">
               <div class="symbol symbol-30px symbol-square me-3">
                 <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
-                  >{{timeSheetDetails?.employee?.firstName?.[0]
+                  >{{timeSheetDetails?.workForceDetails?.firstName?.[0]
 
 
 
@@ -66,47 +85,14 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  }}{{timeSheetDetails?.employee?.lastName?.[0]}}
+                  }}{{timeSheetDetails?.workForceDetails?.lastName?.[0]}}
                 </span>
               </div>
               <div>
                 <span class="d-flex text-muted fs-8">Employee</span>
                 <span class="fw-bold d-flex s-"
-                  >{{ timeSheetDetails?.employee?.firstName }}
-                  {{ timeSheetDetails?.employee?.lastName }}</span
+                  >{{ timeSheetDetails?.workForceDetails?.firstName }}
+                  {{ timeSheetDetails?.workForceDetails?.lastName }}</span
                 >
               </div>
             </div>
@@ -163,10 +149,7 @@
         [closeOthers]="true"
         class="b-0"
       >
-        <ngb-panel
-          *ngFor="let d of taskListDetails; let number = index"
-          (click)="startDate = d.date"
-        >
+        <ngb-panel *ngFor="let d of taskListDetails; let number = index">
           <ng-template ngbPanelHeader let-opened="opened">
             <div
               class="d-flex custom-header align-items-center justify-content-between p-0 ps-7 py-1 pe-2"
@@ -183,6 +166,7 @@
                   type="button"
                   ngbPanelToggle
                   class="btn btn-icon btn-active-color-primary btn-sm"
+                  (click)="clickAccordion(d.date)"
                 >
                   <i
                     class="bi fs-4 bi-chevron-down"
@@ -273,6 +257,9 @@
                       [(ngModel)]="element.timeSpent"
                       style="width: 100%"
                       class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10"
+                      [disabled]="
+                        !auth?.vendorId || timeSheetDetails?.status !== 'DRAFT'
+                      "
                       placeholder="hrs"
                     />
                   </td>
@@ -290,6 +277,10 @@
                         (click)="picker.open()"
                         style="width: 100%"
                         [(ngModel)]="element.startDate"
+                        [disabled]="
+                          !auth?.vendorId ||
+                          timeSheetDetails?.status !== 'DRAFT'
+                        "
                         [matDatepicker]="picker"
                         placeholder="Select Due Date"
                       />
@@ -311,6 +302,10 @@
                         class="form-control pe-10 py-2 fs- fw-normal"
                         (click)="picker.open()"
                         style="width: 100%"
+                        [disabled]="
+                          !auth?.vendorId ||
+                          timeSheetDetails?.status !== 'DRAFT'
+                        "
                         [(ngModel)]="element.finishDate"
                         [matDatepicker]="picker"
                         placeholder="Select Due Date"
@@ -345,7 +340,7 @@
                 <ng-container matColumnDef="actions">
                   <th mat-header-cell *matHeaderCellDef></th>
                   <td mat-cell *matCellDef="let element; let i = index">
-                    <div>
+                    <div *ngIf="timeSheetDetails?.status === 'DRAFT'">
                       <span>
                         <i
                           class="bi bi-trash actions"
@@ -374,31 +369,34 @@
         type="button"
         class="btn btn-primary btn-sm my-5"
         id="kt_new_task_drawer_toggle"
+        *ngIf="auth?.vendorId && timeSheetDetails?.status === 'DRAFT'"
       >
         <i class="bi bi-plus-lg"></i> Add Task
       </button>
       <app-new-task-drawer-detail
         [workOrderId]="workOrderId"
         [selectedEmpObj]="selectedEmpObj"
-        [alreadyTaskList]="alreadyTaskList"
+        [alreadyTaskList]="taskListDetails"
+        [startDate]="startDate"
         (getSelectedTaskList)="getSelectedTaskList($event)"
       ></app-new-task-drawer-detail>
       <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
         <button type="button" routerLink="/timesheets" class="btn btn-sm">
           Cancel
         </button>
-        <button
+        <!-- <button
           type="button"
           class="btn btn-sm btn-light-primary"
           (click)="save('DRAFT')"
           *ngIf="timeSheetDetails?.status === 'DRAFT'"
         >
           Save as Draft
-        </button>
+        </button> -->
         <button
           type="button"
           class="btn btn-sm btn-primary"
           (click)="save('ACTIVE')"
+          *ngIf="auth?.vendorId && timeSheetDetails?.status === 'DRAFT'"
         >
           Submit
         </button>
@@ -412,3 +410,88 @@
 >
   <div class="spinner"></div>
 </div>
+<app-modal
+  #modalStatus
+  [modalConfig]="statusModalConfig"
+  style="max-width: 777px"
+  data-nnn=""
+>
+  <form [formGroup]="statusModal">
+    <div class="mb-1">Attachments</div>
+    <div class="fv-row mb-5">
+      <!--begin::Dropzone-->
+      <div
+        class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
+        DropZone
+        (onFileDropped)="droppedFiles($event, 'documentList')"
+        (click)="fileInputOther.click()"
+      >
+        <!--begin::Message-->
+        <div class="text-center w-100 text-muted">
+          <!--begin::Icon-->
+          <i class="fas fa-cloud-upload-alt fs-2x"></i>
+          <!--end::Icon-->
+          <!--begin::Info-->
+          <div class="ms-4">
+            <input
+              type="file"
+              hidden
+              #fileInputOther
+              (change)="selectFile($event, 'documentList')"
+              accept=".pdf,.doc,.docx,.xls,.xlsx"
+            />
+            <h3 class="fs-5 mb-1">
+              <a class="text-primary">Click to upload </a> or Drop files here.
+            </h3>
+            <span class="fs-7 fw-semibold text-gray-400"
+              >.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb); maximum 6
+              files</span
+            >
+          </div>
+          <!--end::Info-->
+        </div>
+      </div>
+      <div
+        *ngIf="statusModal.controls['documentList'].value"
+        class="d-flex flex-wrap"
+      >
+        <a
+          *ngFor="
+            let doc of statusModal.controls['documentList'].value;
+            let index = index
+          "
+          class="me-3 mt-4 border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between mw-325px"
+        >
+          <div
+            class="text-truncate pspmw95"
+            [ngbTooltip]="doc.name"
+            [openDelay]="600"
+          >
+            {{ doc.name }}
+          </div>
+          <span class="cursor-pointer ms-3">
+            <i
+              class="bi bi-x-circle"
+              (click)="clearFile('documentList', index)"
+            ></i
+          ></span>
+        </a>
+      </div>
+
+      <!--end::Dropzone-->
+    </div>
+
+    <div class="modal-footer bg-light p-3 px-5">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="closeStatusModal()"
+      >
+        Cancel
+      </button>
+      <button type="button" class="btn btn-primary" (click)="updateStatus()">
+        Save
+      </button>
+    </div>
+  </form>
+</app-modal>

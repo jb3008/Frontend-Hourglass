@@ -13,6 +13,7 @@
     </div>
     <a
       routerLink="new-timesheet"
+      *ngIf="auth?.vendorId"
       class="btn btn-primary w-200px btn-sm cursor-pointer my-2"
     >
       <i class="bi bi-plus-lg"></i> New Timesheet</a
@@ -26,7 +27,6 @@
           formControlName="timeSheetId"
           class="form-control py-2 px-3 fs- fw-normal pe-10"
           placeholder="Search by Timesheet # "
-          
         />
         <span><i class="fa fa-search"></i></span>
       </div>
@@ -89,8 +89,21 @@
         <mat-datepicker #pickerTo></mat-datepicker>
       </div>
 
-      <a class="btn btn-light-primary btn-sm cursor-pointer" (click)="getAllTimesheet()">Search</a>
-      <a class="btn btn-light-primary btn-sm cursor-pointer" (click)="timeSheetFilter.reset();timeSheetFilter.controls['status'].setValue('All');getAllTimesheet();"> Reset</a>
+      <a
+        class="btn btn-light-primary btn-sm cursor-pointer"
+        (click)="getAllTimesheet()"
+        >Search</a
+      >
+      <a
+        class="btn btn-light-primary btn-sm cursor-pointer"
+        (click)="
+          timeSheetFilter.reset();
+          timeSheetFilter.controls['status'].setValue('All');
+          getAllTimesheet()
+        "
+      >
+        Reset</a
+      >
     </div>
   </form>
 
@@ -123,17 +136,26 @@
           <div class="me-10 my-1 d-flex">
             <div class="symbol symbol-35px symbol-square me-3">
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
-                >{{element?.employee?.firstName?.[0]
-                }}{{element?.employee?.lastName?.[0]}}
+                >{{element?.workForceDetails?.firstName?.[0]
+
+
+
+
+
+
+
+
+
+                }}{{element?.workForceDetails?.lastName?.[0]}}
               </span>
             </div>
             <div>
               <span
-                >{{ element?.employee?.firstName }}
-                {{ element?.employee?.lastName }}</span
+                >{{ element?.workForceDetails?.firstName }}
+                {{ element?.workForceDetails?.lastName }}</span
               >
               <span class="d-flex text-muted fs-8">{{
-                element?.employee?.workEmail
+                element?.workForceDetails?.workEmail
               }}</span>
             </div>
           </div>
@@ -176,12 +198,12 @@
       </ng-container>
 
       <!-- totalhr Column -->
-      <ng-container matColumnDef="totalTimeSpent">
+      <ng-container matColumnDef="timeSpent">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
           <i class="bi bi-clock"></i> Total Work hr
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
-          {{ element.totalTimeSpent }}
+          {{ element.timeSpent }} hrs
         </td>
       </ng-container>
 

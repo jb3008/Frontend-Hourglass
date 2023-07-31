@@ -52,6 +52,8 @@ const EndPoints = {
   GET_JOBAPPL_COUNTS: '/hourglass/vendor/getJobApplicationCounts.api',
   GET_TASK_FOR_WORK_ORDER_LIST: '/hourglass/task/tasksForWorkOrderId.api',
   GET_TIME_SHEET: '/hourglass/timesheet/listTimeSheet.api',
+  GET_TIME_SHEET_NOTIFICATION:
+    '/hourglass/timesheet/notification/listInbox.api',
   GET_TIME_SHEET_DETAILS: '/hourglass/timesheet/getTimeSheetDetails.api',
   CREATE_TIME_SHEET: '/hourglass/timesheet/create.api',
   CREATE_TIME_SHEET_AS_DRAFT: '/hourglass/timesheet/saveDraftTimeSheet.api',
@@ -68,6 +70,9 @@ const EndPoints = {
     '/hourglass/timesheet/uploadFilesForTimeSheet.api',
   REMOVE_TASK_FROM_TIMESHEET: '/hourglass/timesheet/removeTaskForTimeSheet.api',
   WORKORDER_NOTIFICATION: '/hourglass/work-order/notification/listInbox.api',
+  GET_TIMESHEET_STATUS: '/hourglass/common/listTimeSheetStatus.api',
+  GET_TIMESHEET_LOGS: '/hourglass/audit-log/auditLogForTimeSheet.api',
+  UPDATE_TIMESHEET_STATUS: '/hourglass/timesheet/updateTimeSheetStatus.api',
 };
 
 export default EndPoints;

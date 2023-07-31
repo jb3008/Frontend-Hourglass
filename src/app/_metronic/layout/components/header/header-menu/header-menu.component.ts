@@ -20,7 +20,7 @@ export class HeaderMenuComponent implements OnInit {
     private layoutInit: LayoutInitService,
     private utils: Utils,
     private apiCalls: ApiCallsService,
-    private route:  ActivatedRoute
+    private route: ActivatedRoute
   ) {}
 
   setHiringManager: boolean = true;
@@ -28,13 +28,14 @@ export class HeaderMenuComponent implements OnInit {
   switch_text = 'Switch to Vendor';
   logoutUrl: string = '/auth/logout';
   jobPostsUrl: string = '/job-posts';
+  timeSheetUrl: string = '/timesheets';
   workOrderUrl: string = '/work-order';
   isActiveLink = false;
-  
+
   ngOnInit(): void {
-    this.setWorkOrderActive()
+    this.setWorkOrderActive();
     this.router.events.subscribe((ev) => {
-      if (ev instanceof NavigationEnd) { 
+      if (ev instanceof NavigationEnd) {
         this.setWorkOrderActive();
       }
     });
@@ -46,6 +47,7 @@ export class HeaderMenuComponent implements OnInit {
       this.utils.setUser(auth?.['user-id'] || '');
       this.jobPostsUrl = '/job-posts';
       this.workOrderUrl = '/work-order';
+      this.timeSheetUrl = '/timesheets';
       this.utils.setHiringManager('false');
 
       // this.setHiringManager = true;
@@ -55,7 +57,9 @@ export class HeaderMenuComponent implements OnInit {
     } else {
       this.switch_text = 'Switch to Vendor';
       this.jobPostsUrl = '/hm/job-posts';
+      this.jobPostsUrl = '/hm/job-posts';
       this.workOrderUrl = '/hm/work-order';
+      this.timeSheetUrl = '/hm/timesheets';
       this.utils.setUser(auth?.['user-id'] || '');
       this.utils.setHiringManager('true');
 
@@ -85,31 +89,34 @@ export class HeaderMenuComponent implements OnInit {
     }
   }
 
-  setWorkOrderActive(){
-    if(this.router.url.includes('work-order')){
-      this.route.queryParams.subscribe(param => {
-        if(param['from'] == 'inbox'){
+  setWorkOrderActive() {
+    if (this.router.url.includes('work-order')) {
+      this.route.queryParams.subscribe((param) => {
+        if (param['from'] == 'inbox') {
           this.isActiveLink = false;
-        }else{
+        } else {
           this.isActiveLink = true;
         }
       });
-    }else{
-      this.isActiveLink  = false;
+    } else {
+      this.isActiveLink = false;
     }
   }
 
-  getVendorDetails(id: any){
+  getVendorDetails(id: any) {
     let queryParam = {
-      vendorCode : id
-    }
-    this.apiCalls.get(this.endPoints.GET_VENDOR_DETAILS, queryParam)
-      .pipe(catchError(async (error) => {
-        throw error;
-      }))
+      vendorCode: id,
+    };
+    this.apiCalls
+      .get(this.endPoints.GET_VENDOR_DETAILS, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          throw error;
+        })
+      )
       .subscribe((response) => {
         sessionStorage.setItem('vendorDetails', JSON.stringify(response));
-      })
+      });
   }
 
   calculateMenuItemCssClass(url: string): string {
@@ -153,13 +160,15 @@ export class HeaderMenuComponent implements OnInit {
     }
   }
 
-  logout(){
-    this.apiCalls.get(this.endPoints.LOGOUT)
-      .pipe(catchError(async (error) => {
-        throw error;
-      }))
-      .subscribe((response) => {
-      })
+  logout() {
+    this.apiCalls
+      .get(this.endPoints.LOGOUT)
+      .pipe(
+        catchError(async (error) => {
+          throw error;
+        })
+      )
+      .subscribe((response) => {});
   }
 }
 

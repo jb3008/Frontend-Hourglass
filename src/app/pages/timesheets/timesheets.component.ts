@@ -31,11 +31,12 @@ export class TimesheetsComponent implements OnInit {
     'workOrderId',
     'fromDate',
     'toDate',
-    'totalTimeSpent',
+    'timeSpent',
     'status',
   ];
   dataSource = new MatTableDataSource<PeriodicElement>([]);
   endPoints = EndPoints;
+  auth: any;
   workForceList: any = [];
   isLoading = false;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -43,6 +44,7 @@ export class TimesheetsComponent implements OnInit {
   timeSheetFilter: FormGroup;
   ngAfterViewInit() {}
   ngOnInit(): void {
+    this.auth = this.utils.getAuth();
     this.timeSheetFilter = this.fb.group({
       timeSheetTaskId: [''],
       timeSheetId: [''],
@@ -52,7 +54,7 @@ export class TimesheetsComponent implements OnInit {
       status: ['All'],
       searchByEmployee: [''],
     });
-    this.getAllWorkForceList();
+    this.getAllTimesheet();
   }
   changeDateToUtc(dateObj: any) {
     const date = new Date(dateObj);
@@ -104,9 +106,6 @@ export class TimesheetsComponent implements OnInit {
         for (let index = 0; index < response.length; index++) {
           const element = response[index];
 
-          const emp: any = this.workForceList.find(
-            (o: any) => parseInt(o.workForceId) === parseInt(element.employeeId)
-          );
           element.timeSpent = 0;
 
           for (let i = 0; i < element.taskListDetails.length; i++) {
@@ -114,7 +113,6 @@ export class TimesheetsComponent implements OnInit {
               ? parseInt(element.taskListDetails[i].timeSpent)
               : 0;
           }
-          response[index].employee = emp;
         }
         this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;
@@ -150,6 +148,6 @@ export interface PeriodicElement {
   workOrderId: number;
   fromDate: string;
   toDate: string;
-  totalTimeSpent: string;
+  timeSpent: string;
   status: string;
 }

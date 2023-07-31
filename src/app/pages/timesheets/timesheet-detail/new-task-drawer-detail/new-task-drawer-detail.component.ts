@@ -43,13 +43,13 @@ export class NewTaskDrawerDetailComponent implements OnInit {
   @Input() workOrderId: any;
   @Input() selectedEmpObj: any;
   @Input() alreadyTaskList: any;
+  @Input() startDate: any;
   @Output() getSelectedTaskList = new EventEmitter<any>();
   ngOnInit(): void {
     this.selection.clear();
     this.cdr.detectChanges();
   }
   ngOnChanges() {
-    console.log('CALLED');
     if (this.workOrderId) {
       this.getTaskList();
     }
@@ -102,8 +102,12 @@ export class NewTaskDrawerDetailComponent implements OnInit {
         })
       )
       .subscribe((response) => {
+        const taskExist = this.alreadyTaskList.find((r: any) => {
+          return this.startDate === r.date;
+        });
+        const ids = taskExist ? taskExist?.data.map((r: any) => r.taskId) : [];
         response = response.filter((r: any) => {
-          return this.alreadyTaskList.indexOf(r.taskId) === -1;
+          return ids.indexOf(r.taskId) === -1;
         });
         this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;
