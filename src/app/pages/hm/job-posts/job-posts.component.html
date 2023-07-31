@@ -56,7 +56,7 @@
                     <!--begin::Input-->
                     <div class="input-icon position-relative input-icon-right">
                         <input class="form-control py-2 px-3 fs- fw-normal" (click)="picker.open()" [matDatepicker]="picker" 
-                            placeholder="Start Date" [value]="filter?.startDate" (dateChange)="getDate($event.value,'startDate')"
+                            placeholder="Start Date" [(ngModel)]="filter.startDate" (dateChange)="getDate($event.value,'startDate')"
                             [max]="queryParam.endDate">
                         <span><i class="far fa-calendar"></i></span>
                         <mat-datepicker #picker></mat-datepicker>
@@ -65,7 +65,7 @@
                     <!--begin::Input-->
                     <div class="input-icon position-relative input-icon-right">
                         <input class="form-control py-2 px-3 fs- fw-normal" (click)="picker1.open()" [matDatepicker]="picker1" 
-                            placeholder="End Date" [value]="filter?.endDate" (dateChange)="getDate($event.value,'endDate')"
+                            placeholder="End Date" [(ngModel)]="filter.endDate" (dateChange)="getDate($event.value,'endDate')"
                             [matDatepickerFilter]="endDateFilter">
                         <span><i class="far fa-calendar"></i></span>
                         <mat-datepicker #picker1></mat-datepicker>
@@ -75,14 +75,14 @@
     
                 <div class="fs-8 text-muted mb-3">Work Area</div>
                 <div class="mb-5">
-                    <mat-select class="form-select fs- py-2"  placeholder="Select Site" [value] = "filter?.site" (selectionChange)="filterSite($event)">
+                    <mat-select class="hide-arrow form-select fs- py-2"  placeholder="Select Site" [(value)] = "filter.site" (selectionChange)="filterSite($event)">
                         <mat-option *ngFor="let sites of sitesList" [value]="sites.code">
                             {{sites.name}} ({{sites.code}})
                         </mat-option>
                     </mat-select>
                 </div>
                 <div class="mb-5">
-                    <mat-select class="form-select fs- py-2"  placeholder="Select Business Unit" [value] = "filter?.businessUnit" (selectionChange)="filterBusinessUnit($event)">
+                    <mat-select class="hide-arrow form-select fs- py-2"  placeholder="Select Business Unit" [(value)] = "filter.businessUnit" (selectionChange)="filterBusinessUnit($event)">
                         <mat-option *ngFor="let units of businessUnits" [value]="units.code">
                             {{units.name}} ({{units.code}})
                         </mat-option>
@@ -164,9 +164,9 @@
     
                     <!-- position Column -->
                     <ng-container matColumnDef="position">
-                        <th mat-header-cell *matHeaderCellDef class="align-middle"> Position </th>
+                        <th mat-header-cell *matHeaderCellDef class="align-middle"> Positions </th>
                         <td mat-cell *matCellDef="let element" class="align-middle">
-                            <span class="badge badge-light-danger">{{element.openPosition}}</span>
+                            <span class="badge badge-light-warning">{{element.openPosition}}</span>
                         </td>
                     </ng-container>
     
@@ -184,7 +184,7 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
     
-                <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons  [pageSize]="30"
+                <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons  [pageSize]="10"
                     aria-label="Select page of periodic elements">
                 </mat-paginator>
             </div>

@@ -289,6 +289,10 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   numbersOnly(event: any){
     return this.utils.numberOnly(event);
   }
+  
+  numbersAndDecimalOnly(event: any){
+    return this.utils.numbersAndDecimal(event);
+  }
 
   getJobDetails(id: string){
     this.isLoading = true;
@@ -333,8 +337,8 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
         payTerms: data.payTerms,
         legalEntity: data.companyDetails?.companyCode,
         workRate: data?.rate,
-        minBudget: data?.minBudget,
-        maxBudget: data?.maxBudget,
+        // minBudget: data?.minBudget,
+        // maxBudget: data?.maxBudget,
         workRateCurrency: data?.currency,
         site: data.siteDetails?.code,
         location: data.siteDetails?.city,
@@ -352,6 +356,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     const formData = new FormData();
     let workRateValue = this.workOrderData.controls['workRate'].value;
     let minBudget = this.workOrderData.controls['minBudget'].value;
+    this.workOrderData.controls['maxBudget'].setValue(minBudget);
     let maxBudget = this.workOrderData.controls['maxBudget'].value;
     if(this.workOrderData.valid && (workRateValue || (minBudget && maxBudget))){
       this.isLoading = true;

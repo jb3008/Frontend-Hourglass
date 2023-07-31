@@ -1,3 +1,9 @@
 :host {
     width: 100%;
   }
+
+  /* Custom style to show arrow icons always */
+.mat-paginator .mat-paginator-navigation-previous,
+.mat-paginator .mat-paginator-navigation-next {
+  display: flex !important;
+}

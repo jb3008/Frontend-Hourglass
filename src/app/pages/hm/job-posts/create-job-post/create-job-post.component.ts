@@ -388,6 +388,10 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     return this.utils.numberOnly(event);
   }
 
+  numberAndDecimalOnly(event: any){
+    return this.utils.numbersAndDecimal(event);
+  }
+
   showConsent() {
     let filesExist: boolean = false;
     for (const key of Object.keys(this.jobPostData.value) ) {

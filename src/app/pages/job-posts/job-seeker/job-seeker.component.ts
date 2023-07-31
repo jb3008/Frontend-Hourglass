@@ -142,6 +142,10 @@ export class JobSeekerComponent implements OnInit {
   numbersOnly(event: any){
     return this.utils.numberOnly(event);
   }
+  
+  numbersOAndDecimalOnly(event: any){
+    return this.utils.numbersAndDecimal(event);
+  }
 
   submitApplication(){
     const formData = new FormData();

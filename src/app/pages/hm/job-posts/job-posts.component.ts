@@ -33,7 +33,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   filter: Filter = {} as Filter;
 
   // searchFilter:string ='';
-  @ViewChild("searchFilterInp") searchFilterInp: HTMLInputElement;
+  @ViewChild("searchFilterInp") searchFilterInp: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -175,6 +175,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedTab(tab:string) {
+    this.resetFilter('tab')
     this.selectedTab = tab;
     this.queryParam.status = this.selectedTab.toUpperCase();
     this.getAllJobs();
@@ -225,7 +226,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         })
       }else{
         this.selected = false;
-        this.queryParam?.types?.splice(index, 1);
+        this.queryParam.types = this.queryParam?.types?.filter(val => val != event.target.value)
         this.selectedJobTypes[index] = false;
       }
     }
@@ -247,11 +248,13 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     return utcDate;
   }
 
-  resetFilter() {
+  resetFilter(tab?: any) {
     delete this.queryParam.site;
+    delete this.queryParam.searchText;
     delete this.queryParam.businessUnit;
     delete this.queryParam.startDate;
     delete this.queryParam.endDate;
+    this.searchFilterInp.nativeElement.value = '';
     this.queryParam.types = [];
     this.filter.startDate = '';
     this.filter.endDate = '';
@@ -259,7 +262,8 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.filter.businessUnit = '';
     this.selectedJobTypes = [];
     this.selected = false;
-    this.getAllJobs();
+    if(!tab)
+      this.getAllJobs();
   }
 
   clearSearch() {

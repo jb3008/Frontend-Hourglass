@@ -104,6 +104,23 @@ export class Utils {
     return !(charCode > 31 && (charCode < 48 || charCode > 57));
   }
 
+  numbersAndDecimal(event: any){
+    const charCode = (event.which) ? event.which : event.keyCode;
+    const inputValue = event.target.value;
+
+    if (charCode === 8 || charCode === 46 || (charCode >= 48 && charCode <= 57)) {
+        const hasDecimalPoint = inputValue.indexOf('.') !== -1;
+
+        if (charCode === 46 && hasDecimalPoint) {
+            return false;
+        }
+
+        return true;
+    }
+
+    return false;
+  }
+
   getDocIcon(fileName: string) {
     switch (fileName.substring(fileName.lastIndexOf('.') + 1)) {
       case 'doc':
