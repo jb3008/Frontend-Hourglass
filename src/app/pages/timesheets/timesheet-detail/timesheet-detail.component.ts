@@ -332,7 +332,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
       fromDate: this.changeDateToUtc(this.timeSheetDetails.fromDate),
       toDate: this.changeDateToUtc(this.timeSheetDetails.toDate),
       comments: this.timeSheetDetails.comments,
-      status: this.timeSheetDetails.status,
+      status: status,
     };
     const newTimeSheetTaskList = [];
     const existingTimeSheetTaskList = [];

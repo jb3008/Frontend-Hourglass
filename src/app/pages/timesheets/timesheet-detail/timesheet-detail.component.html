@@ -75,16 +75,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
                   }}{{timeSheetDetails?.workForceDetails?.lastName?.[0]}}
                 </span>
               </div>
@@ -384,14 +374,14 @@
         <button type="button" routerLink="/timesheets" class="btn btn-sm">
           Cancel
         </button>
-        <!-- <button
+        <button
           type="button"
           class="btn btn-sm btn-light-primary"
           (click)="save('DRAFT')"
-          *ngIf="timeSheetDetails?.status === 'DRAFT'"
+          *ngIf="auth?.vendorId && timeSheetDetails?.status === 'DRAFT'"
         >
           Save as Draft
-        </button> -->
+        </button>
         <button
           type="button"
           class="btn btn-sm btn-primary"

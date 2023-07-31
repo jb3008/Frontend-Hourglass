@@ -160,7 +160,7 @@ export class WorkerProfileComponent implements OnInit {
     }
   }
 
-  getAttachment(documentId: any) {
+  getAttachment(documentId: any, name: any) {
     let queryParam = {
       documentId: documentId,
     };
@@ -174,7 +174,12 @@ export class WorkerProfileComponent implements OnInit {
       )
       .subscribe((response) => {
         const url = window.URL.createObjectURL(response);
-        window.open(url);
+        // window.open(url);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = name;
+        anchor.click();
+        window.URL.revokeObjectURL(url);
         this.cdr.detectChanges();
       });
   }
