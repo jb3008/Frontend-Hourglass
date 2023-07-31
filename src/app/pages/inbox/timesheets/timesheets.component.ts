@@ -56,7 +56,6 @@ export class TimesheetsComponent implements OnInit {
       searchByEmployee: [''],
     });
     this.getAllTimeSheetStatus();
-    this.getAllTimesheet();
   }
   changeDateToUtc(dateObj: any) {
     const date = new Date(dateObj);
@@ -161,6 +160,7 @@ export class TimesheetsComponent implements OnInit {
       )
       .subscribe((response) => {
         this.lstTimeSheetStatus = response;
+        this.getAllTimesheet();
         this.cdr.detectChanges();
       });
   }

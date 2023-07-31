@@ -66,7 +66,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
 
     this.timeSheetId = this.route.snapshot.paramMap.get('timeSheetId');
     this.getAllTimeSheetStatus();
-    this.getAllTimesheetDetails();
+
     this.statusModal = this.fb.group({
       timeSheetId: [this.timeSheetId, Validators.required],
       status: ['', Validators.required],
@@ -127,6 +127,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.lstTimeSheetStatus = response;
+        this.getAllTimesheetDetails();
         this.cdr.detectChanges();
       });
   }
