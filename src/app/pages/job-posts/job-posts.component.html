@@ -15,19 +15,19 @@
     <ul class="nav nav-line-tabs nav-line-tabs-1x nav-stretch ">
         <li class="nav-item">
             <a data-bs-toggle="tab" class="nav-link px-4" (click)="getSelectedTab('NewJob')"
-                [ngClass]="{'active': selectedTab=='NewJob', 'cursor-pointer': selectedTab !=='NewJob'}"> New Job <span class="badge badge-light-primary ms-3">
+                [ngClass]="{'active': selectedTab=='NewJob', 'cursor-pointer': selectedTab !=='NewJob'}"> New Jobs <span class="badge badge-light-primary ms-3">
                     <i class="bi bi-arrow-down-left px-1 text-primary fs-9 me-2"></i> {{jobCount?.activeJobPost}}</span> </a>
         </li>
 
         <li class="nav-item">
             <a data-bs-toggle="tab" class="nav-link px-4" (click)="getSelectedTab('AppliedJob')"
-                [ngClass]="{'active': selectedTab=='AppliedJob', 'cursor-pointer': selectedTab !=='AppliedJob'}"> Applied Job <span
+                [ngClass]="{'active': selectedTab=='AppliedJob', 'cursor-pointer': selectedTab !=='AppliedJob'}"> Applied Jobs <span
                     class="badge badge-light-warning ms-3"><i
                         class="bi bi-arrow-up-right px-1 text-warning fs-9 me-2"></i> {{jobCount?.appliedjobcount}}</span></a>
         </li>
         <li class="nav-item">
             <a data-bs-toggle="tab" class="nav-link px-4" (click)="getSelectedTab('ConfirmedJob')"
-                [ngClass]="{'active': selectedTab=='ConfirmedJob', 'cursor-pointer': selectedTab !=='ConfirmedJob'}"> Confirmed Job
+                [ngClass]="{'active': selectedTab=='ConfirmedJob', 'cursor-pointer': selectedTab !=='ConfirmedJob'}"> Confirmed Jobs
                 <span
                     class="badge badge-light-success ms-3"><i class="bi bi-check2-circle fs-7 me-2"></i> {{jobCount?.confirmedjobcount}}</span></a>
         </li>
@@ -102,14 +102,14 @@
           
             <div class="fs-8 text-muted mt-5 mb-3">Work Area</div>
             <div class="mb-5">
-                <mat-select class="form-select fs- py-2"  placeholder="Select Site" (selectionChange)="filterSite($event)">
+                <mat-select class="form-select fs- py-2"  placeholder="Select Site" [(value)] = "filter.site" (selectionChange)="filterSite($event)">
                     <mat-option *ngFor="let sites of sitesList" [value]="sites.code">
                         {{sites.name}} ({{sites.code}})
                     </mat-option>
                 </mat-select>
             </div>
             <div class="mb-5">
-                <mat-select class="form-select fs- py-2"  placeholder="Select Business Unit" (selectionChange)="filterBusinessUnit($event)">
+                <mat-select class="form-select fs- py-2"  placeholder="Select Business Unit" [(value)] = "filter.businessUnit" (selectionChange)="filterBusinessUnit($event)">
                     <mat-option *ngFor="let units of businessUnits" [value]="units.code">
                         {{units.name}}
                     </mat-option>
@@ -120,7 +120,7 @@
 
     <div class="col ">
         <ng-container *ngIf="selectedTab=='NewJob'">
-            <ng-container *ngFor="let details of jobDetails">
+            <ng-container *ngFor="let details of jobDetails | slice: currentPage * pageSize : (currentPage + 1) * pageSize">
                 <div class="card mb-2 ">
                     <div class="card-body py-5">
 
@@ -173,7 +173,7 @@
         </ng-container>
 
         <ng-container *ngIf="selectedTab=='AppliedJob'">
-            <ng-container *ngFor="let details of jobDetails">
+            <ng-container *ngFor="let details of jobDetails | slice: currentPage * pageSize : (currentPage + 1) * pageSize">
                 <div class="card mb-2 cursor-pointer" (click)="goToDetails(details.id)">
                     <div class="card-body py-5">
 
@@ -234,7 +234,7 @@
         </ng-container>
 
         <ng-container *ngIf="selectedTab=='ConfirmedJob'">
-            <ng-container *ngFor="let details of jobDetails">
+            <ng-container *ngFor="let details of jobDetails | slice: currentPage * pageSize : (currentPage + 1) * pageSize">
                 <div class="card mb-2">
                     <div class="card-body py-5">
                         <div class="d-flex justify-content-between align-items-start flex-wrap">
@@ -288,7 +288,9 @@
             </ng-container>
         </ng-container>
 
-
+        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]" [length]="jobDetails.length"
+               (page)="onPageChange($event)">
+        </mat-paginator>
 
 
     </div>

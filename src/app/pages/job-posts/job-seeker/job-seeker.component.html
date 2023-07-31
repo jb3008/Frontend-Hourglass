@@ -75,7 +75,7 @@
                     <div class="col-8 d-flex align-items-center">
                   
                         <input type="input" formControlName="workRate"  class="form-control w-150px py-2 fs- fw-normal rounded-end-0" 
-                        placeholder="Number" (keypress)="numbersOnly($event)"> 
+                        placeholder="Number" (keypress)="numbersOAndDecimalOnly($event)"> 
                         <span class="text-muted ps-2" style="margin-left: '10px'">{{jobDetails?.currency}}</span>
                         <!-- <mat-select class="form-select fs- py-2 w-100px rounded-start-0"  formControlName="workRateCurrency" placeholder="Select">
                             <mat-option value="USD">USD</mat-option>

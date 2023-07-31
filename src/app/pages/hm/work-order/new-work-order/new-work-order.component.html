@@ -28,7 +28,7 @@
                             Details </a></li>
 
                     <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6"
-                            (click)="getSelectedTab('Task'); getTaskList()" [ngClass]="{'active': isSelectedTab=='Task'}">Task
+                            >Task
                         </a></li>
 
                 </ul>
@@ -102,14 +102,14 @@
                         <div class="col-8 d-flex align-items-center">
                       
                             <input *ngIf="workOrderKind == 'Hourly'" type="input" formControlName="workRate" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                            placeholder="Number" (keypress)="numbersOnly($event)">
+                            placeholder="Number" (keypress)="numbersAndDecimalOnly($event)">
                             
                             <ng-container *ngIf="workOrderKind == 'Fixed'">
                                 <input type="input" formControlName="minBudget" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                            placeholder="Number" (keypress)="numbersOnly($event)">
-                            <span> ~ </span>
+                            placeholder="Number" (keypress)="numbersAndDecimalOnly($event)">
+                            <!-- <span> ~ </span>
                             <input type="input" formControlName="maxBudget" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                            placeholder="Number" (keypress)="numbersOnly($event)">
+                            placeholder="Number" (keypress)="numbersOnly($event)"> -->
                             </ng-container>
     
                             <mat-select class="form-select fs- py-2 w-100px rounded-start-0" formControlName="workRateCurrency" placeholder="Select">

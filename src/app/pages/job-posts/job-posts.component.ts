@@ -1,5 +1,5 @@
 import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
@@ -39,9 +39,11 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   selectedJobKind: boolean[] = [false, false];
   selectedJobStatusAll: boolean = false;
   selectedJobStatus: boolean[] = [false, false, false];
+  pageSize = 10;
+  currentPage = 0;
 
   // searchFilter:string ='';
-  @ViewChild("searchFilterInp") searchFilterInp: HTMLInputElement;
+  @ViewChild("searchFilterInp") searchFilterInp: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -72,6 +74,11 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  onPageChange(event: PageEvent) {
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+  }
+  
   getAllJobs() {
     this.isLoading = true;
     this.apiCalls.get(this.endpoints.LIST_JOBS, this.queryParam)
@@ -184,6 +191,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedTab(tab:string) {
+    this.pageSize = 10;
     // if (this.selectedTab == tab) {
     //   return false;
     // }
@@ -271,7 +279,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     if(event.target.checked){
       if(event.target.value == 'All'){
         this.selectedJobKindAll = true;
-        this.queryParam.jobKind = ['Fixed', 'Hourly']; //if we click select all with any other already selected
+        this.queryParam.jobKind = []; //if we click select all with any other already selected
         this.selectedJobKind = [true, true];
       }else{
         this.queryParam.jobKind?.push(event.target.value);
@@ -323,6 +331,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     delete this.queryParam.site;
     delete this.queryParam.businessUnit;
     delete this.queryParam.searchText;
+    this.searchFilterInp.nativeElement.value = '';
     this.queryParam.types = [];
     this.queryParam.jobKind = [];
     this.queryParam.jobStatus = [];

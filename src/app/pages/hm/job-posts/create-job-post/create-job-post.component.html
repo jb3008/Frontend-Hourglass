@@ -110,14 +110,14 @@
                     <div class="col-8 d-flex align-items-center">
                   
                         <input *ngIf="jobKind == 'Hourly'" type="input" formControlName="workRate" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                        placeholder="Number" value="500" (keypress)="numberOnly($event)">
+                        placeholder="Number" value="500" (keypress)="numberAndDecimalOnly($event)">
                         
                         <ng-container *ngIf="jobKind == 'Fixed'">
                             <input type="input" formControlName="minBudget" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                        placeholder="Number" [value]="budgetMin" (keypress)="numberOnly($event)" >
+                        placeholder="Number" [value]="budgetMin" (keypress)="numberAndDecimalOnly($event)" >
                         <span> ~ </span>
                         <input type="input" formControlName="maxBudget" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                        placeholder="Number" [value]="budgetMax" (keypress)="numberOnly($event)" >
+                        placeholder="Number" [value]="budgetMax" (keypress)="numberAndDecimalOnly($event)" >
                         </ng-container>
 
                         <mat-select class="form-select fs- py-2 w-100px rounded-start-0" formControlName="workRateCurrency" placeholder="Select">
