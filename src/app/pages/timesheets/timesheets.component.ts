@@ -104,6 +104,8 @@ export class TimesheetsComponent implements OnInit {
       )
       .subscribe((response) => {
         this.timeSheetList = response;
+        console.log(this.timeSheetList);
+
         for (let index = 0; index < response.length; index++) {
           const element = response[index];
 

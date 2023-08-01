@@ -1,7 +1,6 @@
 <div
   class="border-bottom tolbar mb-6 px-4 d-flex align-items-stretch justify-content-between"
 >
-
   <div class="d-flex">
     <h4 class="pt-4 me-20">Work Force</h4>
     <ul class="nav nav-line-tabs nav-line-tabs-1x nav-stretch">
@@ -10,7 +9,7 @@
           class="nav-link px-4 cursor-pointer fw-bold active"
           (click)="isEngagedWorker = 'Engaged'; getAllWorkForceList()"
           [class.active]="isEngagedWorker === 'Engaged'"
-          >Engaged Worker</a
+          >Engaged Employees</a
         >
       </li>
       <li class="nav-item">
@@ -18,7 +17,7 @@
           class="nav-link px-4 cursor-pointer"
           (click)="isEngagedWorker = 'Free'; getAllWorkForceList()"
           [class.active]="isEngagedWorker === 'Free'"
-          >Free Worker
+          >Free Employees
         </a>
       </li>
       <li class="nav-item">
@@ -27,13 +26,13 @@
           (click)="isEngagedWorker = 'All'; getAllWorkForceList()"
           [class.active]="isEngagedWorker === 'All'"
         >
-          All Worker
+          All Employees
         </a>
       </li>
     </ul>
   </div>
   <a class="btn btn-primary btn-sm cursor-pointer my-2" (click)="openModal()">
-    Add New Member</a
+    Add New Employee</a
   >
   <!-- begin:: Modal example -->
 
@@ -76,7 +75,7 @@
               type="text"
               formControlName="firstName"
               class="form-control py-2 fs- fw-normal"
-              placeholder="Fiirst Name"
+              placeholder="Enter First Name"
             />
           </div>
           <div
@@ -97,7 +96,7 @@
               type="text"
               formControlName="lastName"
               class="form-control py-2 fs- fw-normal"
-              placeholder="Last Name"
+              placeholder="Enter Last Name"
             />
           </div>
           <div
@@ -123,7 +122,7 @@
               type="text"
               formControlName="workEmail"
               class="form-control py-2 fs- fw-normal"
-              placeholder="Work Email ID"
+              placeholder="Enter Email ID"
             />
           </div>
           <div
@@ -141,20 +140,20 @@
         <div class="col-6 p-0 ps-4">
           <div class="form-group">
             <label class="mb-1"
-              >Professional Email ID <span class="text-danger">*</span></label
+              >Personal Email ID <span class="text-danger">*</span></label
             >
             <input
               type="text"
               formControlName="personalEmail"
               class="form-control py-2 fs- fw-normal"
-              placeholder="Professional Email ID"
+              placeholder="Enter Email ID"
             />
           </div>
           <div
             class="fv-plugins-message-container"
             *ngIf="submitted && f.personalEmail.errors"
           >
-            <div class="fv-help-block">Professional Email ID is required</div>
+            <div class="fv-help-block">Personal Email ID is required</div>
             <div class="fv-help-block" *ngIf="f.personalEmail.errors.email">
               Email must be a valid email address
             </div>
@@ -174,15 +173,19 @@
               type="text"
               formControlName="workPhone"
               class="form-control py-2 fs- fw-normal"
-              placeholder="Work Phone"
+              placeholder="Give Work ph Number Here"
             />
           </div>
           <div
             class="fv-plugins-message-container"
-           *ngIf="submitted && f.workPhone.errors" 
+            *ngIf="submitted && f.workPhone.errors"
           >
-            <div class="fv-help-block" *ngIf="f.workPhone.errors.required">Work Phone is required</div>
-            <div class="fv-help-block" *ngIf="f.workPhone.errors.pattern">Only number allow!</div>
+            <div class="fv-help-block" *ngIf="f.workPhone.errors.required">
+              Work Phone is required
+            </div>
+            <div class="fv-help-block" *ngIf="f.workPhone.errors.pattern">
+              Only number allow!
+            </div>
           </div>
         </div>
         <div class="col-6 p-0 ps-4">
@@ -194,15 +197,19 @@
               type="text"
               formControlName="mobilePhone"
               class="form-control py-2 fs- fw-normal"
-              placeholder="Mobile Phone"
+              placeholder="Give Mobile Number Here"
             />
           </div>
           <div
             class="fv-plugins-message-container"
-            *ngIf="submitted && f.mobilePhone.errors" 
+            *ngIf="submitted && f.mobilePhone.errors"
           >
-            <div class="fv-help-block" *ngIf="f.mobilePhone.errors.required">Mobile Phone is required</div>
-              <div class="fv-help-block" *ngIf="f.mobilePhone.errors.pattern">Only number allow!</div>
+            <div class="fv-help-block" *ngIf="f.mobilePhone.errors.required">
+              Mobile Phone is required
+            </div>
+            <div class="fv-help-block" *ngIf="f.mobilePhone.errors.pattern">
+              Only number allow!
+            </div>
           </div>
         </div>
       </div>
@@ -224,7 +231,7 @@
                 class="form-control py-2 fs- fw-normal"
                 (click)="dob.open()"
                 [matDatepicker]="dob"
-                placeholder="Date of Birth"
+                placeholder="Select Date of Birth"
               />
               <span><i class="far fa-calendar"></i></span>
               <mat-datepicker #dob></mat-datepicker>
@@ -232,9 +239,11 @@
           </div>
           <div
             class="fv-plugins-message-container"
-           *ngIf="submitted && f.dateOfBirth.errors" 
+            *ngIf="submitted && f.dateOfBirth.errors"
           >
-            <div class="fv-help-block"  *ngIf="f.dateOfBirth.errors.required">Date of Birth is required</div>
+            <div class="fv-help-block" *ngIf="f.dateOfBirth.errors.required">
+              Date of Birth is required
+            </div>
           </div>
         </div>
         <div class="col-6 p-0 ps-4">
@@ -244,7 +253,7 @@
               type="text"
               formControlName="bloodGroup"
               class="form-control py-2 fs- fw-normal"
-              placeholder="Blood Group"
+              placeholder="Enter Blood Group"
             />
           </div>
         </div>
@@ -262,14 +271,16 @@
               type="text"
               formControlName="designation"
               class="form-control py-2 fs- fw-normal"
-              placeholder="Designation"
+              placeholder="Enter Designation"
             />
           </div>
           <div
             class="fv-plugins-message-container"
-            *ngIf="submitted && f.designation.errors" 
+            *ngIf="submitted && f.designation.errors"
           >
-            <div class="fv-help-block" *ngIf="f.designation.errors.required">Designation is required</div>
+            <div class="fv-help-block" *ngIf="f.designation.errors.required">
+              Designation is required
+            </div>
           </div>
         </div>
         <div class="col-6 p-0 ps-4">
@@ -281,15 +292,19 @@
               type="text"
               formControlName="workExperience"
               class="form-control py-2 fs- fw-normal"
-              placeholder="Work Experience"
+              placeholder="Enter Work Exp."
             />
           </div>
           <div
             class="fv-plugins-message-container"
-             *ngIf="submitted && f.workExperience.errors" 
+            *ngIf="submitted && f.workExperience.errors"
           >
-            <div class="fv-help-block" *ngIf="f.workExperience.errors.required">Work Experience is required</div>
-                <div class="fv-help-block" *ngIf="f.workExperience.errors.pattern">Only number allow!</div>
+            <div class="fv-help-block" *ngIf="f.workExperience.errors.required">
+              Work Experience is required
+            </div>
+            <div class="fv-help-block" *ngIf="f.workExperience.errors.pattern">
+              Only number allow!
+            </div>
           </div>
         </div>
       </div>
@@ -301,14 +316,16 @@
         type="text"
         formControlName="location"
         class="form-control py-2 fs- fw-normal"
-        placeholder="Location"
+        placeholder="Give Location"
       />
     </div>
     <div
       class="fv-plugins-message-container"
-     *ngIf="submitted && f.location.errors" 
+      *ngIf="submitted && f.location.errors"
     >
-      <div class="fv-help-block"  *ngIf="f.location.errors.required">Location is required</div>
+      <div class="fv-help-block" *ngIf="f.location.errors.required">
+        Location is required
+      </div>
     </div>
     <div class="container mb-6">
       <div class="row justify-content-between">
@@ -328,9 +345,11 @@
           </div>
           <div
             class="fv-plugins-message-container"
-             *ngIf="submitted && f.currentAddress.errors" 
+            *ngIf="submitted && f.currentAddress.errors"
           >
-            <div class="fv-help-block" *ngIf="f.currentAddress.errors.required">Current Address is required</div>
+            <div class="fv-help-block" *ngIf="f.currentAddress.errors.required">
+              Current Address is required
+            </div>
           </div>
         </div>
         <div class="col-6 p-0 ps-4">
@@ -349,9 +368,14 @@
           </div>
           <div
             class="fv-plugins-message-container"
-              *ngIf="submitted && f.permanentAddress.errors" 
+            *ngIf="submitted && f.permanentAddress.errors"
           >
-            <div class="fv-help-block" *ngIf="f.permanentAddress.errors.required">Permanent Address is required</div>
+            <div
+              class="fv-help-block"
+              *ngIf="f.permanentAddress.errors.required"
+            >
+              Permanent Address is required
+            </div>
           </div>
         </div>
       </div>

@@ -9,23 +9,25 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
-    InvoicesComponent,
-    InvoicesDetailsComponent
-  ],
+  declarations: [InvoicesComponent, InvoicesDetailsComponent],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     InvoicesRoutingModule,
     MatTableModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
     MatPaginatorModule,
-
-
-  ]
+    NgbAccordionModule,
+    MatCheckboxModule,
+  ],
 })
-export class InvoicesModule { }
+export class InvoicesModule {}
