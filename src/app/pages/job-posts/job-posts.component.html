@@ -14,19 +14,19 @@
 <div class="border-bottom tolbar mb-5 px-4   d-flex align-items-stretch justify-content-between">
     <ul class="nav nav-line-tabs nav-line-tabs-1x nav-stretch ">
         <li class="nav-item">
-            <a data-bs-toggle="tab" class="nav-link px-4" (click)="getSelectedTab('NewJob')"
+            <a data-bs-toggle="tab" class="nav-link px-4 fw-semibold" (click)="getSelectedTab('NewJob')"
                 [ngClass]="{'active': selectedTab=='NewJob', 'cursor-pointer': selectedTab !=='NewJob'}"> New Jobs <span class="badge badge-light-primary ms-3">
                     <i class="bi bi-arrow-down-left px-1 text-primary fs-9 me-2"></i> {{jobCount?.activeJobPost}}</span> </a>
         </li>
 
         <li class="nav-item">
-            <a data-bs-toggle="tab" class="nav-link px-4" (click)="getSelectedTab('AppliedJob')"
+            <a data-bs-toggle="tab" class="nav-link px-4 fw-semibold" (click)="getSelectedTab('AppliedJob')"
                 [ngClass]="{'active': selectedTab=='AppliedJob', 'cursor-pointer': selectedTab !=='AppliedJob'}"> Applied Jobs <span
                     class="badge badge-light-warning ms-3"><i
                         class="bi bi-arrow-up-right px-1 text-warning fs-9 me-2"></i> {{jobCount?.appliedjobcount}}</span></a>
         </li>
         <li class="nav-item">
-            <a data-bs-toggle="tab" class="nav-link px-4" (click)="getSelectedTab('ConfirmedJob')"
+            <a data-bs-toggle="tab" class="nav-link px-4 fw-semibold" (click)="getSelectedTab('ConfirmedJob')"
                 [ngClass]="{'active': selectedTab=='ConfirmedJob', 'cursor-pointer': selectedTab !=='ConfirmedJob'}"> Confirmed Jobs
                 <span
                     class="badge badge-light-success ms-3"><i class="bi bi-check2-circle fs-7 me-2"></i> {{jobCount?.confirmedjobcount}}</span></a>
@@ -35,7 +35,7 @@
     <!-- <a href="" class="btn btn-primary btn-sm cursor-pointer my-2" routerLink="creat-job-post" > Create Job Post</a> -->
     </div>
     <div class="row g-xl-12 mb-5 mb-xl-12">
-        <div class="w-250px text-gray-600">
+        <div class="w-250px text-gray-600 h-100">
             <div class="card p-4">
                 <div class="position-relative input-icon  ">
                     <input type="text" class="form-control py-2 fs- fw-normal px-11" #searchFilterInp  placeholder="Search for a Job"  (keyup)="searchFilter($event)"/>
@@ -50,7 +50,7 @@
                 </div>
                 <div class="separator mb-5"></div>
 
-                <div class="fs-8 text-muted mb-5 mt-3">Job Type </div>
+                <div class="fs-8 text-muted mb-5">Job Type </div>
                 <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
                     <input type="checkbox" [checked]="selected" value="All" (change)="filterJobType($event, -1)"/>
                     <span></span>
@@ -83,8 +83,8 @@
                     </label>
                     </ng-container>
            
-
-            <div class="fs-8 text-muted mb-2 mt-5">PAY RATE </div>
+                    <div class="separator separator-dashed my-5"></div>
+            <div class="fs-8 text-muted mb-2">PAY RATE </div>
                 <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
                     <input type="checkbox" value="All" [checked]="selectedJobKindAll" (change)="filterJobKind($event, -1)"/>
                     <span></span> All 
@@ -98,9 +98,10 @@
                     <span></span> Fixed
                 </label>
                            
+                <div class="separator separator-dashed my-5"></div>
 
           
-            <div class="fs-8 text-muted mt-5 mb-3">Work Area</div>
+            <div class="fs-8 text-muted mb-3">Work Area</div>
             <div class="mb-5">
                 <mat-select class="form-select fs- py-2"  placeholder="Select Site" [(value)] = "filter.site" (selectionChange)="filterSite($event)">
                     <mat-option *ngFor="let sites of sitesList" [value]="sites.code">
@@ -115,6 +116,7 @@
                     </mat-option>
                 </mat-select>
             </div>
+            <div class="separator separator-dashed mb-5"></div>
         </div>
     </div>
 

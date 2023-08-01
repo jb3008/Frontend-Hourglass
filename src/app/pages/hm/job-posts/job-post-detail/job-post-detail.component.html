@@ -3,7 +3,7 @@
   </div>
 <div class="content flex-column-fluid auto container-lg mb-4">
   <div class="py-5 fw-bold">
-   <a class="cursor-pointer text-body" routerLink="/hm/job-posts" [queryParams]="{ tab: selectedTab }"> <i class="fas fa-arrow-left me-3"></i> #{{jobDetails?.id}}</a>
+   <a class="cursor-pointer text-body" routerLink="/hm/job-posts" [queryParams]="{ tab: selectedTab }"> <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i> #{{jobDetails?.id}}</a>
    <span  class="badge badge-light-success fw-normal ms-3">
     <i  class="fas fa-yin-yangfas fa-circle px-1 text-success fs-10"></i> Published </span>
   </div>
@@ -354,12 +354,18 @@
             <td mat-cell *matCellDef="let element" class="align-middle"> 
               <div class="d-flex align-items-center justify-content-center gap-5">
 
-                <a id="kt_logs_drawer_toggle" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm" (click)="setApplicationId(element.id)"><i class="bi bi-clock"></i></a>
+                <a id="kt_logs_drawer_toggle" class="cursor-pointer" (click)="setApplicationId(element.id)">
+                <img src="../../../../../assets/images/icons/jobpost-timer.svg" alt="">
+                  <!-- <i class="bi bi-clock fw-bold text-primary"></i> -->
+                </a>
 
-                <a id="kt_chat_drawer_toggle" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm "><i class="bi bi-chat-left-text"></i> <span class="text-danger ms-2 fw-bold">5</span> </a>
+                <a id="kt_chat_drawer_toggle" class="cursor-pointer ">
+                  <!-- <i class="bi bi-chat-left-text"></i>  -->
+                  <img src="../../../../../assets/images/icons/jobpost-msg.svg" alt="">
+                  <span class="text-danger ms-2 fw-bold">5</span> </a>
               
                     <div ngbDropdown class="d-flex justify-content-start"  placement="bottom-end">
-                      <button class="btn btn-sm btn-primary" id="dropdownMenu" ngbDropdownToggle>
+                      <button class="btn btn-sm btn-primary min-w-100px" id="dropdownMenu" ngbDropdownToggle>
                         Action</button>
                         <div ngbDropdownMenu aria-labelledby="dropdownMenu">
 

@@ -13,7 +13,7 @@
     <div class="card-body">
       <div [ngClass]="{'d-flex justify-content-between align-items-center': isFromInbox}">
       <h3 class="card-title fs-4">
-        <a class="cursor-pointer " (click)="goBack()"> <i class="fas fa-arrow-left me-3"></i> </a>
+        <a class="cursor-pointer " (click)="goBack()"> <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i> </a>
         Work Order - {{workOrderDetails?.workOrderId}}
       </h3>
       <span *ngIf="!isFromInbox" class="text-muted">
@@ -132,7 +132,7 @@
 
         <div class="row mt-10">
           <div class="col-md-6  ">
-            <div class="card border border-dashed bg-light h-100">
+            <div class="card border border-dashed bx h-100">
               <div class="card-header">
                 <h5 class="card-title">Organization Details & Work Policy</h5>
               </div>
@@ -145,7 +145,7 @@
                     </div>
                   </div>
                 </ng-container>
-                <div class="separator"></div>
+                <div class="separator separator-dashed"></div>
                 <ng-container>
                   <div class="form-group row ">
                     <label class="col-4 col-form-label text-muted">Site</label>
@@ -154,7 +154,7 @@
                     </div>
                   </div>
                 </ng-container>
-                <div class="separator"></div>
+                <div class="separator separator-dashed"></div>
                 <ng-container>
                   <div class="form-group row ">
                     <label class="col-4 col-form-label text-muted">Work Location</label>
@@ -169,7 +169,7 @@
                     </div>
                   </div>
                 </ng-container>
-                <div class="separator"></div>
+                <div class="separator separator-dashed"></div>
                 <ng-container>
                   <div class="form-group row ">
                     <label class="col-4 col-form-label text-muted">Business Unit</label>
@@ -178,7 +178,7 @@
                     </div>
                   </div>
                 </ng-container>
-                <div class="separator"></div>
+                <div class="separator separator-dashed"></div>
                 <ng-container>
                   <div class="form-group row ">
                     <label class="col-4 col-form-label text-muted">Time Sheet Frequency</label>
@@ -187,7 +187,7 @@
                     </div>
                   </div>
                 </ng-container>
-                <div class="separator"></div>
+                <div class="separator separator-dashed"></div>
                 <ng-container>
                   <div class="form-group row ">
                     <label class="col-4 col-form-label text-muted">Hours per Week</label>
@@ -200,7 +200,7 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="card card border border-dashed bg-light  h-100 h-100">
+            <div class="card card border border-dashed bx  h-100">
               <div class="card-header">
                 <h5 class="card-title">ACCOUNT DETAILS</h5>
               </div>
@@ -211,14 +211,14 @@
                     <span class="form-control-plaintext text-end">({{workOrderDetails?.constCenterDetails?.code}}) {{workOrderDetails?.constCenterDetails?.name}}</span>
                   </div>
                 </div>
-                <div class="separator"></div>
+                <div class="separator separator-dashed"></div>
                 <div class="form-group row ">
                   <label class="col-4 col-form-label text-muted">Payment Terms</label>
                   <div class="col-8">
                     <span class="form-control-plaintext text-end">{{workOrderDetails?.payRate}}</span>
                   </div>
                 </div>
-                <div class="separator"></div>
+                <div class="separator separator-dashed"></div>
                 <div class="form-group row ">
                   <label class="col-4 col-form-label text-muted">
                     {{workOrderDetails?.kind == 'Fixed' ? 'Budget' : 'Working Rate'}}

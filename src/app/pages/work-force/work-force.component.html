@@ -6,7 +6,7 @@
     <ul class="nav nav-line-tabs nav-line-tabs-1x nav-stretch">
       <li class="nav-item">
         <a
-          class="nav-link px-4 cursor-pointer fw-bold active"
+          class="nav-link px-4 cursor-pointer fw-semibold active"
           (click)="isEngagedWorker = 'Engaged'; getAllWorkForceList()"
           [class.active]="isEngagedWorker === 'Engaged'"
           >Engaged Employees</a
@@ -14,7 +14,7 @@
       </li>
       <li class="nav-item">
         <a
-          class="nav-link px-4 cursor-pointer"
+          class="nav-link px-4 cursor-pointer fw-semibold"
           (click)="isEngagedWorker = 'Free'; getAllWorkForceList()"
           [class.active]="isEngagedWorker === 'Free'"
           >Free Employees
@@ -22,7 +22,7 @@
       </li>
       <li class="nav-item">
         <a
-          class="nav-link px-4 cursor-pointer"
+          class="nav-link px-4 cursor-pointer fw-semibold"
           (click)="isEngagedWorker = 'All'; getAllWorkForceList()"
           [class.active]="isEngagedWorker === 'All'"
         >
