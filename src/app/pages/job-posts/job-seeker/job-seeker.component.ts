@@ -131,6 +131,14 @@ export class JobSeekerComponent implements OnInit {
     }
   }
 
+  clearFileInput(element: any) {
+    this.utils.clearFileInput(element);
+  }
+
+  clearFile(name: string) {
+    this.applyJobData.controls[name].setValue(null);
+  }
+
   clearFileOther(name: string, index: number) {
     this.applyJobData.controls[name].value.splice(index, 1);
   }
@@ -149,7 +157,9 @@ export class JobSeekerComponent implements OnInit {
 
   submitApplication(){
     const formData = new FormData();
-    if(this.applyJobData.valid && this.applyJobData.controls['agreeTerms'].value){
+    const resumeData = this.applyJobData.controls['resumeDoc'].value 
+    const otherDocs = this.applyJobData.controls['otherDocList'].value 
+    if(this.applyJobData.valid && this.applyJobData.controls['agreeTerms'].value && resumeData && otherDocs.length > 0){
       this.loading = true;
       this.applyJobData.controls['availableDate'].setValue(this.utils.changeDateToUtc(this.applyJobData.controls['availableDate'].value));
       let totalMonths = (Number(this.applyJobData.controls['workExpYears'].value) * 12) + Number(this.applyJobData.controls['workExpMonths'].value);

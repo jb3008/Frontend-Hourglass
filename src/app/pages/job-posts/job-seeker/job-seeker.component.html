@@ -61,9 +61,9 @@
                     <label class="col-4">Available Date <span class="text-danger">*</span></label>
                     <div class="col-8 d-flex align-items-center gap-4">
                         <div class="input-icon position-relative w-150px input-icon-right ">
-                            <input formControlName="availableDate"  type="text" class="form-control  py-2 fs- fw-normal" (click)="pickerrd.open()"
+                            <input formControlName="availableDate"  type="text" class="form-control  cursor-pointer py-2 fs- fw-normal" (click)="pickerrd.open()"
                                 [matDatepicker]="pickerrd" placeholder="MM/DD/YYYY" readonly>
-                            <span><i class="far fa-calendar"></i></span>
+                            <span class="cursor-pointer" (click)="pickerrd.open()"><i class="far fa-calendar"></i></span>
                             <mat-datepicker #pickerrd></mat-datepicker> 
                     </div>
                     Requested Date<a class="text-primary">{{jobDetails?.startDate | date:'MM/dd/yyyy'}} </a>
@@ -75,7 +75,7 @@
                     <div class="col-8 d-flex align-items-center">
                   
                         <input type="input" formControlName="workRate"  class="form-control w-150px py-2 fs- fw-normal rounded-end-0" 
-                        placeholder="Number" (keypress)="numbersOAndDecimalOnly($event)"> 
+                        placeholder="Enter Amount" (keypress)="numbersOAndDecimalOnly($event)"> 
                         <span class="text-muted ps-2" style="margin-left: '10px'">{{jobDetails?.currency}}</span>
                         <!-- <mat-select class="form-select fs- py-2 w-100px rounded-start-0"  formControlName="workRateCurrency" placeholder="Select">
                             <mat-option value="USD">USD</mat-option>
@@ -122,17 +122,23 @@
                 </div>
 
                 <div class="form-group  my-5">
-                    <label class="mb-1">Comment </label>
+                    <label class="mb-1">Comment <span class="text-danger">*</span></label>
                  <textarea formControlName="comment" name="" id="" cols="30" rows="3" class="form-control p-2   fw-normal" placeholder="Write your comment here"></textarea>
                 </div>
 
                 <div class="form-group  mb-5">
                     <label class="mb-1">Resume/CV <span class="text-danger">*</span></label>
-                    <input type="file" hidden #resume (change)="selectFile($event, 'resumeDoc')">
+                    <input type="file" hidden #resume (change)="selectFile($event, 'resumeDoc')" (click)="clearFileInput($event)">
                         <div><button type="button" (click)="resume.click()" class="btn btn-sm  btn-outline">Attach</button></div>
-                        <span *ngIf="applyJobData.controls['resumeDoc'].value">
-                            {{applyJobData.controls['resumeDoc'].value.name}}
-                         </span>
+                        <a *ngIf="applyJobData.controls['resumeDoc'].value" 
+                            class=" border rounded-1 py-1 px-3 text-active-primary mt-2 d-flex justify-content-between w-25">
+                            <div class="text-truncate pspmw95" [ngbTooltip]="applyJobData.controls['resumeDoc'].value.name" [openDelay]="600">
+
+                                {{applyJobData.controls['resumeDoc'].value.name}}
+                            </div>
+                            <span class="cursor-pointer ms-3 ">
+                                <i class="bi bi-x-circle" (click)="clearFile('resumeDoc')"></i></span>
+                        </a>
                 </div>
                 <div class="form-group  mb-5">
                     <label class="mb-1">Profile Picture</label>
@@ -148,7 +154,7 @@
                     No Qualifications specified.
                 </div>
 
-                <div class="fw-bold mb-5 mt-6">ATTACHMENTS</div>
+                <div class="fw-bold mb-5 mt-6">ATTACHMENTS <span class="text-danger">*</span></div>
                 <div class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
                 DropZone  (click)="fileInputOther.click()">
                   <!--begin::Message-->
@@ -157,7 +163,7 @@
                       <i class="fas fa-cloud-upload-alt  fs-2x"></i> <!--end::Icon-->
                       <!--begin::Info-->
                       <div class="ms-4">
-                          <input type="file" hidden #fileInputOther (change)="selectFile($event, 'otherDocList')" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                          <input type="file" hidden #fileInputOther (change)="selectFile($event, 'otherDocList')" (click)="clearFileInput($event)" accept=".pdf,.doc,.docx,.xls,.xlsx">
                           <h3 class="fs-5 mb-1"> <a class=" text-primary ">Click to upload </a> or Drop files
                               here.</h3>
                           <span class="fs-7 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size  less than 2mb)</span>

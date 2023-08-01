@@ -39,6 +39,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   draftJobDetails: any;
   documentsList: any;
   dialogRef: MatDialogRef<DialogComponent>;
+  today = new Date();
 
   @ViewChild('siteSelect') siteSelect: MatSelect;
 
@@ -343,12 +344,13 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   }
 
   changeInputValue(element: HTMLElement, action: string){
+    debugger
     let formControl = element.getAttribute('formControlName');
     let value;
     if(formControl)
         value = this.jobPostData.get(formControl)?.value
     if(action == '-'){
-      if(value == 1)
+      if(value == 1 || !value)
         return;
       
       if(formControl)

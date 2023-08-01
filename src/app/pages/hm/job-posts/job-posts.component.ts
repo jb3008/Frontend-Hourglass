@@ -41,6 +41,17 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef, private utils: Utils, private snackBar: MatSnackBar){}
 
   ngOnInit(){
+    const searchParams = JSON.parse(sessionStorage.getItem('searchFilters')!);
+    if (searchParams)
+      this.queryParam = JSON.parse(JSON.stringify(searchParams));
+
+    const filterData = JSON.parse(sessionStorage.getItem('filterData')!);
+    if(filterData){
+      this.selected = filterData.selected;
+      this.selectedJobTypes = filterData.selectedJobTypes;
+      this.filter = filterData.filter;
+    }
+    
     window.scroll({
       top: 0
     });
@@ -52,7 +63,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       if(param?.tab){
         this.selectedTab = param.tab;
         setTimeout(() => {
-          this.getSelectedTab(this.selectedTab);
+          this.getSelectedTab(this.selectedTab,'fromDetails');
         }, 100);
       }else{
         this.getAllJobs();
@@ -151,6 +162,13 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   getAllJobs(){
+    const filterData = {
+      selected: this.selected,
+      selectedJobTypes: this.selectedJobTypes,
+      filter: this.filter
+    }
+    sessionStorage.setItem('searchFilters', JSON.stringify(this.queryParam));
+    sessionStorage.setItem('filterData', JSON.stringify(filterData));
     this.isLoading = true;
     this.apiCalls.get(this.endpoints.LIST_JOBS, this.queryParam)
       .pipe(
@@ -174,8 +192,9 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       this.router.navigate(['/hm/job-posts/creat-job-post'], {queryParams: {data: element.id , tab: this.selectedTab}})
   }
 
-  getSelectedTab(tab:string) {
-    this.resetFilter('tab')
+  getSelectedTab(tab:string, from?: string) {
+    if(!from)
+      this.resetFilter('tab')
     this.selectedTab = tab;
     this.queryParam.status = this.selectedTab.toUpperCase();
     this.getAllJobs();
@@ -254,7 +273,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     delete this.queryParam.businessUnit;
     delete this.queryParam.startDate;
     delete this.queryParam.endDate;
-    this.searchFilterInp.nativeElement.value = '';
+    this.filter.searchText = '';
     this.queryParam.types = [];
     this.filter.startDate = '';
     this.filter.endDate = '';
@@ -287,7 +306,8 @@ type Filter = {
   startDate?: string,
   endDate?: string,
   businessUnit?: string,
-  site?: string
+  site?: string,
+  searchText?: string
 };
 
 type QueryParam = {

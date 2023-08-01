@@ -53,15 +53,15 @@
           </mat-option>
         </mat-select>
         <div class="input-icon position-relative input-icon-right">
-          <input class="form-control py-2 px-3 fs- fw-normal" (click)="picker.open()" [(ngModel)]="filterValue.startDate" [matDatepicker]="picker" placeholder="Start Date" (dateChange)="filterByDate($event.value,'startDate')"
+          <input class="form-control py-2 px-3 fs- fw-normal cursor-pointer" (click)="picker.open()" [(ngModel)]="filterValue.startDate" [matDatepicker]="picker" placeholder="Start Date" (dateChange)="filterByDate($event.value,'startDate')"
             [max]="filterValue.endDate" readonly>
-          <span><i class="far fa-calendar"></i></span>
+          <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
           <mat-datepicker #picker></mat-datepicker>
         </div>
         <div class="input-icon position-relative input-icon-right">
-            <input class="form-control py-2 px-3 fs- fw-normal" (click)="picker1.open()" [(ngModel)]="filterValue.endDate" [matDatepicker]="picker1" placeholder="End Date" (dateChange)="filterByDate($event.value,'endDate')"
+            <input class="form-control py-2 px-3 fs- fw-normal cursor-pointer" (click)="picker1.open()" [(ngModel)]="filterValue.endDate" [matDatepicker]="picker1" placeholder="End Date" (dateChange)="filterByDate($event.value,'endDate')"
             [min]="filterValue.startDate" readonly>
-            <span><i class="far fa-calendar"></i></span>
+            <span class="cursor-pointer" (click)="picker1.open()"><i class="far fa-calendar"></i></span>
             <mat-datepicker #picker1></mat-datepicker>
         </div>
    
