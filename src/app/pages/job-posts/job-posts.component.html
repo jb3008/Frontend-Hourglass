@@ -38,15 +38,15 @@
         <div class="w-250px text-gray-600 h-100">
             <div class="card p-4">
                 <div class="position-relative input-icon  ">
-                    <input type="text" class="form-control py-2 fs- fw-normal px-11" #searchFilterInp  placeholder="Search for a Job"  (keyup)="searchFilter($event)"/>
+                    <input type="text" class="form-control py-2 fs- fw-normal px-11" [(ngModel)]="filter.searchText"  placeholder="Search for a Job"  (keyup)="searchFilter($event)"/>
                     <span><i class="fa fa-search "></i></span>
                     <span class="cursor-pointer text-active-primary pspinpClose" 
-                    (click) = "searchFilterInp.value = '';clearSearch();" *ngIf="searchFilterInp.value">
+                    (click) = "filter.searchText = '';clearSearch();" *ngIf="filter.searchText && filter.searchText != ''">
                     <i class="bi bi-x-lg text-active-primary"></i></span>
                 </div>
 
                 <div class="py-4">
-                    Filter by <a class="px-4 fs-8 cursor-pointer" (click)="resetFilter();searchFilterInp.value = ''">Reset Filter</a>
+                    Filter by <a class="px-4 fs-8 cursor-pointer" (click)="resetFilter();">Reset Filters</a>
                 </div>
                 <div class="separator mb-5"></div>
 
@@ -135,7 +135,7 @@
                                 <div class="d-flex">
                                     <a class="fw-bold display-inline cursor-pointer" (click)="goToDetails(details.id)"> #{{details.id}}</a>
                                 </div>
-                                <span class="fs-9 text-muted mt-1 mb-5">{{details.reportDate | date:'dd MMM, yyyy'}}</span>
+                                <span class="fs-7 text-muted mt-1 mb-5">created on {{details.reportDate | date:'dd MMM, yyyy'}}</span>
 
 
                                 <div class="d-flex flex-wrap flex-stack">
@@ -189,7 +189,7 @@
                                     <a class="cursor-pointer fw-bold display-inline"> #{{details.id}}</a>
                                     <span class="badge badge-light-success fw-normal ms-3"><i class="fas fa-yin-yangfas fa-circle px-1 text-success fs-10"></i> Published </span>
                                 </div>
-                                <span class="fs-9 text-muted mt-1 mb-5">{{details.reportDate | date:'dd MMM, yyyy'}}</span>
+                                <span class="fs-7 text-muted mt-1 mb-5">created on{{details.reportDate | date:'dd MMM, yyyy'}}</span>
 
                                 <div class="d-flex flex-wrap flex-stack">
                                     <div class="d-flex flex-column flex-grow-1 pe-8">
@@ -225,7 +225,7 @@
 
                                     <div>
                                         <span class="d-flex text-muted fs-8">Worker</span>
-                                        <span class="fw-bold d-flex s-">Shirley Lopez</span>
+                                        <span class="fw-bold d-flex s-">{{details.jobApplicationDetails?.firstName}} {{details.jobApplicationDetails?.lastName}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -245,7 +245,7 @@
                                 <div class="d-flex">
                                     <a class="fw-bold display-inline"> #{{details.id}}</a>
                                 </div>
-                                <span class="fs-9 text-muted mt-1 mb-5">{{details.reportDate | date:'dd MMM, yyyy'}}</span>
+                                <span class="fs-7 text-muted mt-1 mb-5">created on {{details.reportDate | date:'dd MMM, yyyy'}}</span>
 
                                 <div class="d-flex flex-wrap flex-stack">
                                     <div class="d-flex flex-column flex-grow-1 pe-8">

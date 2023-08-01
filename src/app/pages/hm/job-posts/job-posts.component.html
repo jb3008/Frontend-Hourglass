@@ -35,15 +35,15 @@
         <div class="w-250px text-gray-600">
             <div class="card p-4">
                 <div class="position-relative input-icon  ">
-                    <input type="text" class="form-control py-2 fs- fw-normal px-11" #searchFilterInp  placeholder="Search for a Job"  (keyup)="searchFilter($event)"/>
+                    <input type="text" class="form-control py-2 fs- fw-normal px-11" [(ngModel)]="filter.searchText"  placeholder="Search for a Job"  (keyup)="searchFilter($event)"/>
                     <span><i class="fa fa-search "></i></span>
                     <span class="cursor-pointer text-active-primary pspinpClose" 
-                    (click) = "searchFilterInp.value = '';clearSearch();" *ngIf="searchFilterInp.value">
+                    (click) = "filter.searchText = '';clearSearch();" *ngIf="filter.searchText && filter.searchText != ''">
                     <i class="bi bi-x-lg text-active-primary"></i></span>
                 </div>
 
                 <div class="py-4">
-                    Filter by <a class="px-4 fs-8 cursor-pointer" (click)="resetFilter()">Reset Filter</a>
+                    Filter by <a class="px-4 fs-8 cursor-pointer" (click)="resetFilter()">Reset Filters</a>
                 </div>
                 <div class="separator mb-5"></div>
                 <div class="fs-8 text-muted mb-5">Period</div>
@@ -55,19 +55,19 @@
                     <div class="mb-1 ">Start Date</div>
                     <!--begin::Input-->
                     <div class="input-icon position-relative input-icon-right">
-                        <input class="form-control py-2 px-3 fs- fw-normal" (click)="picker.open()" [matDatepicker]="picker" 
-                            placeholder="Start Date" [(ngModel)]="filter.startDate" (dateChange)="getDate($event.value,'startDate')"
+                        <input class="form-control py-2 px-3 fs- fw-normal cursor-pointer" (click)="picker.open()" [matDatepicker]="picker" 
+                            placeholder="Select Date" [(ngModel)]="filter.startDate" (dateChange)="getDate($event.value,'startDate')"
                             [max]="queryParam.endDate">
-                        <span><i class="far fa-calendar"></i></span>
+                        <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
                         <mat-datepicker #picker></mat-datepicker>
                             </div>      
                         <div class="mb-1 mt-3">End Date</div>
                     <!--begin::Input-->
                     <div class="input-icon position-relative input-icon-right">
-                        <input class="form-control py-2 px-3 fs- fw-normal" (click)="picker1.open()" [matDatepicker]="picker1" 
-                            placeholder="End Date" [(ngModel)]="filter.endDate" (dateChange)="getDate($event.value,'endDate')"
+                        <input class="form-control py-2 px-3 fs- fw-normal cursor-pointer" (click)="picker1.open()" [matDatepicker]="picker1" 
+                            placeholder="Select Date" [(ngModel)]="filter.endDate" (dateChange)="getDate($event.value,'endDate')"
                             [matDatepickerFilter]="endDateFilter">
-                        <span><i class="far fa-calendar"></i></span>
+                        <span class="cursor-pointer" (click)="picker1.open()"><i class="far fa-calendar"></i></span>
                         <mat-datepicker #picker1></mat-datepicker>
                     </div>
                 </div>

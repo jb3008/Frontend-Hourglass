@@ -10,7 +10,7 @@
   <a
     class="menu-link py-2"
     routerLinkActive="active menu-here"
-    [routerLink]="jobPostsUrl"
+    [routerLink]="jobPostsUrl" (click)="removeSessionStorage()"
     ><span class="menu-title"> Job Posts </span></a
   >
 </div>
@@ -20,7 +20,7 @@
     class="menu-link py-2"
     [class.active]="isActiveLink"
     routerLinkActive="menu-here"
-    [routerLink]="workOrderUrl"
+    [routerLink]="workOrderUrl" (click)="removeSessionStorage()"
     ><span class="menu-title"> Work Order</span></a
   >
 </div>
@@ -29,7 +29,7 @@
     <a
       class="menu-link py-2"
       routerLinkActive="active menu-here"
-      routerLink="/work-force"
+      routerLink="/work-force" (click)="removeSessionStorage()"
       ><span class="menu-title"> Work Force</span></a
     >
   </div>
@@ -39,7 +39,7 @@
   <a
     class="menu-link py-2"
     routerLinkActive="active menu-here"
-    routerLink="/timesheets"
+    routerLink="/timesheets" (click)="removeSessionStorage()"
     ><span class="menu-title">Timesheets</span></a
   >
 </div>
@@ -47,7 +47,7 @@
   <a
     class="menu-link py-2"
     routerLinkActive="active menu-here"
-    routerLink="hm/timesheets"
+    routerLink="hm/timesheets" (click)="removeSessionStorage()"
     ><span class="menu-title">Timesheets</span></a
   >
 </div>
@@ -55,7 +55,7 @@
   <a
     class="menu-link py-2"
     routerLinkActive="active menu-here"
-    routerLink="/invoices"
+    routerLink="/invoices" (click)="removeSessionStorage()"
     ><span class="menu-title">Invoices</span></a
   >
 </div>

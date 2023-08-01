@@ -170,6 +170,11 @@ export class HeaderMenuComponent implements OnInit {
       )
       .subscribe((response) => {});
   }
+
+  removeSessionStorage(){
+    sessionStorage.removeItem('searchFilters');
+    sessionStorage.removeItem('filterData');
+  }
 }
 
 const getCurrentUrl = (pathname: string): string => {

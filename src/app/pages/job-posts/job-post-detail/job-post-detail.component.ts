@@ -166,8 +166,8 @@ export class JobPostDetailComponent implements OnInit {
   }
 
   getWorkExperience(){
-    const years = Math.floor(this.applicationCompleteDetails?.workExperience / 12);
-    const months = this.applicationCompleteDetails?.workExperience % 12;
+    const years = Math.floor(this.applicationDetails?.workexpmonths / 12);
+    const months = this.applicationDetails?.workexpmonths % 12;
 
     if (years > 0) {
       if (months > 0) {

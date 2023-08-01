@@ -77,18 +77,18 @@
               <label class="col-2">Start Date <span class="text-danger">*</span></label>
                   <div class="input-icon position-relative min-w-120px input-icon-right">
 
-                      <input type="text" formControlName="startDate" class="form-control   py-2 fs- fw-normal" (click)="picker1.open()"
+                      <input type="text" formControlName="startDate" class="form-control cursor-pointer  py-2 fs- fw-normal" (click)="picker1.open()"
                   [matDatepicker]="picker1" placeholder="Start Date">
-              <span><i class="far fa-calendar"></i></span>
+              <span class="cursor-pointer" (click)="picker1.open()"><i class="far fa-calendar"></i></span>
               <mat-datepicker #picker1></mat-datepicker>
               </div>
 
               <label class="min-w-150px">Excepted to Finish on <span class="text-danger">*</span></label>
                   <div class="input-icon position-relative min-w-120px input-icon-right">
 
-                      <input type="text" formControlName="expectedFinishDate" class="form-control   py-2 fs- fw-normal" (click)="picker2.open()"
+                      <input type="text" formControlName="expectedFinishDate" class="form-control cursor-pointer  py-2 fs- fw-normal" (click)="picker2.open()"
                   [matDatepicker]="picker2" placeholder="End Date">
-              <span><i class="far fa-calendar"></i></span>
+              <span class="cursor-pointer" (click)="picker2.open()"><i class="far fa-calendar"></i></span>
               <mat-datepicker #picker2></mat-datepicker>
               </div>
       </div>
