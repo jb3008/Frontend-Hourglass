@@ -18,6 +18,7 @@ import { SharedModule } from '../shared.modules';
 import { MatSelectModule } from '@angular/material/select';
 import { ModalsModule } from 'src/app/_metronic/partials';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     MatTableModule,
     MatCheckboxModule,
     MatSelectModule,
+    MatPaginatorModule,
     ModalsModule,
     NgxDocViewerModule
   ],

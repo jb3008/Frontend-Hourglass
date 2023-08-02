@@ -128,7 +128,7 @@ export class ApplicationDrawerComponent implements OnInit, OnChanges {
   }
   
   updateStatus(id: string, status: string){
-    let msg = `Do you want to ${status} the offer ?`;
+    let msg = `Do you want to ${status == 'REJECTED' ? 'REJECT' : status} the offer ?`;
     this.utils.showDialogWithCancelButton(this.dialog, msg, (res: any) => {
       if(res){
         this.actionOnOfferLetter(id, status)

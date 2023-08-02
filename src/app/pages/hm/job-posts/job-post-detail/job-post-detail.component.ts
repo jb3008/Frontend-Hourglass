@@ -15,6 +15,7 @@ import EndPoints from 'src/app/common/endpoints';
 import { catchError } from 'rxjs';
 import { Utils } from  'src/app/services/utils';
 import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-job-post-detail',
@@ -53,7 +54,7 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
   dataSource = new MatTableDataSource<any>;
   
   constructor(private router: Router, private route: ActivatedRoute, private apiCalls: ApiCallsService, 
-    private cdr: ChangeDetectorRef, private utils: Utils) {
+    private cdr: ChangeDetectorRef, private utils: Utils, private dialog: MatDialog) {
     // let data = router.getCurrentNavigation()?.extras.state?.data;
     // if(data){
     //   sessionStorage.setItem('jobDetails', JSON.stringify(data));
@@ -373,23 +374,43 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
   }
 
   takeAction(seekerId: string, action: string) {
+    let msg = `Do you want to ${action == 'REJECTED' ? 'REJECT' : action} the offer ?`;
+    this.utils.showDialogWithCancelButton(this.dialog, msg, (res: any) => {
+      if(res){
+        this.actionOnOfferLetter(seekerId, action)
+      }
+      this.cdr.detectChanges();
+    });
+  }
+
+  actionOnOfferLetter(id: string, status: string){
     this.loading = true;
     let queryParam = {
-      jobApplicationId : seekerId,
-      newStatus: action
+      jobApplicationId : id,
+      newStatus: status
     }
-    
     this.apiCalls.post(this.endPoints.UPDATE_APPL_STATUS, '', queryParam)
       .pipe(catchError(async (error) => {
         this.loading = false;
         this.cdr.detectChanges();
         console.log(error);
         throw error;
-    }))
-    .subscribe((response) => {
+      }))
+      .subscribe((response) => {
+        this.loading = false;
+        setTimeout(() => {
+          this.openSuccessPopup(status);
+        }, 100);
+        this.cdr.detectChanges();
+      })
+  }
+
+  openSuccessPopup(status: any){
+    let msg = `Offer letter ${status} successfully`
+    this.utils.showDialog(this.dialog, msg, () => {
       this.loading = false;
-      this.cdr.detectChanges();
       this.getJobSeekersList(this.jobID);
+      this.cdr.detectChanges();
     });
   }
 
