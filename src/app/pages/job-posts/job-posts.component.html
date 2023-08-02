@@ -187,9 +187,9 @@
                                 </h6>
                                 <div class="d-flex">
                                     <a class="cursor-pointer fw-bold display-inline"> #{{details.id}}</a>
-                                    <span class="badge badge-light-success fw-normal ms-3"><i class="fas fa-yin-yangfas fa-circle px-1 text-success fs-10"></i> Published </span>
+                                    <span class="badge badge-light-success fw-normal ms-3"><i class="fas fa-yin-yangfas fa-circle px-1 text-success fs-10"></i> {{details.jobApplicationDetails?.status}} </span>
                                 </div>
-                                <span class="fs-7 text-muted mt-1 mb-5">created on{{details.reportDate | date:'dd MMM, yyyy'}}</span>
+                                <span class="fs-7 text-muted mt-1 mb-5">created on {{details.reportDate | date:'dd MMM, yyyy'}}</span>
 
                                 <div class="d-flex flex-wrap flex-stack">
                                     <div class="d-flex flex-column flex-grow-1 pe-8">
@@ -216,7 +216,7 @@
 
                             <div>
                                 <div> <i class="far fa-calendar my-2 me-4"></i> {{details.startDate | date:'MMM dd'}} - {{details.endDate | date:'dd MMM, yyyy'}} </div>
-                                <div><i class="fas fa-coins my-2  me-4"></i> Hourly</div>
+                                <div><i class="fas fa-coins my-2  me-4"></i> {{details.jobKind}}</div>
                                 <div><i class="fas fa-suitcase my-2  me-4"></i>{{details.type}}</div>
                                 <div class=" mt-4  d-flex">
                                     <div class="symbol symbol-35px symbol-circle me-3">
@@ -272,7 +272,7 @@
 
                             <div>
                                 <div> <i class="far fa-calendar my-2 me-4"></i> {{details.startDate | date:'MMM dd'}} - {{details.endDate | date:'dd MMM, yyyy'}} </div>
-                                <div><i class="fas fa-coins my-2  me-4"></i> Hourly</div>
+                                <div><i class="fas fa-coins my-2  me-4"></i> {{details.jobKind}}</div>
                                 <div><i class="fas fa-suitcase my-2  me-4"></i>{{details.type}}</div>
                                 <div class=" mt-4  d-flex">
                                     <div class="symbol symbol-35px symbol-circle me-3">
@@ -280,7 +280,7 @@
                                     </div>
                                     <div>
                                         <span class="d-flex text-muted fs-8">Worker</span>
-                                        <span class="fw-bold d-flex s-">Shirley Lopez</span>
+                                        <span class="fw-bold d-flex s-">{{details.jobApplicationDetails?.firstName}} {{details.jobApplicationDetails?.lastName}}</span>
                                     </div>
                                 </div>
                             </div>

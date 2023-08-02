@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { catchError } from 'rxjs/internal/operators/catchError';
+import { ModalConfig, ModalComponent } from 'src/app/_metronic/partials';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from  'src/app/services/utils';
@@ -15,6 +16,15 @@ export class ViewOfferLetterDrawerComponent implements OnInit, OnChanges {
   @Input() offerDetails: any[] = [];
   @Input() rate: any;
   @Input() currency: any;
+  loading = false;
+
+  modalConfig: ModalConfig = {
+    modalTitle: 'View Document',
+    dismissButtonLabel: 'Cancel',
+    closeButtonLabel: 'Save',
+    hideFooter: this.hideFooter,
+  };
+  @ViewChild('modal') private modalComponent: ModalComponent;
 
   documentsList: any[] = [];
   endPoints = EndPoints;
@@ -33,6 +43,10 @@ export class ViewOfferLetterDrawerComponent implements OnInit, OnChanges {
     if(changes?.currency?.currentValue){
       this.currency = changes.currency.currentValue;
     }
+  }
+
+  async hideFooter(): Promise<boolean> {
+    return true;
   }
 
   getOfferDocuments(){
@@ -79,6 +93,54 @@ export class ViewOfferLetterDrawerComponent implements OnInit, OnChanges {
   getDocIcon(fileName: string) {
     return  this.utils.getDocIcon(fileName);
   }
+
+  getAttachment(id: string, name: string){
+    this.loading = true;
+    let queryParam = {
+      documentId: id,
+    };
+    this.apiCalls
+      .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.loading = false;
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe((response) => {
+        const url = window.URL.createObjectURL(response);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = name;
+        anchor.click();
+        window.URL.revokeObjectURL(url);
+        this.loading = false;
+        this.cdr.detectChanges();
+      });
+  }
+
+  pdfSrc = '';
+  async openModal(documentId: any) {
+    let queryParam = {
+      documentId: documentId,
+    };
+    this.apiCalls
+      .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe(async (response) => {
+        const src = window.URL.createObjectURL(response);
+        this.pdfSrc = src;
+        this.cdr.detectChanges();
+        return await this.modalComponent.open();
+      });
+  }
+  
 }
 
 
