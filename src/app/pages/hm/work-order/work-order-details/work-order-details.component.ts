@@ -12,6 +12,7 @@ import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
 import { Location } from '@angular/common';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-work-order-details',
@@ -21,7 +22,7 @@ import { Location } from '@angular/common';
 export class WorkOrderDetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,private utils: Utils, private snackBar: MatSnackBar, private dialog: MatDialog, private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef,
-              private location: Location) { }
+              private location: Location, private sanitizer: DomSanitizer) { }
 
   endpoints = EndPoints;
   workOrderID: any;
@@ -90,6 +91,12 @@ export class WorkOrderDetailsComponent implements OnInit {
 
   async hideFooter(): Promise<boolean> {
     return true;
+  }
+
+  processContent(data: string){
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(data, 'text/html');
+    return doc.documentElement.textContent;
   }
 
   getWorkOrderDetails(){

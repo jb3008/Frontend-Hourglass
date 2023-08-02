@@ -30,7 +30,8 @@
     </button>
       <div class="d-flex justify-content-between px-7" >
       <div>
-        <h3 class="card-title fw-bolder text-dark mt-4  "> Task Creation</h3>
+        <h3 class="card-title fw-bolder text-dark mt-4  " *ngIf="!taskDetails"> Task Creation</h3>
+        <h3 class="card-title fw-bolder text-dark mt-4  " *ngIf="taskDetails"> Task Update</h3>
         <div> 
           Specific activities or assignments to be completed withini a proect or worklow, ensuring clear objectives and responsibilities.
         </div>
@@ -135,7 +136,10 @@
       </div>
       <div class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_new_task_recr_footer">
         <button type="button" (click)="taskData.reset()" class="btn  btn-sm btn-outline" id="kt_new_task_recr_close">Cancel</button>
-        <button type="button" class="btn  btn-sm btn-primary" (click)="submitTask()">Submit</button>
+        <button type="button" class="btn  btn-sm btn-primary" (click)="submitTask()">
+          <span *ngIf="!taskDetails">Submit</span>
+          <span *ngIf="taskDetails">Update</span>
+        </button>
       </div>
     </div>
   </div>
