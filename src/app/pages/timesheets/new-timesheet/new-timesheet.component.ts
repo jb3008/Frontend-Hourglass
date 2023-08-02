@@ -41,8 +41,10 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
   isLoading = false;
   workOrderId: any = '';
   timeSheetData: FormGroup;
-  selectedTask: any;
+  selectedTask: any = [];
   displayHrs: any = 0;
+  today = new Date();
+
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<any>([]);
     const auth = this.authService.getAuthFromLocalStorage();
@@ -68,9 +70,9 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     'taskId',
     'title',
     'priority',
-    'estimatedTime',
+    'timeSpent',
     'startDate',
-    'finishDate',
+    'dueDate',
     'status',
     'actions',
   ];
@@ -127,41 +129,45 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
   }
   getSelectedTaskList(selectedTask: any) {
     if (selectedTask.length) {
-      this.timeSheetData.controls['newTimeSheetTaskList'].setValue([]);
-      this.selectedTask = selectedTask;
-      this.dataSource = new MatTableDataSource<any>(selectedTask);
+      let taskList = [];
       let totalHrs = 0;
       for (let index = 0; index < selectedTask.length; index++) {
         const element = selectedTask[index];
-        totalHrs += parseInt(element.estimatedTime);
-        this.timeSheetData.controls['newTimeSheetTaskList'].value.push({
+        taskList.push({
           taskId: element.taskId,
-          timeSpent: element.estimatedTime,
-          startDate: element.startDate,
-          dueDate: element.finishDate,
+          timeSpent: 0,
+          startDate: this.timeSheetData.controls['fromDate'].value,
+          dueDate: this.timeSheetData.controls['toDate'].value,
+          priority: element.priority,
+          title: element.title,
+          status: element.status,
         });
       }
+      this.selectedTask = taskList;
+      this.dataSource = new MatTableDataSource<any>(taskList);
       this.displayHrs = totalHrs.toFixed(1);
     }
     this.cdr.detectChanges();
   }
-  removeTask(index: number) {
-    this.timeSheetData.controls['newTimeSheetTaskList'].setValue([]);
-    this.selectedTask.splice(index, 1);
-    this.dataSource = new MatTableDataSource<any>(this.selectedTask);
+  changeTimeStamp() {
     let totalHrs = 0;
     for (let index = 0; index < this.selectedTask.length; index++) {
       const element = this.selectedTask[index];
-
-      totalHrs += parseInt(element.estimatedTime);
-      this.timeSheetData.controls['newTimeSheetTaskList'].value.push({
-        taskId: element.taskId,
-        timeSpent: element.estimatedTime,
-        startDate: element.startDate,
-        dueDate: element.finishDate,
-      });
+      totalHrs += parseInt(element.timeSpent);
     }
     this.displayHrs = totalHrs.toFixed(1);
+  }
+  removeTask(index: number) {
+    // this.timeSheetData.controls['newTimeSheetTaskList'].setValue([]);
+    this.selectedTask.splice(index, 1);
+    let totalHrs = 0;
+    for (let index = 0; index < this.selectedTask.length; index++) {
+      const element = this.selectedTask[index];
+      totalHrs += parseInt(element.timeSpent);
+    }
+    this.displayHrs = totalHrs.toFixed(1);
+    this.dataSource = new MatTableDataSource<any>(this.selectedTask);
+
     this.cdr.detectChanges();
   }
 
@@ -262,6 +268,16 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
   }
 
   async save(status: string) {
+    this.timeSheetData.controls['newTimeSheetTaskList'].setValue([]);
+    for (let index = 0; index < this.selectedTask.length; index++) {
+      const element = this.selectedTask[index];
+      this.timeSheetData.controls['newTimeSheetTaskList'].value.push({
+        taskId: element.taskId,
+        timeSpent: element.timeSpent,
+        startDate: element.startDate,
+        dueDate: element.dueDate,
+      });
+    }
     let formData: any = new Object();
     this.submitted = true;
 

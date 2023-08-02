@@ -73,7 +73,7 @@ const EndPoints = {
   GET_TIMESHEET_STATUS: '/hourglass/common/listTimeSheetStatus.api',
   GET_TIMESHEET_LOGS: '/hourglass/audit-log/auditLogForTimeSheet.api',
   UPDATE_TIMESHEET_STATUS: '/hourglass/timesheet/updateTimeSheetStatus.api',
-  GET_INVOICE: '/hourglass/payment/invoice/list.api',
+  GET_INVOICE: '/hourglass/payment/invoice/listInvoice.api',
 };
 
 export default EndPoints;

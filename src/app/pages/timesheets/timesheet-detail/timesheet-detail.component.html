@@ -10,7 +10,19 @@
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
         <h3 class="card-title fs-4">
-          <a class="cursor-pointer" routerLink="/timesheets">
+          <a
+            class="cursor-pointer"
+            routerLink="/timesheets"
+            *ngIf="auth?.vendorId"
+          >
+            <i class="fas fa-arrow-left me-3"></i>
+            <span class="fs-8 fw-normal">Time Sheet ID</span>
+          </a>
+          <a
+            class="cursor-pointer"
+            routerLink="/hm/timesheets"
+            *ngIf="!auth?.vendorId"
+          >
             <i class="fas fa-arrow-left me-3"></i>
             <span class="fs-8 fw-normal">Time Sheet ID</span>
           </a>
@@ -75,6 +87,13 @@
 
 
 
+
+
+
+
+
+
+
                   }}{{timeSheetDetails?.workForceDetails?.lastName?.[0]}}
                 </span>
               </div>
@@ -92,7 +111,7 @@
               <span class="d-flex text-muted fs-8">Status</span>
               <span class="fw-bold d-flex s-"
                 ><span class="badge badge-primary">
-                  {{ timeSheetDetails?.status }}</span
+                  {{ timeSheetDetails?.displayStatus }}</span
                 >
               </span>
             </div>
@@ -247,9 +266,6 @@
                       [(ngModel)]="element.timeSpent"
                       style="width: 100%"
                       class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10"
-                      [disabled]="
-                        !auth?.vendorId || timeSheetDetails?.status !== 'DRAFT'
-                      "
                       placeholder="hrs"
                     />
                   </td>
@@ -272,7 +288,8 @@
                           timeSheetDetails?.status !== 'DRAFT'
                         "
                         [matDatepicker]="picker"
-                        placeholder="Select Due Date"
+                        [max]="today"
+                        placeholder="Select Start Date"
                       />
                       <span><i class="far fa-calendar"></i></span>
                       <mat-datepicker #picker></mat-datepicker>
@@ -299,6 +316,7 @@
                         [(ngModel)]="element.finishDate"
                         [matDatepicker]="picker"
                         placeholder="Select Due Date"
+                        [max]="today"
                       />
                       <span><i class="far fa-calendar"></i></span>
                       <mat-datepicker #picker></mat-datepicker>

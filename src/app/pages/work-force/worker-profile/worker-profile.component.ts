@@ -308,7 +308,7 @@ export class WorkerProfileComponent implements OnInit {
         const value = this.workForceDocument.value[key];
 
         if (value) {
-          formData.append(key, value);
+          formData.append('workForceId', value);
         }
       }
     }

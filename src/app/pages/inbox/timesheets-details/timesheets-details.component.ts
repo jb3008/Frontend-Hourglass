@@ -60,6 +60,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
   lstTimeSheetStatus: any;
   auth: any;
   statusModal: FormGroup;
+  today = new Date();
   ngOnInit(): void {
     // DrawerComponent.reinitialization();
     this.auth = this.utils.getAuth();
@@ -151,7 +152,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.timeSheetDetails = response;
-        this.timeSheetDetails.status = this.lstTimeSheetStatus.length
+        this.timeSheetDetails.displayStatus = this.lstTimeSheetStatus.length
           ? this.lstTimeSheetStatus.find(
               (r: any) => r.code === this.timeSheetDetails.status
             ).title

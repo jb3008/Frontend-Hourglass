@@ -110,6 +110,7 @@
                     [matDatepicker]="picker"
                     placeholder="Start Date"
                     formControlName="fromDate"
+                    [max]="today"
                   />
                   <span><i class="far fa-calendar"></i></span>
                   <mat-datepicker #picker></mat-datepicker>
@@ -126,27 +127,39 @@
                     [matDatepicker]="picker1"
                     placeholder="End Date"
                     formControlName="toDate"
+                    [min]="
+                      timeSheetData.controls['fromDate'].value
+                        ? timeSheetData.controls['fromDate'].value
+                        : ''
+                    "
+                    [max]="today"
                   />
                   <span><i class="far fa-calendar"></i></span>
                   <mat-datepicker #picker1></mat-datepicker>
                 </div>
-        
               </div>
             </div>
             <div class="row mb-5">
               <div class="col-4"></div>
               <div class="col-8 d-flex align-items-center">
-                <div class="fv-plugins-message-container" *ngIf="submitted && f.fromDate.errors">
+                <div
+                  class="fv-plugins-message-container"
+                  *ngIf="submitted && f.fromDate.errors"
+                >
                   <div class="fv-help-block" *ngIf="f.fromDate.errors.required">
-                   From Date is required
+                    From Date is required
                   </div>
                 </div>
-                  <label class="mb-1 ps-6 pe-4 min-w-50px"></label>
-                  <div class="fv-plugins-message-container" style="margin-left: 20px;" *ngIf="submitted && f.toDate.errors">
-                    <div class="fv-help-block" *ngIf="f.toDate.errors.required">
-                      To Date is required
-                    </div>
+                <label class="mb-1 ps-6 pe-4 min-w-50px"></label>
+                <div
+                  class="fv-plugins-message-container"
+                  style="margin-left: 20px"
+                  *ngIf="submitted && f.toDate.errors"
+                >
+                  <div class="fv-help-block" *ngIf="f.toDate.errors.required">
+                    To Date is required
                   </div>
+                </div>
               </div>
             </div>
           </div>
@@ -272,12 +285,20 @@
             </ng-container>
 
             <!-- timeSpent Column -->
-            <ng-container matColumnDef="estimatedTime">
+            <ng-container matColumnDef="timeSpent">
               <th mat-header-cell *matHeaderCellDef class="align-middle">
-                <i class="bi bi-clock"></i> Time Spent
+                <i class="bi bi-clock"></i> Time Spent (hrs)
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
-                {{ element.estimatedTime }} hrs
+                <input
+                  type="text"
+                  [(ngModel)]="element.timeSpent"
+                  [ngModelOptions]="{ standalone: true }"
+                  (change)="changeTimeStamp()"
+                  style="width: 100%"
+                  class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10"
+                  placeholder="hrs"
+                />
               </td>
             </ng-container>
 
@@ -287,17 +308,45 @@
                 <i class="bi bi-calendar"></i> Start Date
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
-                {{ element.startDate | date : "dd/M/yyyy" }}
+                <div class="position-relative input-icon input-icon-right">
+                  <input
+                    type="text"
+                    class="form-control pe-10 py-2 fs- fw-normal"
+                    (click)="picker.open()"
+                    style="width: 100%"
+                    [(ngModel)]="element.startDate"
+                    [ngModelOptions]="{ standalone: true }"
+                    [matDatepicker]="picker"
+                    [max]="today"
+                    placeholder="Select Start Date"
+                  />
+                  <span><i class="far fa-calendar"></i></span>
+                  <mat-datepicker #picker></mat-datepicker>
+                </div>
               </td>
             </ng-container>
 
             <!-- lastUpdate Column -->
-            <ng-container matColumnDef="finishDate">
+            <ng-container matColumnDef="dueDate">
               <th mat-header-cell *matHeaderCellDef class="align-middle">
                 <i class="bi bi-calendar"></i> Due Date
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
-                {{ element.finishDate | date : "dd/M/yyyy" }}
+                <div class="position-relative input-icon input-icon-right">
+                  <input
+                    type="text"
+                    class="form-control pe-10 py-2 fs- fw-normal"
+                    (click)="picker.open()"
+                    style="width: 100%"
+                    [(ngModel)]="element.dueDate"
+                    [ngModelOptions]="{ standalone: true }"
+                    [matDatepicker]="picker"
+                    [max]="today"
+                    placeholder="Select Due Date"
+                  />
+                  <span><i class="far fa-calendar"></i></span>
+                  <mat-datepicker #picker></mat-datepicker>
+                </div>
               </td>
             </ng-container>
 
@@ -310,9 +359,12 @@
                 <span
                   class="badge badge-light-danger"
                   [ngClass]="{
-                    ' badge-light-warning': element.status?.toUpperCase() === 'IN_PROGRESS',
-                    'badge-light-success': element.status?.toUpperCase() === 'APPROVED',
-                    'badge-light-danger': element.status?.toUpperCase() === 'REJECTED'
+                    ' badge-light-warning':
+                      element.status?.toUpperCase() === 'IN_PROGRESS',
+                    'badge-light-success':
+                      element.status?.toUpperCase() === 'APPROVED',
+                    'badge-light-danger':
+                      element.status?.toUpperCase() === 'REJECTED'
                   }"
                   >{{ element.status?.toUpperCase() }}</span
                 >
@@ -320,8 +372,8 @@
             </ng-container>
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let i=index">
-              <i class="bi bi-trash actions"  (click)="removeTask(i)"></i>
+              <td mat-cell *matCellDef="let i = index">
+                <i class="bi bi-trash actions" (click)="removeTask(i)"></i>
               </td>
             </ng-container>
             <tr
@@ -337,10 +389,11 @@
           type="button"
           class="btn btn-primary btn-sm my-5"
           id="kt_new_task_drawer_toggle"
-      
           [disabled]="
             !timeSheetData.controls['workOrderId'].value ||
-            !timeSheetData.controls['employeeId'].value
+            !timeSheetData.controls['employeeId'].value ||
+            !timeSheetData.controls['fromDate'].value ||
+            !timeSheetData.controls['toDate'].value
           "
         >
           <i class="bi bi-plus-lg"></i> Add Task
@@ -438,19 +491,21 @@
         </div>
       </div>
       <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
-        <button type="button" routerLink="/timesheets" class="btn btn-sm">Cancel</button>
+        <button type="button" routerLink="/timesheets" class="btn btn-sm">
+          Cancel
+        </button>
         <button
           type="button"
           class="btn btn-sm btn-light-primary"
-          [disabled]="!timeSheetData.controls['newTimeSheetTaskList'].value.length"
+          [disabled]="!selectedTask.length"
           (click)="save('DRAFT')"
         >
           Save as Draft
         </button>
         <button
           type="button"
-          class="btn btn-sm btn-primary" 
-          [disabled]="!timeSheetData.controls['newTimeSheetTaskList'].value.length"
+          class="btn btn-sm btn-primary"
+          [disabled]="!selectedTask.length"
           (click)="save('ACTIVE')"
         >
           Submit

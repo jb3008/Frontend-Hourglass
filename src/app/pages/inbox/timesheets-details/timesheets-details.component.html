@@ -104,17 +104,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
                   }}{{timeSheetDetails?.workForceDetails?.lastName?.[0]}}
                 </span>
               </div>
@@ -132,7 +121,7 @@
               <span class="d-flex text-muted fs-8">Status</span>
               <span class="fw-bold d-flex s-"
                 ><span class="badge badge-primary">
-                  {{ timeSheetDetails?.status }}</span
+                  {{ timeSheetDetails?.displayStatus }}</span
                 >
               </span>
             </div>
@@ -290,6 +279,7 @@
                       [disabled]="
                         !auth?.vendorId || timeSheetDetails?.status !== 'DRAFT'
                       "
+                      [max]="today"
                       placeholder="hrs"
                     />
                   </td>
@@ -311,6 +301,7 @@
                           !auth?.vendorId ||
                           timeSheetDetails?.status !== 'DRAFT'
                         "
+                        [max]="today"
                         [matDatepicker]="picker"
                         placeholder="Select Due Date"
                       />

@@ -59,9 +59,9 @@
         class="form-select fs- py-2 w-200px"
       >
         <option value="All">All Status</option>
-        <option value="ACTIVE">ACTIVE</option>
-        <option value="DRAFT">DRAFT</option>
-        <option value="APPROVED">APPROVED</option>
+        <option value="{{ item.code }}" *ngFor="let item of lstTimeSheetStatus">
+          {{ item.title }}
+        </option>
       </select>
 
       <!-- <select  name="" id="" class="form-select fs- py-2 w-200px">
@@ -151,24 +151,6 @@
             <div class="symbol symbol-35px symbol-square me-3">
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
                 >{{element?.workForceDetails?.firstName?.[0]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                 }}{{element?.workForceDetails?.lastName?.[0]}}
