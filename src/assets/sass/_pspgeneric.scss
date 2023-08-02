@@ -12,10 +12,13 @@
 }
 
 
-.mat-select-arrow {
+.mat-select-arrow:not(.mat-paginator-container  .mat-select-arrow) {
     display: none;
   }
 
+  body[data-kt-drawer="on"]{
+    overflow: hidden;
+  }
 
 .input-icon span {
     left: 0;
