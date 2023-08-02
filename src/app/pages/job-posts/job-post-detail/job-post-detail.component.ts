@@ -159,8 +159,12 @@ export class JobPostDetailComponent implements OnInit {
 
   blobToBase64(blob: any) {
     return new Promise((resolve, _) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
+      const reader: any = new FileReader();
+      reader.onloadend = () => {
+      const base64String = reader?.result?.split(",")[1];
+      const base64WithHeader = `data:image/jpeg;base64,${base64String}`;
+      resolve(base64WithHeader);
+    };
       reader.readAsDataURL(blob);
     });
   }

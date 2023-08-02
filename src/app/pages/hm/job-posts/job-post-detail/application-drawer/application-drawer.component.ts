@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
@@ -6,6 +6,7 @@ import EndPoints from 'src/app/common/endpoints';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { Utils } from 'src/app/services/utils';
 import { MatDialog } from '@angular/material/dialog';
+import { ModalConfig, ModalComponent } from 'src/app/_metronic/partials';
 
 @Component({
   selector: 'app-application-drawer',
@@ -23,12 +24,18 @@ export class ApplicationDrawerComponent implements OnInit, OnChanges {
   @Input() applicationAttachement: any;
   loading = false;
   endPoints = EndPoints;
+
+  modalConfig: ModalConfig = {
+    modalTitle: 'View Document',
+    dismissButtonLabel: 'Cancel',
+    closeButtonLabel: 'Save',
+    hideFooter: this.hideFooter,
+  };
+  @ViewChild('modal') private modalComponent: ModalComponent;
   
   constructor(private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef, private utils: Utils, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    console.log(this.applicationDetails);
-    
   }
 
   ngOnChanges(change: any){
@@ -53,6 +60,10 @@ export class ApplicationDrawerComponent implements OnInit, OnChanges {
     }
   }
 
+  async hideFooter(): Promise<boolean> {
+    return true;
+  }
+
   getApplicantDocuments(id: string){
     this.loading = true;
     let queryParam = {
@@ -69,9 +80,36 @@ export class ApplicationDrawerComponent implements OnInit, OnChanges {
       })
   }
 
-  getAttachment(id: string){
+  getAttachment(id: string, name: string){
+    this.loading = true;
     let queryParam = {
       documentId: id,
+    };
+    this.apiCalls
+      .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.loading = false;
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
+      .subscribe((response) => {
+        const url = window.URL.createObjectURL(response);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = name;
+        anchor.click();
+        window.URL.revokeObjectURL(url);
+        this.loading = false;
+        this.cdr.detectChanges();
+      });
+  }
+
+  pdfSrc = '';
+  async openModal(documentId: any) {
+    let queryParam = {
+      documentId: documentId,
     };
     this.apiCalls
       .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
@@ -81,13 +119,14 @@ export class ApplicationDrawerComponent implements OnInit, OnChanges {
           throw error;
         })
       )
-      .subscribe((response) => {
-        const url = window.URL.createObjectURL(response);
-        window.open(url);
+      .subscribe(async (response) => {
+        const src = window.URL.createObjectURL(response);
+        this.pdfSrc = src;
         this.cdr.detectChanges();
+        return await this.modalComponent.open();
       });
   }
-
+  
   updateStatus(id: string, status: string){
     let msg = `Do you want to ${status} the offer ?`;
     this.utils.showDialogWithCancelButton(this.dialog, msg, (res: any) => {
