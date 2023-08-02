@@ -34,6 +34,8 @@ export class SendOfferLetterDrawerComponent implements OnInit {
   ngOnInit(): void { 
     this.jobPostData = this.formBuilder.group({
       offerLetter: ['', Validators.required],
+      offerMsg: ['', Validators.required],
+      workRate: ['', Validators.required]
     });
   }
   
@@ -52,6 +54,8 @@ export class SendOfferLetterDrawerComponent implements OnInit {
     `;
 
     this.rate = this.jobDetails?.jobKind == 'Hourly' ? this.jobDetails?.rate : this.jobDetails?.minBudget;
+    this.jobPostData?.controls['workRate'].setValue(this.rate);
+    this.jobPostData?.controls['offerMsg'].setValue(this.data);
   }
 
   selectFile(event: any, name: any){
@@ -85,13 +89,13 @@ export class SendOfferLetterDrawerComponent implements OnInit {
   }
 
   numbersOnly(event: any){
-    return this.utils.numberOnly(event);
+    return this.utils.numbersAndDecimal(event);
   }
 
   sendOfferLetter() {
     const formData = new FormData();
-
-    if (!!!this.rate || !!!this.data || !!!this.jobPostData.valid) {
+    
+    if (!!!this.jobPostData.valid) {
       this.utils.showSnackBarMessage(this.snackBar, 'Please enter all required data');
       return;
     }
@@ -102,7 +106,7 @@ export class SendOfferLetterDrawerComponent implements OnInit {
     formData.append('status', 'OFFER_SENT');
     formData.append('jobPostId', this.jobDetails.id);
     formData.append('jobAppId', this.jobSeeker.id);
-    formData.append('offerMsg', this.data);
+    formData.append('offerMsg', this.jobPostData.controls['offerMsg'].value);
     formData.append('rate', this.rate);
     // formData.append('budget', this.jobDetails.jobKind == 'Fixed' ? this.rate: '0');
     formData.append('otherDocList', this.jobPostData.value['offerLetter']);

@@ -55,7 +55,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       priority: ['Medium'],
       openPosition: ['', Validators.required],
       jobType: ['', Validators.required],
-      jobKind: ['', Validators.required],
+      jobKind: ['Hourly', Validators.required],
       workRate: [''],
       minBudget: [''],
       maxBudget: [''],
@@ -499,7 +499,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     if(status == 'active'){
       msg = 'Your Job is posted successfully. Job Id = ' + id;
     } else if(status == 'draft'){
-      msg = 'Your Job is saved successfully'
+      msg = 'Your Job is drafted successfully'
     }
     this.utils.showDialog(this.dialog, msg, () => {
       this.isLoading = false;

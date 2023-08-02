@@ -27,6 +27,7 @@
     <div class="card-body position-relative "  id="kt_activities_body">
       <div class="mb-6">
         <div  class="text-gray-800 fs-5 fw-bold">Offer Letter</div>
+        <form [formGroup]="jobPostData">
         <div class="badge-light-danger text-gray-800 p-5 rounded-3 my-5">
           <div  class="text-gray-800 mb-5 fs-7 fw-bold">NEGOTATION</div>
           <div class="form-group row mb-3 d-flex align-items-center">
@@ -40,8 +41,8 @@
           <label class="col-4">Revised {{jobDetails?.jobKind == 'Fixed' ? 'Budget' : 'Work Rate'}}<span class="text-danger">*</span></label>
           <!-- <label class="col-4">Revised Work Rate<span class="text-danger">*</span></label> -->
           <div class="col-8 d-flex align-items-center">
-            <input type="input" id="revisedWorkRate" (keypress)="numbersOnly($event)"  class="form-control w-150px py-2 fs- fw-normal" 
-              placeholder="Number" value="{{jobSeeker?.workRate}}">
+            <input type="input" id="revisedWorkRate" formControlName="workRate" (keypress)="numbersOnly($event)"  class="form-control w-150px py-2 fs- fw-normal" 
+              placeholder="Enter Amount" value="{{jobSeeker?.workRate}}">
               <span class="text-muted ps-2">{{this.jobDetails?.currency}}</span>  
             <!-- <mat-select class="form-select fs- py-2 w-100px" placeholder="Select">
               <mat-option value="USD">USD</mat-option>
@@ -52,14 +53,15 @@
         </div>
       </div>
 
+      
       <div class="form-group  mb-5">
         <label class="mb-1">Description <span class="text-danger">*</span></label>
-        <ckeditor [editor]="editor" [data]="data" class="form-control p-0 fs- fw-normal"  
+        <ckeditor [editor]="editor" formControlName="offerMsg" [data]="data" class="form-control p-0 fs- fw-normal"  
           [config]="{ placeholder:'Provide description here...'}"></ckeditor>
       </div>
 
-      <form [formGroup]="jobPostData">
-        <div class="fw-bold mb-5 ">Attachments</div>
+      
+        <div class="fw-bold mb-5 ">Attachment <span class="text-danger">*</span></div>
           <!--begin::Dropzone-->
           <div class="dropzone dz-clickable bg-light-primary border border-dashed text-center mb-2"
             DropZone (onFileDropped)="droppedFiles($event)" (click)="fileInput.click()">
