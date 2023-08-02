@@ -279,7 +279,7 @@
 
         <div class="d-flex align-items-start gap-4 ">
           <div class="position-relative input-icon input-icon-right">
-            <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4" [(ngModel)]="filterValue.taskId" (keyup)="applySearchFilter($event)" placeholder="Search By Task Id #" />
+            <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10" [(ngModel)]="filterValue.taskId" (keyup)="applySearchFilter($event)" placeholder="Search By Task Id #" />
             <span><i class="fa fa-search "></i></span>
           </div>
           <mat-select class="form-select fs- py-2  w-200px" [(value)]="filterValue.priority" (selectionChange)="filterByPriority($event)">
@@ -289,7 +289,7 @@
             <mat-option value="Medium">Medium</mat-option>
           </mat-select>
           <div class="position-relative input-icon input-icon-right">
-            <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4" [(ngModel)]="filterValue.assigneeId" (keyup)="filterByAssignee($event)" placeholder="Search By Assignee" />
+            <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10" [(ngModel)]="filterValue.assigneeId" (keyup)="filterByAssignee($event)" placeholder="Search By Assignee" />
             <span><i class="fa fa-search "></i></span>
           </div>
           <mat-select class="form-select fs- py-2  w-200px" [(value)]="filterValue.status" (selectionChange)="filterByStatus($event)">
