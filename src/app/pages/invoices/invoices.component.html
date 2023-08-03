@@ -130,17 +130,27 @@
           <i class="bi bi-person"></i> Created By
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
-          <!-- <div class="me-10 my-1 d-flex">
-            <div class="symbol symbol-35px symbol-square me-3">
+          <div class="me-10 my-1 d-flex">
+            <div
+              class="symbol symbol-35px symbol-square me-3"
+              *ngIf="element.userDetail"
+            >
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
-                >SL
+                >{{ element.userDetail?.firstName[0]
+                }}{{ element.userDetail?.lastName[0] }}
               </span>
             </div>
             <div>
-              <span>{{ element.employee }}</span>
-              <span class="d-flex text-muted fs-8">username@example.com</span>
+              <span
+                >{{ element.userDetail?.firstName
+                }}{{ element.userDetail?.lastName }}</span
+              >
+              <span class="d-flex text-muted fs-8">{{
+                element.userDetail?.emailId
+              }}</span>
             </div>
-          </div> -->
+          </div>
+          <div>{{ element.registerId }}</div>
         </td>
       </ng-container>
 

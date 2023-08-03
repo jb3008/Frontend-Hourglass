@@ -33,6 +33,17 @@
                     {{ list.title }}
                   </mat-option>
                 </mat-select>
+                <div
+                  class="fv-plugins-message-container"
+                  *ngIf="submitted && f.workOrderId.errors"
+                >
+                  <div
+                    class="fv-help-block"
+                    *ngIf="f.workOrderId.errors.required"
+                  >
+                    Work Order is required
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -44,6 +55,17 @@
                   class="form-control py-2 fs- fw-normal"
                   formControlName="paymentTerms"
                 />
+                <div
+                  class="fv-plugins-message-container"
+                  *ngIf="submitted && f.paymentTerms.errors"
+                >
+                  <div
+                    class="fv-help-block"
+                    *ngIf="f.paymentTerms.errors.required"
+                  >
+                    Payment Term is required
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -57,6 +79,17 @@
                   class="form-control py-2 fs- fw-normal"
                   formControlName="invoiceNumber"
                 />
+                <div
+                  class="fv-plugins-message-container"
+                  *ngIf="submitted && f.invoiceNumber.errors"
+                >
+                  <div
+                    class="fv-help-block"
+                    *ngIf="f.invoiceNumber.errors.required"
+                  >
+                    Invoice Number is required
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -76,6 +109,17 @@
                     placeholder=" "
                     formControlName="invoiceDate"
                   />
+                  <div
+                    class="fv-plugins-message-container"
+                    *ngIf="submitted && f.invoiceDate.errors"
+                  >
+                    <div
+                      class="fv-help-block"
+                      *ngIf="f.invoiceDate.errors.required"
+                    >
+                      Invoice Date is required
+                    </div>
+                  </div>
                   <span><i class="far fa-calendar"></i></span>
                   <mat-datepicker #picker></mat-datepicker>
                 </div>
@@ -91,7 +135,6 @@
                   type="input"
                   class="form-control w-150px py-2 rounded-end-0 fw-normal"
                   placeholder="Number"
-                  value="4800.00"
                   formControlName="invoiceAmount"
                   readonly
                 />
@@ -100,7 +143,9 @@
                   class="form-select fs- py-2 w-100px rounded-start-0"
                   formControlName="workRateCurrency"
                   placeholder="Select"
+                  [disabled]="true"
                 >
+                  <mat-option value="">Currency</mat-option>
                   <mat-option value="USD">USD</mat-option>
                   <mat-option value="INR">INR</mat-option>
                 </mat-select>
@@ -117,8 +162,11 @@
               <img src="../../../../assets/images/invoice-icon.svg" alt="" />
             </div>
             <div class="align-middle">
-              <span class="text-muted me-3 fw-semibold">Payable Ammount</span>
-              <span class="fs-1 fw-semibold text-body">4800.00 USD</span>
+              <span class="text-muted me-3 fw-semibold">Payable Amount</span>
+              <span class="fs-1 fw-semibold text-body"
+                >{{ invoiceData.controls["invoiceAmount"].value }}
+                {{ invoiceData.controls["workRateCurrency"].value }}</span
+              >
             </div>
           </div>
         </div>
@@ -186,7 +234,8 @@
                 <i class="bi"></i> Unit Price
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
-                {{ element.timeSpent }}
+                {{ element.unitPrice }}
+                {{ invoiceData.controls["workRateCurrency"].value }}
               </td>
             </ng-container>
 
@@ -196,7 +245,8 @@
                 <i class="bi"></i> Amount
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
-                {{ element.timeSpent }}
+                {{ element.amount }}
+                {{ invoiceData.controls["workRateCurrency"].value }}
               </td>
             </ng-container>
 
@@ -214,11 +264,7 @@
           type="button"
           class="btn btn-primary btn-sm my-5"
           id="kt_invoice_add_timesheet_drawer_toggle"
-          [disabled]="
-            !invoiceData.controls['workOrderId'].value ||
-            !invoiceData.controls['invoiceNumber'].value ||
-            !invoiceData.controls['invoiceDate'].value
-          "
+          [disabled]="!invoiceData.controls['workOrderId'].value"
         >
           <i class="bi bi-plus-lg"></i> Add Timesheet
         </button>
@@ -227,7 +273,10 @@
           <div class="mw-300px">
             <div class="d-flex flex-stack mb-3 fs-7">
               <div class="fw-semibold pe-10 text-gray-600">SUB TOTAL</div>
-              <div class="text-end fw-bo/ld text-gray-800">4800.00 USD</div>
+              <div class="text-end fw-bo/ld text-gray-800">
+                {{ toNumber(invoiceData.controls["invoiceAmount"].value) }}
+                {{ invoiceData.controls["workRateCurrency"].value }}
+              </div>
             </div>
             <div class="d-flex flex-stack mb-3 fs-7">
               <div class="fw-semibold pe-10 text-gray-600">TAX AMOUNT</div>
@@ -235,13 +284,22 @@
                 <input
                   type="text"
                   class="form-control w-100px text-right"
+                  formControlName="taxAmount"
                   value="0.00"
                 />
               </div>
             </div>
             <div class="d-flex flex-stack mb-3 fs-6">
               <div class="fw-semibold pe-10 text-gray-600">TOTAL AMOUNT</div>
-              <div class="text-end fw-bold text-gray-800">4800.00 USD</div>
+              <div class="text-end fw-bold text-gray-800">
+                {{
+                  toNumber(
+                    changeNum(invoiceData.controls["invoiceAmount"].value) +
+                      changeNum(invoiceData.controls["taxAmount"].value)
+                  )
+                }}
+                USD
+              </div>
             </div>
           </div>
         </div>
@@ -291,17 +349,40 @@
                   here.
                 </h3>
                 <span class="fs-7 fw-semibold text-gray-400"
-                  >.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb)</span
+                  >.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb); maximum
+                  6 files</span
                 >
               </div>
               <!--end::Info-->
             </div>
           </div>
-          <!-- <div *ngIf="jobPostData.controls['otherDocList'].value" class="d-flex">
-                      <h4 *ngFor="let doc of jobPostData.controls['otherDocList'].value" class="me-3">
-                             {{doc.name}}
-                      </h4>
-                   </div> -->
+          <div
+            *ngIf="invoiceData.controls['documentList'].value"
+            class="d-flex flex-wrap"
+          >
+            <a
+              *ngFor="
+                let doc of invoiceData.controls['documentList'].value;
+                let index = index
+              "
+              class="me-3 mt-4 border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between mw-325px"
+            >
+              <div
+                class="text-truncate pspmw95"
+                [ngbTooltip]="doc.name"
+                [openDelay]="600"
+              >
+                {{ doc.name }}
+              </div>
+              <span class="cursor-pointer ms-3">
+                <i
+                  class="bi bi-x-circle"
+                  (click)="clearFile('documentList', index)"
+                ></i
+              ></span>
+            </a>
+          </div>
+
           <!--end::Dropzone-->
         </div>
 
@@ -311,11 +392,13 @@
         ></app-invoice-add-timesheet-drawer>
       </div>
       <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
-        <button type="button" class="btn btn-sm">Cancel</button>
-        <button type="button" class="btn btn-sm btn-light-primary">
-          Save as Draft
+        <button type="button" class="btn btn-sm" routerLink="/invoice">
+          Cancel
         </button>
-        <button type="button" class="btn btn-sm btn-primary">Submit</button>
+
+        <button type="button" class="btn btn-sm btn-primary" (click)="save()">
+          Submit
+        </button>
       </div>
     </div>
   </form>

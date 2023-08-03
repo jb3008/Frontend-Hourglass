@@ -77,6 +77,7 @@ const EndPoints = {
   TIMESHEET_LIST_HM: '/hourglass/timesheet/listTimeSheetForInvoice.api',
   CREATE_INVOICE: '/hourglass/payment/invoice/create.api',
   GET_TIME_SHEET_OUTBOX: '/hourglass/timesheet/notification/listOutbox.api',
+  GET_PAYMENT_TERM: '/hourglass/common/rest/list-pay-terms.api',
 };
 
 export default EndPoints;

@@ -101,6 +101,7 @@
               <div class="symbol symbol-30px symbol-square me-3">
                 <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
                   >{{timeSheetDetails?.workForceDetails?.firstName?.[0]
+
                   }}{{timeSheetDetails?.workForceDetails?.lastName?.[0]}}
                 </span>
               </div>
@@ -129,7 +130,7 @@
                   }"
                 >
                   {{
-                    timeSheetDetails?.status === "In Process"
+                    timeSheetDetails?.displayStatus === "In Process"
                       ? "In-Process"
                       : timeSheetDetails?.displayStatus
                   }}</span

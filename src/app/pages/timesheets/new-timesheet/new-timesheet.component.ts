@@ -143,7 +143,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
           dueDate: this.timeSheetData.controls['toDate'].value,
           priority: element.priority,
           title: element.title,
-          status: element.status,
+          status: element.displayStatus,
         });
       }
       this.selectedTask = taskList;

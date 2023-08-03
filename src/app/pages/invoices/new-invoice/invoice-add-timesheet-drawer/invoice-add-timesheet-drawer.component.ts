@@ -110,11 +110,9 @@ export class InvoiceAddTimesheetDrawerComponent implements OnInit {
         })
       )
       .subscribe((response) => {
-        console.log(response);
-
         for (let index = 0; index < response.length; index++) {
           const element = response[index];
-
+          element.status = element.displayStatus;
           element.timeSpent = 0;
 
           for (let i = 0; i < element.taskListDetails.length; i++) {
@@ -136,7 +134,7 @@ export class InvoiceAddTimesheetDrawerComponent implements OnInit {
     closeBtn?.click();
     this.cdr.detectChanges();
     this.getSelectedTimesheetList.emit(this.selection?.selected);
-    this.selection.clear();
+    // this.selection.clear();
   }
 }
 

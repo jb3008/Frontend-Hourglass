@@ -152,14 +152,15 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.timeSheetDetails = response;
-        this.timeSheetDetails.displayStatus = this.lstTimeSheetStatus.length
-          ? this.lstTimeSheetStatus.find(
-              (r: any) => r.code === this.timeSheetDetails.status
-            ).title
-          : '';
+        // this.timeSheetDetails.displayStatus = this.lstTimeSheetStatus.length
+        //   ? this.lstTimeSheetStatus.find(
+        //       (r: any) => r.code === this.timeSheetDetails.status
+        //     ).title
+        //   : '';
         this.timeSheetDetails.taskListDetails =
           this.timeSheetDetails.taskListDetails.filter((r: any) => {
             r.isNew = false;
+            r.status = r.displayStatus;
             r.startDate = new Date(r.startDate).toISOString();
             return r;
           });
@@ -258,7 +259,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
               ].timeSheetTaskId + 1
             : 1,
           title: element.title,
-          status: element.status,
+          status: element.displayStatus,
           priority: element.priority,
           isNew: true,
         });

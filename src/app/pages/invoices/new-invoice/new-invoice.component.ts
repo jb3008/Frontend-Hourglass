@@ -31,7 +31,7 @@ export class NewInvoiceComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router
   ) {}
-
+  submitted: boolean = false;
   workOrderList: any[];
   endPoints = EndPoints;
   workOrderId: any = '';
@@ -39,24 +39,37 @@ export class NewInvoiceComponent implements OnInit {
   invoiceData: FormGroup;
   selectedTask: any = [];
   isLoading = false;
-  submitted = false;
 
+  paymentTerms: any = [];
   ngOnInit(): void {
     // DrawerComponent.reinitialization();
     this.invoiceData = this.fb.group({
       workOrderId: ['', Validators.required],
-      paymentTerms: [''],
+      paymentTerms: [{ value: '', disabled: true }],
       invoiceNumber: ['', Validators.required],
       invoiceDate: ['', Validators.required],
-      invoiceAmount: ['', Validators.required],
+      invoiceAmount: [0, Validators.required],
       workRateCurrency: ['', Validators.required],
       comments: [''],
       newInvoiceTimeSheetList: [[]],
       documentList: [[]],
+      rate: [0],
+      taxAmount: [0],
     });
+    this.getAllPaymentTerms();
     this.getAllWorkOrders();
   }
 
+  get f() {
+    return this.invoiceData.controls;
+  }
+
+  toNumber(num: number) {
+    return (Math.round(num * 100) / 100).toFixed(2);
+  }
+  changeNum(number: any) {
+    return parseInt(number);
+  }
   ngAfterViewInit() {
     DrawerComponent.reinitialization();
   }
@@ -100,14 +113,52 @@ export class NewInvoiceComponent implements OnInit {
       });
   }
 
+  getAllPaymentTerms() {
+    this.apiCalls
+      .get(this.endPoints.GET_PAYMENT_TERM, {})
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to fetch the payment terms'
+          );
+
+          this.cdr.detectChanges();
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.paymentTerms = response;
+
+        this.cdr.detectChanges();
+      });
+  }
+
   changeWorkOrder(workOrderId: number) {
     this.workOrderId = workOrderId;
+    const workOrder: any = this.workOrderList.find(
+      (r: any) => r.workOrderId === workOrderId
+    );
+    const paymentTerms = this.paymentTerms.find(
+      (r: any) => r.id == workOrder.payRate
+    );
+    this.invoiceData.controls['paymentTerms'].setValue(
+      `(${workOrder.payRate}) ` + paymentTerms?.name
+    );
+    this.invoiceData.controls['workRateCurrency'].setValue(
+      workOrder.rateCurrency
+    );
+    this.invoiceData.controls['rate'].setValue(
+      workOrder.rate ? workOrder.rate : 0
+    );
     this.cdr.detectChanges();
   }
 
   allFiles: File[] = [];
 
   droppedFiles(allFiles: File[], name: string): void {
+    console.log('this.allFiles', allFiles);
+    console.log(this.invoiceData.controls[name].value);
     const fileLength = allFiles.length;
     let flg: boolean = true;
     for (let i = 0; i < fileLength; i++) {
@@ -157,37 +208,34 @@ export class NewInvoiceComponent implements OnInit {
   }
 
   selectFile(event: any, name: string) {
-    if (event.target.files.length) {
-      const file = event.target.files[0];
-      if (file.type.indexOf('image') == 0) {
-        this.utils.showSnackBarMessage(
-          this.snackBar,
-          'Please upload documents only'
-        );
-      } else if (file.size > 2 * 1024 * 1024) {
-        // check if file size is > 2 MB
-        this.utils.showSnackBarMessage(
-          this.snackBar,
-          'Maximum allowed file size is 2 MB. Please choose another file.'
-        );
-      } else {
-        const docList = this.invoiceData.controls[name].value;
-        console.log(docList);
-        if (docList.length < 6) {
-          if (this.utils.isFileExist(docList, file)) {
-            this.utils.showSnackBarMessage(
-              this.snackBar,
-              'This file "' + file.name + '" already exist.'
-            );
-          } else {
-            this.invoiceData.controls[name].value.push(file);
-          }
-        } else {
+    const file = event.target.files[0];
+    if (file.type.indexOf('image') == 0) {
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Please upload documents only'
+      );
+    } else if (file.size > 2 * 1024 * 1024) {
+      // check if file size is > 2 MB
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Maximum allowed file size is 2 MB. Please choose another file.'
+      );
+    } else {
+      const docList = this.invoiceData.controls[name].value;
+      if (docList.length < 6) {
+        if (this.utils.isFileExist(docList, file)) {
           this.utils.showSnackBarMessage(
             this.snackBar,
-            'Maximum 6 files can be added.'
+            'This file "' + file.name + '" already exist.'
           );
+        } else {
+          this.invoiceData.controls[name].value.push(file);
         }
+      } else {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Maximum 6 files can be added.'
+        );
       }
     }
   }
@@ -199,13 +247,22 @@ export class NewInvoiceComponent implements OnInit {
   getSelectedTimesheetList(selectedTimeSheet: any) {
     if (selectedTimeSheet.length) {
       let timeSheetList = [];
+      let invoiceAmount = 0;
       for (let index = 0; index < selectedTimeSheet.length; index++) {
         const element = selectedTimeSheet[index];
+        element.timeSpent = element.timeSpent ? parseInt(element.timeSpent) : 0;
+        const rate = this.invoiceData.controls['rate'].value
+          ? this.invoiceData.controls['rate'].value
+          : 0;
         timeSheetList.push({
           timeSheetId: element.timeSheetId,
           timeSpent: element.timeSpent,
+          unitPrice: parseFloat(this.invoiceData.controls['rate'].value),
+          amount: element.timeSpent * rate,
         });
+        invoiceAmount += element.timeSpent * rate;
       }
+      this.invoiceData.controls['invoiceAmount'].setValue(invoiceAmount);
       this.selectedTask = timeSheetList;
       this.dataSource = new MatTableDataSource<any>(timeSheetList);
     }
@@ -218,7 +275,7 @@ export class NewInvoiceComponent implements OnInit {
     return utcDate;
   }
 
-  async save(status: string) {
+  async save() {
     // this.invoiceData.controls['newInvoiceTimeSheetList'].setValue([]);
     // for (let index = 0; index < this.selectedTask.length; index++) {
     //   const element = this.selectedTask[index];

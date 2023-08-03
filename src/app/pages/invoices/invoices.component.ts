@@ -107,18 +107,7 @@ export class InvoicesComponent implements OnInit {
 
         for (let index = 0; index < response.length; index++) {
           const element = response[index];
-
-          // element.timeSpent = 0;
-
-          // for (let i = 0; i < element.taskListDetails.length; i++) {
-          //   element.timeSpent += element.taskListDetails[i].timeSpent
-          //     ? parseInt(element.taskListDetails[i].timeSpent)
-          //     : 0;
-          // }
-          // element.status = this.lstinvoiceStatus.length
-          //   ? this.lstinvoiceStatus.find((r: any) => r.code === element.status)
-          //       .title
-          //   : '';
+          element.status = element.displayStatus;
         }
 
         this.dataSource = new MatTableDataSource<any>(response);

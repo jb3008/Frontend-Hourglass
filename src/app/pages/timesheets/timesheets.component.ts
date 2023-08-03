@@ -116,11 +116,7 @@ export class TimesheetsComponent implements OnInit {
               ? parseInt(element.taskListDetails[i].timeSpent)
               : 0;
           }
-          element.status = this.lstTimeSheetStatus.length
-            ? this.lstTimeSheetStatus.find(
-                (r: any) => r.code === element.status
-              ).title
-            : '';
+          element.status = element.displayStatus;
         }
         this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;

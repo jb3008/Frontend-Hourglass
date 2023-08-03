@@ -9,7 +9,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbAccordionModule,
+  NgbTooltipModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -20,7 +23,12 @@ import { SharedModule } from '../shared.modules';
 import { InvoiceAddTimesheetDrawerComponent } from './new-invoice/invoice-add-timesheet-drawer/invoice-add-timesheet-drawer.component';
 
 @NgModule({
-  declarations: [InvoicesComponent, InvoicesDetailsComponent, NewInvoiceComponent,   InvoiceAddTimesheetDrawerComponent],
+  declarations: [
+    InvoicesComponent,
+    InvoicesDetailsComponent,
+    NewInvoiceComponent,
+    InvoiceAddTimesheetDrawerComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -35,7 +43,8 @@ import { InvoiceAddTimesheetDrawerComponent } from './new-invoice/invoice-add-ti
     SharedModule,
     MatCheckboxModule,
     MatPaginatorModule,
-    InlineSVGModule
+    InlineSVGModule,
+    NgbTooltipModule,
   ],
 })
 export class InvoicesModule {}

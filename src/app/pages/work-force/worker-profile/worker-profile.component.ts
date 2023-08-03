@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, catchError, throwError } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth';
 import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-worker-profile',
@@ -42,25 +43,14 @@ export class WorkerProfileComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  async openModal(documentId: any) {
-    let queryParam = {
-      documentId: documentId,
-    };
-    this.apiCalls
-      .getDocument(this.endPoints.GET_ATTACHMENT, queryParam)
-      .pipe(
-        catchError(async (error) => {
-          this.cdr.detectChanges();
-          throw error;
-        })
-      )
-      .subscribe(async (response) => {
-        const src = window.URL.createObjectURL(response);
-        this.pdfSrc = src;
-        console.log(this.pdfSrc);
-        this.cdr.detectChanges();
-        return await this.modalComponent.open();
-      });
+  async openModal(documentId: string) {
+    this.pdfSrc =
+      environment.apiUrl +
+      this.endPoints.GET_ATTACHMENT +
+      `?documentId=${documentId}`;
+
+    this.cdr.detectChanges();
+    return await this.modalComponent.open();
   }
 
   async openDocumentModal() {
