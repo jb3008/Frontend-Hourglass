@@ -23,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ModalsModule } from 'src/app/_metronic/partials';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { EditWorkDrawerComponent } from './work-order-details/edit-work-drawer/edit-work-drawer.component';
 
 
 @NgModule({
@@ -31,7 +32,9 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     WorkOrderDetailsComponent,
     NewWorkOrderComponent,
     NewTaskDrawerComponent,
-    WorkOrderNewTaskDrawerComponent
+    WorkOrderNewTaskDrawerComponent,
+    EditWorkDrawerComponent,
+
 
   ],
   imports: [

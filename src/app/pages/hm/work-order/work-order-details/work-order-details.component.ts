@@ -19,7 +19,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './work-order-details.component.html',
   styleUrls: ['./work-order-details.component.scss']
 })
-export class WorkOrderDetailsComponent implements OnInit {
+export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
 
   constructor(private route: ActivatedRoute,private utils: Utils, private snackBar: MatSnackBar, private dialog: MatDialog, private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef,
               private location: Location, private sanitizer: DomSanitizer) { }
@@ -66,6 +66,14 @@ export class WorkOrderDetailsComponent implements OnInit {
     this.getWorkOrderDetails();
     this.getAllStatus();
   }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      DrawerComponent.reinitialization();
+      ToggleComponent.reinitialization();
+    }, 0);
+  }
+
 
   
   isSelectedTab:string ='Details';
