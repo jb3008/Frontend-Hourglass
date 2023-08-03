@@ -5,7 +5,8 @@
 // Drawer
 .drawer {
 	display: flex !important;
-	overflow: auto;
+	overflow: auto !important;
+	height: 100vh;
 	z-index: $drawer-z-index;
 	position: fixed;
 	top: 0;

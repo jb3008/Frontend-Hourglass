@@ -95,7 +95,13 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
     'actions',
   ];
   dataSource: any;
-
+  numberOnly(event: any): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
   getAllWorkForceList() {
     this.apiCalls
       .get(this.endPoints.LIST_WORK_FORCE, {})
@@ -343,6 +349,16 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
     };
     const newTimeSheetTaskList = [];
     const existingTimeSheetTaskList = [];
+    var checkTimeSpent = this.timeSheetDetails.taskListDetails.filter(
+      (i: any) => i.timeSpent === 0
+    );
+    if (checkTimeSpent.length) {
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Please add time spent (hrs).'
+      );
+      return;
+    }
     for (
       let index = 0;
       index < this.timeSheetDetails.taskListDetails.length;

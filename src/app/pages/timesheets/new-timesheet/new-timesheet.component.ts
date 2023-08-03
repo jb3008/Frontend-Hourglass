@@ -125,6 +125,9 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
   }
   changeWorkOrder(workOrderId: number) {
     this.workOrderId = workOrderId;
+    this.selectedTask = [];
+    this.dataSource = new MatTableDataSource<any>([]);
+    this.displayHrs = 0.0;
     this.cdr.detectChanges();
   }
   getSelectedTaskList(selectedTask: any) {
@@ -266,9 +269,25 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     const utcDate = date.toISOString();
     return utcDate;
   }
-
+  numberOnly(event: any): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
   async save(status: string) {
     this.timeSheetData.controls['newTimeSheetTaskList'].setValue([]);
+    var checkTimeSpent = this.selectedTask.filter(
+      (i: any) => i.timeSpent === 0
+    );
+    if (checkTimeSpent.length) {
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Please add time spent (hrs).'
+      );
+      return;
+    }
     for (let index = 0; index < this.selectedTask.length; index++) {
       const element = this.selectedTask[index];
       this.timeSheetData.controls['newTimeSheetTaskList'].value.push({

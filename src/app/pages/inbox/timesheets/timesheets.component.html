@@ -52,18 +52,20 @@
         />
         <span><i class="fa fa-search"></i></span>
       </div>
-      <select
-        name=""
-        id=""
-        formControlName="status"
-        class="form-select fs- py-2 w-200px"
-      >
-        <option value="All">All Status</option>
-        <option value="{{ item.code }}" *ngFor="let item of lstTimeSheetStatus">
-          {{ item.title }}
-        </option>
-      </select>
-
+      <div class="position-relative input-icon input-icon-right">
+        <select
+          name=""
+          id=""
+          formControlName="status"
+          class="form-select fs- py-2 w-200px"
+        >
+          <option value="All">All Status</option>
+          <option value="DRAFT">Draft</option>
+          <option value="ACTIVE">In Process</option>
+          <option value="REJECTED">Rejected</option>
+          <option value="APPROVED_BY_COMPANY">Approved</option>
+        </select>
+      </div>
       <!-- <select  name="" id="" class="form-select fs- py-2 w-200px">
             <option  value="">Select</option>
         </select> -->
@@ -153,6 +155,13 @@
                 >{{element?.workForceDetails?.firstName?.[0]
 
 
+
+
+
+
+
+
+
                 }}{{element?.workForceDetails?.lastName?.[0]}}
               </span>
             </div>
@@ -190,7 +199,7 @@
           <i class="bi bi-calendar"></i> From Date
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
-          {{ element.fromDate | date : "MMM,dd yyyy" }}
+          {{ element.fromDate | date : "MMM dd, yyyy" }}
         </td>
       </ng-container>
 
@@ -200,7 +209,7 @@
           <i class="bi bi-calendar"></i> Due Date
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
-          {{ element.toDate | date : "MMM,dd yyyy" }}
+          {{ element.toDate | date : "MMM dd, yyyy" }}
         </td>
       </ng-container>
 
@@ -223,11 +232,13 @@
           <span
             class="badge badge-light-danger badge-light-primary"
             [ngClass]="{
-              ' badge-light-warning': element.status === 'In-Progress',
+              ' badge-light-warning': element.status === 'In Process',
               'badge-light-success': element.status === 'Approved',
               'badge-light-danger': element.status === 'Rejected'
             }"
-            >{{ element.status }}</span
+            >{{
+              element.status === "In Process" ? "In-Process" : element.status
+            }}</span
           >
         </td>
       </ng-container>

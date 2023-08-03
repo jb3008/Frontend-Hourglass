@@ -45,10 +45,12 @@ export class NewTaskDrawerComponent implements OnInit {
 
   @Output() getSelectedTaskList = new EventEmitter<any>();
   ngOnInit(): void {
+    console.log(this.selectedEmpObj);
     this.selection.clear();
     this.cdr.detectChanges();
   }
   ngOnChanges() {
+    console.log(this.selectedEmpObj);
     if (this.workOrderId) {
       this.getTaskList();
     }
@@ -113,7 +115,7 @@ export class NewTaskDrawerComponent implements OnInit {
     closeBtn?.click();
     this.cdr.detectChanges();
     this.getSelectedTaskList.emit(this.selection?.selected);
-    this.selection.clear();
+    // this.selection.clear();
   }
   applyFilter(event: any) {
     this.dataSource.filter = event.target.value.trim().toLowerCase();

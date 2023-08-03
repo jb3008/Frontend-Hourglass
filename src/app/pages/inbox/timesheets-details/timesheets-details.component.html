@@ -43,11 +43,11 @@
           </a>
           <button
             type="button"
-            class="btn btn-sm btn-primary mr-5"
+            class="btn btn-sm btn-primary mr-5 my-5"
             (click)="openStatusModal('APPROVED')"
             *ngIf="timeSheetDetails?.status === 'ACTIVE'"
           >
-            APPROVED
+            Approve
           </button>
 
           <button
@@ -56,7 +56,7 @@
             (click)="openStatusModal('REJECTED')"
             *ngIf="timeSheetDetails?.status === 'ACTIVE'"
           >
-            REJECTED
+            Reject
           </button>
           <button
             type="button"
@@ -64,7 +64,7 @@
             (click)="openStatusModal('APPROVED')"
             *ngIf="timeSheetDetails?.status === 'APPROVED_BY_VENDOR'"
           >
-            APPROVED
+            Approve
           </button>
 
           <button
@@ -73,7 +73,7 @@
             (click)="openStatusModal('REJECTED')"
             *ngIf="timeSheetDetails?.status === 'APPROVED_BY_VENDOR'"
           >
-            REJECTED
+            Reject
           </button>
         </div>
       </div>
@@ -104,6 +104,8 @@
 
 
 
+
+
                   }}{{timeSheetDetails?.workForceDetails?.lastName?.[0]}}
                 </span>
               </div>
@@ -120,8 +122,22 @@
             <div class="me-5 my-1">
               <span class="d-flex text-muted fs-8">Status</span>
               <span class="fw-bold d-flex s-"
-                ><span class="badge badge-primary">
-                  {{ timeSheetDetails?.displayStatus }}</span
+                ><span
+                  class="badge badge-primary"
+                  [ngClass]="{
+                    ' badge-light-warning':
+                      timeSheetDetails?.displayStatus === 'In Process',
+                    'badge-light-success':
+                      timeSheetDetails?.displayStatus === 'Approved',
+                    'badge-light-danger':
+                      timeSheetDetails?.displayStatus === 'Rejected'
+                  }"
+                >
+                  {{
+                    timeSheetDetails?.status === "In Process"
+                      ? "In-Process"
+                      : timeSheetDetails?.displayStatus
+                  }}</span
                 >
               </span>
             </div>
