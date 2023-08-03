@@ -77,7 +77,7 @@ export class InvoicesComponent implements OnInit {
         catchError(async (err) => {
           this.utils.showSnackBarMessage(
             this.snackBar,
-            'failed to fetch the time-sheet'
+            'failed to fetch the invoices'
           );
           this.isLoading = false;
           this.cdr.detectChanges();
@@ -86,13 +86,13 @@ export class InvoicesComponent implements OnInit {
       )
       .subscribe((response) => {
         this.invoiceList = response;
-        console.log(response.list);
+        console.log(response);
 
         for (let index = 0; index < response.length; index++) {
           const element = response[index];
         }
 
-        this.dataSource = new MatTableDataSource<any>(response.list);
+        this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.isLoading = false;

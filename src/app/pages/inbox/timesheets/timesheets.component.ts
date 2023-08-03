@@ -43,6 +43,7 @@ export class TimesheetsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   timeSheetFilter: FormGroup;
   lstTimeSheetStatus: any;
+  flag: any = 'Inbox';
   ngAfterViewInit() {}
   ngOnInit(): void {
     this.auth = this.utils.getAuth();
@@ -62,6 +63,25 @@ export class TimesheetsComponent implements OnInit {
     const utcDate = date.toISOString();
     return utcDate;
   }
+
+  isSelectedTab: string = 'Inbox';
+  changeFlag(flag: string) {
+    if (flag === 'Inbox') {
+      this.flag = 'Inbox';
+      this.isSelectedTab = flag;
+    } else {
+      this.flag = 'Outbox';
+      this.isSelectedTab = flag;
+    }
+    this.getAllTimesheet();
+  }
+
+  getEndpoint(flag: string) {
+    return flag === 'Inbox'
+      ? this.endPoints.GET_TIME_SHEET_NOTIFICATION
+      : this.endPoints.GET_TIME_SHEET_OUTBOX;
+  }
+
   getAllTimesheet() {
     this.isLoading = true;
     let filter: any = {};
@@ -90,7 +110,7 @@ export class TimesheetsComponent implements OnInit {
     }
 
     this.apiCalls
-      .get(this.endPoints.GET_TIME_SHEET_NOTIFICATION, filter)
+      .get(this.getEndpoint(this.flag), filter)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(

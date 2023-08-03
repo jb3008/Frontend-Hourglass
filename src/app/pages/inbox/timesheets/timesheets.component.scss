@@ -1,9 +1,9 @@
 :host {
-    width: 100%;
-    background-color: rgb(255, 255, 255);
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+}
+.timeSheetFilter {
+  input {
+    margin-right: 12rem !important;
   }
-    .timeSheetFilter {
-      input {
-        margin-right: 12rem !important
-      }
-    }
+}

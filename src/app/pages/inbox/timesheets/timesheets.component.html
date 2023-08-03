@@ -13,18 +13,27 @@
         <a
           data-bs-toggle="tab"
           class="nav-link text-primary fw-semibold px-4 cursor-pointer active"
+          (click)="changeFlag('Inbox')"
+          [ngClass]="{ active: isSelectedTab === 'Inbox' }"
         >
           Inbox</a
         >
       </li>
       <li class="nav-item">
-        <a data-bs-toggle="tab" class="nav-link px-4 cursor-pointer"> Outbox</a>
+        <a
+          data-bs-toggle="tab"
+          class="nav-link px-4 cursor-pointer"
+          (click)="changeFlag('Outbox')"
+          [ngClass]="{ active: isSelectedTab === 'Outbox' }"
+        >
+          Outbox</a
+        >
       </li>
     </ul>
   </div>
 
   <form [formGroup]="timeSheetFilter">
-    <div class="d-flex align-items-start gap-4">
+    <div class="d-flex align-items-start gap-4 timeSheetFilter">
       <div class="position-relative input-icon input-icon-right">
         <input
           type="text"
@@ -153,15 +162,6 @@
             <div class="symbol symbol-35px symbol-square me-3">
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
                 >{{element?.workForceDetails?.firstName?.[0]
-
-
-
-
-
-
-
-
-
                 }}{{element?.workForceDetails?.lastName?.[0]}}
               </span>
             </div>

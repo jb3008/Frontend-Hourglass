@@ -101,11 +101,6 @@
               <div class="symbol symbol-30px symbol-square me-3">
                 <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
                   >{{timeSheetDetails?.workForceDetails?.firstName?.[0]
-
-
-
-
-
                   }}{{timeSheetDetails?.workForceDetails?.lastName?.[0]}}
                 </span>
               </div>
@@ -145,14 +140,14 @@
             <div class="me-5 my-1">
               <span class="d-flex text-muted fs-8">From Date</span>
               <span class="fw-bold d-flex s-"
-                >{{ timeSheetDetails?.fromDate | date : "MMM,dd yyyy" }}
+                >{{ timeSheetDetails?.fromDate | date : "MMM dd, yyyy" }}
               </span>
             </div>
             <div class="vr me-5 mt-4 h-20px"></div>
             <div class="me-5 my-1">
               <span class="d-flex text-muted fs-8">To Date</span>
               <span class="fw-bold d-flex s-"
-                >{{ timeSheetDetails?.toDate | date : "MMM,dd yyyy" }}
+                >{{ timeSheetDetails?.toDate | date : "MMM dd, yyyy" }}
               </span>
             </div>
           </div>

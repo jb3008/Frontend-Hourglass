@@ -1,71 +1,148 @@
-import {AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
+import {
+  ChangeDetectorRef,
+  AfterViewInit,
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+} from '@angular/core';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
-
+import EndPoints from 'src/app/common/endpoints';
+import { ApiCallsService } from 'src/app/services/api-calls.service';
+import { Utils } from 'src/app/services/utils';
+import { AuthService } from 'src/app/modules/auth';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, catchError, throwError } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-invoice-add-timesheet-drawer',
   templateUrl: './invoice-add-timesheet-drawer.component.html',
 })
 export class InvoiceAddTimesheetDrawerComponent implements OnInit {
+  constructor(
+    private dialog: MatDialog,
+    private apiCalls: ApiCallsService,
+    private utils: Utils,
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
+  ) {}
 
-  constructor() {}
-
-  ngOnInit(): void {}
-
-  displayedColumns: string[] = ['select', 'taskSheet', 'period', 'workedHr', 'status'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = [
+    'select',
+    'taskSheet',
+    'period',
+    'workedHr',
+    'status',
+  ];
+  endPoints = EndPoints;
+  isLoading = false;
+  dataSource = new MatTableDataSource<PeriodicElement>([]);
   selection = new SelectionModel<PeriodicElement>(true, []);
-  
+  @Input() workOrderId: any;
+  @Output() getSelectedTimesheetList = new EventEmitter<any>();
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  ngOnInit(): void {
+    this.selection.clear();
+    this.cdr.detectChanges();
+  }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
- /** Whether the number of selected elements matches the total number of rows. */
- isAllSelected() {
-  const numSelected = this.selection.selected.length;
-  const numRows = this.dataSource.data.length;
-  return numSelected === numRows;
-}
 
-/** Selects all rows if they are not all selected; otherwise clear selection. */
-toggleAllRows() {
-  if (this.isAllSelected()) {
+  ngOnChanges() {
+    if (this.workOrderId) {
+      this.getTimesheetList();
+    }
     this.selection.clear();
-    return;
+    this.cdr.detectChanges();
   }
 
-  this.selection.select(...this.dataSource.data);
-}
-
-/** The label for the checkbox on the passed row */
-checkboxLabel(row?: PeriodicElement): string {
-  if (!row) {
-    return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
   }
-  return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.taskSheet + 1}`;
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  toggleAllRows() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+
+    this.selection.select(...this.dataSource.data);
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: PeriodicElement): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
+      row.taskSheet + 1
+    }`;
+  }
+
+  getTimesheetList() {
+    this.isLoading = true;
+    this.apiCalls
+      .get(this.endPoints.TIMESHEET_LIST_HM, {
+        workOrderId: this.workOrderId,
+      })
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to get the task list'
+          );
+          this.isLoading = false;
+          this.cdr.detectChanges();
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        console.log(response);
+
+        for (let index = 0; index < response.length; index++) {
+          const element = response[index];
+
+          element.timeSpent = 0;
+
+          for (let i = 0; i < element.taskListDetails.length; i++) {
+            element.timeSpent += element.taskListDetails[i].timeSpent
+              ? parseInt(element.taskListDetails[i].timeSpent)
+              : 0;
+          }
+        }
+        this.dataSource = new MatTableDataSource<any>(response);
+        this.dataSource.paginator = this.paginator;
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      });
+  }
+
+  continue() {
+    this.isLoading = false;
+    let closeBtn = document.getElementById('kt_invoice_add_timesheet_close');
+    closeBtn?.click();
+    this.cdr.detectChanges();
+    this.getSelectedTimesheetList.emit(this.selection?.selected);
+    this.selection.clear();
+  }
 }
-
-
-
-
-}
-
 
 export interface PeriodicElement {
   taskSheet: string;
-  period:string;
-  workedHr:string;
-  status:string;
-  
+  period: string;
+  workedHr: string;
+  status: string;
 }
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {taskSheet: 'HGTS888022',period: 'Jan 02 - Jan 08, 2022',workedHr: '40.0',status: 'Approved'},
-  {taskSheet: 'HGTS888022',period: 'Jan 02 - Jan 08, 2022',workedHr: '40.0',status: 'Reject'},
-  {taskSheet: 'HGTS888022',period: 'Jan 02 - Jan 08, 2022',workedHr: '40.0',status: 'Approved'},
-
-
-];
