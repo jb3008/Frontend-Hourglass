@@ -11,12 +11,14 @@
     // r-bottom: ;
 }
 
-
-.mat-select-arrow {
+.mat-select-arrow:not(.mat-paginator-container  .mat-select-arrow) {
     display: none;
   }
-
-
+  .badge-light-warning {
+    color: var(--kt-warning);
+    background-color: var(--kt-warning-light)!important;
+}
+.fit-content{width: fit-content;}
 .input-icon span {
     left: 0;
     top: 0;

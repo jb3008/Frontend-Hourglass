@@ -5,6 +5,9 @@
 // General mode
 .app-wrapper {
     display: flex;
+    max-height: calc(100vh - 125px);
+    overflow: auto;
+    padding-bottom:25px ;
 }
 
 // Desktop mode
