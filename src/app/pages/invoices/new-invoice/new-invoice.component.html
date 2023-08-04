@@ -111,12 +111,9 @@
                   />
                   <div
                     class="fv-plugins-message-container"
-                    *ngIf="submitted && f.invoiceDate.errors"
+                    *ngIf="submitted && f.date.errors"
                   >
-                    <div
-                      class="fv-help-block"
-                      *ngIf="f.invoiceDate.errors.required"
-                    >
+                    <div class="fv-help-block" *ngIf="f.date.errors.required">
                       Invoice Date is required
                     </div>
                   </div>
@@ -135,13 +132,13 @@
                   type="input"
                   class="form-control w-150px py-2 rounded-end-0 fw-normal"
                   placeholder="Number"
-                  formControlName="invoiceAmount"
+                  formControlName="totalAmount"
                   readonly
                 />
 
                 <mat-select
                   class="form-select fs- py-2 w-100px rounded-start-0"
-                  formControlName="workRateCurrency"
+                  formControlName="currency"
                   placeholder="Select"
                   [disabled]="true"
                 >
@@ -164,8 +161,8 @@
             <div class="align-middle">
               <span class="text-muted me-3 fw-semibold">Payable Amount</span>
               <span class="fs-1 fw-semibold text-body"
-                >{{ invoiceData.controls["invoiceAmount"].value }}
-                {{ invoiceData.controls["workRateCurrency"].value }}</span
+                >{{ invoiceData.controls["totalAmount"].value }}
+                {{ invoiceData.controls["currency"].value }}</span
               >
             </div>
           </div>
@@ -177,13 +174,17 @@
         <div class="d-flex align-items-center justify-content-between mb-4">
           <div class="text-body">
             BILL FROM <br />
-            <p class="fw-bold fs-4 my-2">COMMAND + R</p>
-            4140 Parker Rd. Allentown, New Mexico 31134
+            <p class="fw-bold fs-4 my-2">
+              {{ selectedWorkOrder?.vendorDetails?.title }}
+            </p>
+            {{ selectedWorkOrder?.vendorDetails?.address }}
           </div>
           <div class="text-body">
             BILL TO <br />
-            <p class="fw-bold fs-4 my-2">COMMAND + R</p>
-            4140 Parker Rd. Allentown, New Mexico 31134
+            <p class="fw-bold fs-4 my-2">
+              {{ selectedWorkOrder?.companyDetails?.title }}
+            </p>
+            {{ selectedWorkOrder?.companyDetails?.address }}
           </div>
           <div
             class="mw-175px mh-45px border mt-3 d-flex align-items-center justify-content-center min-h-35px min-w-40px overflow-hidden"
@@ -235,7 +236,7 @@
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
                 {{ element.unitPrice }}
-                {{ invoiceData.controls["workRateCurrency"].value }}
+                {{ invoiceData.controls["currency"].value }}
               </td>
             </ng-container>
 
@@ -246,7 +247,7 @@
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
                 {{ element.amount }}
-                {{ invoiceData.controls["workRateCurrency"].value }}
+                {{ invoiceData.controls["currency"].value }}
               </td>
             </ng-container>
 
@@ -274,31 +275,39 @@
             <div class="d-flex flex-stack mb-3 fs-7">
               <div class="fw-semibold pe-10 text-gray-600">SUB TOTAL</div>
               <div class="text-end fw-bo/ld text-gray-800">
-                {{ toNumber(invoiceData.controls["invoiceAmount"].value) }}
-                {{ invoiceData.controls["workRateCurrency"].value }}
+                {{ invoiceData.controls["subTotalAmount"].value }}
+                {{ invoiceData.controls["currency"].value }}
               </div>
             </div>
             <div class="d-flex flex-stack mb-3 fs-7">
-              <div class="fw-semibold pe-10 text-gray-600">TAX AMOUNT</div>
+              <div class="fw-semibold pe-10 text-gray-600">TAX AMOUNT (%)</div>
               <div class="text-end fw-/bold text-gray-800">
                 <input
-                  type="text"
+                  type="number"
                   class="form-control w-100px text-right"
-                  formControlName="taxAmount"
-                  value="0.00"
+                  formControlName="taxPercentage"
+                  min="0"
+                  max="100"
+                  (input)="onTaxChange()"
                 />
+              </div>
+            </div>
+            <div
+              class="fv-plugins-message-container"
+              *ngIf="f.taxPercentage.errors"
+            >
+              <div class="fv-help-block" *ngIf="f.taxPercentage.errors.max">
+                Please enter a value between 0 and 100
+              </div>
+              <div class="fv-help-block" *ngIf="f.taxPercentage.errors.min">
+                Please enter a value between 0 and 100
               </div>
             </div>
             <div class="d-flex flex-stack mb-3 fs-6">
               <div class="fw-semibold pe-10 text-gray-600">TOTAL AMOUNT</div>
               <div class="text-end fw-bold text-gray-800">
-                {{
-                  toNumber(
-                    changeNum(invoiceData.controls["invoiceAmount"].value) +
-                      changeNum(invoiceData.controls["taxAmount"].value)
-                  )
-                }}
-                USD
+                {{ invoiceData.controls["totalAmount"].value }}
+                {{ invoiceData.controls["currency"].value }}
               </div>
             </div>
           </div>
@@ -388,6 +397,7 @@
 
         <app-invoice-add-timesheet-drawer
           [workOrderId]="workOrderId"
+          [selectedTask]="selectedTask"
           (getSelectedTimesheetList)="getSelectedTimesheetList($event)"
         ></app-invoice-add-timesheet-drawer>
       </div>
@@ -396,7 +406,12 @@
           Cancel
         </button>
 
-        <button type="button" class="btn btn-sm btn-primary" (click)="save()">
+        <button
+          type="button"
+          class="btn btn-sm btn-primary"
+          [disabled]="!selectedTask.length"
+          (click)="save()"
+        >
           Submit
         </button>
       </div>

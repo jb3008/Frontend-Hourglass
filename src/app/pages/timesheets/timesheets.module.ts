@@ -29,8 +29,7 @@ import { ModalsModule } from 'src/app/_metronic/partials';
     TimesheetsComponent,
     TimesheetDetailComponent,
     NewTimesheetComponent,
-    TimesheetLogsDrawerComponent,
-    AttachmentLogsDrawerComponent,
+
     NewTaskDrawerComponent,
     NewTaskDrawerDetailComponent,
   ],

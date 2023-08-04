@@ -68,13 +68,15 @@ const EndPoints = {
     '/hourglass/work-force/uploadFilesForWorkForce.api',
   UPLOAD_TIME_SHEET_DOCUMENT:
     '/hourglass/timesheet/uploadFilesForTimeSheet.api',
+  UPLOAD_INVOICE_DOCUMENT: '/hourglass/invoice/uploadFilesForInvoice.api',
   REMOVE_TASK_FROM_TIMESHEET: '/hourglass/timesheet/removeTaskForTimeSheet.api',
   WORKORDER_NOTIFICATION: '/hourglass/work-order/notification/listInbox.api',
   GET_TIMESHEET_STATUS: '/hourglass/common/listTimeSheetStatus.api',
   GET_TIMESHEET_LOGS: '/hourglass/audit-log/auditLogForTimeSheet.api',
   UPDATE_TIMESHEET_STATUS: '/hourglass/timesheet/updateTimeSheetStatus.api',
   GET_INVOICE: '/hourglass/payment/invoice/listInvoice.api',
-  TIMESHEET_LIST_HM: '/hourglass/timesheet/listTimeSheetForInvoice.api',
+  TIMESHEET_LIST_FOR_INVOICE:
+    '/hourglass/timesheet/listTimeSheetForInvoice.api',
   CREATE_INVOICE: '/hourglass/payment/invoice/create.api',
   GET_TIME_SHEET_OUTBOX: '/hourglass/timesheet/notification/listOutbox.api',
   GET_PAYMENT_TERM: '/hourglass/common/rest/list-pay-terms.api',

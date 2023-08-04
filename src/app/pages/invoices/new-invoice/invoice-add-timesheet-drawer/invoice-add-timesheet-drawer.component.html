@@ -110,14 +110,15 @@
             </th>
             <td mat-cell *matCellDef="let element" class="align-middle">
               <span
-                class="badge badge-light-danger"
+                class="badge badge-light-primary"
                 [ngClass]="{
-                  'badge-light-danger': element.status === 'Reject',
-                  'badge-light-warning': element.status === 'Medium',
+                  ' badge-light-warning': element.status === 'IN_PROGRESS',
                   'badge-light-success':
-                    element.status === 'APPROVED_BY_COMPANY'
+                    element.status === 'APPROVED_BY_COMPANY' ||
+                    element.status === 'APPROVED_BY_VENDOR',
+                  'badge-light-danger': element.status === 'REJECTED'
                 }"
-                >{{ element.status }}</span
+                >{{ element.displayStatus }}</span
               >
             </td>
           </ng-container>
@@ -156,7 +157,7 @@
         Cancel
       </button>
       <button
-        type="reset"
+        type="button"
         class="btn btn-sm btn-primary"
         [disabled]="!selection.selected.length"
         (click)="continue()"

@@ -1,11 +1,4 @@
 <div class="content flex-column-fluid auto container-lg mb-4">
-  <!-- <div class="py-5 fw-bold">
-        <a class="cursor-pointer " routerLink="/job-posts"> <i class="fas fa-arrow-left me-3"></i>
-            Create Job Posting for Worker <span class="badge badge-light-success fw-normal ms-3"><i
-                    class="fas fa-yin-yangfas fa-circle px-1 text-success  fs-10"></i> New Job</span></a>
-    </div> -->
-  <!--begin:: Top Card-->
-
   <div class="card mb-5 mb-xl-10 text-gray-600">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
@@ -44,7 +37,7 @@
           <button
             type="button"
             class="btn btn-sm btn-primary mr-5 my-5"
-            (click)="openStatusModal('APPROVED')"
+            id="kt_inbox_approve_drawer_toggle"
             *ngIf="timeSheetDetails?.status === 'ACTIVE'"
           >
             Approve
@@ -53,7 +46,7 @@
           <button
             type="button"
             class="btn btn-sm btn-primary"
-            (click)="openStatusModal('REJECTED')"
+            id="kt_inbox_reject_drawer_toggle"
             *ngIf="timeSheetDetails?.status === 'ACTIVE'"
           >
             Reject
@@ -61,7 +54,7 @@
           <button
             type="button"
             class="btn btn-sm btn-primary mr-5"
-            (click)="openStatusModal('APPROVED')"
+            id="kt_inbox_approve_drawer_toggle"
             *ngIf="timeSheetDetails?.status === 'APPROVED_BY_VENDOR'"
           >
             Approve
@@ -70,7 +63,7 @@
           <button
             type="button"
             class="btn btn-sm btn-primary"
-            (click)="openStatusModal('REJECTED')"
+            id="kt_inbox_reject_drawer_toggle"
             *ngIf="timeSheetDetails?.status === 'APPROVED_BY_VENDOR'"
           >
             Reject
@@ -100,9 +93,8 @@
             <div class="me-5 my-1 d-flex">
               <div class="symbol symbol-30px symbol-square me-3">
                 <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
-                  >{{timeSheetDetails?.workForceDetails?.firstName?.[0]
-
-                  }}{{timeSheetDetails?.workForceDetails?.lastName?.[0]}}
+                  >{{ timeSheetDetails?.workForceDetails?.firstName[0] }}
+                  {{ timeSheetDetails?.workForceDetails?.lastName[0] }}
                 </span>
               </div>
               <div>
@@ -283,17 +275,7 @@
                     <i class="bi bi-clock"></i> Time Spent
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
-                    <input
-                      type="text"
-                      [(ngModel)]="element.timeSpent"
-                      style="width: 100%"
-                      class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10"
-                      [disabled]="
-                        !auth?.vendorId || timeSheetDetails?.status !== 'DRAFT'
-                      "
-                      [max]="today"
-                      placeholder="hrs"
-                    />
+                    {{ element.timeSpent }}
                   </td>
                 </ng-container>
                 <!-- eta Column -->
@@ -302,24 +284,7 @@
                     <i class="bi bi-calendar"></i> Start Date
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
-                    <div class="position-relative input-icon input-icon-right">
-                      <input
-                        type="text"
-                        class="form-control pe-10 py-2 fs- fw-normal"
-                        (click)="picker.open()"
-                        style="width: 100%"
-                        [(ngModel)]="element.startDate"
-                        [disabled]="
-                          !auth?.vendorId ||
-                          timeSheetDetails?.status !== 'DRAFT'
-                        "
-                        [max]="today"
-                        [matDatepicker]="picker"
-                        placeholder="Select Due Date"
-                      />
-                      <span><i class="far fa-calendar"></i></span>
-                      <mat-datepicker #picker></mat-datepicker>
-                    </div>
+                    {{ element?.startDate | date : "dd/MM/yyyy" }}
                   </td>
                 </ng-container>
 
@@ -329,23 +294,7 @@
                     <i class="bi bi-calendar"></i> Due Date
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
-                    <div class="position-relative input-icon input-icon-right">
-                      <input
-                        type="text"
-                        class="form-control pe-10 py-2 fs- fw-normal"
-                        (click)="picker.open()"
-                        style="width: 100%"
-                        [disabled]="
-                          !auth?.vendorId ||
-                          timeSheetDetails?.status !== 'DRAFT'
-                        "
-                        [(ngModel)]="element.finishDate"
-                        [matDatepicker]="picker"
-                        placeholder="Select Due Date"
-                      />
-                      <span><i class="far fa-calendar"></i></span>
-                      <mat-datepicker #picker></mat-datepicker>
-                    </div>
+                    {{ element?.finishDate | date : "dd/MM/yyyy" }}
                   </td>
                 </ng-container>
 
@@ -359,13 +308,13 @@
                       class="badge badge-light-primary"
                       [ngClass]="{
                         ' badge-light-warning':
-                          element.status?.toUpperCase() === 'IN_PROGRESS',
+                          element.status === 'IN_PROGRESS',
                         'badge-light-success':
-                          element.status?.toUpperCase() === 'APPROVED',
-                        'badge-light-danger':
-                          element.status?.toUpperCase() === 'REJECTED'
+                          element.status === 'APPROVED' ||
+                          element.status === 'COMPLETED',
+                        'badge-light-danger': element.status === 'REJECTED'
                       }"
-                      >{{ element.status?.toUpperCase() }}</span
+                      >{{ element.displayStatus }}</span
                     >
                   </td>
                 </ng-container>
@@ -398,21 +347,7 @@
           </ng-template>
         </ngb-panel>
       </ngb-accordion>
-      <!-- <button
-        type="button"
-        class="btn btn-primary btn-sm my-5"
-        id="kt_new_task_drawer_toggle"
-        *ngIf="auth?.vendorId && timeSheetDetails?.status === 'DRAFT'"
-      >
-        <i class="bi bi-plus-lg"></i> Add Task
-      </button> -->
-      <app-new-task-drawer-detail
-        [workOrderId]="workOrderId"
-        [selectedEmpObj]="selectedEmpObj"
-        [alreadyTaskList]="taskListDetails"
-        [startDate]="startDate"
-        (getSelectedTaskList)="getSelectedTaskList($event)"
-      ></app-new-task-drawer-detail>
+
       <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
         <button
           type="button"
@@ -430,22 +365,6 @@
         >
           Cancel
         </button>
-        <!-- <button
-          type="button"
-          class="btn btn-sm btn-light-primary"
-          (click)="save('DRAFT')"
-          *ngIf="timeSheetDetails?.status === 'DRAFT'"
-        >
-          Save as Draft
-        </button> -->
-        <!-- <button
-          type="button"
-          class="btn btn-sm btn-primary"
-          (click)="save('ACTIVE')"
-          *ngIf="auth?.vendorId && timeSheetDetails?.status === 'DRAFT'"
-        >
-          Submit
-        </button> -->
       </div>
     </div>
   </div>
@@ -456,88 +375,18 @@
 >
   <div class="spinner"></div>
 </div>
-<app-modal
-  #modalStatus
-  [modalConfig]="statusModalConfig"
-  style="max-width: 777px"
-  data-nnn=""
->
-  <form [formGroup]="statusModal">
-    <div class="mb-1">Attachments</div>
-    <div class="fv-row mb-5">
-      <!--begin::Dropzone-->
-      <div
-        class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
-        DropZone
-        (onFileDropped)="droppedFiles($event, 'documentList')"
-        (click)="fileInputOther.click()"
-      >
-        <!--begin::Message-->
-        <div class="text-center w-100 text-muted">
-          <!--begin::Icon-->
-          <i class="fas fa-cloud-upload-alt fs-2x"></i>
-          <!--end::Icon-->
-          <!--begin::Info-->
-          <div class="ms-4">
-            <input
-              type="file"
-              hidden
-              #fileInputOther
-              (change)="selectFile($event, 'documentList')"
-              accept=".pdf,.doc,.docx,.xls,.xlsx"
-            />
-            <h3 class="fs-5 mb-1">
-              <a class="text-primary">Click to upload </a> or Drop files here.
-            </h3>
-            <span class="fs-7 fw-semibold text-gray-400"
-              >.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb); maximum 6
-              files</span
-            >
-          </div>
-          <!--end::Info-->
-        </div>
-      </div>
-      <div
-        *ngIf="statusModal.controls['documentList'].value"
-        class="d-flex flex-wrap"
-      >
-        <a
-          *ngFor="
-            let doc of statusModal.controls['documentList'].value;
-            let index = index
-          "
-          class="me-3 mt-4 border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between mw-325px"
-        >
-          <div
-            class="text-truncate pspmw95"
-            [ngbTooltip]="doc.name"
-            [openDelay]="600"
-          >
-            {{ doc.name }}
-          </div>
-          <span class="cursor-pointer ms-3">
-            <i
-              class="bi bi-x-circle"
-              (click)="clearFile('documentList', index)"
-            ></i
-          ></span>
-        </a>
-      </div>
+<app-inbox-reject-drawer
+  [timeSheetId]="timeSheetId"
+  [status]="timeSheetDetails?.status"
+></app-inbox-reject-drawer>
+<app-inbox-approve-drawer
+  [timeSheetId]="timeSheetId"
+  [status]="timeSheetDetails?.status"
+></app-inbox-approve-drawer>
 
-      <!--end::Dropzone-->
-    </div>
-
-    <div class="modal-footer bg-light p-3 px-5">
-      <button
-        type="button"
-        class="btn btn-outline-secondary"
-        (click)="closeStatusModal()"
-      >
-        Cancel
-      </button>
-      <button type="button" class="btn btn-primary" (click)="updateStatus()">
-        Save
-      </button>
-    </div>
-  </form>
-</app-modal>
+<app-attachment-logs-drawer
+  [timeSheetId]="timeSheetId"
+></app-attachment-logs-drawer>
+<app-timesheet-logs-drawer
+  [timeSheetId]="timeSheetId"
+></app-timesheet-logs-drawer>

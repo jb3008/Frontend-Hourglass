@@ -4,29 +4,42 @@ import { InboxLogsDrawerComponent } from './inbox-drawer/inbox-logs-drawer/inbox
 import { InboxAttachmentLogsDrawerComponent } from './inbox-drawer/inbox-attachment-logs-drawer/inbox-attachment-logs-drawer.component';
 import { InboxCollaborateDrawerComponent } from './inbox-drawer/inbox-collaborate-drawer/inbox-collaborate-drawer.component';
 import { InboxRejectDrawerComponent } from './inbox-drawer/inbox-reject-drawer/inbox-reject-drawer.component';
-import { InboxApproveDrawerComponent } from './inbox-drawer/inbox-approve-drawer/inbox-approve-drawer.component';
+// import { InboxApproveDrawerComponent } from './inbox-drawer/inbox-approve-drawer/inbox-approve-drawer.component';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { CommonModule } from '@angular/common';
+import { AttachmentLogsDrawerComponent } from './timesheets/timesheet-detail/attachment-logs-drawer/attachment-logs-drawer.component';
+import { TimesheetLogsDrawerComponent } from './timesheets/timesheet-detail/timesheet-logs-drawer/timesheet-logs-drawer.component';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { ModalsModule } from '../_metronic/partials';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  exports: [ 
+  exports: [
     DropzoneDirective,
     InboxLogsDrawerComponent,
     InboxAttachmentLogsDrawerComponent,
     InboxCollaborateDrawerComponent,
-    InboxRejectDrawerComponent,
-    InboxApproveDrawerComponent,
-    
+    // InboxRejectDrawerComponent,
+    AttachmentLogsDrawerComponent,
+    TimesheetLogsDrawerComponent,
+    // InboxApproveDrawerComponent,
   ],
-  declarations: [DropzoneDirective,
+  declarations: [
+    DropzoneDirective,
     InboxLogsDrawerComponent,
     InboxAttachmentLogsDrawerComponent,
     InboxCollaborateDrawerComponent,
-    InboxRejectDrawerComponent,
-    InboxApproveDrawerComponent,
-    ],
-    imports:[
-      CommonModule
-    ]
+    // InboxRejectDrawerComponent,
+    AttachmentLogsDrawerComponent,
+    TimesheetLogsDrawerComponent,
+    // InboxApproveDrawerComponent,
+  ],
+  imports: [
+    CommonModule,
+    InlineSVGModule,
+    NgxDocViewerModule,
+    ModalsModule,
+    FormsModule,
+  ],
 })
 export class SharedModule {}

@@ -1,0 +1,163 @@
+<div
+  id="kt_inbox_reject_drawer"
+  class="bg-body"
+  data-kt-drawer="true"
+  data-kt-drawer-name="rejects_drawer"
+  data-kt-drawer-activate="true"
+  data-kt-drawer-overlay="true"
+  data-kt-drawer-width="{default:'300px', 'lg': '700px'}"
+  data-kt-drawer-direction="end"
+  data-kt-drawer-toggle="#kt_inbox_reject_drawer_toggle"
+  data-kt-drawer-close="#kt_inbox_reject_close"
+>
+  <div class="card shadow-none rounded-0 w-100">
+    <form [formGroup]="statusModal">
+      <div class="d-flex justify-content-between px-7">
+        <div>
+          <h3 class="card-title fw-bolder text-dark mt-4 mb-7">Reject</h3>
+          <!-- <div> 
+        Invoice submission with Hourglass is more faster than ever,  just select the approved timesheet for the work order and flip them into an invoice.
+      </div> -->
+        </div>
+        <!-- <div class="card-toolbar">
+        <button
+          type="button"
+          class="btn btn-sm btn-icon btn-active-light-primary mt-5 "
+          id="kt_inbox_reject_close"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+            class="svg-icon svg-icon-1"
+          ></span>
+        </button>
+      </div> -->
+      </div>
+      <button
+        type="button"
+        class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
+        id="kt_inbox_reject_close"
+      >
+        <img src="./assets/media/icons/duotune/arrows/arr061.svg" alt="" />
+        <!-- <span
+      [inlineSVG]="''"
+      class="svg-icon svg-icon-1"
+    ></span> -->
+      </button>
+      <div class="card-body position-relative pt-0" id="kt_activities_body">
+        <div class="d-flex text-body gap-3 align-items-center">
+          <img src="../../../../assets/images/icons/inbox-reject.svg" alt="" />
+          <span class="fs-4">No, I dont agree with this...</span>
+        </div>
+
+        <div class="form-group my-6">
+          <label class="mb-1">Comment </label>
+          <textarea
+            name=""
+            id=""
+            formControlName="comment"
+            cols="30"
+            rows="3"
+            class="form-control py-2 fs- fw-normal"
+          ></textarea>
+        </div>
+
+        <div class="border w-100 rounded-1 p-/2">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="bg-light-primary w-100">
+              <label class="py-2 px-5">
+                <i class="bi bi-paperclip fs-3"></i>
+                Attachments</label
+              >
+            </div>
+          </div>
+          <div class="fv-row mb-5">
+            <!--begin::Dropzone-->
+            <div
+              class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
+              DropZone
+              (onFileDropped)="droppedFiles($event, 'documentList')"
+              (click)="fileInputOther.click()"
+            >
+              <!--begin::Message-->
+              <div class="text-center w-100 text-muted">
+                <!--begin::Icon-->
+                <i class="fas fa-cloud-upload-alt fs-2x"></i>
+                <!--end::Icon-->
+                <!--begin::Info-->
+                <div class="ms-4">
+                  <input
+                    type="file"
+                    hidden
+                    #fileInputOther
+                    (change)="selectFile($event, 'documentList')"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx"
+                  />
+                  <h3 class="fs-5 mb-1">
+                    <a class="text-primary">Click to upload </a> or Drop files
+                    here.
+                  </h3>
+                  <span class="fs-7 fw-semibold text-gray-400"
+                    >.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb);
+                    maximum 6 files</span
+                  >
+                </div>
+                <!--end::Info-->
+              </div>
+            </div>
+            <div
+              *ngIf="statusModal.controls['documentList'].value"
+              class="d-flex flex-wrap"
+            >
+              <a
+                *ngFor="
+                  let doc of statusModal.controls['documentList'].value;
+                  let index = index
+                "
+                class="me-3 mt-4 border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between mw-325px"
+              >
+                <div
+                  class="text-truncate pspmw95"
+                  [ngbTooltip]="doc.name"
+                  [openDelay]="600"
+                >
+                  {{ doc.name }}
+                </div>
+                <span class="cursor-pointer ms-3">
+                  <i
+                    class="bi bi-x-circle"
+                    (click)="clearFile('documentList', index)"
+                  ></i
+                ></span>
+              </a>
+            </div>
+
+            <!--end::Dropzone-->
+          </div>
+        </div>
+      </div>
+      <div
+        class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10"
+        id="kt_inbox_reject_footer"
+      >
+        <button
+          type="reset"
+          class="btn btn-sm btn-outline"
+          id="kt_inbox_reject_close"
+          (click)="
+            statusModal.reset();
+            statusModal.controls['documentList'].setValue([])
+          "
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-primary w-100px"
+          (click)="updateStatus()"
+        >
+          Reject
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

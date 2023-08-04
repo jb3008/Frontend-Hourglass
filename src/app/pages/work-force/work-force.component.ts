@@ -27,6 +27,7 @@ export class WorkForceComponent implements OnInit {
   profilePicDoc: any = null;
   isEngagedWorker: string = 'Engaged';
   submitted = false;
+  today: any = new Date();
   modalConfig: ModalConfig = {
     modalTitle: 'Employee',
     dismissButtonLabel: 'Cancel',
@@ -45,6 +46,7 @@ export class WorkForceComponent implements OnInit {
   ) {}
 
   async openModal() {
+    this.workForceData.reset();
     return await this.modalComponent.open();
   }
   async hideFooter(): Promise<boolean> {
@@ -378,5 +380,9 @@ export class WorkForceComponent implements OnInit {
         this.cdr.detectChanges();
       };
     }
+  }
+
+  numbersOnly(event: any) {
+    return this.utils.numberOnly(event);
   }
 }

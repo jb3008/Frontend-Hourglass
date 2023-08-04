@@ -27,7 +27,7 @@
                 >
                   <mat-option
                     *ngFor="let list of workForceList"
-                    [value]="list.wfUserId"
+                    [value]="list.workForceId"
                   >
                     {{ list.firstName }} {{ list.lastName }}
                   </mat-option>
@@ -358,16 +358,15 @@
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
                 <span
-                  class="badge badge-light-danger"
+                  class="badge badge-light-success"
                   [ngClass]="{
-                    ' badge-light-warning':
-                      element.status?.toUpperCase() === 'IN_PROGRESS',
+                    ' badge-light-warning': element.status === 'IN_PROGRESS',
                     'badge-light-success':
-                      element.status?.toUpperCase() === 'APPROVED',
-                    'badge-light-danger':
-                      element.status?.toUpperCase() === 'REJECTED'
+                      element.status === 'APPROVED' ||
+                      element.status === 'COMPLETED',
+                    'badge-light-danger': element.status === 'REJECTED'
                   }"
-                  >{{ element.status?.toUpperCase() }}</span
+                  >{{ element.displayStatus }}</span
                 >
               </td>
             </ng-container>

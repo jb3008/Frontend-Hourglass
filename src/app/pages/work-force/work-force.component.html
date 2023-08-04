@@ -172,8 +172,10 @@
             <input
               type="text"
               formControlName="workPhone"
+              (keypress)="numbersOnly($event)"
               class="form-control py-2 fs- fw-normal"
               placeholder="Give Work ph Number Here"
+              maxlength="10"
             />
           </div>
           <div
@@ -195,7 +197,9 @@
             </label>
             <input
               type="text"
+              (keypress)="numbersOnly($event)"
               formControlName="mobilePhone"
+              maxlength="10"
               class="form-control py-2 fs- fw-normal"
               placeholder="Give Mobile Number Here"
             />
@@ -230,6 +234,7 @@
                 type="text"
                 class="form-control py-2 fs- fw-normal"
                 (click)="dob.open()"
+                [max]="today"
                 [matDatepicker]="dob"
                 placeholder="Select Date of Birth"
               />

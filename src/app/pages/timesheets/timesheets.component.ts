@@ -111,10 +111,12 @@ export class TimesheetsComponent implements OnInit {
 
           element.timeSpent = 0;
 
-          for (let i = 0; i < element.taskListDetails.length; i++) {
-            element.timeSpent += element.taskListDetails[i].timeSpent
-              ? parseInt(element.taskListDetails[i].timeSpent)
-              : 0;
+          if (element.taskListDetails?.length) {
+            for (let i = 0; i < element.taskListDetails.length; i++) {
+              element.timeSpent += element.taskListDetails[i].timeSpent
+                ? parseInt(element.taskListDetails[i].timeSpent)
+                : 0;
+            }
           }
           element.status = element.displayStatus;
         }

@@ -45,7 +45,7 @@
           type="text"
           formControlName="searchByEmployee"
           class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10"
-          placeholder="Search by Emplyee"
+          placeholder="Search by Employee"
         />
         <span><i class="fa fa-search"></i></span>
       </div>
@@ -150,7 +150,7 @@
               }}</span>
             </div>
           </div>
-          <div>{{ element.registerId }}</div>
+          <div *ngIf="!element.userDetail">{{ element.registerId }}</div>
         </td>
       </ng-container>
 

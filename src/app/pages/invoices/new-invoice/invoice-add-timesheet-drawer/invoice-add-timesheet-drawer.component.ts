@@ -45,19 +45,18 @@ export class InvoiceAddTimesheetDrawerComponent implements OnInit {
   dataSource = new MatTableDataSource<PeriodicElement>([]);
   selection = new SelectionModel<PeriodicElement>(true, []);
   @Input() workOrderId: any;
+  @Input() selectedTask: any = [];
   @Output() getSelectedTimesheetList = new EventEmitter<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  ngOnInit(): void {
-    this.selection.clear();
-    this.cdr.detectChanges();
-  }
-  ngAfterViewInit() {
+  ngOnInit(): void {}
+  AfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
 
   ngOnChanges() {
+    console.log('CALL CHANGE');
     if (this.workOrderId) {
       this.getTimesheetList();
     }
@@ -74,6 +73,7 @@ export class InvoiceAddTimesheetDrawerComponent implements OnInit {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   toggleAllRows() {
+    console.log(this.dataSource.data);
     if (this.isAllSelected()) {
       this.selection.clear();
       return;
@@ -95,7 +95,7 @@ export class InvoiceAddTimesheetDrawerComponent implements OnInit {
   getTimesheetList() {
     this.isLoading = true;
     this.apiCalls
-      .get(this.endPoints.TIMESHEET_LIST_HM, {
+      .get(this.endPoints.TIMESHEET_LIST_FOR_INVOICE, {
         workOrderId: this.workOrderId,
       })
       .pipe(
@@ -112,7 +112,6 @@ export class InvoiceAddTimesheetDrawerComponent implements OnInit {
       .subscribe((response) => {
         for (let index = 0; index < response.length; index++) {
           const element = response[index];
-          element.status = element.displayStatus;
           element.timeSpent = 0;
 
           for (let i = 0; i < element.taskListDetails.length; i++) {

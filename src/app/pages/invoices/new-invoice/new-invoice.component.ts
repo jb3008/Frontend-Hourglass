@@ -4,7 +4,6 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { DrawerComponent } from 'src/app/_metronic/kt/components';
 
@@ -41,6 +40,7 @@ export class NewInvoiceComponent implements OnInit {
   isLoading = false;
 
   paymentTerms: any = [];
+  selectedWorkOrder: any;
   ngOnInit(): void {
     // DrawerComponent.reinitialization();
     this.invoiceData = this.fb.group({
@@ -48,13 +48,18 @@ export class NewInvoiceComponent implements OnInit {
       paymentTerms: [{ value: '', disabled: true }],
       invoiceNumber: ['', Validators.required],
       invoiceDate: ['', Validators.required],
-      invoiceAmount: [0, Validators.required],
-      workRateCurrency: ['', Validators.required],
+      status: ['PENDING', Validators.required],
+      currency: ['', Validators.required],
       comments: [''],
-      newInvoiceTimeSheetList: [[]],
+      timeSheetList: [[]],
       documentList: [[]],
-      rate: [0],
-      taxAmount: [0],
+      vendorId: [''],
+      vendorAddress: [''],
+      companyCode: [''],
+      companyAddress: [''],
+      subTotalAmount: [0],
+      taxPercentage: [0, [Validators.max(100), Validators.min(0)]],
+      totalAmount: [0],
     });
     this.getAllPaymentTerms();
     this.getAllWorkOrders();
@@ -145,12 +150,26 @@ export class NewInvoiceComponent implements OnInit {
     this.invoiceData.controls['paymentTerms'].setValue(
       `(${workOrder.payRate}) ` + paymentTerms?.name
     );
-    this.invoiceData.controls['workRateCurrency'].setValue(
-      workOrder.rateCurrency
+    this.invoiceData.controls['currency'].setValue(workOrder.rateCurrency);
+    this.invoiceData.controls['vendorId'].setValue(
+      workOrder?.vendorDetails?.vendorId
     );
-    this.invoiceData.controls['rate'].setValue(
-      workOrder.rate ? workOrder.rate : 0
+    this.invoiceData.controls['vendorAddress'].setValue(
+      workOrder?.vendorDetails?.address
     );
+    this.invoiceData.controls['companyCode'].setValue(
+      workOrder?.companyDetails?.companyCode
+    );
+    this.invoiceData.controls['companyAddress'].setValue(
+      workOrder?.companyDetails?.address
+    );
+
+    this.invoiceData.controls['taxPercentage'].setValue(0);
+    this.invoiceData.controls['subTotalAmount'].setValue(0);
+    this.invoiceData.controls['totalAmount'].setValue(0);
+    this.selectedTask = [];
+    this.dataSource = new MatTableDataSource<any>([]);
+    this.selectedWorkOrder = workOrder;
     this.cdr.detectChanges();
   }
 
@@ -245,30 +264,79 @@ export class NewInvoiceComponent implements OnInit {
   }
 
   getSelectedTimesheetList(selectedTimeSheet: any) {
+    console.log(selectedTimeSheet);
     if (selectedTimeSheet.length) {
       let timeSheetList = [];
-      let invoiceAmount = 0;
+      let subTotal = 0;
       for (let index = 0; index < selectedTimeSheet.length; index++) {
         const element = selectedTimeSheet[index];
         element.timeSpent = element.timeSpent ? parseInt(element.timeSpent) : 0;
-        const rate = this.invoiceData.controls['rate'].value
-          ? this.invoiceData.controls['rate'].value
+        const rate = this.selectedWorkOrder.rate
+          ? this.selectedWorkOrder.rate
           : 0;
         timeSheetList.push({
           timeSheetId: element.timeSheetId,
           timeSpent: element.timeSpent,
-          unitPrice: parseFloat(this.invoiceData.controls['rate'].value),
+          unitPrice: parseFloat(rate),
           amount: element.timeSpent * rate,
         });
-        invoiceAmount += element.timeSpent * rate;
+        subTotal = element.timeSpent * rate;
       }
-      this.invoiceData.controls['invoiceAmount'].setValue(invoiceAmount);
+      this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
+      const totalTax = this.percentage(
+        parseInt(this.invoiceData.controls['taxPercentage'].value),
+        subTotal
+      );
+
+      this.invoiceData.controls['totalAmount'].setValue(
+        parseFloat(totalTax) + subTotal
+      );
+
       this.selectedTask = timeSheetList;
       this.dataSource = new MatTableDataSource<any>(timeSheetList);
     }
     this.cdr.detectChanges();
   }
+  onTaxChange(): void {
+    let subTotal = 0;
+    if (this.invoiceData.controls['taxPercentage'].value) {
+      for (let index = 0; index < this.selectedTask.length; index++) {
+        const element = this.selectedTask[index];
+        element.timeSpent = element.timeSpent ? parseInt(element.timeSpent) : 0;
+        const rate = this.selectedWorkOrder.rate
+          ? this.selectedWorkOrder.rate
+          : 0;
 
+        subTotal = element.timeSpent * rate;
+      }
+      this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
+      const totalTax = this.percentage(
+        parseInt(this.invoiceData.controls['taxPercentage'].value),
+        subTotal
+      );
+      console.log(totalTax);
+
+      this.invoiceData.controls['totalAmount'].setValue(
+        parseFloat(totalTax) + subTotal
+      );
+    } else {
+      for (let index = 0; index < this.selectedTask.length; index++) {
+        const element = this.selectedTask[index];
+        element.timeSpent = element.timeSpent ? parseInt(element.timeSpent) : 0;
+        const rate = this.selectedWorkOrder.rate
+          ? this.selectedWorkOrder.rate
+          : 0;
+
+        subTotal = element.timeSpent * rate;
+      }
+      this.invoiceData.controls['taxPercentage'].setValue(0);
+      this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
+      this.invoiceData.controls['totalAmount'].setValue(subTotal);
+    }
+  }
+  percentage(percent: number, total: number) {
+    return ((percent / 100) * total).toFixed(2);
+  }
   changeDateToUtc(dateObj: any) {
     const date = new Date(dateObj);
     const utcDate = date.toISOString();
@@ -276,16 +344,16 @@ export class NewInvoiceComponent implements OnInit {
   }
 
   async save() {
-    // this.invoiceData.controls['newInvoiceTimeSheetList'].setValue([]);
-    // for (let index = 0; index < this.selectedTask.length; index++) {
-    //   const element = this.selectedTask[index];
-    //   this.invoiceData.controls['newInvoiceTimeSheetList'].value.push({
-    //     taskId: element.taskId,
-    //     timeSpent: element.timeSpent,
-    //     startDate: element.startDate,
-    //     dueDate: element.dueDate,
-    //   });
-    // }
+    this.invoiceData.controls['timeSheetList'].setValue([]);
+    for (let index = 0; index < this.selectedTask.length; index++) {
+      const element = this.selectedTask[index];
+      this.invoiceData.controls['timeSheetList'].value.push({
+        timeSheetId: element.timeSheetId,
+        hours: element.timeSpent,
+        rate: parseFloat(element.unitPrice),
+        amount: parseFloat(element.amount),
+      });
+    }
     let formData: any = new Object();
     this.submitted = true;
 
@@ -295,6 +363,7 @@ export class NewInvoiceComponent implements OnInit {
     }
 
     this.isLoading = true;
+
     if (this.invoiceData.controls['invoiceDate'].value) {
       this.invoiceData.controls['invoiceDate'].setValue(
         this.changeDateToUtc(this.invoiceData.controls['invoiceDate'].value)
@@ -310,7 +379,7 @@ export class NewInvoiceComponent implements OnInit {
         }
       }
     }
-    formData['status'] = status;
+
     this.apiCalls
       .post(this.endPoints.CREATE_INVOICE, formData)
       .pipe(
@@ -333,9 +402,9 @@ export class NewInvoiceComponent implements OnInit {
               docFormData.append('documentList', blob, fileObj.name);
             });
 
-            docFormData.append('timeSheetId', response);
+            docFormData.append('invoiceId', response.InvoiceId);
             this.apiCalls
-              .post(this.endPoints.UPLOAD_TIME_SHEET_DOCUMENT, docFormData)
+              .post(this.endPoints.UPLOAD_INVOICE_DOCUMENT, docFormData)
               .pipe(
                 catchError(async (err) => {
                   this.isLoading = false;
@@ -344,7 +413,7 @@ export class NewInvoiceComponent implements OnInit {
                   }, 10);
                   this.utils.showSnackBarMessage(
                     this.snackBar,
-                    'Something went wrong on upload timesheet-document'
+                    'Something went wrong on upload invoice-document'
                   );
                   this.cdr.detectChanges();
                 })
@@ -355,9 +424,9 @@ export class NewInvoiceComponent implements OnInit {
                   this.ngOnInit();
                   this.utils.showSnackBarMessage(
                     this.snackBar,
-                    'Time sheet created successfully'
+                    'Invoice created successfully'
                   );
-                  this.router.navigate(['/timesheets']);
+                  this.router.navigate(['/invoices']);
                 }
               });
           } else {
@@ -365,9 +434,9 @@ export class NewInvoiceComponent implements OnInit {
             this.ngOnInit();
             this.utils.showSnackBarMessage(
               this.snackBar,
-              'Time sheet created successfully'
+              'Invoice created successfully'
             );
-            this.router.navigate(['/timesheets']);
+            this.router.navigate(['/invoices']);
           }
         }
       });
@@ -384,15 +453,3 @@ export interface PeriodicElement {
   lastUpdate: string;
   status: string;
 }
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    taskId: 8865,
-    taskName: 'Some task name that has lengthy characters',
-    priority: 'Low',
-    timeSpent: '38 hrs',
-    eta: '28/5/2023',
-    lastUpdate: '28/5/2023',
-    status: 'In-progress',
-  },
-];

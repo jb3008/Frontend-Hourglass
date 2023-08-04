@@ -33,16 +33,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private _formBuilder: FormBuilder
   ) {}
-  statusModalConfig: ModalConfig = {
-    modalTitle: 'Document',
-    dismissButtonLabel: 'Cancel',
-    closeButtonLabel: 'Save',
-    hideFooter: this.hideFooter,
-  };
-  async hideFooter(): Promise<boolean> {
-    return true;
-  }
-  @ViewChild('modalStatus') private statusModalComponent: ModalComponent;
+
   endPoints = EndPoints;
   timeSheetDetails: any = {};
   workForceList: any = [];
@@ -59,7 +50,6 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
   isEditableNew: boolean = true;
   lstTimeSheetStatus: any;
   auth: any;
-  statusModal: FormGroup;
   today = new Date();
   ngOnInit(): void {
     // DrawerComponent.reinitialization();
@@ -67,12 +57,6 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
 
     this.timeSheetId = this.route.snapshot.paramMap.get('timeSheetId');
     this.getAllTimeSheetStatus();
-
-    this.statusModal = this.fb.group({
-      timeSheetId: [this.timeSheetId, Validators.required],
-      status: ['', Validators.required],
-      documentList: [[]],
-    });
   }
 
   ngAfterViewInit() {
@@ -102,24 +86,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
     }
     return true;
   }
-  getAllWorkForceList() {
-    this.apiCalls
-      .get(this.endPoints.LIST_WORK_FORCE, {})
-      .pipe(
-        catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the work-force'
-          );
-          throw err;
-        })
-      )
-      .subscribe((response) => {
-        this.workForceList = response;
-        this.getAllTimesheetDetails();
-        this.cdr.detectChanges();
-      });
-  }
+
   getAllTimeSheetStatus() {
     this.apiCalls
       .get(this.endPoints.GET_TIMESHEET_STATUS, {})
@@ -161,8 +128,8 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
         this.timeSheetDetails.taskListDetails =
           this.timeSheetDetails.taskListDetails.filter((r: any) => {
             r.isNew = false;
-            r.status = r.displayStatus;
             r.startDate = new Date(r.startDate).toISOString();
+
             return r;
           });
 
@@ -217,7 +184,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
             ids.push(element.data[i].taskId);
           }
           this.totalTimeSpent += element.timeSpent;
-
+          console.log(element.data);
           this.dataSource[element.date] = new MatTableDataSource<any>(
             element.data
           );
@@ -260,7 +227,8 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
               ].timeSheetTaskId + 1
             : 1,
           title: element.title,
-          status: element.displayStatus,
+          status: element.status,
+          displayStatus: element.displayStatus,
           priority: element.priority,
           isNew: true,
         });
@@ -580,159 +548,6 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
     return status === 'Draft'
       ? this.endPoints.CREATE_TIME_SHEET_AS_DRAFT
       : this.endPoints.CREATE_TIME_SHEET;
-  }
-  async openStatusModal(status: string) {
-    this.statusModal.controls['documentList'].setValue([]);
-    this.statusModal.controls['status'].setValue(status);
-    this.statusModalConfig.modalTitle = status;
-    return await this.statusModalComponent.open();
-  }
-
-  async closeStatusModal() {
-    return await this.statusModalComponent.closeModal();
-  }
-
-  droppedFiles(allFiles: File[], name: string): void {
-    console.log('this.allFiles', allFiles);
-    console.log(this.statusModal.controls[name].value);
-    const fileLength = allFiles.length;
-    let flg: boolean = true;
-    for (let i = 0; i < fileLength; i++) {
-      const file = allFiles[i];
-
-      if (file.type.indexOf('image') == 0) {
-        this.utils.showSnackBarMessage(
-          this.snackBar,
-          'Please upload documents only'
-        );
-        flg = false;
-        break;
-      } else if (file.size > 2 * 1024 * 1024) {
-        // check if file size is > 2 MB
-        this.utils.showSnackBarMessage(
-          this.snackBar,
-          'Maximum allowed file size is 2 MB. Please choose another file.'
-        );
-        flg = false;
-        break;
-      } else {
-        const docList = this.statusModal.controls[name].value;
-        if (docList.length < 6) {
-          if (this.utils.isFileExist(docList, file)) {
-            this.utils.showSnackBarMessage(
-              this.snackBar,
-              'This file "' + file.name + '" already exist.'
-            );
-            flg = false;
-            break;
-          }
-        } else {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'Maximum 6 files can be added.'
-          );
-          flg = false;
-          break;
-        }
-      }
-    }
-    if (flg) {
-      for (let i = 0; i < fileLength; i++) {
-        this.statusModal.controls[name].value.push(allFiles[i]);
-      }
-    }
-  }
-
-  selectFile(event: any, name: string) {
-    if (event.target.files.length) {
-      const file = event.target.files[0];
-      if (file.type.indexOf('image') == 0) {
-        this.utils.showSnackBarMessage(
-          this.snackBar,
-          'Please upload documents only'
-        );
-      } else if (file.size > 2 * 1024 * 1024) {
-        // check if file size is > 2 MB
-        this.utils.showSnackBarMessage(
-          this.snackBar,
-          'Maximum allowed file size is 2 MB. Please choose another file.'
-        );
-      } else {
-        console.log(this.statusModal.controls);
-        const docList = this.statusModal.controls[name].value;
-        if (docList.length < 6) {
-          if (this.utils.isFileExist(docList, file)) {
-            this.utils.showSnackBarMessage(
-              this.snackBar,
-              'This file "' + file.name + '" already exist.'
-            );
-          } else {
-            this.statusModal.controls[name].value.push(file);
-          }
-        } else {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'Maximum 6 files can be added.'
-          );
-        }
-      }
-    }
-  }
-
-  clearFile(name: string, index: number) {
-    this.statusModal.controls[name].value.splice(index, 1);
-  }
-
-  async updateStatus() {
-    const formData = new FormData();
-
-    // stop here if form is invalid
-    if (this.statusModal.invalid) {
-      return;
-    }
-
-    this.isLoading = true;
-
-    for (const key of Object.keys(this.statusModal.value)) {
-      if (key != 'documentList') {
-        const value = this.statusModal.value[key];
-
-        if (value) {
-          formData.append(key, value);
-        }
-      }
-    }
-    const file = this.statusModal.get('documentList')?.value;
-    if (file.length != 0) {
-      file.forEach((fileObj: File) => {
-        const blob = new Blob([fileObj], { type: fileObj.type });
-        formData.append('documentList', blob, fileObj.name);
-      });
-    }
-
-    this.apiCalls
-      .post(this.endPoints.UPDATE_TIMESHEET_STATUS, formData)
-      .pipe(
-        catchError(async (err) => {
-          this.isLoading = false;
-          setTimeout(() => {
-            throw err;
-          }, 10);
-          this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
-          this.cdr.detectChanges();
-        })
-      )
-      .subscribe(async (response) => {
-        if (this.isLoading) {
-          this.isLoading = false;
-          await this.statusModalComponent.closeModal();
-          this.ngOnInit();
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'Time sheet status updated successfully'
-          );
-        }
-      });
   }
 }
 

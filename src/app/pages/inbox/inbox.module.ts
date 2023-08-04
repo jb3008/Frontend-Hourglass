@@ -28,11 +28,12 @@ import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { InboxLogsDrawerComponent } from '../inbox-drawer/inbox-logs-drawer/inbox-logs-drawer.component';
 import { InboxCollaborateDrawerComponent } from '../inbox-drawer/inbox-collaborate-drawer/inbox-collaborate-drawer.component';
 import { InboxAttachmentLogsDrawerComponent } from '../inbox-drawer/inbox-attachment-logs-drawer/inbox-attachment-logs-drawer.component';
-import { InboxRejectDrawerComponent } from '../inbox-drawer/inbox-reject-drawer/inbox-reject-drawer.component';
-import { InboxApproveDrawerComponent } from '../inbox-drawer/inbox-approve-drawer/inbox-approve-drawer.component';
+
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { ModalsModule } from 'src/app/_metronic/partials';
+import { InboxApproveDrawerComponent } from './timesheets-details/inbox-approve-drawer/inbox-approve-drawer.component';
+import { InboxRejectDrawerComponent } from './timesheets-details/inbox-reject-drawer/inbox-reject-drawer.component';
 @NgModule({
   declarations: [
     InboxComponent,
@@ -40,12 +41,8 @@ import { ModalsModule } from 'src/app/_metronic/partials';
     TimesheetDetailComponent,
     InvoicesDetailsComponent,
     InvoicesComponent,
-
-    // InboxLogsDrawerComponent,
-    // InboxAttachmentLogsDrawerComponent,
-    // InboxCollaborateDrawerComponent,
-    // InboxRejectDrawerComponent,
-    // InboxApproveDrawerComponent,
+    InboxApproveDrawerComponent,
+    InboxRejectDrawerComponent,
   ],
   imports: [
     CommonModule,
