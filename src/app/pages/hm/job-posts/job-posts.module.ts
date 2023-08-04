@@ -26,6 +26,7 @@ import { LogsDrawerComponent } from './job-post-detail/logs-drawer/logs-drawer.c
 import { ChatDrawerComponent } from './job-post-detail/chat-drawer/chat-drawer.component';
 import { ModalsModule } from 'src/app/_metronic/partials';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -59,7 +60,10 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     MatDialogModule,
     NgbTooltipModule,
     ModalsModule,
-    NgxDocViewerModule
+    NgxDocViewerModule,
+    MatAutocompleteModule
+
+
   ]
 })
 export class JobPostsModule { }

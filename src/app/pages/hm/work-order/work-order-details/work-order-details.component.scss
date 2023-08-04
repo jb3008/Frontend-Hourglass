@@ -6,3 +6,14 @@
   .bx{  
      background: #FCFCFD; 
   }
+
+.tasktable{
+  th,td{ padding-left:10px ;}
+  th.mat-header-cell:not(:first-child),
+  td.mat-cell:not(:first-child)
+   {
+    border-left: 1px solid #eff2f5;
+   
+  }
+}
+  
