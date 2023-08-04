@@ -64,9 +64,9 @@
         <div *ngFor="let documents of documentsList">
           <div class="d-flex align-items-center mb-4 bg-white rounded p-3 border">
             <span class="symbol symbol-30px align-middle mr-5 w-50px">
-              <img alt="" [src]="getDocIcon(documents.name)"></span>
+              <img alt="" [src]="getDocIcon(documents.fileName)"></span>
             <div class="d-flex flex-column w-100 mr-2">
-              <span class="fw-bold">{{documents.name}}</span>
+              <span class="fw-bold">{{documents.fileName}}</span>
             </div>
             <!-- <div class="d-flex w-sm-100 mr-2"><span class="badge badge-light-primary w-auto">Docktype name</span></div> -->
             <div class="font-weight-bolder text-warning py-1 font-size-lg min-w-100px">

@@ -80,6 +80,24 @@ export class ApplicationDrawerComponent implements OnInit, OnChanges {
       })
   }
 
+  getWorkExperience(exp: any){
+    const years = Math.floor(exp / 12);
+    const months = exp % 12;
+
+    if (years > 0) {
+      if (months > 0) {
+        return `${years} years ${months} months`;
+      } else {
+        return `${years} years`;
+      }
+    } else {
+      if(months)
+        return `${months} months`;
+      else
+        return "0 month";
+    }
+  }
+
   getAttachment(id: string, name: string){
     this.loading = true;
     let queryParam = {

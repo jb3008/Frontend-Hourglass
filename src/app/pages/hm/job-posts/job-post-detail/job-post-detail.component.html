@@ -467,7 +467,7 @@
                   >
                     {{element.status}}</span> -->
                     <span  class="badge  fw-normal" [className]="getInterviewStatusClass(element.status)">
-                    {{getInterviewStatus(element.status)}}</span>
+                    {{element.displayStatus}}</span>
             </div>
             <app-logs-drawer [clickedApplication]="clickedApplication"></app-logs-drawer>
             <app-chat-drawer></app-chat-drawer>

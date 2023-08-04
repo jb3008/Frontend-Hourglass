@@ -14,6 +14,7 @@ import { catchError } from 'rxjs/internal/operators/catchError';
 import { MatPaginator } from '@angular/material/paginator';
 import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 import { Location } from '@angular/common';
+import { NewTaskRecrDrawerComponent  } from './new-task-recr-drawer/new-task-recr-drawer.component';
 
 @Component({
   selector: 'app-work-order-detail',
@@ -38,6 +39,8 @@ export class WorkOrderDetailComponent implements OnInit {
   displayedColumns: string[] = ['taskId', 'title', 'priority', 'assigneeId','timeSpent',  'finishDate', 'lastUpdate', 'status', 'action'];
   dataSource = new MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('taskdrawer', { static: false }) taskdrawer: NewTaskRecrDrawerComponent;
+  
   modalConfig: ModalConfig = {
     modalTitle: 'View Document',
     dismissButtonLabel: 'Cancel',
@@ -88,6 +91,10 @@ export class WorkOrderDetailComponent implements OnInit {
 
   async hideFooter(): Promise<boolean> {
     return true;
+  }
+
+  showTaskDrawer(){
+    this.taskdrawer.ngOnInit();
   }
 
   processContent(data: string){

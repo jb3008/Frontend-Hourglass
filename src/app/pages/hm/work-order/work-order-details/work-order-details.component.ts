@@ -13,6 +13,7 @@ import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
 import { Location } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
+import { NewTaskDrawerComponent } from './new-task-drawer/new-task-drawer.component';
 
 @Component({
   selector: 'app-work-order-details',
@@ -34,6 +35,7 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
   isFromInbox = false;
   dataSource = new MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('taskdrawer', { static: false }) taskdrawer: NewTaskDrawerComponent;
   modalConfig: ModalConfig = {
     modalTitle: 'View Document',
     dismissButtonLabel: 'Cancel',
@@ -99,6 +101,10 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
 
   async hideFooter(): Promise<boolean> {
     return true;
+  }
+
+  showTaskDrawer(){
+    this.taskdrawer.ngOnInit();
   }
 
   processContent(data: string){

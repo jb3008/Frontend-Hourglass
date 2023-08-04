@@ -135,7 +135,7 @@
                                 <div class="d-flex">
                                     <a class="fw-bold display-inline cursor-pointer" (click)="goToDetails(details.id)"> #{{details.id}}</a>
                                 </div>
-                                <span class="fs-7 text-muted mt-1 mb-5">created on {{details.reportDate | date:'dd MMM, yyyy'}}</span>
+                                <span class="fs-7 text-muted mt-1 mb-5">created on {{details.registerDate | date:'dd MMM, yyyy'}}</span>
 
 
                                 <div class="d-flex flex-wrap flex-stack">
@@ -187,9 +187,9 @@
                                 </h6>
                                 <div class="d-flex">
                                     <a class="cursor-pointer fw-bold display-inline"> #{{details.id}}</a>
-                                    <span class="badge badge-light-success fw-normal ms-3"><i class="fas fa-yin-yangfas fa-circle px-1 text-success fs-10"></i> {{details.jobApplicationDetails?.status}} </span>
+                                    <span class="badge badge-light-success fw-normal ms-3"><i class="fas fa-yin-yangfas fa-circle px-1 text-success fs-10"></i> {{details.jobApplicationDetails?.displayStatus}} </span>
                                 </div>
-                                <span class="fs-7 text-muted mt-1 mb-5">created on {{details.reportDate | date:'dd MMM, yyyy'}}</span>
+                                <span class="fs-7 text-muted mt-1 mb-5">created on {{details.registerDate | date:'dd MMM, yyyy'}}</span>
 
                                 <div class="d-flex flex-wrap flex-stack">
                                     <div class="d-flex flex-column flex-grow-1 pe-8">
@@ -245,7 +245,7 @@
                                 <div class="d-flex">
                                     <a class="fw-bold display-inline"> #{{details.id}}</a>
                                 </div>
-                                <span class="fs-7 text-muted mt-1 mb-5">created on {{details.reportDate | date:'dd MMM, yyyy'}}</span>
+                                <span class="fs-7 text-muted mt-1 mb-5">created on {{details.registerDate | date:'dd MMM, yyyy'}}</span>
 
                                 <div class="d-flex flex-wrap flex-stack">
                                     <div class="d-flex flex-column flex-grow-1 pe-8">

@@ -287,9 +287,9 @@
 
       <ng-container *ngIf="isSelectedTab=='Task'">
 
-        <a id="kt_new_task_recr_drawer_toggle" class="btn btn-primary btn-sm cursor-pointer mb-6" (click)="taskDetails = ''"> <i
+        <a id="kt_new_task_recr_drawer_toggle" class="btn btn-primary btn-sm cursor-pointer mb-6" (click)="taskDetails = ''; showTaskDrawer();"> <i
             class="bi bi-plus-lg"></i>New Task</a>
-        <app-new-task-recr-drawer [vendorId]="workOrderDetails?.managerDetails?.vendorId" [taskDetails]="taskDetails" (getList)="getTaskList({workOrderId: workOrderDetails?.workOrderId})"></app-new-task-recr-drawer>
+        <app-new-task-recr-drawer #taskdrawer [vendorId]="workOrderDetails?.managerDetails?.vendorId" [taskDetails]="taskDetails" (getList)="getTaskList({workOrderId: workOrderDetails?.workOrderId})"></app-new-task-recr-drawer>
 
         <div class="d-flex align-items-start gap-4 ">
           <div class="position-relative input-icon input-icon-right">
@@ -363,11 +363,19 @@
               <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-person"></i>
                 Assigned To </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
+                <div class="d-flex align-items-center">
                 <div class="symbol symbol-30px symbol-square me-3">
-                  <!-- <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">SL </span> -->
+                  <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">
+                    {{element.userDetail?.firstName[0]}}{{element.userDetail?.lastName[0]}}
+                  </span>
                 </div> 
-                <span>{{element.assigneeId}}</span>
-                <!-- <span class="d-flex text-muted fs-8">{{element.assigneeId}}</span>                 -->
+                <div>
+                  {{element.userDetail?.firstName}}{{element.userDetail?.lastName}}
+                  <div>
+                    {{element.userDetail?.emailId}}
+                  </div>
+                </div> 
+              </div>
               </td>
             </ng-container>
 
@@ -396,7 +404,7 @@
               <td mat-cell *matCellDef="let element" class="align-middle">
                 <!-- <span class="badge badge-light-danger"
                   [ngClass]="{' badge-light-warning': element.status === 'In-progress', 'badge-light-success' : element.status === 'Approved' , 'badge-light-danger' : element.status === 'Rejected' }"></span> -->
-                  <span class="badge badge-light-primary">{{element.status}}</span>
+                  <span class="badge badge-light-primary">{{element.displayStatus}}</span>
               </td>
             </ng-container>
 

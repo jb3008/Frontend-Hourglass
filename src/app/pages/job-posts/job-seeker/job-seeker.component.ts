@@ -181,8 +181,10 @@ export class JobSeekerComponent implements OnInit {
               }
             }else{
               const file = this.applyJobData.get(key)?.value;
-              const blob = new Blob([file], { type: file.type });
-              formData.append(key, blob, file.name);
+              if(file){
+                const blob = new Blob([file], { type: file.type });
+                formData.append(key, blob, file.name);
+              }
             }
           }
         }

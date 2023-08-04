@@ -74,9 +74,9 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       site: ['', Validators.required],
       location: [{value: '', disabled: true}, Validators.required],
       businessUnit: ['', Validators.required],
-      workPolicyDoc: [''],
-      aboutOrgDoc: [''],
-      requirementDoc: [''],
+      workPolicyDoc: ['', Validators.required],
+      aboutOrgDoc: ['', Validators.required],
+      requirementDoc: ['', Validators.required],
       otherDocList: [[]],
     });
 
@@ -448,6 +448,10 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     let minBudget = this.jobPostData.controls['minBudget'].value;
     let maxBudget = this.jobPostData.controls['maxBudget'].value;
     if(this.jobPostData.valid && (workRateValue || (minBudget && maxBudget))){
+      if((workRateValue && workRateValue == 0) || (minBudget && minBudget == 0) || (maxBudget && maxBudget == 0)){
+        this.utils.showSnackBarMessage(this.snackBar, 'Please enter an amount greater than 0');
+        return;
+      }
       this.isLoading = true;
       this.jobPostData.controls['reportDate'].setValue(this.changeDateToUtc(this.jobPostData.controls['reportDate'].value))
       this.jobPostData.controls['startDate'].setValue(this.changeDateToUtc(this.jobPostData.controls['startDate'].value))
@@ -461,7 +465,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
           if(status != 'draft'){
             if(key == 'otherDocList'){
               const file = this.jobPostData.get(key)?.value;
-              if(file.length != 0){
+              if(file && file.length != 0){
                 file.forEach((fileObj: File) => {
                   const blob = new Blob([fileObj], { type: fileObj.type });
                   formData.append(key, blob, fileObj.name);
