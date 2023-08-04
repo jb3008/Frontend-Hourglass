@@ -113,8 +113,9 @@
                             </ng-container>
     
                             <mat-select class="form-select fs- py-2 w-100px rounded-start-0" formControlName="workRateCurrency" placeholder="Select">
-                                <mat-option value="USD">USD</mat-option>
-                                <mat-option value="INR">INR</mat-option>
+                                <mat-option *ngFor="let currency of currencies" [value]="currency">
+                                    {{currency}}
+                                </mat-option>
                             </mat-select>
                             <span *ngIf="workOrderKind == 'Hourly'" class="text-muted ps-2">Per Hour</span>
                         </div>

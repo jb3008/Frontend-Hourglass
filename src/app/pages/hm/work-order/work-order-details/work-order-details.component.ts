@@ -216,7 +216,7 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
   }
 
   getAllStatus(){
-    this.apiCalls.get(this.endpoints.WORK_ORDER_STATUS)
+    this.apiCalls.get(this.endpoints.TASK_STATUS)
     .pipe(
       catchError(async (err) => {
         this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the work order status');

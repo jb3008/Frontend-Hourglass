@@ -25,6 +25,7 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
   @Output() getList = new EventEmitter<any>;
   @Input() vendorId: any;
   @Input() taskDetails: any;
+  @Input() statusLists: any;
   workOrderID: any;
 
   ngOnInit(): void {
@@ -51,6 +52,9 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
       this.taskDetails = changes.taskDetails.currentValue;
       this.taskData.addControl('status', ['', Validators.required]);
       this.setEditValuesOnUi();
+    }
+    if(changes?.statusLists?.currentValue.length > 0){
+      this.statusLists = changes.statusLists.currentValue;
     }
   }
 
@@ -119,6 +123,7 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
       title: this.taskDetails.title,
       assigneeId: this.taskDetails.assigneeId,
       priority: this.taskDetails.priority,
+      status: this.taskDetails.status,
       startDate: this.taskDetails.startDate,
       expectedFinishDate: this.taskDetails.finishDate,
       comments: this.taskDetails.comments,

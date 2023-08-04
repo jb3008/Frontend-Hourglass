@@ -62,8 +62,9 @@
 
             <label class="mb-1" *ngIf="taskDetails">Status<span class="text-danger">*</span></label>
               <mat-select *ngIf="taskDetails" formControlName="status" class="form-select fs- py-2" placeholder="Select">
-                <mat-option value="IN_PROGRESS">IN_PROGRESS</mat-option>
-                <mat-option value="COMPLETED">COMPLETED</mat-option>
+                <mat-option *ngFor="let status of statusLists" [value]="status.code">
+                {{status.title}}
+              </mat-option>
             </mat-select>
         </div>
 

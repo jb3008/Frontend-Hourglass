@@ -28,6 +28,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   legalEntities: any[] = [];
   payTerms: any[] = [];
   draftDetails: any[] = [];
+  currencies: any[] = [];
   jobPostData: FormGroup;
   endDate: Date;
   isLoading = false;
@@ -90,6 +91,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     this.getCostCenter();
     this.getPaymenTerms();
     this.getLegalEntities();
+    this.getCurrencies();
     if(this.jobId){
       this.getJobDocuments(this.jobId);
       
@@ -319,6 +321,23 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     })
   }
 
+  getCurrencies(){
+    this.isLoading = true;
+    this.apiCalls.get(this.endPoints.GET_CURRENCY)
+      .pipe(catchError(async (err) => {
+        this.isLoading = false;
+        setTimeout(() => {
+          throw err;  
+        }, 10);
+        this.cdr.detectChanges();
+      }))
+      .subscribe(response => {
+        this.isLoading = false;
+        this.currencies = response;
+        this.cdr.detectChanges();
+      })
+  }
+
   getDropDownValues(endpoint: any, companyCode?: string): Observable<any> {
     let queryParams;
     if(companyCode){
@@ -344,7 +363,6 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   }
 
   changeInputValue(element: HTMLElement, action: string){
-    debugger
     let formControl = element.getAttribute('formControlName');
     let value;
     if(formControl)
