@@ -278,7 +278,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     const vendorId = this.utils.getVendorId();
     switch (tab) {
       case 'AppliedJob':
-        this.queryParam.status = 'ACTIVE';
+        delete this.queryParam.status;
         this.queryParam.vendorId = vendorId;
         break;
 
@@ -462,7 +462,7 @@ type Filter = {
 
 type QueryParam = {
   [propName: string]: any;
-  status: string;
+  status?: string;
   searchText?: string;
   startDate?: string;
   endDate?: string;

@@ -269,7 +269,7 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
         this.loading = false;
         this.applicantsDetails = response;   
         this.getWorkForceProfilePic(applicationId);  
-        this.getApplicationAttachment(this.applicantsDetails.workForceId);  
+        this.getApplicationAttachment(applicationId);  
         this.cdr.detectChanges();
       })
   }
@@ -278,7 +278,7 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
     this.loading = true;
     let queryParam = {
       id: id,
-      attachmentType: 'WORK_FORCE',
+      attachmentType: 'JOB_APPLICATION',
     };
     this.apiCalls
       .get(this.endPoints.GET_DOCUMENTS, queryParam)

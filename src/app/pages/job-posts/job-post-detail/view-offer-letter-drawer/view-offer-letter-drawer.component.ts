@@ -30,12 +30,12 @@ export class ViewOfferLetterDrawerComponent implements OnInit, OnChanges {
   endPoints = EndPoints;
 
   ngOnInit(): void {
-    this.getOfferDocuments();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes?.offerDetails?.currentValue.length > 0){
       this.offerDetails = changes.offerDetails.currentValue;
+      this.getOfferDocuments();
     }
     if(changes?.rate?.currentValue){
       this.rate = changes.rate.currentValue;
@@ -50,6 +50,7 @@ export class ViewOfferLetterDrawerComponent implements OnInit, OnChanges {
   }
 
   getOfferDocuments(){
+    debugger
     let queryParam = {
       id : this.offerDetails[0]?.id,
       attachmentType : 'JOB_OFFER'

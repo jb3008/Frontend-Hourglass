@@ -126,7 +126,7 @@
                     <div class="col-8 d-flex align-items-center">
                   
                         <input *ngIf="jobKind == 'Hourly'" type="input" formControlName="workRate" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                        placeholder="Enter amount" value="500" (keypress)="numberAndDecimalOnly($event)">
+                        placeholder="Enter amount" (keypress)="numberAndDecimalOnly($event)">
                         
                         <ng-container *ngIf="jobKind == 'Fixed'">
                             <label class="me-2">Min</label>

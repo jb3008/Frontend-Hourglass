@@ -466,8 +466,9 @@
                   
                   >
                     {{element.status}}</span> -->
-                    <span  class="badge fs-7 fw-normal" [ngClass]="getInterviewStatusClass(element.status)">
-                    {{getInterviewStatus(element.status)}}</span>
+
+                    <span  class="badge  fw-normal" [className]="getInterviewStatusClass(element.status)">
+                    {{element.displayStatus}}</span>
             </div>
             <app-logs-drawer [clickedApplication]="clickedApplication"></app-logs-drawer>
             <app-chat-drawer></app-chat-drawer>

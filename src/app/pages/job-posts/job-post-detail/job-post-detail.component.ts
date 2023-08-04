@@ -93,7 +93,7 @@ export class JobPostDetailComponent implements OnInit {
         this.applicationDetails = response;
         this.getApplicationCompleteDetails();
         this.getOfferDetails();
-        this.getApplicationAttachment(this.applicationDetails.workerid);
+        this.getApplicationAttachment(this.applicationDetails.applicationid);
         this.cdr.detectChanges();
       })
   }
@@ -121,7 +121,7 @@ export class JobPostDetailComponent implements OnInit {
     this.loading = true;
     let queryParam = {
       id: id,
-      attachmentType: 'WORK_FORCE',
+      attachmentType: 'JOB_APPLICATION',
     };
     this.apiCalls
       .get(this.endPoints.GET_DOCUMENTS, queryParam)
@@ -175,15 +175,15 @@ export class JobPostDetailComponent implements OnInit {
 
     if (years > 0) {
       if (months > 0) {
-        return `${years}.${months} Y`;
+        return `${years} years ${months} months`;
       } else {
-        return `${years} Y`;
+        return `${years} years`;
       }
     } else {
       if(months)
-        return `${months} M`;
+        return `${months} months`;
       else
-        return "0 M";
+        return "0 month";
     }
   }
 
