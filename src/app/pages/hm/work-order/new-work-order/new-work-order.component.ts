@@ -35,6 +35,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   businessUnits: any[] = [];
   jobLists: any[] = [];
   vendorList: any[] = [];
+  currencies: any[] = [];
   workOrderKind = 'Hourly';
   workOrderData: FormGroup;
 
@@ -78,6 +79,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     this.getCostCenter();
     this.getPaymenTerms();
     this.getLegalEntities();
+    this.getCurrencies();
   }
 
   getHiringManagers(){
@@ -185,6 +187,23 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       .pipe(catchError((err) => {
         return throwError(() => err);
       }));
+  }
+
+  getCurrencies(){
+    this.isLoading = true;
+    this.apiCalls.get(this.endpoints.GET_CURRENCY)
+      .pipe(catchError(async (err) => {
+        this.isLoading = false;
+        setTimeout(() => {
+          throw err;  
+        }, 10);
+        this.cdr.detectChanges();
+      }))
+      .subscribe(response => {
+        this.isLoading = false;
+        this.currencies = response;
+        this.cdr.detectChanges();
+      })
   }
 
   getUserByUserId(id: string){

@@ -286,7 +286,8 @@
       <ng-container *ngIf="isSelectedTab=='Task'">
 
         <a id="kt_new_task_drawer_toggle" class="btn btn-primary btn-sm cursor-pointer mb-6" (click)="taskDetails = ''"> <i class="bi bi-plus-lg"></i>New Task</a>
-<app-new-task-drawer [vendorId]="workOrderDetails?.vendorDetails?.vendorId" [taskDetails]="taskDetails" (getList)="getTaskList({workOrderId: workOrderDetails?.workOrderId})"></app-new-task-drawer>
+          <app-new-task-drawer [vendorId]="workOrderDetails?.vendorDetails?.vendorId" [taskDetails]="taskDetails" (getList)="getTaskList({workOrderId: workOrderDetails?.workOrderId})"
+              [statusLists]="statusLists"></app-new-task-drawer>
 
         <div class="d-flex align-items-start gap-4 ">
             <div class="position-relative input-icon input-icon-right">
@@ -305,8 +306,8 @@
             </div>
             <mat-select class="form-select fs- py-2  w-200px" [(value)]="filterValue.status" (selectionChange)="filterByStatus($event)">
               <mat-option value="All Status">All Status</mat-option>
-              <mat-option *ngFor="let status of statusLists" [value]="status">
-                {{status}}
+              <mat-option *ngFor="let status of statusLists" [value]="status.code">
+                {{status.title}}
               </mat-option>
             </mat-select>
             <div class="position-relative input-icon input-icon-right">
