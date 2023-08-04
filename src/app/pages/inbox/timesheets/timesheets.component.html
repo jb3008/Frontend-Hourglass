@@ -140,14 +140,14 @@
             *ngIf="auth?.vendorId"
           >
             {{ element.timeSheetId }}
-            <i class="far fa-arrow-alt-circle-right"></i>
+           <img class="ms-1 align-middle" src="../../../../assets/images/icons/table-arrow.svg" alt="">
           </a>
           <a
             routerLink="/hm/inbox/timesheets-details/{{ element.timeSheetId }}"
             *ngIf="!auth?.vendorId"
           >
             {{ element.timeSheetId }}
-            <i class="far fa-arrow-alt-circle-right"></i>
+           <img class="ms-1 align-middle" src="../../../../assets/images/icons/table-arrow.svg" alt="">
           </a>
         </td>
       </ng-container>
@@ -186,7 +186,7 @@
         <td mat-cell *matCellDef="let element" class="align-middle">
           <a>
             {{ element.workOrderId }}
-            <i class="far fa-arrow-alt-circle-right"></i>
+            <img class="ms-1 align-middle" src="../../../../assets/images/icons/table-arrow.svg" alt="">
           </a>
         </td>
       </ng-container>
