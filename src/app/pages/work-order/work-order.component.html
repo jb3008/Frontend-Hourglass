@@ -74,7 +74,7 @@
        
           <!-- workOrder Column -->
           <ng-container matColumnDef="workOrderId">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-file-earmark"></i> Work Order #</th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../assets/images/icons/tdoc.svg" class="align-text-bottom" alt=""> Work Order #</th>
             <td mat-cell *matCellDef="let element" class="align-middle">
                 <a (click)="goToDetails(element)" class="cursor-pointer">
                     {{element.workOrderId}}  <img class="ms-1 align-middle" src="../../../../assets/images/icons/table-arrow.svg" alt="">
@@ -84,14 +84,14 @@
          
           <!-- type Column -->
           <ng-container matColumnDef="type">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-tag"></i> Type</th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../assets/images/icons/tag.svg" class="align-middle" alt="">  Type</th>
             <td mat-cell *matCellDef="let element" class="align-middle"> 
                 <span class="badge badge-light-primary" >{{element.type}} </span></td>
           </ng-container>
          
           <!-- title Column -->
           <ng-container matColumnDef="title">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-file-earmark-font"></i> Title & Description</th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../assets/images/icons/text.svg" class="align-text-bottom" alt="">  Title & Description</th>
             <td mat-cell *matCellDef="let element" class="align-middle"> 
             <span class="fw-bold">     {{element.title}} </span>
             <div class="text-muted fs-7">{{truncateText(element?.description, 35)}}</div>
@@ -101,7 +101,7 @@
          
           <!-- jobPost Column -->
           <ng-container matColumnDef="jobPostId">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-file-earmark"></i> Job Post #</th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../assets/images/icons/tdoc.svg" class="align-text-bottom" alt=""> Job Post #</th>
             <td mat-cell *matCellDef="let element" class="align-middle">
                 <a class="text-blue">
                     {{element.jobPostId}}  <img class="ms-1 align-middle" src="../../../../assets/images/icons/table-arrow.svg" alt="">
@@ -111,7 +111,7 @@
          
           <!-- priority Column -->
           <ng-container matColumnDef="priority">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-tag"></i> Priority</th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../assets/images/icons/tag.svg" class="align-middle" alt=""> Priority</th>
             <td mat-cell *matCellDef="let element" class="align-middle">
                 <span class="badge badge-light-danger" 
                 [ngClass]="{' badge-light-danger': element.priority === 'High',
@@ -127,19 +127,19 @@
          
           <!-- fDate Column -->
           <ng-container matColumnDef="startDate">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> From Date</th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../assets/images/icons/tcal.svg" class="align-text-bottom" alt="">  From Date</th>
             <td mat-cell *matCellDef="let element" class="align-middle"> {{element.startDate | date:'MMM dd, yyyy'}} </td>
           </ng-container>
          
           <!-- tDate Column -->
           <ng-container matColumnDef="endDate">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> To Date</th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../assets/images/icons/tcal.svg" class="align-text-bottom" alt=""> To Date</th>
             <td mat-cell *matCellDef="let element" class="align-middle"> {{element.endDate | date:'MMM dd, yyyy'}} </td>
           </ng-container>
          
           <!-- manager Column -->
           <ng-container matColumnDef="managerDetails">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-person"></i> Manager</th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../assets/images/icons/manager.svg" class="align-text-bottom" alt=""> Manager</th>
             <td mat-cell *matCellDef="let element" class="align-middle"> 
       
                     <!-- <div  class="symbol symbol-35px symbol-square me-3">
@@ -163,7 +163,7 @@
           
           <!-- status Column -->
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-sun"></i> Status </th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../assets/images/icons/status.svg" class="align-text-bottom" alt=""> Status </th>
             <td mat-cell *matCellDef="let element" class="align-middle">
               <!-- <span class="badge badge-light-danger" 
               [ngClass]="{' badge-light-warning': element.status === 'In-progress',

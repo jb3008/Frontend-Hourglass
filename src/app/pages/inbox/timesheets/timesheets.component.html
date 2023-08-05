@@ -131,7 +131,7 @@
       <!-- timesheet Column -->
       <ng-container matColumnDef="timeSheetId">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <i class="bi bi-file-earmark"></i> Timesheet #
+            <img src="../../../../assets/images/icons/tdoc.svg" alt="" class="align-text-bottom"> Timesheet #
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <!-- <a routerLink="details" class="cursor-pointer"> -->
@@ -155,7 +155,7 @@
       <!-- employee Column -->
       <ng-container matColumnDef="employee">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <i class="bi bi-person"></i> Employee
+            <img src="../../../../assets/images/icons/manager.svg" class="align-text-bottom" alt="">  Employee
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <div class="me-10 my-1 d-flex">
@@ -181,7 +181,7 @@
       <!-- workOrder Column -->
       <ng-container matColumnDef="workOrderId">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <i class="bi bi-file-earmark"></i> Work Order #
+            <img src="../../../../assets/images/icons/tdoc.svg" alt="" class="align-text-bottom"> Work Order #
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <a>
@@ -196,7 +196,7 @@
       <!-- fromDate Column -->
       <ng-container matColumnDef="fromDate">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <i class="bi bi-calendar"></i> From Date
+          <img src="../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  From Date
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           {{ element.fromDate | date : "MMM dd, yyyy" }}
@@ -206,7 +206,7 @@
       <!-- toDate Column -->
       <ng-container matColumnDef="toDate">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <i class="bi bi-calendar"></i> Due Date
+          <img src="../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  Due Date
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           {{ element.toDate | date : "MMM dd, yyyy" }}
@@ -216,7 +216,7 @@
       <!-- totalhr Column -->
       <ng-container matColumnDef="timeSpent">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <i class="bi bi-clock"></i> Total Work hr
+            <img src="../../../../assets/images/icons/tclock.svg" alt="" class="align-text-bottom">  Total Work hr
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           {{ element.timeSpent }} hrs
@@ -226,7 +226,7 @@
       <!-- status Column -->
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <i class="bi bi-sun"></i> Status
+            <img src="../../../../assets/images/icons/status.svg" class="align-text-bottom" alt="">  Status
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <span

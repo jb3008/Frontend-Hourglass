@@ -60,7 +60,7 @@
         <table mat-table [dataSource]="dataSource" class="table  border-bottom table-row-bordered text-gray-600 m-0">
             <!-- workorder Column -->
             <ng-container matColumnDef="workorder">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-file-earmark"></i> workorder
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tdoc.svg" alt="" class="align-text-bottom"> workorder
                     #</th>
                 <td mat-cell *matCellDef="let element" class="align-middle">
                     <!-- <a routerLink="details" class="cursor-pointer"> -->
@@ -92,7 +92,7 @@
 
             <!-- jobpost Column -->
             <ng-container matColumnDef="jobpost">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-file-earmark"></i> jobpost
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tdoc.svg" alt="" class="align-text-bottom"> jobpost
                 </th>
                 <td mat-cell *matCellDef="let element" class="align-middle">
                     <a class="cursor-pointer text-primary">
@@ -103,25 +103,25 @@
 
             <!-- priority Column -->
             <ng-container matColumnDef="priority">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> From Date</th>
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  From Date</th>
                 <td mat-cell *matCellDef="let element" class="align-middle"> {{element.priority}} </td>
             </ng-container>
 
             <!-- fromdate Column -->
             <ng-container matColumnDef="fromdate">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> From Date</th>
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">   From Date</th>
                 <td mat-cell *matCellDef="let element" class="align-middle"> {{element.fromdate}} </td>
             </ng-container>
 
             <!-- todate Column -->
             <ng-container matColumnDef="todate">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> To Date</th>
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">   To Date</th>
                 <td mat-cell *matCellDef="let element" class="align-middle"> {{element.todate}} </td>
             </ng-container>
 
             <!-- manager Column -->
             <ng-container matColumnDef="manager">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-person"></i> manager</th>
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/manager.svg" class="align-text-bottom" alt=""> manager</th>
                 <td mat-cell *matCellDef="let element" class="align-middle">
                     <div class="me-10 my-1 d-flex">
                         <div class="symbol symbol-35px symbol-square me-3">
@@ -137,7 +137,7 @@
 
             <!-- status Column -->
             <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-sun"></i> Status </th>
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/status.svg" class="align-text-bottom" alt="">  Status </th>
                 <td mat-cell *matCellDef="let element" class="align-middle">
                     <span class="badge badge-light-danger"
                         [ngClass]="{' badge-light-warning': element.status === 'In-Progress',
