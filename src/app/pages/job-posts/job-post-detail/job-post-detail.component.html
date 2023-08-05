@@ -29,7 +29,7 @@
 
             <h5 class="text-dark  text-gray-800 fs-2  me-1">{{jobDetails?.title}}</h5>
             <a class="mb-5 fw-bold cursor-pointer block">#{{jobDetails?.id}}</a>
-            <div class="mt-2  text-muted block">Posted on Nov 12, 2023</div>
+            <div class="mt-2  text-muted block">Posted on {{jobDetails?.registerDate | date:'dd MMM, yyyy'}}</div>
           </div>
 
 
@@ -84,7 +84,7 @@
           <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6"
               (click)="getSelectedTab('Documents'); getJobDocuments(jobDetails.id)" [ngClass]="{'active': isSelectedTab=='Documents'}"> Documents </a>
           </li>
-          <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6" *ngIf="parentTab == 'AppliedJob'"
+          <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6" *ngIf="parentTab == 'AppliedJob' || parentTab == 'ConfirmedJob'"
               (click)="getSelectedTab('Application'); getApplicationDetails()" [ngClass]="{'active': isSelectedTab=='Application'}"> Application
             </a></li>
           <!-- <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6"
@@ -284,7 +284,7 @@
         <!--begin::Title-->
         <div class="d-flex flex-column min-w-50 mr-2 ">
           <a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">{{documents.fileName}}</a>
-          <!-- <span class="text-muted ">Uploaded by <a href="">username</a> on Apr 14 2022 08:59 AM</span> -->
+          <span class="text-muted ">Uploaded by <a>{{documents?.userDetails?.firstName}} {{documents?.userDetails?.lastName}}</a> on {{ documents.modifierDate | date : "fullDate" }} {{ documents.modifierDate | date: 'hh:mm a' }}</span>
         </div>
         <div class="d-flex  w-sm-100 mr-2">
           <span class="badge badge-light-primary w-auto ">{{documents.type}}</span>

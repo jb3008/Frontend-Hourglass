@@ -19,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ModalsModule } from 'src/app/_metronic/partials';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatSelectModule,
     MatPaginatorModule,
     ModalsModule,
-    NgxDocViewerModule
+    NgxDocViewerModule,
+    MatAutocompleteModule
   ],
   providers: [  
     MatDatepickerModule,  

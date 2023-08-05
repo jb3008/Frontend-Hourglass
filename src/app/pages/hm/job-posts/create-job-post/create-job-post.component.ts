@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import InlineEditor from '@ckeditor/ckeditor5-build-inline';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, map, retry, startWith, throwError } from 'rxjs';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
@@ -11,6 +11,7 @@ import { DialogComponent } from 'src/app/common/dialog/dialog.component';
 import { HttpParams } from '@angular/common/http';
 import { MatSelect } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-create-job-post',
   templateUrl: './create-job-post.component.html',
@@ -23,6 +24,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   businessUnits: any[] = [];
   costCenterList: any[] = [];
   hiringManager: any[] = [];
+  hiringManagerSearchResult: Observable<any[]>;
   jobTypes: any[] = [];
   timesheetFrequency: any[] = [];
   legalEntities: any[] = [];
@@ -41,6 +43,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   documentsList: any;
   dialogRef: MatDialogRef<DialogComponent>;
   today = new Date();
+  hiringManagerCntrl = new FormControl();
 
   @ViewChild('siteSelect') siteSelect: MatSelect;
 
@@ -195,6 +198,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     const endDate: any = new Date(this.draftJobDetails.endDate);
     const differenceInMilliseconds = Math.abs(endDate - startDate);
     const differenceInDays = Math.round(differenceInMilliseconds / oneDay);
+    this.hiringManagerCntrl.setValue(this.draftJobDetails.managerDetails);
     setTimeout(() => {
       this.jobPostData.patchValue({
         jobTitle: this.draftJobDetails.title,
@@ -233,15 +237,47 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     return this.draftDetails ? 'temp job by lokesh' : 'Some Job Post Title'
   }
 
+  displayFn(hiringManager: any): string {
+    return hiringManager ? `${hiringManager.firstName} ${hiringManager.lastName}` : '';
+  }
+  
+  showSearchResult(data: any){
+    return this.hiringManager.filter(obj => {
+      let fullName = `${obj.firstName} ${obj.lastName}`.toLowerCase();
+      if(data && typeof data === 'object'){
+        data = data.firstName + ' ' + data.lastName;
+      }
+      let searchData = data.toLowerCase();
+      let filteredData = fullName.includes(searchData);
+      return filteredData
+    })
+  }
+
+  setHiringManagerValue(event: any){
+    let value = event.option.value.userId;
+    this.jobPostData.controls['hiringManager'].setValue(value);
+  }
+
   getHiringManagers(){
     this.getDropDownValues(this.endPoints.HIRING_MANGER).subscribe({
       next: response => {
-        this.hiringManager = response
+        this.hiringManager = response;
+        this.getFilteredValuesForHm();
       },
       error: error => {
         console.log(error);
       }
     })
+  }
+
+  getFilteredValuesForHm(reset?: string){
+    if(reset){
+      this.jobPostData.controls['hiringManager'].setValue('');
+    }
+    this.hiringManagerSearchResult = this.hiringManagerCntrl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.showSearchResult(value))
+    )
   }
 
   getJobType(){

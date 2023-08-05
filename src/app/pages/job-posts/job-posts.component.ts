@@ -257,10 +257,13 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   goToDetails(elementId: any) {
-    if (this.selectedTab == 'NewJob' || this.selectedTab == 'AppliedJob')
-      this.router.navigate(['/job-posts/details'], {
-        queryParams: { jobId: elementId, tab: this.selectedTab },
-      });
+    // if (this.selectedTab == 'NewJob' || this.selectedTab == 'AppliedJob')
+    //   this.router.navigate(['/job-posts/details'], {
+    //     queryParams: { jobId: elementId, tab: this.selectedTab },
+    //   });
+    this.router.navigate(['/job-posts/details'], {
+      queryParams: { jobId: elementId, tab: this.selectedTab },
+    });
     // else if(this.selectedTab == 'AppliedJob')
     //   this.router.navigate(['/hm/job-posts/creat-job-post'], {queryParams: {data: element.id , tab: this.selectedTab}})
   }
