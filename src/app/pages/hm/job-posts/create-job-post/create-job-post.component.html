@@ -45,24 +45,21 @@
                         <div class="position-relative w-100">
                             <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
                         placeholder="Select"
-                        formControlName="hiringManager"
-                        [matAutocomplete]="auto">
-                        <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer"></i>
+                        [formControl]="hiringManagerCntrl"
+                        [matAutocomplete]="auto"
+                        (input)="hiringManagerSearch.value ? '' : jobPostData.controls['hiringManager'].setValue('')"
+                        #hiringManagerSearch>
+                        <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="hiringManagerSearch.value"
+                            (click)="hiringManagerSearch.value = '';getFilteredValuesForHm('reset')"></i>
 
                         </div>
                          <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
                  <i class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer" ngbTooltip="You can type or search or pick the record from search button"></i>
-                 <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let hm of hiringManager" [value]=" hm.firstName +' '+ hm.lastName">
+                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="setHiringManagerValue($event)">
+                    <mat-option *ngFor="let hm of hiringManagerSearchResult | async" [value]="hm">
                                  {{hm.firstName}} {{hm.lastName}}
                     </mat-option>
                   </mat-autocomplete>
-
-                        <!-- <mat-select formControlName="hiringManager" class="form-select fs- py-2" placeholder="Select">
-                            <mat-option *ngFor="let hm of hiringManager" [value]="hm.userId">
-                                {{hm.firstName}} {{hm.lastName}}
-                            </mat-option>
-                        </mat-select> -->
                     </div>
                 </div>
 

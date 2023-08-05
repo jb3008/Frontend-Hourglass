@@ -24,6 +24,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ModalsModule } from 'src/app/_metronic/partials';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { EditWorkDrawerComponent } from './work-order-details/edit-work-drawer/edit-work-drawer.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { EditWorkDrawerComponent } from './work-order-details/edit-work-drawer/e
     MatSelectModule,
     MatDialogModule,
     ModalsModule,
-    NgxDocViewerModule
+    NgxDocViewerModule,
+    MatAutocompleteModule
   ],
   providers: [  
     MatDatepickerModule,  

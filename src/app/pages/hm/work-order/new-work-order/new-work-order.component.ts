@@ -5,12 +5,12 @@ import { DrawerComponent, ToggleComponent } from 'src/app/_metronic/kt/component
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { HttpParams } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, map, startWith, throwError } from 'rxjs';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import EndPoints from 'src/app/common/endpoints';
 import { Utils } from 'src/app/services/utils';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MatSelect } from '@angular/material/select';
@@ -26,6 +26,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
 
   endpoints = EndPoints;
   hiringManager: any[] = [];
+  hiringManagerSearchResult: Observable<any[]>;
   jobTypes: any[] = [];
   timesheetFrequency: any[] = [];
   costCenterList: any[] = [];
@@ -34,10 +35,15 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   siteList: any[] = [];
   businessUnits: any[] = [];
   jobLists: any[] = [];
+  joblistsSearchResult: Observable<any[]>;
   vendorList: any[] = [];
+  vendorSearchResult: Observable<any[]>;
   currencies: any[] = [];
   workOrderKind = 'Hourly';
   workOrderData: FormGroup;
+  hiringManagerCntrl = new FormControl();
+  vendorCntrl = new FormControl();
+  jobPostCntrl = new FormControl();
 
   @ViewChild('siteSelect') siteSelect: MatSelect;
   
@@ -82,15 +88,101 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     this.getCurrencies();
   }
 
+  displayFnHm(hiringManager: any): string {
+    return hiringManager ? `${hiringManager.firstName} ${hiringManager.lastName}` : '';
+  }
+  
+  displayFnVendor(vendor: any): string {
+    return vendor ? `${vendor.vendorId} ${vendor.registerId}` : '';
+  }
+  
+  displayFnJobPost(job: any): string {
+    return job ? `${job.id} ${job.title}` : '';
+  }
+  
+  showSearchResult(data: any){
+    return this.hiringManager.filter(obj => {
+      let fullName = `${obj.firstName} ${obj.lastName}`.toLowerCase();
+      if(data && typeof data === 'object'){
+        data = data.firstName + ' ' + data.lastName;
+      }
+      let searchData = data.toLowerCase();
+      let filteredData = fullName.includes(searchData);
+      return filteredData
+    })
+  }
+  
+  showSearchResultForVendor(data: any){
+    return this.vendorList.filter(obj => {
+      let vendorDetail = `${obj.vendorId} ${obj.registerId}`.toLowerCase();
+      if(data && typeof data === 'object'){
+        data = data.vendorId + ' ' + data.registerId;
+      }
+      let searchData = data.toLowerCase();
+      let filteredData = vendorDetail.includes(searchData);
+      return filteredData
+    })
+  }
+
+  showSearchResultFoJobPost(data: any){
+    return this.jobLists.filter(obj => {
+      let jobDetail = `${obj.id} ${obj.title}`.toLowerCase();
+      if(data && typeof data === 'object'){
+        data = data.id + ' ' + data.title;
+      }
+      let searchData = data.toLowerCase();
+      let filteredData = jobDetail.includes(searchData);
+      return filteredData
+    })
+  }
+
+  setHiringManagerValue(event: any){
+    let value = event.option.value.userId;
+    this.workOrderData.controls['hiringManager'].setValue(value);
+  }
+
+  setVendorValue(event: any){
+    let value = event.option.value.vendorId;
+    this.workOrderData.controls['vendor'].setValue(value);
+  }
+  
+  setJobPostValue(event: any){
+    let value = event.option.value.id;
+    this.workOrderData.controls['jobPostId'].setValue(value);
+  }
+
   getHiringManagers(){
     this.getDropDownValues(this.endpoints.HIRING_MANGER).subscribe({
       next: response => {
-        this.hiringManager = response
+        this.hiringManager = response;
+        this.getFilteredValues('hiringManager');
       },
       error: error => {
         console.log(error);
       }
     })
+  }
+
+  getFilteredValues(key: string, reset?: string){
+    if(reset){
+      this.workOrderData.controls[key].setValue('');
+    }
+    if(key == 'hiringManager'){
+      this.hiringManagerSearchResult = this.hiringManagerCntrl.valueChanges.pipe(
+        startWith(''),
+        map(value => this.showSearchResult(value))
+      )
+    }else if(key == 'vendor'){
+      this.vendorSearchResult = this.vendorCntrl.valueChanges.pipe(
+        startWith(''),
+        map(value => this.showSearchResultForVendor(value))
+      )
+    }else if(key == 'jobPostId'){
+      this.joblistsSearchResult = this.jobPostCntrl.valueChanges.pipe(
+        startWith(''),
+        map(value => this.showSearchResultFoJobPost(value))
+      )
+    }
   }
 
   getJobType(){
@@ -232,6 +324,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.vendorList = response;
+        this.getFilteredValues('vendor');
       });
   }
 
@@ -248,6 +341,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.jobLists = response;
+        this.getFilteredValues('jobPostId');
       });
   }
 
@@ -373,6 +467,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   isLoading = false;
   submitWorkOrder(status: string){
     const formData = new FormData();
+    debugger
     let workRateValue = this.workOrderData.controls['workRate'].value;
     let minBudget = this.workOrderData.controls['minBudget'].value;
     this.workOrderData.controls['maxBudget'].setValue(minBudget);

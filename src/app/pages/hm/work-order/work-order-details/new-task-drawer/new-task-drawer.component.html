@@ -46,11 +46,26 @@
           </div>
           <div class="form-group  mb-5">
               <label class="mb-1">Assignee<span class="text-danger">*</span></label>
-              <mat-select class="form-select fs- py-2" placeholder="Select" formControlName="assigneeId">
-                <mat-option *ngFor="let assignee of assigneeList" [value]="assignee.userId">
-                  {{assignee.firstName}} {{assignee.lastName}}
-                </mat-option>
-              </mat-select>
+              <div class="d-flex align-items-center">
+              <div class="position-relative w-100">
+              <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
+                        placeholder="Select"
+                        [formControl]="assigneeCntrl"
+                        [matAutocomplete]="auto"
+                        #assigneeSearch
+                        (input)="assigneeSearch.value ? '' : taskData.controls['assigneeId'].setValue('');">
+                        <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="assigneeSearch.value"
+                            (click)="assigneeSearch.value = '';getFilteredListForAssignee('reset')"></i>
+
+                        </div>
+                         <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
+                 <i class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer" ngbTooltip="You can type or search or pick the record from search button"></i>
+                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="setAssigneeValue($event)">
+                    <mat-option *ngFor="let assignee of assigneeFilteredList | async" [value]="assignee">
+                                 {{assignee.firstName}} {{assignee.lastName}}
+                    </mat-option>
+                  </mat-autocomplete>
+            </div>
           </div>
 <ng-container *ngIf="!taskDetails">
   <div class="form-group  d-flex justify-content-between align-items-center gap-3 mb-5">
