@@ -467,12 +467,18 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   isLoading = false;
   submitWorkOrder(status: string){
     const formData = new FormData();
-    debugger
     let workRateValue = this.workOrderData.controls['workRate'].value;
+    this.workOrderData.controls['workRate'].setValue(workRateValue.replace(/,/g, ''));
     let minBudget = this.workOrderData.controls['minBudget'].value;
+    this.workOrderData.controls['minBudget'].setValue(minBudget.replace(/,/g, ''));
+
     this.workOrderData.controls['maxBudget'].setValue(minBudget);
     let maxBudget = this.workOrderData.controls['maxBudget'].value;
     if(this.workOrderData.valid && (workRateValue || (minBudget && maxBudget))){
+      if((workRateValue && workRateValue == 0) || (minBudget && minBudget == 0) || (maxBudget && maxBudget == 0)){
+        this.utils.showSnackBarMessage(this.snackBar, 'Please enter an amount greater than 0');
+        return;
+      }
       this.isLoading = true;
       this.workOrderData.controls['startDate'].setValue(this.changeDateToUtc(this.workOrderData.controls['startDate'].value))
       this.workOrderData.controls['endDate'].setValue(this.changeDateToUtc(this.workOrderData.controls['endDate'].value));

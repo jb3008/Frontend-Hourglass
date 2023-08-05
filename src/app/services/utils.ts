@@ -108,10 +108,10 @@ export class Utils {
     const charCode = (event.which) ? event.which : event.keyCode;
     const inputValue = event.target.value;
 
-    if (charCode === 8 || charCode === 46 || (charCode >= 48 && charCode <= 57)) {
+    if (charCode === 8 || charCode === 46 || charCode === 44 || (charCode >= 48 && charCode <= 57)) {
         const hasDecimalPoint = inputValue.indexOf('.') !== -1;
 
-        if (charCode === 46 && hasDecimalPoint) {
+        if ((charCode === 46 || charCode == 44) && hasDecimalPoint) {
             return false;
         }
 

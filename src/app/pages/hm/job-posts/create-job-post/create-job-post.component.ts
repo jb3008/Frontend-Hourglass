@@ -413,6 +413,8 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       if(formControl)
         this.jobPostData.get(formControl)?.setValue(++value);
     }
+
+    this.checkValidHrs();
     
   }
 
@@ -437,6 +439,14 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   changeValidTill(event: any){
     if(event.target.value || event.target.value == ''){
       this.jobPostData.controls['endDate'].setValue(null);
+    }
+  }
+
+  checkValidHrs(){
+    if(this.jobPostData.controls['workHourInterval'].value == 'Daily'){
+      if(this.jobPostData.get('workHours')?.value > 24){
+        this.jobPostData.get('workHours')?.setValue('');
+      }
     }
   }
 
@@ -481,8 +491,11 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   saveJob(status: string){
     const formData = new FormData();
     let workRateValue = this.jobPostData.controls['workRate'].value;
+    this.jobPostData.controls['workRate'].setValue(workRateValue.replace(/,/g, ''));
     let minBudget = this.jobPostData.controls['minBudget'].value;
+    this.jobPostData.controls['minBudget'].setValue(minBudget.replace(/,/g, ''));
     let maxBudget = this.jobPostData.controls['maxBudget'].value;
+    this.jobPostData.controls['maxBudget'].setValue(maxBudget.replace(/,/g, ''));
     if(this.jobPostData.valid && (workRateValue || (minBudget && maxBudget))){
       if((workRateValue && workRateValue == 0) || (minBudget && minBudget == 0) || (maxBudget && maxBudget == 0)){
         this.utils.showSnackBarMessage(this.snackBar, 'Please enter an amount greater than 0');

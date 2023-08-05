@@ -102,7 +102,11 @@ export class SendOfferLetterDrawerComponent implements OnInit {
 
     this.isLoading = true;
     let workRate = document.getElementById('revisedWorkRate') as HTMLInputElement;
-    this.rate = workRate.value;
+    this.rate = workRate.value.replace(/,/g, '')
+    if(this.rate && this.rate == '0'){
+      this.utils.showSnackBarMessage(this.snackBar, 'Please enter an amount greater than 0');
+        return;
+    }
     formData.append('status', 'OFFER_SENT');
     formData.append('jobPostId', this.jobDetails.id);
     formData.append('jobAppId', this.jobSeeker.id);
