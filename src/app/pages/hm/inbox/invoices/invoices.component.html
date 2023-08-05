@@ -30,9 +30,9 @@
         
    
         <div class="position-relative input-icon input-icon-right">
-            <input type="text" class="form-control   py-2 fs- fw-normal" (click)="picker1.open()"
+            <input type="text" class="form-control cursor-pointer py-2 fs- fw-normal" (click)="picker1.open()"
             [matDatepicker]="picker1" placeholder="Select Date">
-            <span><i class="far fa-calendar"></i></span>
+            <span class="cursor-pointer" (click)="picker1.open()"><i class="far fa-calendar"></i></span>
             <mat-datepicker #picker1></mat-datepicker>
         </div>
 
