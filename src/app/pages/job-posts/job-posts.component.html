@@ -290,7 +290,11 @@
             </ng-container>
         </ng-container>
 
-        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 30]" [length]="jobDetails.length"
+        <div *ngIf="jobDetails.length == 0" class="text-center fw-bold fs-3 mt-2">
+            No Records Found
+        </div>
+
+        <mat-paginator *ngIf="jobDetails.length > 0" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 30]" [length]="jobDetails.length"
                (page)="onPageChange($event)">
         </mat-paginator>
 

@@ -222,6 +222,10 @@ export class WorkOrderDetailComponent implements OnInit {
     });
   }
 
+  numbersOnly(event: any){
+    return this.utils.numberOnly(event);
+  }
+  
   getDocuments(){
     this.loading = true;
     let queryObj = {

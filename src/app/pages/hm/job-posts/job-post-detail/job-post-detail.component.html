@@ -115,7 +115,7 @@
               <div class="form-group row ">
                 <label class="col-4 col-form-label text-muted">Legal Entity</label>
                 <div class="col-8">
-                  <span class="form-control-plaintext">{{jobDetails?.companyDetails.title}} ({{jobDetails?.companyDetails.companyCode}})</span>
+                  <span class="form-control-plaintext">{{jobDetails?.companyDetails?.title}} ({{jobDetails?.companyDetails?.companyCode}})</span>
                 </div>
               </div>
               <div class="separator separator-dashed my-"></div>
@@ -294,7 +294,9 @@
       </div>
     </ng-container>
 
-
+    <div *ngIf="documentsList.length == 0"  class="text-center fw-bold fs-3 mt-2">
+      No Records Found
+    </div>
 
   </ng-container>
   <ng-container *ngIf="isSelectedTab=='JobSeekers'">
@@ -386,6 +388,9 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;">
           </tr>
         </table>
+        <div *ngIf="dataSource.data.length == 0"  class="text-center fw-bold fs-3 mt-2">
+          No Records Found
+        </div>
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 
       </div>
@@ -482,7 +487,9 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;">
         </tr>
       </table>
-    
+      <div *ngIf="dataSource.data.length == 0" class="text-center fw-bold fs-3 mt-2">
+        No Records Found
+      </div>
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 
     </div>

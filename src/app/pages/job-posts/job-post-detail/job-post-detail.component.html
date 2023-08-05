@@ -302,6 +302,10 @@
       </div>
     </ng-container>
 
+    <div *ngIf="documentsList.length == 0" class="text-center fw-bold fs-3 mt-2">
+      No Records Found
+   </div>
+
 
 
   </ng-container>
@@ -407,6 +411,9 @@
                     class="far fa-eye"></i></a>
               </div>
             </div>
+            <div *ngIf="applicationAttachement.length == 0" class="fw-bold fs-6 mt-2">
+              No Records Found
+           </div>
 
 
 

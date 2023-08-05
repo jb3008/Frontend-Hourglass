@@ -121,7 +121,7 @@
                     <!-- <span class="badge badge-light-warning">
                       In-Progress</span>  -->
                       <span>
-                        {{workOrderDetails?.status}}
+                        {{workOrderDetails?.displayStatus}}
                       </span>
                     </span>
                 </div>
@@ -279,6 +279,10 @@
           </div>
         </ng-container>
 
+        <div *ngIf="documentsList.length == 0" class="text-center fw-bold fs-3 mt-2">
+          No Records Found
+       </div>
+
       </ng-container>
 
 
@@ -293,7 +297,7 @@
 
         <div class="d-flex align-items-start gap-4 ">
           <div class="position-relative input-icon input-icon-right">
-            <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10" [(ngModel)]="filterValue.taskId" (keyup)="applySearchFilter($event)" placeholder="Search By Task Id #" />
+            <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10" [(ngModel)]="filterValue.taskId" (keyup)="applySearchFilter($event)" (keypress)="numbersOnly($event)" placeholder="Search By Task Id #" />
             <span><i class="fa fa-search "></i></span>
           </div>
           <mat-select class="form-select fs- py-2  w-200px" [(value)]="filterValue.priority" (selectionChange)="filterByPriority($event)">
@@ -431,6 +435,11 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns;">
             </tr>
           </table>
+
+          <div *ngIf="dataSource.data.length == 0" class="text-center fw-bold fs-3 mt-2">
+            No Records Found
+         </div>
+
           <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons  [pageSize]="30"
                     aria-label="Select page of periodic elements">
             </mat-paginator>
