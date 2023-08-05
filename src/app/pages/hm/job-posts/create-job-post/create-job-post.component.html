@@ -193,9 +193,9 @@
                     <div class="col-8">
                         <div class="input-icon position-relative w-150px input-icon-right">
 
-                            <input type="text" formControlName="endDate" class="form-control  py-2 fs- fw-normal" (click)="pickerValid.open()"
+                            <input type="text" formControlName="endDate" class="form-control cursor-pointer py-2 fs- fw-normal" (click)="pickerValid.open()"
                                 [matDatepicker]="pickerValid" placeholder="Valid Till" [disabled]="true">
-                            <span><i class="far fa-calendar"></i></span>
+                            <span class="cursor-pointer" (click)="pickerValid.open()"><i class="far fa-calendar"></i></span>
                             <mat-datepicker #pickerValid></mat-datepicker>
                     </div>
                     </div>

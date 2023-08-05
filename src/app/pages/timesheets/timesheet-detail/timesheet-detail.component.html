@@ -267,7 +267,7 @@
                     <div class="position-relative input-icon input-icon-right">
                       <input
                         type="text"
-                        class="form-control pe-10 py-2 fs- fw-normal"
+                        class="form-control pe-10 py-2 fs- fw-normal cursor-pointer "
                         (click)="picker.open()"
                         style="width: 100%"
                         [(ngModel)]="element.startDate"
@@ -279,7 +279,7 @@
                         [max]="today"
                         placeholder="Select Start Date"
                       />
-                      <span><i class="far fa-calendar"></i></span>
+                      <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
                       <mat-datepicker #picker></mat-datepicker>
                     </div>
                   </td>
@@ -294,7 +294,7 @@
                     <div class="position-relative input-icon input-icon-right">
                       <input
                         type="text"
-                        class="form-control pe-10 py-2 fs- fw-normal"
+                        class="form-control pe-10 py-2 fs- fw-normal cursor-pointer "
                         (click)="picker.open()"
                         style="width: 100%"
                         [disabled]="
@@ -306,7 +306,7 @@
                         placeholder="Select Due Date"
                         [max]="today"
                       />
-                      <span><i class="far fa-calendar"></i></span>
+                      <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
                       <mat-datepicker #picker></mat-datepicker>
                     </div>
                   </td>

@@ -251,9 +251,9 @@
               <option value="">Select</option>
             </select>
             <div class="position-relative input-icon input-icon-right">
-              <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4" placeholder="Select ETA Dates"
+              <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4 cursor-pointer" placeholder="Select ETA Dates"
                 (click)="picker3.open()" [matDatepicker]="picker3" />
-              <span><i class="far fa-calendar"></i></span>
+              <span class="cursor-pointer" (click)="picker3.open()"><i class="far fa-calendar"></i></span>
               <mat-datepicker #picker3></mat-datepicker>
             </div>
   
