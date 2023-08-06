@@ -64,7 +64,7 @@
       <div class="position-relative input-icon input-icon-right">
         <input
           type="text"
-          class="form-control py-2 fs- fw-normal cursor-pointer"
+          class="form-control py-2 fs- fw-normal cursor-pointer pe-10"
           (click)="picker.open()"
           [matDatepicker]="picker"
           formControlName="invoiceDate"
@@ -76,7 +76,7 @@
       <div class="position-relative input-icon input-icon-right">
         <input
           type="text"
-          class="form-control py-2 fs- fw-normal cursor-pointer"
+          class="form-control py-2 fs- fw-normal cursor-pointer pe-10"
           (click)="picker1.open()"
           [matDatepicker]="picker1"
           formControlName="dueDate"
@@ -132,7 +132,7 @@
         <td mat-cell *matCellDef="let element" class="align-middle">
           <div class="me-10 my-1 d-flex">
             <div
-              class="symbol symbol-35px symbol-square me-3"
+              class="symbol symbol-35px sym/bol-square rounded-1 me-3"
               *ngIf="element.userDetail"
             >
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
@@ -196,7 +196,7 @@
       <!-- amount Column -->
       <ng-container matColumnDef="amount">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <i class="fas fa-coins"></i> Amount
+          Amount <img src="../../../assets/images/icons/tcost.svg" class="align-text-bottom" alt="">
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           {{ element.totalAmount }} {{ element.currency }}

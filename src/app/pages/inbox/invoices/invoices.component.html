@@ -112,7 +112,7 @@
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <div class="me-10 my-1 d-flex">
-            <div class="symbol symbol-35px symbol-square me-3">
+            <div class="symbol symbol-35px  rounded-1 me-3">
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
                 >SL
               </span>
@@ -128,7 +128,7 @@
       <!-- amount Column -->
       <ng-container matColumnDef="amount">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          Invoice Amount <i class="fas fa-coins"></i>
+          Invoice Amount <img src="../../../../assets/images/icons/tcost.svg" class="align-text-bottom" alt="">
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           {{ element.totalAmount }} {{ element.currency }}
