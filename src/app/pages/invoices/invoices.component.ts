@@ -98,6 +98,9 @@ export class InvoicesComponent implements OnInit {
             'failed to fetch the invoices'
           );
           this.isLoading = false;
+          this.dataSource = new MatTableDataSource<any>([]);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
           this.cdr.detectChanges();
           throw err;
         })

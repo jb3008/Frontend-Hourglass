@@ -16,21 +16,16 @@ export class NavbarComponent implements OnInit {
   userAvatarClass: string = 'symbol-35px symbol-md-40px';
   btnIconClass: string = 'svg-icon-1';
 
-  constructor(    private utils: Utils,
-    ) {}
-    inboxLink = ''
+  constructor(private utils: Utils) {}
+  inboxLink = '';
   ngOnInit(): void {
     let auth = this.utils.getAuth();
     // console.log(auth?.vendorId);
     if (auth?.vendorId) {
-    console.log('auth?.vendorId', auth?.vendorId)
-    this.inboxLink = 'inbox'
+      this.inboxLink = 'inbox';
+    } else {
+      console.log('else auth?.vendorId', auth?.vendorId);
+      this.inboxLink = 'hm/inbox';
+    }
   }
-  else{
-    console.log('else auth?.vendorId', auth?.vendorId);
-    this.inboxLink = 'hm/inbox'
-
-
-  }
-}
 }

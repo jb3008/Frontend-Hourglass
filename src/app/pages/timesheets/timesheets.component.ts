@@ -97,6 +97,9 @@ export class TimesheetsComponent implements OnInit {
             this.snackBar,
             'failed to fetch the time-sheet'
           );
+          this.dataSource = new MatTableDataSource<any>([]);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
           this.isLoading = false;
           this.cdr.detectChanges();
           throw err;

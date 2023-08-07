@@ -183,10 +183,8 @@
           <div class="me-10 my-1 d-flex">
             <div class="symbol symbol-35px rounded-1 me-3">
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
-                >{{element?.workForceDetails?.firstName?.[0]
-
-
-                }}{{element?.workForceDetails?.lastName?.[0]}}
+                >{{ element?.workForceDetails?.firstName?.charAt(0)
+                }}{{ element?.workForceDetails?.lastName?.charAt(0) }}
               </span>
             </div>
             <div>
@@ -303,6 +301,12 @@
       ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+    <div
+      *ngIf="dataSource.data.length === 0"
+      class="text-center fw-bold fs-3 mt-2"
+    >
+      No Records Found
+    </div>
     <mat-paginator
       [pageSize]="30"
       [pageSizeOptions]="[30, 50, 100]"

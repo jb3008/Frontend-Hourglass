@@ -115,8 +115,11 @@ export class TimesheetsComponent implements OnInit {
         catchError(async (err) => {
           this.utils.showSnackBarMessage(
             this.snackBar,
-            'failed to fetch the time-sheet'
+            'failed to fetch the time-sheet notification'
           );
+          this.dataSource = new MatTableDataSource<any>([]);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
           this.isLoading = false;
           this.cdr.detectChanges();
           throw err;

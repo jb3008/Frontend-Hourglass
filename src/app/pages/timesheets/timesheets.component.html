@@ -19,7 +19,7 @@
     >
   </div>
   <form [formGroup]="timeSheetFilter">
-    <div class="d-flex align-items-start gap-4 timeSheetFilter">
+    <div class="d-flex align-items-start gap-4">
       <div class="position-relative input-icon input-icon-right">
         <input
           type="text"
@@ -73,7 +73,9 @@
           [matDatepicker]="picker"
           placeholder="Select From Date"
         />
-        <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
+        <span class="cursor-pointer" (click)="picker.open()"
+          ><i class="far fa-calendar"></i
+        ></span>
         <mat-datepicker #picker></mat-datepicker>
       </div>
 
@@ -86,7 +88,9 @@
           formControlName="toDate"
           placeholder="Select To Date"
         />
-        <span class="cursor-pointer" (click)="pickerTo.open()"><i class="far fa-calendar"></i></span>
+        <span class="cursor-pointer" (click)="pickerTo.open()"
+          ><i class="far fa-calendar"></i
+        ></span>
         <mat-datepicker #pickerTo></mat-datepicker>
       </div>
 
@@ -117,13 +121,22 @@
       <!-- timesheet Column -->
       <ng-container matColumnDef="timeSheetId">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <img src="../../../assets/images/icons/tdoc.svg" alt="" class="align-text-bottom"> Timesheet #
+          <img
+            src="../../../assets/images/icons/tdoc.svg"
+            alt=""
+            class="align-text-bottom"
+          />
+          Timesheet #
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <!-- <a routerLink="details" class="cursor-pointer"> -->
           <a routerLink="timesheet-detail/{{ element.timeSheetId }}">
             {{ element.timeSheetId }}
-            <img class="ms-1 align-middle" src="../../../../assets/images/icons/table-arrow.svg" alt="">
+            <img
+              class="ms-1 align-middle"
+              src="../../../../assets/images/icons/table-arrow.svg"
+              alt=""
+            />
           </a>
         </td>
       </ng-container>
@@ -131,19 +144,19 @@
       <!-- employee Column -->
       <ng-container matColumnDef="employee">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <img src="../../../assets/images/icons/manager.svg" class="align-text-bottom" alt="">  Employee
+          <img
+            src="../../../assets/images/icons/manager.svg"
+            class="align-text-bottom"
+            alt=""
+          />
+          Employee
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <div class="me-10 my-1 d-flex" *ngIf="element?.workForceDetails">
-            <div class="symbol symbol-35px  rounded-1 me-3">
+            <div class="symbol symbol-35px rounded-1 me-3">
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
-                >{{element?.workForceDetails?.firstName?.[0]
-
-
-
-
-
-                }}{{element?.workForceDetails?.lastName?.[0]}}
+                >{{ element?.workForceDetails?.firstName?.charAt(0)
+                }}{{ element?.workForceDetails?.lastName?.charAt(0) }}
               </span>
             </div>
             <div>
@@ -162,12 +175,21 @@
       <!-- workOrder Column -->
       <ng-container matColumnDef="workOrderId">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <img src="../../../assets/images/icons/tdoc.svg" alt="" class="align-text-bottom"> Work Order #
+          <img
+            src="../../../assets/images/icons/tdoc.svg"
+            alt=""
+            class="align-text-bottom"
+          />
+          Work Order #
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <a>
             {{ element.workOrderId }}
-            <img class="ms-1 align-middle" src="../../../../assets/images/icons/table-arrow.svg" alt="">
+            <img
+              class="ms-1 align-middle"
+              src="../../../../assets/images/icons/table-arrow.svg"
+              alt=""
+            />
           </a>
         </td>
       </ng-container>
@@ -177,7 +199,12 @@
       <!-- fromDate Column -->
       <ng-container matColumnDef="fromDate">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-         <img src="../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  From Date
+          <img
+            src="../../../assets/images/icons/tcal.svg"
+            alt=""
+            class="align-text-bottom"
+          />
+          From Date
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           {{ element.fromDate | date : "MMM dd, yyyy" }}
@@ -187,7 +214,12 @@
       <!-- toDate Column -->
       <ng-container matColumnDef="toDate">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-         <img src="../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  Due Date
+          <img
+            src="../../../assets/images/icons/tcal.svg"
+            alt=""
+            class="align-text-bottom"
+          />
+          Due Date
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           {{ element.toDate | date : "MMM dd, yyyy" }}
@@ -197,7 +229,12 @@
       <!-- totalhr Column -->
       <ng-container matColumnDef="timeSpent">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <img src="../../../assets/images/icons/tclock.svg" alt="" class="align-text-bottom">  Total Work hr
+          <img
+            src="../../../assets/images/icons/tclock.svg"
+            alt=""
+            class="align-text-bottom"
+          />
+          Total Work hr
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           {{ element.timeSpent }} hrs
@@ -207,7 +244,12 @@
       <!-- status Column -->
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef class="align-middle">
-          <img src="../../../assets/images/icons/status.svg" class="align-text-bottom" alt="">  Status
+          <img
+            src="../../../assets/images/icons/status.svg"
+            class="align-text-bottom"
+            alt=""
+          />
+          Status
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <span
@@ -231,6 +273,12 @@
       ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+    <div
+      *ngIf="dataSource.data.length === 0"
+      class="text-center fw-bold fs-3 mt-2"
+    >
+      No Records Found
+    </div>
     <mat-paginator
       [pageSize]="30"
       [pageSizeOptions]="[30, 50, 100]"

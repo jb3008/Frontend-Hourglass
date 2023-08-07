@@ -82,6 +82,10 @@ const EndPoints = {
   GET_PAYMENT_TERM: '/hourglass/common/rest/list-pay-terms.api',
   TASK_STATUS: '/hourglass/common/listAllTaskStaus.api',
   GET_CURRENCY: '/hourglass/common/listAllcurrencies.api',
+  INVOICE_INBOX_NOTIFICATION:
+    '/hourglass/payment/invoice/notification/listInbox.api',
+  INVOICE_OUTBOX_NOTIFICATION:
+    '/hourglass/payment/invoice/notification/listOutbox.api',
 };
 
 export default EndPoints;

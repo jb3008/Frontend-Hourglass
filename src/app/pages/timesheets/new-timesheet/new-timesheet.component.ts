@@ -79,6 +79,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       documentList: [[]],
     });
     this.getAllWorkForceList();
+    this.getAllWorkOrders();
   }
 
   ngAfterViewInit() {}
@@ -109,7 +110,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     this.selectedEmpObj = this.workForceList.find(
       (o) => o.workForceId === value
     );
-    this.getAllWorkOrders();
+
     this.cdr.detectChanges();
   }
   displayFn(emp: any): string {
@@ -184,7 +185,9 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
 
   getAllWorkOrders() {
     this.apiCalls
-      .get(this.endPoints.ALL_WORK_ORDERS, {})
+      .get(this.endPoints.ALL_WORK_ORDERS, {
+        vendorId: this.utils.getAuth()?.vendorId,
+      })
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(
@@ -217,18 +220,18 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
   }
   getSelectedTaskList(selectedTaskFromTask: any) {
     this.selectedTaskForDrawer = [];
-    const alreadyExist = this.selectedTask.filter((r: any) =>
-      selectedTaskFromTask.map((a: any) => a.taskId).includes(r.taskId)
-    );
-    if (alreadyExist.length) {
-      this.utils.showSnackBarMessage(
-        this.snackBar,
-        `Task Id (${alreadyExist
-          .map((a: any) => a.taskId)
-          .join(',')}) already linked.`
-      );
-      return;
-    }
+    // const alreadyExist = this.selectedTask.filter((r: any) =>
+    //   selectedTaskFromTask.map((a: any) => a.taskId).includes(r.taskId)
+    // );
+    // if (alreadyExist.length) {
+    //   this.utils.showSnackBarMessage(
+    //     this.snackBar,
+    //     `Task Id (${alreadyExist
+    //       .map((a: any) => a.taskId)
+    //       .join(',')}) already linked.`
+    //   );
+    //   return;
+    // }
 
     if (selectedTaskFromTask.length) {
       let totalHrs = 0;
@@ -391,6 +394,22 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       );
       return;
     }
+    const alreadyExist = this.selectedTask.filter(
+      (obj: any, index: number) =>
+        this.selectedTask.findIndex(
+          (item: any) =>
+            item.startDate === obj.startDate && item.taskId === obj.taskId
+        ) === index
+    );
+
+    if (alreadyExist.length !== this.selectedTask.length) {
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        `Duplicate task linked.Please check date.`
+      );
+      return;
+    }
+
     for (let index = 0; index < this.selectedTask.length; index++) {
       const element = this.selectedTask[index];
       this.timeSheetData.controls['newTimeSheetTaskList'].value.push({
@@ -474,7 +493,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
                   this.ngOnInit();
                   this.utils.showSnackBarMessage(
                     this.snackBar,
-                    'Time sheet created successfully'
+                    this.getMessage(status)
                   );
                   this.router.navigate(['/timesheets']);
                 }
@@ -484,7 +503,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
             this.ngOnInit();
             this.utils.showSnackBarMessage(
               this.snackBar,
-              'Time sheet created successfully'
+              this.getMessage(status)
             );
             this.router.navigate(['/timesheets']);
           }
@@ -500,6 +519,11 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     return status === 'Draft'
       ? this.endPoints.CREATE_TIME_SHEET_AS_DRAFT
       : this.endPoints.CREATE_TIME_SHEET;
+  }
+  getMessage(status: string) {
+    return status === 'DRAFT'
+      ? 'Time sheet drafted successfully'
+      : 'Time sheet created successfully';
   }
 }
 
