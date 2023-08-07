@@ -34,6 +34,7 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
   @ViewChild(MatAutocompleteTrigger, {read: MatAutocompleteTrigger}) assigneeSearch: MatAutocompleteTrigger;
 
   ngOnInit(): void {
+    this.assigneeCntrl.setValue(null);
     this.route.queryParams.subscribe(param => {
       this.workOrderID = param['workOrderId'];
     });
@@ -81,8 +82,8 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
       if(data && typeof data === 'object'){
         data = data.firstName + ' ' + data.lastName;
       }
-      let searchData = data.toLowerCase();
-      let filteredData = fullName.includes(searchData);
+      let searchData = data?.toLowerCase();
+      let filteredData = fullName?.includes(searchData);
       return filteredData
     })
   }

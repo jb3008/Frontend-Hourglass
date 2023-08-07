@@ -226,6 +226,10 @@ export class WorkOrderDetailComponent implements OnInit {
     return this.utils.numberOnly(event);
   }
   
+  getDocIcon(fileName: string) {
+    return this.utils.getDocIcon(fileName);
+  }
+  
   getDocuments(){
     this.loading = true;
     let queryObj = {

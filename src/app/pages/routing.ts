@@ -77,7 +77,7 @@ const Routing: Routes = [
   {
     path: 'hm/inbox',
     loadChildren: () =>
-      import('./inbox/inbox.module').then((m) => m.InboxModule),
+      import('./hm/inbox/inbox.module').then((m) => m.InboxModule),
   },
   // { path: 'job-posts-details', component: JobPostDetailComponent },
 

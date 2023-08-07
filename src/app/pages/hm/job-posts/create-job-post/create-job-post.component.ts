@@ -487,15 +487,38 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       this.jobPostData.controls['maxBudget'].setValue(null);
     }
   }
+
+  checkMaxBudget(event: any, type: string){
+    const currentValue = Number(event.target.value);
+    const minValue = Number(this.jobPostData.controls['minBudget'].value);
+    const maxValue = Number(this.jobPostData.controls['maxBudget'].value)
+    if(type == 'max'){
+      if(minValue && currentValue <= minValue){
+        this.utils.showSnackBarMessage(this.snackBar, 'Please enter max amount greater than min amount');
+        this.jobPostData.controls['maxBudget'].setValue(null);
+      }
+    }else if(type == 'min'){
+      if(maxValue && currentValue >= maxValue){
+        this.utils.showSnackBarMessage(this.snackBar, 'Please enter min amount less than max amount');
+        this.jobPostData.controls['minBudget'].setValue(null);
+      }
+    }
+  }
   
   saveJob(status: string){
     const formData = new FormData();
     let workRateValue = this.jobPostData.controls['workRate'].value;
-    this.jobPostData.controls['workRate'].setValue(workRateValue.replace(/,/g, ''));
+    if(workRateValue)
+    this.jobPostData.controls['workRate'].setValue(workRateValue.toString().replace(/,/g, ''));
+
     let minBudget = this.jobPostData.controls['minBudget'].value;
-    this.jobPostData.controls['minBudget'].setValue(minBudget.replace(/,/g, ''));
+    if(minBudget)
+    this.jobPostData.controls['minBudget'].setValue(minBudget.toString().replace(/,/g, ''));
+
     let maxBudget = this.jobPostData.controls['maxBudget'].value;
-    this.jobPostData.controls['maxBudget'].setValue(maxBudget.replace(/,/g, ''));
+    if(maxBudget)
+    this.jobPostData.controls['maxBudget'].setValue(maxBudget.toString().replace(/,/g, ''));
+  
     if(this.jobPostData.valid && (workRateValue || (minBudget && maxBudget))){
       if((workRateValue && workRateValue == 0) || (minBudget && minBudget == 0) || (maxBudget && maxBudget == 0)){
         this.utils.showSnackBarMessage(this.snackBar, 'Please enter an amount greater than 0');
