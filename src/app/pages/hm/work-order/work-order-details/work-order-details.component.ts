@@ -113,6 +113,10 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
     return doc.documentElement.textContent;
   }
 
+  getDocIcon(fileName: string) {
+    return this.utils.getDocIcon(fileName);
+  }
+
   getWorkOrderDetails(){
     this.loading = true;
     let queryObj = {

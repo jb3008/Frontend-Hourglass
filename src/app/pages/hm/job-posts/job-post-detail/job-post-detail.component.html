@@ -34,12 +34,12 @@
               <div class="d-flex flex-wrap lign-items-center">
                 <div class="flex-lg-fill me-5 my-1">
                   <span class="d-flex text-muted fs-8">Business Unit</span>
-                  <span class="fw-bold d-flex s-">{{jobDetails?.businessUnit}}</span>
+                  <span class="fw-bold d-flex s-">{{jobDetails?.businessUnitDetails.name}} ({{jobDetails?.businessUnitDetails.code}})</span>
                 </div>
                 <div class="vr me-5 mt-4 h-20px "></div>
                 <div class="flex-lg-fill me-5 my-1">
                   <span class="d-flex text-muted fs-8">Site</span>
-                  <span class="fw-bold d-flex s-">{{jobDetails?.site}}</span>
+                  <span class="fw-bold d-flex s-">{{jobDetails?.siteDetails.name}} ({{jobDetails?.siteDetails.code}})</span>
                 </div>
                 <div class="vr me-5 mt-4 h-20px "></div>
                 <div class="flex-lg-fill me-5 my-1">
@@ -124,7 +124,7 @@
               <div class="form-group row ">
                 <label class="col-4 col-form-label text-muted">Site</label>
                 <div class="col-8">
-                  <span class="form-control-plaintext">{{jobDetails?.site}}</span>
+                  <span class="form-control-plaintext">{{jobDetails?.siteDetails.name}} ({{jobDetails?.siteDetails.code}})</span>
                 </div>
               </div>
               <div class="separator separator-dashed my-"></div>
@@ -142,7 +142,7 @@
               <div class="form-group row ">
                 <label class="col-4 col-form-label text-muted">Business Unit</label>
                 <div class="col-8">
-                  <span class="form-control-plaintext">{{jobDetails?.businessUnit}}</span>
+                  <span class="form-control-plaintext">{{jobDetails?.businessUnitDetails.name}} ({{jobDetails?.businessUnitDetails.code}})</span>
                 </div>
               </div>
               <div class="separator separator-dashed my-"></div>
