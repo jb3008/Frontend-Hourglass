@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { SharedModule } from '../shared.modules';
 import { InvoiceAddTimesheetDrawerComponent } from './new-invoice/invoice-add-timesheet-drawer/invoice-add-timesheet-drawer.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { InvoiceAddTimesheetDrawerComponent } from './new-invoice/invoice-add-ti
     MatPaginatorModule,
     InlineSVGModule,
     NgbTooltipModule,
+    MatAutocompleteModule,
   ],
 })
 export class InvoicesModule {}

@@ -213,7 +213,26 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
     this.startDate = this.startDate ? this.startDate : date;
     let [day, month, year] = this.startDate.split('/');
     const dateObj = new Date(+year, +month - 1, +day);
+
     if (selectedTask.length) {
+      const currentDateData: any = this.taskListDetails.filter((r: any) => {
+        return r.date === this.startDate;
+      });
+
+      if (currentDateData.length) {
+        const alreadyExist = selectedTask.filter((r: any) =>
+          currentDateData[0].data.map((a: any) => a.taskId).includes(r.taskId)
+        );
+        if (alreadyExist.length) {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            `Task Id (${alreadyExist
+              .map((a: any) => a.taskId)
+              .join(',')}) already linked.`
+          );
+          return;
+        }
+      }
       for (let index = 0; index < selectedTask.length; index++) {
         const element = selectedTask[index];
         this.timeSheetDetails.taskListDetails.push({

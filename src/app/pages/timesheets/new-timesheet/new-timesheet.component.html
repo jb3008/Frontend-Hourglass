@@ -18,7 +18,7 @@
               <label class="col-4"
                 >Employee <span class="text-danger">*</span></label
               >
-              <div class="col-8 d-flex align-items-center gap-2">
+              <!-- <div class="col-8 d-flex align-items-center gap-2">
                 <mat-select
                   formControlName="employeeId"
                   placeholder="Select"
@@ -36,6 +36,51 @@
                 <a class="btn btn-icon btn-sm">
                   <i class="bi bi-info-circle"></i>
                 </a>
+              </div> -->
+              <div class="col-8 d-flex align-items-center">
+                <div class="position-relative w-100">
+                  <input
+                    type="text"
+                    class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
+                    placeholder="Select"
+                    [formControl]="WorkForceCntrl"
+                    [matAutocomplete]="auto"
+                    (input)="
+                      WorkForceSearch.value
+                        ? ''
+                        : timeSheetData.controls['employeeId'].setValue('')
+                    "
+                    #WorkForceSearch
+                  />
+                  <i
+                    class="bi bi-x-lg text-active-primary inp-x cursor-pointer"
+                    *ngIf="WorkForceSearch.value"
+                    (click)="
+                      WorkForceSearch.value = '';
+                      getFilteredValuesForWorkForce('reset')
+                    "
+                  ></i>
+                </div>
+                <a
+                  class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"
+                  ><i class="bi bi-search"></i
+                ></a>
+                <i
+                  class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer"
+                  ngbTooltip="You can type or search or pick the record from search button"
+                ></i>
+                <mat-autocomplete
+                  #auto="matAutocomplete"
+                  [displayWith]="displayFn"
+                  (optionSelected)="setWorkForceValue($event)"
+                >
+                  <mat-option
+                    *ngFor="let list of WorkForceSearchResult | async"
+                    [value]="list"
+                  >
+                    {{ list.firstName }} {{ list.lastName }}
+                  </mat-option>
+                </mat-autocomplete>
               </div>
             </div>
             <div class="row mb-5">
@@ -59,7 +104,7 @@
               <label class="col-4"
                 >Work Order <span class="text-danger">*</span></label
               >
-              <div class="col-8 d-flex align-items-center gap-2">
+              <!-- <div class="col-8 d-flex align-items-center gap-2">
                 <mat-select
                   formControlName="workOrderId"
                   placeholder="Select"
@@ -76,6 +121,51 @@
                 <a class="btn btn-icon btn-sm">
                   <i class="bi bi-info-circle"></i>
                 </a>
+              </div> -->
+              <div class="col-8 d-flex align-items-center">
+                <div class="position-relative w-100">
+                  <input
+                    type="text"
+                    class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
+                    placeholder="Select"
+                    [formControl]="WorkOrderCntrl"
+                    [matAutocomplete]="workOrder"
+                    (input)="
+                      WorkOrderSearch.value
+                        ? ''
+                        : timeSheetData.controls['workOrderId'].setValue('')
+                    "
+                    #WorkOrderSearch
+                  />
+                  <i
+                    class="bi bi-x-lg text-active-primary inp-x cursor-pointer"
+                    *ngIf="WorkOrderSearch.value"
+                    (click)="
+                      WorkOrderSearch.value = '';
+                      getFilteredValuesForWorkOrder('reset')
+                    "
+                  ></i>
+                </div>
+                <a
+                  class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"
+                  ><i class="bi bi-search"></i
+                ></a>
+                <i
+                  class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer"
+                  ngbTooltip="You can type or search or pick the record from search button"
+                ></i>
+                <mat-autocomplete
+                  #workOrder="matAutocomplete"
+                  [displayWith]="displayFnWorkOrder"
+                  (optionSelected)="setWorkOrderValue($event)"
+                >
+                  <mat-option
+                    *ngFor="let list of WorkOrderSearchResult | async"
+                    [value]="list"
+                  >
+                    {{ list.title }}
+                  </mat-option>
+                </mat-autocomplete>
               </div>
             </div>
             <div class="row mb-5">
@@ -112,7 +202,9 @@
                     formControlName="fromDate"
                     [max]="today"
                   />
-                  <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
+                  <span class="cursor-pointer" (click)="picker.open()"
+                    ><i class="far fa-calendar"></i
+                  ></span>
                   <mat-datepicker #picker></mat-datepicker>
                 </div>
 
@@ -134,7 +226,9 @@
                     "
                     [max]="today"
                   />
-                  <span class="cursor-pointer" (click)="picker1.open()"><i class="far fa-calendar"></i></span>
+                  <span class="cursor-pointer" (click)="picker1.open()"
+                    ><i class="far fa-calendar"></i
+                  ></span>
                   <mat-datepicker #picker1></mat-datepicker>
                 </div>
               </div>
@@ -246,7 +340,12 @@
             <!-- title Column -->
             <ng-container matColumnDef="title">
               <th mat-header-cell *matHeaderCellDef class="align-middle">
-                <img src="../../../../assets/images/icons/text.svg" alt="" class="align-text-bottom"> Task Name
+                <img
+                  src="../../../../assets/images/icons/text.svg"
+                  alt=""
+                  class="align-text-bottom"
+                />
+                Task Name
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
                 {{ element.title }}
@@ -256,7 +355,12 @@
             <!-- priority Column -->
             <ng-container matColumnDef="priority">
               <th mat-header-cell *matHeaderCellDef class="align-middle">
-                <img src="../../../../assets/images/icons/tag.svg" alt="" class="align-middle">  Priority
+                <img
+                  src="../../../../assets/images/icons/tag.svg"
+                  alt=""
+                  class="align-middle"
+                />
+                Priority
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
                 <span
@@ -287,7 +391,12 @@
             <!-- timeSpent Column -->
             <ng-container matColumnDef="timeSpent">
               <th mat-header-cell *matHeaderCellDef class="align-middle">
-                <img src="../../../../assets/images/icons/tclock.svg" alt="" class="align-text-bottom">  Time Spent (hrs)
+                <img
+                  src="../../../../assets/images/icons/tclock.svg"
+                  alt=""
+                  class="align-text-bottom"
+                />
+                Time Spent (hrs)
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
                 <input
@@ -306,7 +415,12 @@
             <!-- eta Column -->
             <ng-container matColumnDef="startDate">
               <th mat-header-cell *matHeaderCellDef class="align-middle">
-               <img src="../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  Start Date
+                <img
+                  src="../../../../assets/images/icons/tcal.svg"
+                  alt=""
+                  class="align-text-bottom"
+                />
+                Start Date
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
                 <div class="position-relative input-icon input-icon-right">
@@ -321,7 +435,9 @@
                     [max]="today"
                     placeholder="Select Start Date"
                   />
-                  <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
+                  <span class="cursor-pointer" (click)="picker.open()"
+                    ><i class="far fa-calendar"></i
+                  ></span>
                   <mat-datepicker #picker></mat-datepicker>
                 </div>
               </td>
@@ -330,7 +446,12 @@
             <!-- lastUpdate Column -->
             <ng-container matColumnDef="dueDate">
               <th mat-header-cell *matHeaderCellDef class="align-middle">
-               <img src="../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  Due Date
+                <img
+                  src="../../../../assets/images/icons/tcal.svg"
+                  alt=""
+                  class="align-text-bottom"
+                />
+                Due Date
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
                 <div class="position-relative input-icon input-icon-right">
@@ -345,7 +466,9 @@
                     [max]="today"
                     placeholder="Select Due Date"
                   />
-                  <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
+                  <span class="cursor-pointer" (click)="picker.open()"
+                    ><i class="far fa-calendar"></i
+                  ></span>
                   <mat-datepicker #picker></mat-datepicker>
                 </div>
               </td>
@@ -354,7 +477,12 @@
             <!-- status Column -->
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef class="align-middle">
-                <img src="../../../../assets/images/icons/status.svg" class="align-text-bottom" alt="">  Status
+                <img
+                  src="../../../../assets/images/icons/status.svg"
+                  class="align-text-bottom"
+                  alt=""
+                />
+                Status
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
                 <span
@@ -401,6 +529,7 @@
         <app-new-task-drawer
           [workOrderId]="workOrderId"
           [selectedEmpObj]="selectedEmpObj"
+          [selectedTask]="selectedTaskForDrawer"
           (getSelectedTaskList)="getSelectedTaskList($event)"
         ></app-new-task-drawer>
         <!-- 

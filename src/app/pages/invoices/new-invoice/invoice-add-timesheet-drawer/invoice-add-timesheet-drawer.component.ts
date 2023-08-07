@@ -128,11 +128,11 @@ export class InvoiceAddTimesheetDrawerComponent implements OnInit {
   }
 
   continue() {
+    this.getSelectedTimesheetList.emit(this.selection?.selected);
     this.isLoading = false;
     let closeBtn = document.getElementById('kt_invoice_add_timesheet_close');
     closeBtn?.click();
     this.cdr.detectChanges();
-    this.getSelectedTimesheetList.emit(this.selection?.selected);
     // this.selection.clear();
   }
 }
