@@ -21,8 +21,10 @@
                 Work orders are detailed instruction or request that outline specific task repairs or service to be performed in a structured or organized manner.
             </span>
             </div>
-            <a id="kt_edit_work_drawer_toggle" class="btn border bg-white btn-sm cursor-pointer  fw-bold">Edit Work Order</a>
-            <app-edit-work-drawer></app-edit-work-drawer>
+            <!-- <a id="kt_edit_work_drawer_toggle" class="btn border bg-white btn-sm cursor-pointer  fw-bold">Edit Work Order</a>
+            <app-edit-work-drawer></app-edit-work-drawer> -->
+             <!-- will add the above edit work order later -->
+
             <div *ngIf="isFromInbox">
             <a  class=" btn btn-bg-light text-primary   btn-sm " id="kt_inbox_logs_drawer_toggle" >
               <i class="bi fs-4 bi-chat-left-text" ></i> Logs    </a>
@@ -40,9 +42,11 @@
           <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6"
             (click)="getSelectedTab('Task'); getTaskList({workOrderId: workOrderDetails?.workOrderId})" [ngClass]="{'active': isSelectedTab=='Task'}">Tasks
           </a></li>
-          <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6"
+          <!-- <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6"
             (click)="getSelectedTab('Logs');" [ngClass]="{'active': isSelectedTab=='Logs'}">Logs
-          </a></li>
+          </a></li> -->
+           <!-- will add the above logs later -->
+
           <!-- <li class="nav-item"><a class="nav-link cursor-pointer text-active-primary me-6"
               (click)="getSelectedTab('JobSeekers')" [ngClass]="{'active': isSelectedTab=='JobSeekers'}"> Job Seekers
             </a></li>
@@ -161,7 +165,7 @@
                   <div class="form-group row ">
                     <label class="col-4 col-form-label text-muted">Legal Entity</label>
                     <div class="col-8">
-                      <span class="form-control-plaintext">{{workOrderDetails?.companyDetails?.title}}</span>
+                      <span class="form-control-plaintext">{{workOrderDetails?.companyDetails?.title}} ({{workOrderDetails?.companyDetails?.companyCode}})</span>
                     </div>
                   </div>
                 </ng-container>
@@ -170,7 +174,7 @@
                   <div class="form-group row ">
                     <label class="col-4 col-form-label text-muted">Site</label>
                     <div class="col-8">
-                      <span class="form-control-plaintext">{{workOrderDetails?.siteDetails?.name}}</span>
+                      <span class="form-control-plaintext">{{workOrderDetails?.siteDetails?.name}} ({{workOrderDetails?.siteDetails?.code}})</span>
                     </div>
                   </div>
                 </ng-container>
@@ -194,7 +198,7 @@
                   <div class="form-group row ">
                     <label class="col-4 col-form-label text-muted">Business Unit</label>
                     <div class="col-8">
-                      <span class="form-control-plaintext">{{workOrderDetails?.businessUnitDetails?.name}}</span>
+                      <span class="form-control-plaintext">{{workOrderDetails?.businessUnitDetails?.name}} ({{workOrderDetails?.businessUnitDetails?.code}})</span>
                     </div>
                   </div>
                 </ng-container>
@@ -261,7 +265,7 @@
             <div class="d-flex align-items-center mb-4 bg-white border rounded p-5 ">
               <!--begin::Icon-->
               <span class="symbol align-middle mr-5 w-70px">
-                <img alt="" src="./assets/media/svg/files/pdf.svg"></span>
+                <img alt="" [src]="getDocIcon(documents.fileName)"></span>
               <!--end::Icon-->
     
               <!--begin::Title-->
