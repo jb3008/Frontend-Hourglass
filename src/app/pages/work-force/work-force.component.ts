@@ -46,7 +46,52 @@ export class WorkForceComponent implements OnInit {
   ) {}
 
   async openModal() {
-    this.workForceData.reset();
+    const auth = this.utils.getAuth();
+    this.workForceData = this.fb.group({
+      id: [''],
+
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      gender: [''],
+      workEmail: [
+        '',
+        Validators.compose([Validators.required, Validators.email]),
+      ],
+      personalEmail: [
+        '',
+        Validators.compose([Validators.required, Validators.email]),
+      ],
+      workPhone: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
+      workExperience: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
+      mobilePhone: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
+      dateOfBirth: ['', Validators.required],
+      bloodGroup: [''],
+      designation: ['', Validators.required],
+      location: ['', Validators.required],
+      currentAddress: ['', Validators.required],
+      permanentAddress: ['', Validators.required],
+      vendorId: [auth?.vendorId, Validators.required],
+      documentList: [[]],
+      createUser: [true],
+    });
     return await this.modalComponent.open();
   }
   async hideFooter(): Promise<boolean> {
@@ -54,7 +99,7 @@ export class WorkForceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const auth = this.authService.getAuthFromLocalStorage();
+    const auth = this.utils.getAuth();
     this.profilePicDoc = null;
     this.imagePath = undefined;
     this.workForceData = this.fb.group({
@@ -102,12 +147,16 @@ export class WorkForceComponent implements OnInit {
       documentList: [[]],
       createUser: [true],
     });
+
     this.getAllWorkForceList();
   }
+
   get f() {
     return this.workForceData.controls;
   }
   async save() {
+    this.isLoading = true;
+    this.cdr.detectChanges();
     const formData = new FormData();
     this.submitted = true;
 

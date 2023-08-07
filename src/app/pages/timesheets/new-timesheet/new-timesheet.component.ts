@@ -47,7 +47,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<any>([]);
-    const auth = this.authService.getAuthFromLocalStorage();
+    const auth = this.utils.getAuth();
     DrawerComponent.reinitialization();
     ToggleComponent.reinitialization();
     this.timeSheetData = this.fb.group({

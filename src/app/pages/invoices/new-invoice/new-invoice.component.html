@@ -107,13 +107,17 @@
                     (click)="picker.open()"
                     [matDatepicker]="picker"
                     placeholder=" "
+                    [max]="today"
                     formControlName="invoiceDate"
                   />
                   <div
                     class="fv-plugins-message-container"
-                    *ngIf="submitted && f.date.errors"
+                    *ngIf="submitted && f.invoiceDate.errors"
                   >
-                    <div class="fv-help-block" *ngIf="f.date.errors.required">
+                    <div
+                      class="fv-help-block"
+                      *ngIf="f.invoiceDate.errors.required"
+                    >
                       Invoice Date is required
                     </div>
                   </div>

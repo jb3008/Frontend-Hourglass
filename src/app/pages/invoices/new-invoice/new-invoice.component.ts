@@ -41,8 +41,10 @@ export class NewInvoiceComponent implements OnInit {
 
   paymentTerms: any = [];
   selectedWorkOrder: any;
+  today: any = new Date();
   ngOnInit(): void {
     // DrawerComponent.reinitialization();
+
     this.invoiceData = this.fb.group({
       workOrderId: ['', Validators.required],
       paymentTerms: [{ value: '', disabled: true }],
