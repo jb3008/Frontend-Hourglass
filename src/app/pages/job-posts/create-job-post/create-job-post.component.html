@@ -117,9 +117,9 @@
                     <div class="col-8">
                         <div class="input-icon position-relative w-150px input-icon-right">
 
-                            <input type="text" class="form-control  py-2 fs- fw-normal" (click)="pickerrd.open()"
+                            <input type="text" class="form-control cursor-pointer py-2 fs- fw-normal" (click)="pickerrd.open()"
                                 [matDatepicker]="pickerrd" placeholder="Reporting Date">
-                            <span><i class="far fa-calendar"></i></span>
+                            <span class="cursor-pointer" (click)="pickerrd.open()"><i class="far fa-calendar"></i></span>
                             <mat-datepicker #pickerrd></mat-datepicker>
                     </div>
                     </div>
@@ -130,9 +130,9 @@
                     <div class="col-8 d-flex align-items-center">
                         <div class="input-icon position-relative min-w-150px input-icon-right">
 
-                            <input type="text" class="form-control   py-2 fs- fw-normal" (click)="picker.open()"
+                            <input type="text" class="form-control cursor-pointer  py-2 fs- fw-normal" (click)="picker.open()"
                         [matDatepicker]="picker" placeholder="Start Date">
-                    <span><i class="far fa-calendar"></i></span>
+                    <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
                     <mat-datepicker #picker></mat-datepicker>
                     </div>
 
@@ -273,7 +273,7 @@
                 <div class="border w-100 rounded-1 p-2">
                     <div class="d-flex justify-content-between align-items-center ">
                         <label class="p-2">Work Policy Document <span class="text-danger">*</span></label>
-                        <i class="bi bi-paperclip fs-3"></i>
+                        <img src="../../../../assets/images/icons/attachment.svg" alt=""> 
 
                     </div>
                     <div class="fv-row ">
@@ -299,7 +299,7 @@
                 <div class="border w-100 rounded-1 p-2">
                     <div class="d-flex justify-content-between align-items-center ">
                         <label class="p-2">About Organization Document <span class="text-danger">*</span></label>
-                        <i class="bi bi-paperclip fs-3"></i>
+                        <img src="../../../../assets/images/icons/attachment.svg" alt=""> 
 
                     </div>
                     <div class="fv-row ">
@@ -325,7 +325,7 @@
                 <div class="border w-100 rounded-1 p-2">
                     <div class="d-flex justify-content-between align-items-center ">
                         <label class="p-2">Requirements Document <span class="text-danger">*</span></label>
-                        <i class="bi bi-paperclip fs-3"></i>
+                        <img src="../../../../assets/images/icons/attachment.svg" alt=""> 
 
                     </div>
                     <div class="fv-row ">

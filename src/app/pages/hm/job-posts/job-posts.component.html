@@ -138,15 +138,15 @@
                         <td mat-cell *matCellDef="let element" class="align-middle"> 
                             <!-- <i class="far fa-building"></i> -->
                             <img src="../../../../assets/images/icons/building.svg" alt="" class="me-1">
-                             {{element.businessUnit}} </td>
+                             {{element.businessUnitDetails?.name}} ({{element.businessUnitDetails?.code}}) </td>
                     </ng-container>
     
                     <!-- site Column -->
                     <ng-container matColumnDef="site">
                         <th mat-header-cell *matHeaderCellDef class="align-middle"> Site </th>
-                        <td mat-cell *matCellDef="let element" class="align-middle"> {{element.site}} </td>
+                        <td mat-cell *matCellDef="let element" class="align-middle"> {{element.siteDetails?.name}} ({{element?.siteDetails?.code}})</td>
                     </ng-container>
-    
+
                     <!-- sDate Column -->
                     <ng-container matColumnDef="startDate">
                         <th mat-header-cell *matHeaderCellDef class="align-middle"> Start Date </th>
@@ -163,7 +163,8 @@
                     <ng-container matColumnDef="message">
                         <th mat-header-cell *matHeaderCellDef class="align-middle"> Messages </th>
                         <td mat-cell *matCellDef="let element" class="align-middle text-danger"> 
-                          <i class="bi bi-chat-left-text"></i>  {{element.message}}
+                         <img src="../../../../assets/images/icons/jobpost-msg.svg" alt="">
+                            {{element.message}}
                          </td>
                     </ng-container>
     
@@ -190,6 +191,9 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
+                <div *ngIf="dataSource.data.length == 0" class="text-center fw-bold fs-3 mt-2">
+                    No Records Found
+                </div>
     
                 <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons  [pageSize]="10"
                     aria-label="Select page of periodic elements">
@@ -249,8 +253,8 @@
                         <div class=" my-4">
                             <div> <i class="far fa-calendar my-2 me-4"></i> <span class="badge badge-light-warning"> Nov 12 -
                                     Mar 28, 2023</span></div>
-                            <div><i class="fas fa-coins my-2  me-4"></i> Hourly</div>
-                            <div><i class="fas fa-suitcase my-2  me-4"></i> Job type here</div>
+                            <div><div class="w-20px  display-inline my-1 me-1"><img class="" src="../../../../assets/images/icons/coin.svg" alt=""></div> Hourly</div>
+                            <div><div class="w-20px  display-inline my-1 me-1"><img class="" src="../../../../assets/images/icons/case.svg" alt=""></div> Job type here</div>
                         </div>
                     </div>
                 </div>

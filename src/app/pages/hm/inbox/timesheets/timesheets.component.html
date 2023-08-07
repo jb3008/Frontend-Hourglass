@@ -42,9 +42,9 @@
 
 
         <div class="position-relative input-icon input-icon-right">
-            <input type="text" class="form-control py-2 px-3 fs- fw-normal pe-10" (click)="picker1.open()"
+            <input type="text" class="form-control py-2 px-3 fs- fw-normal pe-10 cursor-pointer" (click)="picker1.open()"
                 [matDatepicker]="picker1" placeholder="Select From & To Date">
-            <span><i class="far fa-calendar"></i></span>
+            <span class="cursor-pointer" (click)="picker1.open()"><i class="far fa-calendar"></i></span>
             <mat-datepicker #picker1></mat-datepicker>
         </div>
 
@@ -60,22 +60,22 @@
         <table mat-table [dataSource]="dataSource" class="table  border-bottom table-row-bordered text-gray-600 m-0">
             <!-- timesheet Column -->
             <ng-container matColumnDef="timesheet">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-file-earmark"></i> Timesheet
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tdoc.svg" alt="" class="align-text-bottom"> Timesheet
                     #</th>
                 <td mat-cell *matCellDef="let element" class="align-middle">
                     <!-- <a routerLink="details" class="cursor-pointer"> -->
                     <a  class="cursor-pointer text-primary" routerLink="../timesheets-details">
-                        {{element.timesheet}} <i class="far fa-arrow-alt-circle-right"></i>
+                        {{element.timesheet}} <img class="ms-1 align-middle" src="../../../../assets/images/icons/table-arrow.svg" alt="">
                     </a>
                 </td>
             </ng-container>
 
             <!-- employee Column -->
             <ng-container matColumnDef="employee">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-person"></i> Employee</th>
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/manager.svg" class="align-text-bottom" alt="">  Employee</th>
                 <td mat-cell *matCellDef="let element" class="align-middle">
                     <div class="me-10 my-1 d-flex">
-                        <div class="symbol symbol-35px symbol-square me-3">
+                        <div class="symbol symbol-35px rounded-1 me-3">
                             <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">SL </span>
                         </div>
                         <div>
@@ -90,30 +90,30 @@
 
             <!-- workorder Column -->
             <ng-container matColumnDef="workorder">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-file-earmark"></i> Work Order
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tdoc.svg" alt="" class="align-text-bottom"> Work Order
                 </th>
                 <td mat-cell *matCellDef="let element" class="align-middle">
                     <a>
-                        {{element.workorder}} <i class="far fa-arrow-alt-circle-right"></i>
+                        {{element.workorder}} <img class="ms-1 align-middle" src="../../../../assets/images/icons/table-arrow.svg" alt="">
                     </a>
                 </td>
             </ng-container>
 
             <!-- fromdate Column -->
             <ng-container matColumnDef="fromdate">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> From Date</th>
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  From Date</th>
                 <td mat-cell *matCellDef="let element" class="align-middle"> {{element.fromdate}} </td>
             </ng-container>
 
             <!-- todate Column -->
             <ng-container matColumnDef="todate">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> To Date</th>
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom"> To Date</th>
                 <td mat-cell *matCellDef="let element" class="align-middle"> {{element.todate}} </td>
             </ng-container>
 
             <!-- workhr Column -->
             <ng-container matColumnDef="workhr">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-calendar"></i> Total Work
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  Total Work
                     Hour</th>
                 <td mat-cell *matCellDef="let element" class="align-middle"> {{element.workhr}} </td>
             </ng-container>
@@ -121,7 +121,7 @@
 
             <!-- status Column -->
             <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef class="align-middle"><i class="bi bi-sun"></i> Status </th>
+                <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/status.svg" class="align-text-bottom" alt="">  Status </th>
                 <td mat-cell *matCellDef="let element" class="align-middle">
                     <span class="badge badge-light-danger"
                         [ngClass]="{' badge-light-warning': element.status === 'In-Progress',

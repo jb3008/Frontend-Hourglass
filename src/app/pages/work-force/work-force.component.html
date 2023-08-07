@@ -32,7 +32,7 @@
     </ul>
   </div>
   <a class="btn btn-primary btn-sm cursor-pointer my-2" (click)="openModal()">
-    Add New Employee</a
+    <i class="bi bi-plus-lg"></i> Add New Employee</a
   >
   <!-- begin:: Modal example -->
 
@@ -232,13 +232,13 @@
               <input
                 formControlName="dateOfBirth"
                 type="text"
-                class="form-control py-2 fs- fw-normal"
+                class="form-control py-2 fs- fw-normal cursor-pointer"
                 (click)="dob.open()"
                 [max]="today"
                 [matDatepicker]="dob"
                 placeholder="Select Date of Birth"
               />
-              <span><i class="far fa-calendar"></i></span>
+              <span class="cursor-pointer" (click)="dob.open()"><i class="far fa-calendar"></i></span>
               <mat-datepicker #dob></mat-datepicker>
             </div>
           </div>

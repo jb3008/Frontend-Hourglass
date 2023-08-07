@@ -1,8 +1,10 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { Observable, map, startWith } from 'rxjs';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
@@ -22,11 +24,14 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
   endpoints = EndPoints;
   isLoading = false;
   assigneeList: any[] = [];
+  assigneeFilteredList: Observable<any[]>;
   @Output() getList = new EventEmitter<any>;
   @Input() vendorId: any;
   @Input() taskDetails: any;
   @Input() statusLists: any;
   workOrderID: any;
+  assigneeCntrl = new FormControl();
+  @ViewChild(MatAutocompleteTrigger, {read: MatAutocompleteTrigger}) assigneeSearch: MatAutocompleteTrigger;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(param => {
@@ -70,6 +75,27 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
     console.log(this.allFiles)
   }
 
+  showSearchResult(data: any){
+    return this.assigneeList.filter(obj => {
+      let fullName = `${obj.firstName} ${obj.lastName}`.toLowerCase();
+      if(data && typeof data === 'object'){
+        data = data.firstName + ' ' + data.lastName;
+      }
+      let searchData = data.toLowerCase();
+      let filteredData = fullName.includes(searchData);
+      return filteredData
+    })
+  }
+
+  displayFn(assignee: any): string {
+    return assignee ? `${assignee.firstName} ${assignee.lastName}` : '';
+  }
+
+  setAssigneeValue(event: any){
+    let value = event.option.value.userId;
+    this.taskData.controls['assigneeId'].setValue(value);
+  }
+
   getAssigneeList(){
     const queryParam = {
       vendorId : this.vendorId
@@ -83,7 +109,18 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
       )
       .subscribe((response) => {
         this.assigneeList = response;
+        this.getFilteredListForAssignee();
       });
+  }
+
+  getFilteredListForAssignee(reset?: string){
+    if(reset){
+      this.taskData.controls['assigneeId'].setValue('');
+    }
+    this.assigneeFilteredList = this.assigneeCntrl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.showSearchResult(value))
+    )
   }
 
   numbersOnly(event: any){
@@ -119,6 +156,7 @@ export class NewTaskDrawerComponent implements OnInit, OnChanges {
   }
 
   setEditValuesOnUi(){
+    this.assigneeCntrl.setValue(this.taskDetails.userDetail);
     this.taskData.patchValue({
       title: this.taskDetails.title,
       assigneeId: this.taskDetails.assigneeId,

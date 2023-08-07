@@ -19,6 +19,14 @@
     background-color: var(--kt-warning-light)!important;
 }
 .fit-content{width: fit-content;}
+.inp-x{
+    position: absolute;
+    top: 11px;
+    right: 37px;
+}
+tr.mat-header-row {
+    height: 44px!important;
+}
 .input-icon span {
     left: 0;
     top: 0;
@@ -51,6 +59,7 @@
     opacity: 1;
     border-radius: 0;
 }
+.display-inline{display: inline-block}
 .input-icon span.pspinpClose{right: 0; left: unset; position: absolute;}
 .drawer{
     background-color: #1e1e2d;

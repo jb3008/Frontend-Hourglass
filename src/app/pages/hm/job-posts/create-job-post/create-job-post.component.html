@@ -41,12 +41,25 @@
             <div class="pspw60 ">
                 <div class="form-group row mb-5 d-flex align-items-center">
                     <label class="col-4">Hiring Manager <span class="text-danger">*</span></label>
-                    <div class="col-8">
-                        <mat-select formControlName="hiringManager" class="form-select fs- py-2" placeholder="Select">
-                            <mat-option *ngFor="let hm of hiringManager" [value]="hm.userId">
-                                {{hm.firstName}} {{hm.lastName}}
-                            </mat-option>
-                        </mat-select>
+                    <div class="col-8  d-flex align-items-center">
+                        <div class="position-relative w-100">
+                            <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
+                        placeholder="Select"
+                        [formControl]="hiringManagerCntrl"
+                        [matAutocomplete]="auto"
+                        (input)="hiringManagerSearch.value ? '' : jobPostData.controls['hiringManager'].setValue('')"
+                        #hiringManagerSearch>
+                        <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="hiringManagerSearch.value"
+                            (click)="hiringManagerSearch.value = '';getFilteredValuesForHm('reset')"></i>
+
+                        </div>
+                         <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
+                 <i class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer" ngbTooltip="You can type or search or pick the record from search button"></i>
+                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="setHiringManagerValue($event)">
+                    <mat-option *ngFor="let hm of hiringManagerSearchResult | async" [value]="hm">
+                                 {{hm.firstName}} {{hm.lastName}}
+                    </mat-option>
+                  </mat-autocomplete>
                     </div>
                 </div>
 
@@ -110,7 +123,7 @@
                     <div class="col-8 d-flex align-items-center">
                   
                         <input *ngIf="jobKind == 'Hourly'" type="input" formControlName="workRate" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                        placeholder="Enter amount" value="500" (keypress)="numberAndDecimalOnly($event)">
+                        placeholder="Enter amount" (keypress)="numberAndDecimalOnly($event)">
                         
                         <ng-container *ngIf="jobKind == 'Fixed'">
                             <label class="me-2">Min</label>
@@ -151,19 +164,19 @@
                     </div>
                 </div>
 
-                <div class="form-group row mb-5">
+                <div class="form-group row mb-5  d-flex align-items-center">
                     <label class="col-4">Start Date <span class="text-danger">*</span></label>
                     <div class="col-8 d-flex align-items-center">
                         <div class="input-icon position-relative min-w-150px input-icon-right">
 
                             <input type="text" formControlName="startDate" class="form-control cursor-pointer  py-2 fs- fw-normal" (click)="picker.open()"
-                        [matDatepicker]="picker" placeholder="Start Date" readonly [min]="today">
+                        [matDatepicker]="picker" placeholder="Select Date" readonly [min]="today">
                     <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
                     <mat-datepicker #picker></mat-datepicker>
                     </div>
 
                     <label class="mb-1 ps-6 pe-4 min-w-100px ">End Date <span class="text-danger">*</span></label>
-                    <input type="text" formControlName="endDateNumber" class="form-control w-90px py-2 fs- fw-normal" placeholder="End Date" (input)="changeValidTill($event)" (keypress)="numberOnly($event)">
+                    <input type="text" formControlName="endDateNumber" class="form-control w-125px py-2 fs- fw-normal" placeholder="Select Date" (input)="changeValidTill($event)" (keypress)="numberOnly($event)">
     
                     <select name="" id="" class="form-select min-w-90px fs- py-2 ms-2">
                         <option value="">Days</option>
@@ -177,9 +190,9 @@
                     <div class="col-8">
                         <div class="input-icon position-relative w-150px input-icon-right">
 
-                            <input type="text" formControlName="endDate" class="form-control  py-2 fs- fw-normal" (click)="pickerValid.open()"
+                            <input type="text" formControlName="endDate" class="form-control cursor-pointer py-2 fs- fw-normal" (click)="pickerValid.open()"
                                 [matDatepicker]="pickerValid" placeholder="Valid Till" [disabled]="true">
-                            <span><i class="far fa-calendar"></i></span>
+                            <span class="cursor-pointer" (click)="pickerValid.open()"><i class="far fa-calendar"></i></span>
                             <mat-datepicker #pickerValid></mat-datepicker>
                     </div>
                     </div>
@@ -202,7 +215,7 @@
     
                 <div class="form-group row mb-5 d-flex align-items-center">
                     <label class="col-4 d-flex align-items-center">Work hours per <span class="text-danger">*</span>
-                    <mat-select formControlName="workHourInterval" class="form-select fs- py-2 w-90px ms-2" placeholder="Select">
+                    <mat-select formControlName="workHourInterval" class="form-select fs- py-2 w-90px ms-2" placeholder="Select" (selectionChange)="checkValidHrs()">
                         <mat-option value="Daily">
                             Daily
                         </mat-option>
@@ -220,7 +233,7 @@
     
                       </a>
                         <input type="input" formControlName="workHours" #workHours class="form-control w-70px py-2 fs- fw-normal" 
-                        placeholder="Number" (keypress)="numberOnly($event)">
+                        placeholder="Number" (keypress)="numberOnly($event)" (focusout)="checkValidHrs()">
                         <a  class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary">
                       <i class="bi bi-plus-circle" (click)="changeInputValue(workHours, '+')"></i>
                       </a>
@@ -314,7 +327,7 @@
                     <div class="border w-100 rounded-1 p-2">
                         <div class="d-flex justify-content-between align-items-center ">
                             <label class="p-2">Work Policy Document <span class="text-danger">*</span></label>
-                            <i class="bi bi-paperclip fs-3"></i>
+                            <img src="../../../../../assets/images/icons/attachment.svg" alt=""> 
     
                         </div>
                         <div class="fv-row ">
@@ -355,7 +368,7 @@
                     <div class="border w-100 rounded-1 p-2">
                         <div class="d-flex justify-content-between align-items-center ">
                             <label class="p-2">About Organization Document <span class="text-danger">*</span></label>
-                            <i class="bi bi-paperclip fs-3 "></i>
+                            <img src="../../../../../assets/images/icons/attachment.svg" alt=""> 
     
                         </div>
                         <div class="fv-row ">
@@ -396,7 +409,7 @@
                     <div class="border w-100 rounded-1 p-2">
                         <div class="d-flex justify-content-between align-items-center ">
                             <label class="p-2">Requirements Document <span class="text-danger">*</span></label>
-                            <i class="bi bi-paperclip fs-3"></i>
+                            <img src="../../../../../assets/images/icons/attachment.svg" alt=""> 
     
                         </div>
                         <div class="fv-row ">

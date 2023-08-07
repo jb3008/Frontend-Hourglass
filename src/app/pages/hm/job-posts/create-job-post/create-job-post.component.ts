@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import InlineEditor from '@ckeditor/ckeditor5-build-inline';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, map, retry, startWith, throwError } from 'rxjs';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
@@ -11,6 +11,7 @@ import { DialogComponent } from 'src/app/common/dialog/dialog.component';
 import { HttpParams } from '@angular/common/http';
 import { MatSelect } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-create-job-post',
   templateUrl: './create-job-post.component.html',
@@ -23,6 +24,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   businessUnits: any[] = [];
   costCenterList: any[] = [];
   hiringManager: any[] = [];
+  hiringManagerSearchResult: Observable<any[]>;
   jobTypes: any[] = [];
   timesheetFrequency: any[] = [];
   legalEntities: any[] = [];
@@ -41,6 +43,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   documentsList: any;
   dialogRef: MatDialogRef<DialogComponent>;
   today = new Date();
+  hiringManagerCntrl = new FormControl();
 
   @ViewChild('siteSelect') siteSelect: MatSelect;
 
@@ -74,9 +77,9 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       site: ['', Validators.required],
       location: [{value: '', disabled: true}, Validators.required],
       businessUnit: ['', Validators.required],
-      workPolicyDoc: [''],
-      aboutOrgDoc: [''],
-      requirementDoc: [''],
+      workPolicyDoc: ['', Validators.required],
+      aboutOrgDoc: ['', Validators.required],
+      requirementDoc: ['', Validators.required],
       otherDocList: [[]],
     });
 
@@ -195,6 +198,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     const endDate: any = new Date(this.draftJobDetails.endDate);
     const differenceInMilliseconds = Math.abs(endDate - startDate);
     const differenceInDays = Math.round(differenceInMilliseconds / oneDay);
+    this.hiringManagerCntrl.setValue(this.draftJobDetails.managerDetails);
     setTimeout(() => {
       this.jobPostData.patchValue({
         jobTitle: this.draftJobDetails.title,
@@ -233,15 +237,47 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     return this.draftDetails ? 'temp job by lokesh' : 'Some Job Post Title'
   }
 
+  displayFn(hiringManager: any): string {
+    return hiringManager ? `${hiringManager.firstName} ${hiringManager.lastName}` : '';
+  }
+  
+  showSearchResult(data: any){
+    return this.hiringManager.filter(obj => {
+      let fullName = `${obj.firstName} ${obj.lastName}`.toLowerCase();
+      if(data && typeof data === 'object'){
+        data = data.firstName + ' ' + data.lastName;
+      }
+      let searchData = data.toLowerCase();
+      let filteredData = fullName.includes(searchData);
+      return filteredData
+    })
+  }
+
+  setHiringManagerValue(event: any){
+    let value = event.option.value.userId;
+    this.jobPostData.controls['hiringManager'].setValue(value);
+  }
+
   getHiringManagers(){
     this.getDropDownValues(this.endPoints.HIRING_MANGER).subscribe({
       next: response => {
-        this.hiringManager = response
+        this.hiringManager = response;
+        this.getFilteredValuesForHm();
       },
       error: error => {
         console.log(error);
       }
     })
+  }
+
+  getFilteredValuesForHm(reset?: string){
+    if(reset){
+      this.jobPostData.controls['hiringManager'].setValue('');
+    }
+    this.hiringManagerSearchResult = this.hiringManagerCntrl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.showSearchResult(value))
+    )
   }
 
   getJobType(){
@@ -377,6 +413,8 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       if(formControl)
         this.jobPostData.get(formControl)?.setValue(++value);
     }
+
+    this.checkValidHrs();
     
   }
 
@@ -401,6 +439,14 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   changeValidTill(event: any){
     if(event.target.value || event.target.value == ''){
       this.jobPostData.controls['endDate'].setValue(null);
+    }
+  }
+
+  checkValidHrs(){
+    if(this.jobPostData.controls['workHourInterval'].value == 'Daily'){
+      if(this.jobPostData.get('workHours')?.value > 24){
+        this.jobPostData.get('workHours')?.setValue('');
+      }
     }
   }
 
@@ -445,9 +491,16 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   saveJob(status: string){
     const formData = new FormData();
     let workRateValue = this.jobPostData.controls['workRate'].value;
+    this.jobPostData.controls['workRate'].setValue(workRateValue.replace(/,/g, ''));
     let minBudget = this.jobPostData.controls['minBudget'].value;
+    this.jobPostData.controls['minBudget'].setValue(minBudget.replace(/,/g, ''));
     let maxBudget = this.jobPostData.controls['maxBudget'].value;
+    this.jobPostData.controls['maxBudget'].setValue(maxBudget.replace(/,/g, ''));
     if(this.jobPostData.valid && (workRateValue || (minBudget && maxBudget))){
+      if((workRateValue && workRateValue == 0) || (minBudget && minBudget == 0) || (maxBudget && maxBudget == 0)){
+        this.utils.showSnackBarMessage(this.snackBar, 'Please enter an amount greater than 0');
+        return;
+      }
       this.isLoading = true;
       this.jobPostData.controls['reportDate'].setValue(this.changeDateToUtc(this.jobPostData.controls['reportDate'].value))
       this.jobPostData.controls['startDate'].setValue(this.changeDateToUtc(this.jobPostData.controls['startDate'].value))
@@ -461,7 +514,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
           if(status != 'draft'){
             if(key == 'otherDocList'){
               const file = this.jobPostData.get(key)?.value;
-              if(file.length != 0){
+              if(file && file.length != 0){
                 file.forEach((fileObj: File) => {
                   const blob = new Blob([fileObj], { type: fileObj.type });
                   formData.append(key, blob, fileObj.name);

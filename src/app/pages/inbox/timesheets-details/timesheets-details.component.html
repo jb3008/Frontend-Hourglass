@@ -26,13 +26,13 @@
             class="btn btn-bg-light text-primary btn-sm"
             id="kt_timesheet_logs_drawer_toggle"
           >
-            <i class="bi fs-4 bi-chat-left-text"></i> Logs
+          <img src="../../../../assets/images/icons/jobpost-msg.svg" alt=""> Logs
           </a>
           <a
             class="btn btn-bg-light text-primary btn-sm ms-5 mr-5"
             id="kt_attachment_logs_drawer_toggle"
           >
-            <i class="bi fs-4 bi-paperclip"></i> Attachments
+          <img src="../../../../assets/images/icons/attachment.svg" alt="">  Attachments
           </a>
           <button
             type="button"
@@ -84,14 +84,14 @@
               <span class="fw-bold d-flex s-">
                 <a class="cursor-pointer">
                   {{ timeSheetDetails?.workOrderId }}
-                  <i class="far fa-arrow-alt-circle-right"></i>
+                  <img class="ms-1 align-middle" src="../../../../assets/images/icons/table-arrow.svg" alt="">
                 </a>
               </span>
             </div>
             <div class="vr me-5 mt-4 h-20px"></div>
 
             <div class="me-5 my-1 d-flex">
-              <div class="symbol symbol-30px symbol-square me-3">
+              <div class="symbol symbol-30px rounded-1 me-3">
                 <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
                   >{{ timeSheetDetails?.workForceDetails?.firstName[0] }}
                   {{ timeSheetDetails?.workForceDetails?.lastName[0] }}
@@ -231,7 +231,7 @@
                 <!-- title Column -->
                 <ng-container matColumnDef="title">
                   <th mat-header-cell *matHeaderCellDef class="align-middle">
-                    <i class="bi bi-file-earmark-font"></i> Task Name
+                    <img src="../../../../assets/images/icons/text.svg" alt="" class="align-text-bottom"> Task Name
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     {{ element.title }}
@@ -241,7 +241,7 @@
                 <!-- priority Column -->
                 <ng-container matColumnDef="priority">
                   <th mat-header-cell *matHeaderCellDef class="align-middle">
-                    <i class="bi bi-tag"></i> Priority
+                    <img src="../../../../assets/images/icons/tag.svg" alt="" class="align-middle">  Priority
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     <span
@@ -272,7 +272,7 @@
                 <!-- timeSpent Column -->
                 <ng-container matColumnDef="timeSpent">
                   <th mat-header-cell *matHeaderCellDef class="align-middle">
-                    <i class="bi bi-clock"></i> Time Spent
+                    <img src="../../../../assets/images/icons/tclock.svg" alt="" class="align-text-bottom">  Time Spent
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     {{ element.timeSpent }}
@@ -281,7 +281,7 @@
                 <!-- eta Column -->
                 <ng-container matColumnDef="startDate">
                   <th mat-header-cell *matHeaderCellDef class="align-middle">
-                    <i class="bi bi-calendar"></i> Start Date
+                    <img src="../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  Start Date
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     {{ element?.startDate | date : "dd/MM/yyyy" }}
@@ -291,7 +291,7 @@
                 <!-- lastUpdate Column -->
                 <ng-container matColumnDef="finishDate">
                   <th mat-header-cell *matHeaderCellDef class="align-middle">
-                    <i class="bi bi-calendar"></i> Due Date
+                    <img src="../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  Due Date
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     {{ element?.finishDate | date : "dd/MM/yyyy" }}
@@ -301,7 +301,7 @@
                 <!-- status Column -->
                 <ng-container matColumnDef="status">
                   <th mat-header-cell *matHeaderCellDef class="align-middle">
-                    <i class="bi bi-sun"></i> Status
+                    <img src="../../../../assets/images/icons/status.svg" class="align-text-bottom" alt="">  Status
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     <span

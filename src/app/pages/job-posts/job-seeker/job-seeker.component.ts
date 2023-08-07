@@ -151,15 +151,21 @@ export class JobSeekerComponent implements OnInit {
     return this.utils.numberOnly(event);
   }
   
-  numbersOAndDecimalOnly(event: any){
+  numbersAndDecimalOnly(event: any){
     return this.utils.numbersAndDecimal(event);
   }
 
   submitApplication(){
     const formData = new FormData();
+    let workRateValue = this.applyJobData.controls['workRate'].value;
+    this.applyJobData.controls['workRate'].setValue(workRateValue.replace(/,/g, ''));
     const resumeData = this.applyJobData.controls['resumeDoc'].value 
     const otherDocs = this.applyJobData.controls['otherDocList'].value 
     if(this.applyJobData.valid && this.applyJobData.controls['agreeTerms'].value && resumeData && otherDocs.length > 0){
+      if(workRateValue && workRateValue == 0){
+        this.utils.showSnackBarMessage(this.snackBar, 'Please enter an amount greater than 0');
+        return;
+      }
       this.loading = true;
       this.applyJobData.controls['availableDate'].setValue(this.utils.changeDateToUtc(this.applyJobData.controls['availableDate'].value));
       let totalMonths = (Number(this.applyJobData.controls['workExpYears'].value) * 12) + Number(this.applyJobData.controls['workExpMonths'].value);
@@ -181,8 +187,10 @@ export class JobSeekerComponent implements OnInit {
               }
             }else{
               const file = this.applyJobData.get(key)?.value;
-              const blob = new Blob([file], { type: file.type });
-              formData.append(key, blob, file.name);
+              if(file){
+                const blob = new Blob([file], { type: file.type });
+                formData.append(key, blob, file.name);
+              }
             }
           }
         }

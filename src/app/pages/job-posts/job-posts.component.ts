@@ -257,10 +257,13 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   goToDetails(elementId: any) {
-    if (this.selectedTab == 'NewJob' || this.selectedTab == 'AppliedJob')
-      this.router.navigate(['/job-posts/details'], {
-        queryParams: { jobId: elementId, tab: this.selectedTab },
-      });
+    // if (this.selectedTab == 'NewJob' || this.selectedTab == 'AppliedJob')
+    //   this.router.navigate(['/job-posts/details'], {
+    //     queryParams: { jobId: elementId, tab: this.selectedTab },
+    //   });
+    this.router.navigate(['/job-posts/details'], {
+      queryParams: { jobId: elementId, tab: this.selectedTab },
+    });
     // else if(this.selectedTab == 'AppliedJob')
     //   this.router.navigate(['/hm/job-posts/creat-job-post'], {queryParams: {data: element.id , tab: this.selectedTab}})
   }
@@ -278,7 +281,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     const vendorId = this.utils.getVendorId();
     switch (tab) {
       case 'AppliedJob':
-        this.queryParam.status = 'ACTIVE';
+        delete this.queryParam.status;
         this.queryParam.vendorId = vendorId;
         break;
 
@@ -462,7 +465,7 @@ type Filter = {
 
 type QueryParam = {
   [propName: string]: any;
-  status: string;
+  status?: string;
   searchText?: string;
   startDate?: string;
   endDate?: string;
