@@ -80,12 +80,7 @@
           </a>
         </div>
       </div>
-      <app-attachment-logs-drawer
-        [timeSheetId]="timeSheetId"
-      ></app-attachment-logs-drawer>
-      <app-timesheet-logs-drawer
-        [timeSheetId]="timeSheetId"
-      ></app-timesheet-logs-drawer>
+
       <div class="d-flex flex-wrap flex-stack mt-7">
         <div class="d-flex flex-column flex-grow-1 pe-8">
           <div class="d-flex flex-wrap lign-items-center">
@@ -422,10 +417,12 @@
 <app-inbox-reject-drawer
   [timeSheetId]="timeSheetId"
   [status]="timeSheetDetails?.status"
+  (reloadPage)="ngOnInit()"
 ></app-inbox-reject-drawer>
 <app-inbox-approve-drawer
   [timeSheetId]="timeSheetId"
   [status]="timeSheetDetails?.status"
+  (reloadPage)="ngOnInit()"
 ></app-inbox-approve-drawer>
 
 <app-attachment-logs-drawer

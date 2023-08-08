@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
@@ -15,6 +22,7 @@ import { ActivatedRoute } from '@angular/router';
 export class InboxRejectDrawerComponent implements OnInit {
   @Input() timeSheetId: any;
   @Input() status: any;
+  @Output() reloadPage = new EventEmitter<any>();
   statusModal: FormGroup;
   isLoading = false;
   endPoints = EndPoints;
@@ -184,8 +192,10 @@ export class InboxRejectDrawerComponent implements OnInit {
       .subscribe(async (response) => {
         if (this.isLoading) {
           this.isLoading = false;
-
-          this.ngOnInit();
+          let closeBtn = document.getElementById('kt_inbox_reject_close');
+          closeBtn?.click();
+          this.reloadPage.emit(true);
+          this.cdr.detectChanges();
           this.utils.showSnackBarMessage(
             this.snackBar,
             'Time sheet status rejected successfully'

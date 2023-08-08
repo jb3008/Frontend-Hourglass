@@ -50,7 +50,10 @@
         class="form-select fs- py-2 w-200px"
         formControlName="status"
       >
-        <option value="">All Status</option>
+        <option value="All">All Status</option>
+        <option value="PENDING">Pending</option>
+        <option value="APPROVED">Approved</option>
+        <option value="REJECTED">Rejected</option>
       </select>
 
       <div class="position-relative input-icon input-icon-right">
@@ -89,12 +92,18 @@
   <div class="mt-5 mb-7 border">
     <table
       mat-table
+      matSort
       [dataSource]="dataSource"
       class="table border-bottom table-row-bordered text-gray-600 m-0"
     >
       <!-- invoice Column -->
       <ng-container matColumnDef="invoiceId">
-        <th mat-header-cell *matHeaderCellDef class="align-middle">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="align-middle"
+        >
           <img
             src="../../../../assets/images/icons/tdoc.svg"
             alt=""
@@ -106,7 +115,8 @@
           <!-- <a routerLink="details" class="cursor-pointer"> -->
           <a
             class="cursor-pointer text-primary"
-            routerLink="/inbox/invoices-details"
+            (click)="readNotification(element)"
+            routerLink="/inbox/invoices-details/{{ element.invoiceId }}"
             *ngIf="auth?.vendorId"
           >
             {{ element.invoiceId }}
@@ -118,7 +128,8 @@
           </a>
           <a
             class="cursor-pointer text-primary"
-            routerLink="/hm/inbox/invoices-details"
+            (click)="readNotification(element)"
+            routerLink="/hm/inbox/invoices-details/{{ element.invoiceId }}"
             *ngIf="!auth?.vendorId"
           >
             {{ element.invoiceId }}
@@ -132,7 +143,12 @@
       </ng-container>
       <!-- invoiceDate Column -->
       <ng-container matColumnDef="invoiceDate">
-        <th mat-header-cell *matHeaderCellDef class="align-middle">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="align-middle"
+        >
           <img
             src="../../../../assets/images/icons/tcal.svg"
             alt=""
@@ -171,7 +187,12 @@
 
       <!-- amount Column -->
       <ng-container matColumnDef="amount">
-        <th mat-header-cell *matHeaderCellDef class="align-middle">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="align-middle"
+        >
           Invoice Amount
           <img
             src="../../../../assets/images/icons/tcost.svg"
@@ -186,7 +207,12 @@
 
       <!-- status Column -->
       <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef class="align-middle">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="align-middle"
+        >
           <img
             src="../../../../assets/images/icons/status.svg"
             class="align-text-bottom"

@@ -42,7 +42,7 @@
       ></span>
     </button>
     <div class="card-body position-relative pt-0" id="kt_activities_body">
-      <div
+      <!-- <div
         class="pb-3 fw-bold d-flex justify-content-between align-items-center"
       >
         <div class="position-relative input-icon w-50">
@@ -62,7 +62,7 @@
             <i class="bi bi-x-lg text-active-primary"></i
           ></span>
         </div>
-      </div>
+      </div> -->
 
       <ng-container *ngFor="let d of documentsList">
         <div class="d-flex align-items-center mb-4 bg-white rounded p-5">
@@ -105,13 +105,15 @@
               class="btn btn-icon btn-active-color-primary btn-sm me-3"
               (click)="getAttachment(d.id)"
             >
-            <img src="../../../../../assets/images/icons/download.svg" alt=""></a>
+              <img src="../../../../../assets/images/icons/download.svg" alt=""
+            /></a>
             <a
               href="javascript:;"
               class="btn btn-icon btn-active-color-primary btn-sm"
               (click)="openModal(d.id)"
             >
-            <img src="../../../../../assets/images/icons/eye.svg" alt=""></a>
+              <img src="../../../../../assets/images/icons/eye.svg" alt=""
+            /></a>
           </div>
           <!--end::Lable-->
         </div>

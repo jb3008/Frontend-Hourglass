@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
@@ -16,6 +23,7 @@ import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 export class InboxApproveDrawerComponent implements OnInit {
   @Input() timeSheetId: any;
   @Input() status: any;
+  @Output() reloadPage = new EventEmitter<any>();
   statusModal: FormGroup;
   isLoading = false;
   endPoints = EndPoints;
@@ -40,7 +48,7 @@ export class InboxApproveDrawerComponent implements OnInit {
         this.auth.vendorId ? 'APPROVED_BY_VENDOR' : 'APPROVED_BY_COMPANY',
         Validators.required,
       ],
-      comment: ['', Validators.required],
+      comment: [''],
       documentList: [[]],
     });
   }
@@ -53,7 +61,7 @@ export class InboxApproveDrawerComponent implements OnInit {
         this.auth.vendorId ? 'APPROVED_BY_VENDOR' : 'APPROVED_BY_COMPANY',
         Validators.required,
       ],
-      comment: ['', Validators.required],
+      comment: [''],
       documentList: [[]],
     });
   }
@@ -191,8 +199,10 @@ export class InboxApproveDrawerComponent implements OnInit {
       .subscribe(async (response) => {
         if (this.isLoading) {
           this.isLoading = false;
-
-          this.ngOnInit();
+          let closeBtn = document.getElementById('kt_inbox_approve_close');
+          closeBtn?.click();
+          this.reloadPage.emit(true);
+          this.cdr.detectChanges();
           this.utils.showSnackBarMessage(
             this.snackBar,
             'Time sheet status approve successfully'

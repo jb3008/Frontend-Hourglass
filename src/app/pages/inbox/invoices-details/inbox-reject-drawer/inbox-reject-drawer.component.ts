@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
@@ -15,6 +22,7 @@ import { ActivatedRoute } from '@angular/router';
 export class InboxInvoiceRejectDrawerComponent implements OnInit {
   @Input() invoiceId: any;
   @Input() status: any;
+  @Output() reloadPage = new EventEmitter<any>();
   statusModal: FormGroup;
   isLoading = false;
   endPoints = EndPoints;
@@ -167,7 +175,7 @@ export class InboxInvoiceRejectDrawerComponent implements OnInit {
     }
 
     this.apiCalls
-      .post(this.endPoints.UPDATE_TIMESHEET_STATUS, formData)
+      .post(this.endPoints.UPDATE_INVOICE_STATUS, formData)
       .pipe(
         catchError(async (err) => {
           this.isLoading = false;
@@ -185,10 +193,15 @@ export class InboxInvoiceRejectDrawerComponent implements OnInit {
         if (this.isLoading) {
           this.isLoading = false;
 
-          this.ngOnInit();
+          let closeBtn = document.getElementById(
+            'kt_inbox_invoice__reject_close'
+          );
+          closeBtn?.click();
+          this.reloadPage.emit(true);
+          this.cdr.detectChanges();
           this.utils.showSnackBarMessage(
             this.snackBar,
-            'Invoice status rejected successfully'
+            'Invoice status approve successfully'
           );
         }
       });

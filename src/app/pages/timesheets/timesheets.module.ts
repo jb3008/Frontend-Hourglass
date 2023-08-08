@@ -25,6 +25,7 @@ import { NewTaskDrawerDetailComponent } from './timesheet-detail/new-task-drawer
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { ModalsModule } from 'src/app/_metronic/partials';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSortModule } from '@angular/material/sort';
 @NgModule({
   declarations: [
     TimesheetsComponent,
@@ -54,6 +55,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     NgxDocViewerModule,
     ModalsModule,
     MatAutocompleteModule,
+    MatSortModule,
   ],
 })
 export class TimesheetsModule {}

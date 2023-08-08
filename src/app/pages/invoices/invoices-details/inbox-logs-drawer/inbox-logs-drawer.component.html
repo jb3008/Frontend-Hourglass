@@ -41,7 +41,8 @@
     <div class="card-body position-relative pt-0" id="kt_activities_body">
       <div class="timeline">
         <!--begin::Timeline item-->
-        <div *ngFor="let log of logs" class="timeline-item">
+        <!--begin::Timeline item-->
+        <div class="timeline-item" *ngFor="let item of logs">
           <div class="timeline-line w-40px"></div>
           <!--begin::Timeline icon-->
           <div class="timeline-icon symbol symbol-circle symbol-40px">
@@ -54,20 +55,21 @@
           <!--begin::Timeline content-->
           <div class="timeline-content mb-8">
             <div class="text-muted me-2 fs-7">
-              {{ log.timeStamp | date : "d MMM y h:mm a" }}
+              {{ item.timeStamp | date : "fullDate" }}
             </div>
             <div class="fs-7 fw-semibold">
-              <a href="">Collabrated with </a>
-              <span class="fw-bold"> {{ log.registerId }}</span>
+              <!-- <a href="">Collabrated with </a> -->
+              <span class="fw-bold"> {{ item.auditMsg }}</span>
             </div>
-            <div
+            <!-- <div
               class="badge-light-primary text-break text-gray-800 my-2 p-3 rounded-3 w-auto"
             >
-              {{ log.auditMsg }}
-            </div>
+              Approved
+            </div> -->
           </div>
           <!--end::Timeline content-->
         </div>
+        <!--end::Timeline item-->
         <!--end::Timeline item-->
       </div>
     </div>

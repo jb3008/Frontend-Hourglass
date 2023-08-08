@@ -184,6 +184,24 @@ export class TimesheetsComponent implements OnInit {
         this.cdr.detectChanges();
       });
   }
+
+  readNotification(obj: any) {
+    if (obj.notificationStatus === 'UNREAD') {
+      var formData = new FormData();
+      formData.append('notificationId', obj.notificationId);
+      this.apiCalls
+        .post(this.endPoints.READ_NOTIFICATION, formData)
+        .pipe(
+          catchError(async (err) => {
+            this.isLoading = false;
+            setTimeout(() => {
+              throw err;
+            }, 10);
+          })
+        )
+        .subscribe(async (response) => {});
+    }
+  }
 }
 
 export interface PeriodicElement {

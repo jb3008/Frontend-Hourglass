@@ -71,7 +71,7 @@ export class InvoicesComponent implements OnInit {
   }
   getEndpoint() {
     return this.flag === 'Inbox'
-      ? this.endPoints.GET_INVOICE
+      ? this.endPoints.INVOICE_INBOX_NOTIFICATION
       : this.endPoints.INVOICE_OUTBOX_NOTIFICATION;
   }
   getAllInvoice() {
@@ -119,6 +119,23 @@ export class InvoicesComponent implements OnInit {
         this.isLoading = false;
         this.cdr.detectChanges();
       });
+  }
+  readNotification(obj: any) {
+    if (obj.notificationStatus === 'UNREAD') {
+      var formData = new FormData();
+      formData.append('notificationId', obj.notificationId);
+      this.apiCalls
+        .post(this.endPoints.READ_NOTIFICATION, formData)
+        .pipe(
+          catchError(async (err) => {
+            this.isLoading = false;
+            setTimeout(() => {
+              throw err;
+            }, 10);
+          })
+        )
+        .subscribe(async (response) => {});
+    }
   }
 }
 

@@ -35,6 +35,7 @@ import { InboxInvoiceApproveDrawerComponent } from './invoices-details/inbox-app
 import { InboxInvoiceRejectDrawerComponent } from './invoices-details/inbox-reject-drawer/inbox-reject-drawer.component';
 import { InboxInvoiceLogsDrawerComponent } from '../invoices/invoices-details/inbox-logs-drawer/inbox-logs-drawer.component';
 import { InboxInvoiceAttachmentLogsDrawerComponent } from '../invoices/invoices-details/inbox-attachment-logs-drawer/inbox-attachment-logs-drawer.component';
+import { MatSortModule } from '@angular/material/sort';
 @NgModule({
   declarations: [
     InboxComponent,
@@ -74,6 +75,7 @@ import { InboxInvoiceAttachmentLogsDrawerComponent } from '../invoices/invoices-
     NgbTooltipModule,
     NgxDocViewerModule,
     ModalsModule,
+    MatSortModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

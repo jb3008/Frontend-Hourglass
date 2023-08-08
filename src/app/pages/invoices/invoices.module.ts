@@ -24,6 +24,7 @@ import { InvoiceAddTimesheetDrawerComponent } from './new-invoice/invoice-add-ti
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { InboxInvoiceAttachmentLogsDrawerComponent } from './invoices-details/inbox-attachment-logs-drawer/inbox-attachment-logs-drawer.component';
 import { InboxInvoiceLogsDrawerComponent } from './invoices-details/inbox-logs-drawer/inbox-logs-drawer.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { InboxInvoiceLogsDrawerComponent } from './invoices-details/inbox-logs-d
     InlineSVGModule,
     NgbTooltipModule,
     MatAutocompleteModule,
+    MatSortModule,
   ],
 })
 export class InvoicesModule {}

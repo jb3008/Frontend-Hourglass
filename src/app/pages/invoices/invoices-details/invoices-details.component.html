@@ -3,7 +3,18 @@
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
         <h3 class="card-title fs-4">
-          <a class="cursor-pointer" routerLink="/inbox/invoices">
+          <a
+            class="cursor-pointer"
+            routerLink="/invoices"
+            *ngIf="auth?.vendorId"
+          >
+            <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i>
+          </a>
+          <a
+            class="cursor-pointer"
+            routerLink="/hm/invoices"
+            *ngIf="!auth?.vendorId"
+          >
             <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i>
           </a>
           <span class="fs-7 fw-normal">Invoice</span>
@@ -16,7 +27,9 @@
             <img src="../../../../assets/images/icons/jobpost-msg.svg" alt="" />
             Logs
           </a>
-          <app-inbox-invoice-logs-drawer></app-inbox-invoice-logs-drawer>
+          <app-inbox-invoice-logs-drawer
+            [invoiceId]="invoiceId"
+          ></app-inbox-invoice-logs-drawer>
           <a
             class="btn btn-bg-light text-primary btn-sm ms-5"
             id="kt_inbox_invoice_attachment_logs_drawer_toggle"
@@ -24,7 +37,9 @@
             <img src="../../../../assets/images/icons/attachment.svg" alt="" />
             Attachments
           </a>
-          <app-inbox-invoice-attachment-logs-drawer></app-inbox-invoice-attachment-logs-drawer>
+          <app-inbox-invoice-attachment-logs-drawer
+            [invoiceId]="invoiceId"
+          ></app-inbox-invoice-attachment-logs-drawer>
 
           <div class="vr mx-5 h-25px align-middle"></div>
         </div>
@@ -36,7 +51,9 @@
             <div class="me-5 my-1">
               <span class="d-flex text-muted fs-8">Invoice Number</span>
               <span class="fw-bold d-flex s-">
-                <a class="cursor-pointer"> 2786111763 </a>
+                <a class="cursor-pointer">
+                  {{ invoiceDetails?.invoiceNumber }}
+                </a>
               </span>
             </div>
             <div class="vr me-5 mt-4 h-20px"></div>
@@ -44,7 +61,18 @@
             <div class="me-5 my-1">
               <span class="d-flex text-muted fs-8">Status</span>
               <span class="fw-bold d-flex s-"
-                ><span class="badge badge-light-warning"> In-Progress</span>
+                ><span
+                  class="badge badge-light-warning"
+                  [ngClass]="{
+                    ' badge-light-warning':
+                      invoiceDetails?.status === 'PENDING',
+                    'badge-light-success':
+                      invoiceDetails?.status === 'APPROVED',
+                    'badge-light-danger': invoiceDetails?.status === 'REJECTED'
+                  }"
+                >
+                  {{ invoiceDetails?.displayStatus }}</span
+                >
               </span>
             </div>
 
@@ -57,13 +85,17 @@
                 <div class="symbol symbol-25px rounded-1 me-3">
                   <span
                     class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
-                    >DR
+                    >{{ invoiceDetails?.userDetail?.firstName[0] }}
+                    {{ invoiceDetails?.userDetail?.lastName[0] }}
                   </span>
                 </div>
                 <div>
-                  <span class="fw-bold d-flex align-items-center gap-3"
-                    >Dianne Russell
-                    <span class="text-muted fs-8">Employee</span></span
+                  <span class="fw-bold d-flex align-items-center gap-3">
+                    {{ invoiceDetails?.userDetail?.firstName }}
+                    {{ invoiceDetails?.userDetail?.lastName }}
+                    <span class="text-muted fs-8">
+                      {{ invoiceDetails?.userDetail?.emailId }}</span
+                    ></span
                   >
                 </div>
               </div>
@@ -72,12 +104,17 @@
             <div class="vr me-5 mt-4 h-20px"></div>
             <div class="me-5 my-1">
               <span class="d-flex text-muted fs-8">Invoice Date</span>
-              <span class="fw-bold d-flex s-">4,8000.00 USD</span>
+              <span class="fw-bold d-flex s-">
+                {{ invoiceDetails?.invoiceDate | date : "MMM dd, yyyy" }}</span
+              >
             </div>
             <div class="vr me-5 mt-4 h-20px"></div>
             <div class="me-5 my-1">
-              <span class="d-flex text-muted fs-8">Invoice Ammount</span>
-              <span class="fw-bold d-flex s-">Jun 12, 2023 </span>
+              <span class="d-flex text-muted fs-8">Invoice Amount</span>
+              <span class="fw-bold d-flex s-"
+                >{{ invoiceDetails?.totalAmount | number : "1.2-2" }}
+                {{ invoiceDetails?.currency }}</span
+              >
             </div>
           </div>
         </div>
@@ -87,8 +124,10 @@
       <div class="d-flex align-items-center justify-content-between">
         <div class="text-body">
           BILL TO <br />
-          <p class="fw-bold fs-4 my-2">COMMAND + R</p>
-          4140 Parker Rd. Allentown, New Mexico 31134
+          <p class="fw-bold fs-4 my-2">
+            {{ invoiceDetails?.companyCode }}
+          </p>
+          {{ invoiceDetails?.companyAddress }}
         </div>
         <div
           class="mw-175px mh-45px border mt-3 d-flex align-items-center justify-content-center min-h-35px min-w-40px overflow-hidden"
@@ -118,7 +157,7 @@
           </thead>
           <tbody class="fw-semibold">
             <!--begin::Table row-->
-            <tr>
+            <tr *ngFor="let item of invoiceDetails?.invoiceTimeSheetDetails">
               <td>
                 <div class="symbol symbol-35px symbol-circle me-3">
                   <span
@@ -126,28 +165,22 @@
                   >
                   </span>
                 </div>
-                <span class="fw-bold text-gray-900">HGTS888022</span>
+                <span class="fw-bold text-gray-900">
+                  {{ item?.timeSheetId }}</span
+                >
               </td>
-              <td>40.0 Hr</td>
-              <td>60.00 $</td>
-              <td>2400.00 $</td>
+              <td>{{ item?.hours | number : "1.2-2" }} Hr</td>
+              <td>
+                {{ item.rate | number : "1.2-2" }}
+                {{ invoiceDetails?.currency }}
+              </td>
+              <td>
+                {{ item?.amount | number : "1.2-2" }}
+                {{ invoiceDetails?.currency }}
+              </td>
             </tr>
             <!--end::Table row-->
             <!--begin::Table row-->
-            <tr class="border-bottom border-bottom-3">
-              <td>
-                <div class="symbol symbol-35px symbol-circle me-3">
-                  <span
-                    class="symbol-label fw-bolder bg-light-warning fs-4 fas fa-clipboard-list"
-                  >
-                  </span>
-                </div>
-                <span class="fw-bold text-gray-900">HGTS888022</span>
-              </td>
-              <td>40.0 Hr</td>
-              <td>60.00 $</td>
-              <td>2400.00 $</td>
-            </tr>
 
             <!--end::Table row-->
           </tbody>
@@ -159,21 +192,24 @@
         <div class="mw-300px">
           <div class="d-flex flex-stack mb-3 fs-7">
             <div class="fw-semibold pe-10 text-gray-600">SUB TOTAL</div>
-            <div class="text-end fw-bo/ld text-gray-800">4800.00 USD</div>
+            <div class="text-end fw-bo/ld text-gray-800">
+              {{ invoiceDetails?.subAmount | number : "1.2-2"
+              }}{{ invoiceDetails?.currency }}
+            </div>
           </div>
           <div class="d-flex flex-stack mb-3 fs-7">
             <div class="fw-semibold pe-10 text-gray-600">TAX AMOUNT</div>
-            <div class="text-end fw-/bold text-gray-800">
-              <input
-                type="text"
-                class="form-control w-100px text-right"
-                value="0.00"
-              />
+            <div class="text-end fw-bo/ld text-gray-800">
+              {{ invoiceDetails?.taxAmount | number : "1.2-2"
+              }}{{ invoiceDetails?.currency }}
             </div>
           </div>
           <div class="d-flex flex-stack mb-3 fs-6">
             <div class="fw-semibold pe-10 text-gray-600">TOTAL AMOUNT</div>
-            <div class="text-end fw-bold text-gray-800">4800.00 USD</div>
+            <div class="text-end fw-bold text-gray-800">
+              {{ invoiceDetails?.totalAmount | number : "1.2-2" }}
+              {{ invoiceDetails?.currency }}
+            </div>
           </div>
         </div>
       </div>

@@ -115,12 +115,18 @@
   <div class="mt-5 mb-7 border">
     <table
       mat-table
+      matSort
       [dataSource]="dataSource"
       class="table border-bottom table-row-bordered text-gray-600 m-0"
     >
       <!-- timesheet Column -->
       <ng-container matColumnDef="timeSheetId">
-        <th mat-header-cell *matHeaderCellDef class="align-middle">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="align-middle"
+        >
           <img
             src="../../../assets/images/icons/tdoc.svg"
             alt=""
@@ -174,7 +180,12 @@
 
       <!-- workOrder Column -->
       <ng-container matColumnDef="workOrderId">
-        <th mat-header-cell *matHeaderCellDef class="align-middle">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="align-middle"
+        >
           <img
             src="../../../assets/images/icons/tdoc.svg"
             alt=""
@@ -198,7 +209,12 @@
 
       <!-- fromDate Column -->
       <ng-container matColumnDef="fromDate">
-        <th mat-header-cell *matHeaderCellDef class="align-middle">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="align-middle"
+        >
           <img
             src="../../../assets/images/icons/tcal.svg"
             alt=""
@@ -213,7 +229,12 @@
 
       <!-- toDate Column -->
       <ng-container matColumnDef="toDate">
-        <th mat-header-cell *matHeaderCellDef class="align-middle">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="align-middle"
+        >
           <img
             src="../../../assets/images/icons/tcal.svg"
             alt=""
@@ -228,7 +249,12 @@
 
       <!-- totalhr Column -->
       <ng-container matColumnDef="timeSpent">
-        <th mat-header-cell *matHeaderCellDef class="align-middle">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="align-middle"
+        >
           <img
             src="../../../assets/images/icons/tclock.svg"
             alt=""
@@ -243,7 +269,12 @@
 
       <!-- status Column -->
       <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef class="align-middle">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="align-middle"
+        >
           <img
             src="../../../assets/images/icons/status.svg"
             class="align-text-bottom"

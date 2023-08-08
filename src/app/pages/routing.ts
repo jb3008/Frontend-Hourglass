@@ -50,7 +50,11 @@ const Routing: Routes = [
     loadChildren: () =>
       import('./invoices/invoices.module').then((m) => m.InvoicesModule),
   },
-
+  {
+    path: 'hm/invoices',
+    loadChildren: () =>
+      import('./invoices/invoices.module').then((m) => m.InvoicesModule),
+  },
   {
     path: 'business-admin',
     loadChildren: () =>

@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
@@ -16,6 +23,7 @@ import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 export class InboxInvoiceApproveDrawerComponent implements OnInit {
   @Input() invoiceId: any;
   @Input() status: any;
+  @Output() reloadPage = new EventEmitter<any>();
   statusModal: FormGroup;
   isLoading = false;
   endPoints = EndPoints;
@@ -33,14 +41,11 @@ export class InboxInvoiceApproveDrawerComponent implements OnInit {
 
   ngOnInit(): void {
     this.auth = this.utils.getAuth();
-    console.log('CALLED');
+
     this.statusModal = this.fb.group({
       invoiceId: [this.invoiceId, Validators.required],
-      status: [
-        this.auth.vendorId ? 'APPROVED_BY_VENDOR' : 'APPROVED_BY_COMPANY',
-        Validators.required,
-      ],
-      comment: ['', Validators.required],
+      status: ['APPROVED', Validators.required],
+      comment: [''],
       documentList: [[]],
     });
   }
@@ -49,11 +54,8 @@ export class InboxInvoiceApproveDrawerComponent implements OnInit {
 
     this.statusModal = this.fb.group({
       invoiceId: [this.invoiceId, Validators.required],
-      status: [
-        this.auth.vendorId ? 'APPROVED_BY_VENDOR' : 'APPROVED_BY_COMPANY',
-        Validators.required,
-      ],
-      comment: ['', Validators.required],
+      status: ['APPROVED', Validators.required],
+      comment: [''],
       documentList: [[]],
     });
   }
@@ -174,7 +176,7 @@ export class InboxInvoiceApproveDrawerComponent implements OnInit {
     }
 
     this.apiCalls
-      .post(this.endPoints.UPDATE_TIMESHEET_STATUS, formData)
+      .post(this.endPoints.UPDATE_INVOICE_STATUS, formData)
       .pipe(
         catchError(async (err) => {
           this.isLoading = false;
@@ -191,8 +193,12 @@ export class InboxInvoiceApproveDrawerComponent implements OnInit {
       .subscribe(async (response) => {
         if (this.isLoading) {
           this.isLoading = false;
-
-          this.ngOnInit();
+          let closeBtn = document.getElementById(
+            'kt_inbox_invoice_approve_close'
+          );
+          closeBtn?.click();
+          this.reloadPage.emit(true);
+          this.cdr.detectChanges();
           this.utils.showSnackBarMessage(
             this.snackBar,
             'Invoice status approve successfully'
