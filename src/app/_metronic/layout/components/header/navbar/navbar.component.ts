@@ -19,6 +19,7 @@ export class NavbarComponent implements OnInit {
   userAvatarClass: string = 'symbol-35px symbol-md-40px';
   btnIconClass: string = 'svg-icon-1';
   endPoints = EndPoints;
+  auth: any;
   constructor(
     private utils: Utils,
     private apiCalls: ApiCallsService,
@@ -28,6 +29,7 @@ export class NavbarComponent implements OnInit {
   notificationCount: number = 0;
   ngOnInit(): void {
     let auth = this.utils.getAuth();
+    this.auth = auth;
     // console.log(auth?.vendorId);
     if (auth?.vendorId) {
       this.inboxLink = 'inbox';

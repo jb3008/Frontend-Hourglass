@@ -79,11 +79,20 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe((user: UserModel | undefined) => {
         const auth = this.utils.getAuth();
+
         if (auth) {
-          if (auth.vendorId) {
-            this.router.navigate(['/job-posts']);
+          if (auth.isAdmin) {
+            if (auth.vendorId) {
+              this.router.navigate(['/job-posts']);
+            } else {
+              this.router.navigate(['/hm/job-posts']);
+            }
           } else {
-            this.router.navigate(['/hm/job-posts']);
+            if (auth.vendorId) {
+              this.router.navigate(['/timesheets']);
+            } else {
+              this.router.navigate(['/timesheets']);
+            }
           }
         } else {
           this.hasError = true;

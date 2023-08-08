@@ -1,5 +1,9 @@
 <!--begin::Search-->
-<div class="app-navbar-item align-items-stretch" [ngClass]="itemClass">
+<div
+  class="app-navbar-item align-items-stretch"
+  [ngClass]="itemClass"
+  *ngIf="auth?.isAdmin"
+>
   <!--begin::Search-->
   <div
     id="kt_header_search"
@@ -36,7 +40,12 @@
 <!--end::Search-->
 
 <!--begin::Activities-->
-<div class="app-navbar-item" [ngClass]="itemClass" [routerLink]="inboxLink">
+<div
+  class="app-navbar-item"
+  [ngClass]="itemClass"
+  [routerLink]="inboxLink"
+  *ngIf="auth?.isAdmin"
+>
   <!--begin::Drawer toggle-->
   <div
     *ngIf="notificationCount > 0"
@@ -54,7 +63,7 @@
 <!--end::Activities-->
 
 <!--begin::User menu-->
-<div class="app-navbar-item" [ngClass]="itemClass">
+<div class="app-navbar-item" [ngClass]="itemClass" *ngIf="auth?.isAdmin">
   <!--begin::Menu wrapper-->
   <div
     class="cursor-pointer symbol"

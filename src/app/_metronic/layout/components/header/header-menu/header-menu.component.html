@@ -6,7 +6,7 @@
 <div class="menu-item q_hdr me-lg-8">
   <img src="../../../../../../assets/hourglass-logo.PNG" alt="" />
 </div>
-<div class="menu-item me-lg-1 q_menu">
+<div class="menu-item me-lg-1 q_menu" *ngIf="auth?.isAdmin">
   <a
     class="menu-link py-2"
     routerLinkActive="active menu-here"
@@ -16,7 +16,7 @@
   >
 </div>
 
-<div class="menu-item me-lg-1 q_menu">
+<div class="menu-item me-lg-1 q_menu" *ngIf="auth?.isAdmin">
   <a
     class="menu-link py-2"
     [class.active]="isActiveLink"
@@ -26,7 +26,7 @@
     ><span class="menu-title"> Work Orders</span></a
   >
 </div>
-<ng-container *ngIf="!setHiringManager">
+<ng-container *ngIf="!setHiringManager && auth?.isAdmin">
   <div class="menu-item me-lg-1 q_menu">
     <a
       class="menu-link py-2"
@@ -56,7 +56,7 @@
     ><span class="menu-title">Timesheets</span></a
   >
 </div>
-<div class="menu-item me-lg-1 q_menu">
+<div class="menu-item me-lg-1 q_menu" *ngIf="auth?.isAdmin">
   <a
     *ngIf="!setHiringManager"
     class="menu-link py-2"
