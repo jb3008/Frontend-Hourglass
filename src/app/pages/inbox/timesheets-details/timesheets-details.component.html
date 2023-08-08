@@ -23,13 +23,6 @@
         </h3>
         <div>
           <a
-            class="btn btn-bg-lig/ht border text-primary btn-sm"
-            id="kt_inbox_collaborate_drawer_drawer_toggle"
-          >
-            <img src="../../../../assets/images/icons/colla.svg" alt="" />
-            Collaborate
-          </a>
-          <a
             class="btn btn-bg-light text-primary btn-sm"
             id="kt_timesheet_logs_drawer_toggle"
           >
@@ -43,48 +36,48 @@
             <img src="../../../../assets/images/icons/attachment.svg" alt="" />
             Attachments
           </a>
-          <button
-            type="button"
-            class="btn btn-sm btn-primary mr-5 my-5"
-            id="kt_inbox_approve_drawer_toggle"
-            *ngIf="auth?.vendorId && timeSheetDetails?.status === 'ACTIVE'"
+          <a
+            class="btn btn-bg-lig/ht border text-primary btn-sm"
+            id="kt_inbox_collaborate_drawer_drawer_toggle"
           >
-            <i class="bi fs-4 bi-slash-circle"></i>
-            Approve
-          </button>
+            <img src="../../../../assets/images/icons/colla.svg" alt="" />
+            Collaborate
+          </a>
 
-          <button
-            type="button"
-            class="btn btn-sm btn-primary"
+          <a
+            class="btn btn-primary btn-sm cursor-pointer ms-5"
             id="kt_inbox_reject_drawer_toggle"
             *ngIf="auth?.vendorId && timeSheetDetails?.status === 'ACTIVE'"
           >
-            <i class="bi fs-4 bi-check2-circle"></i>
-            Reject
-          </button>
-          <button
-            type="button"
-            class="btn btn-sm btn-primary mr-5"
+            <i class="bi fs-4 bi-slash-circle"></i> Reject
+          </a>
+          <a
+            class="btn btn-primary btn-sm cursor-pointer ms-5"
+            *ngIf="auth?.vendorId && timeSheetDetails?.status === 'ACTIVE'"
             id="kt_inbox_approve_drawer_toggle"
-            *ngIf="
-              !auth?.vendorId &&
-              timeSheetDetails?.status === 'APPROVED_BY_VENDOR'
-            "
           >
-            Approve
-          </button>
-
-          <button
-            type="button"
-            class="btn btn-sm btn-primary"
+            <i class="bi fs-4 bi-check2-circle"></i> Approve
+          </a>
+          <a
+            class="btn btn-primary btn-sm cursor-pointer ms-5"
             id="kt_inbox_reject_drawer_toggle"
             *ngIf="
               !auth?.vendorId &&
               timeSheetDetails?.status === 'APPROVED_BY_VENDOR'
             "
           >
-            Reject
-          </button>
+            <i class="bi fs-4 bi-slash-circle"></i> Reject
+          </a>
+          <a
+            class="btn btn-primary btn-sm cursor-pointer ms-5"
+            *ngIf="
+              !auth?.vendorId &&
+              timeSheetDetails?.status === 'APPROVED_BY_VENDOR'
+            "
+            id="kt_inbox_approve_drawer_toggle"
+          >
+            <i class="bi fs-4 bi-check2-circle"></i> Approve
+          </a>
         </div>
       </div>
       <app-attachment-logs-drawer

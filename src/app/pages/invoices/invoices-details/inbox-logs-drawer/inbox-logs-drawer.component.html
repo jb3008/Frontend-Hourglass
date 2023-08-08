@@ -1,0 +1,79 @@
+<div
+  id="kt_inbox_invoice_logs_drawer"
+  class="bg-body"
+  data-kt-drawer="true"
+  data-kt-drawer-name="inbox_logs_drawer"
+  data-kt-drawer-activate="true"
+  data-kt-drawer-overlay="true"
+  data-kt-drawer-width="{default:'300px', 'lg': '700px'}"
+  data-kt-drawer-direction="end"
+  data-kt-drawer-toggle="#kt_inbox_invoice_logs_drawer_toggle"
+  data-kt-drawer-close="#kt_inbox_invoice_logs_close"
+>
+  <div class="card shadow-none rounded-0 w-100">
+    <div class="d-flex justify-content-between px-7">
+      <div>
+        <h3 class="card-title fw-bolder text-dark mt-4 mb-7">Logs</h3>
+        <!-- <div> 
+        Invoice submission with Hourglass is more faster than ever,  just select the approved timesheet for the work order and flip them into an invoice.
+      </div> -->
+      </div>
+      <!-- <div class="card-toolbar">
+        <button
+          type="button"
+          class="btn btn-sm btn-icon btn-active-light-primary mt-5 "
+          id="kt_inbox_logs_close"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+            class="svg-icon svg-icon-1"
+          ></span>
+        </button>
+      </div> -->
+    </div>
+    <button
+      type="button"
+      class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
+      id="kt_inbox_logs_close"
+    >
+      <img src="./assets/media/icons/duotune/arrows/arr061.svg" alt="" />
+    </button>
+    <div class="card-body position-relative pt-0" id="kt_activities_body">
+      <div class="timeline">
+        <!--begin::Timeline item-->
+        <div *ngFor="let log of logs" class="timeline-item">
+          <div class="timeline-line w-40px"></div>
+          <!--begin::Timeline icon-->
+          <div class="timeline-icon symbol symbol-circle symbol-40px">
+            <div class="symbol-label badge-light-success">
+              <i class="bi bi-patch-check text-success fs-4"></i>
+            </div>
+          </div>
+          <!--end::Timeline icon-->
+
+          <!--begin::Timeline content-->
+          <div class="timeline-content mb-8">
+            <div class="text-muted me-2 fs-7">
+              {{ log.timeStamp | date : "d MMM y h:mm a" }}
+            </div>
+            <div class="fs-7 fw-semibold">
+              <a href="">Collabrated with </a>
+              <span class="fw-bold"> {{ log.registerId }}</span>
+            </div>
+            <div
+              class="badge-light-primary text-break text-gray-800 my-2 p-3 rounded-3 w-auto"
+            >
+              {{ log.auditMsg }}
+            </div>
+          </div>
+          <!--end::Timeline content-->
+        </div>
+        <!--end::Timeline item-->
+      </div>
+    </div>
+    <!-- <div class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_inbox_logs_footer">
+    <button type="reset" class="btn  btn-sm btn-outline" id="kt_inbox_logs_close">Cancel</button>
+    <button type="reset" class="btn  btn-sm btn-primary w-100px">Send</button>
+  </div> -->
+  </div>
+</div>

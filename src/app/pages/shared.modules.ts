@@ -12,6 +12,8 @@ import { TimesheetLogsDrawerComponent } from './timesheets/timesheet-detail/time
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { ModalsModule } from '../_metronic/partials';
 import { FormsModule } from '@angular/forms';
+import { InboxInvoiceAttachmentLogsDrawerComponent } from './invoices/invoices-details/inbox-attachment-logs-drawer/inbox-attachment-logs-drawer.component';
+import { InboxInvoiceLogsDrawerComponent } from './invoices/invoices-details/inbox-logs-drawer/inbox-logs-drawer.component';
 
 @NgModule({
   exports: [
@@ -22,6 +24,8 @@ import { FormsModule } from '@angular/forms';
     // InboxRejectDrawerComponent,
     AttachmentLogsDrawerComponent,
     TimesheetLogsDrawerComponent,
+    InboxInvoiceAttachmentLogsDrawerComponent,
+    InboxInvoiceLogsDrawerComponent,
     // InboxApproveDrawerComponent,
   ],
   declarations: [
@@ -32,6 +36,8 @@ import { FormsModule } from '@angular/forms';
     // InboxRejectDrawerComponent,
     AttachmentLogsDrawerComponent,
     TimesheetLogsDrawerComponent,
+    InboxInvoiceAttachmentLogsDrawerComponent,
+    InboxInvoiceLogsDrawerComponent,
     // InboxApproveDrawerComponent,
   ],
   imports: [

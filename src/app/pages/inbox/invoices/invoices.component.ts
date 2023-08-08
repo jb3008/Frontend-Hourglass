@@ -40,9 +40,10 @@ export class InvoicesComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
+  auth: any;
   ngAfterViewInit() {}
   ngOnInit(): void {
+    this.auth = this.utils.getAuth();
     this.invoiceFilter = this.fb.group({
       invoiceId: [''],
       invoiceDate: [''],
@@ -70,7 +71,7 @@ export class InvoicesComponent implements OnInit {
   }
   getEndpoint() {
     return this.flag === 'Inbox'
-      ? this.endPoints.INVOICE_INBOX_NOTIFICATION
+      ? this.endPoints.GET_INVOICE
       : this.endPoints.INVOICE_OUTBOX_NOTIFICATION;
   }
   getAllInvoice() {

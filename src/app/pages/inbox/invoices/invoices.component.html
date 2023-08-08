@@ -104,7 +104,23 @@
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <!-- <a routerLink="details" class="cursor-pointer"> -->
-          <a class="cursor-pointer text-primary" routerLink="invoices-details">
+          <a
+            class="cursor-pointer text-primary"
+            routerLink="/inbox/invoices-details"
+            *ngIf="auth?.vendorId"
+          >
+            {{ element.invoiceId }}
+            <img
+              class="ms-1 align-middle"
+              src="../../../../assets/images/icons/table-arrow.svg"
+              alt=""
+            />
+          </a>
+          <a
+            class="cursor-pointer text-primary"
+            routerLink="/hm/inbox/invoices-details"
+            *ngIf="!auth?.vendorId"
+          >
             {{ element.invoiceId }}
             <img
               class="ms-1 align-middle"

@@ -22,6 +22,8 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 import { SharedModule } from '../shared.modules';
 import { InvoiceAddTimesheetDrawerComponent } from './new-invoice/invoice-add-timesheet-drawer/invoice-add-timesheet-drawer.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { InboxInvoiceAttachmentLogsDrawerComponent } from './invoices-details/inbox-attachment-logs-drawer/inbox-attachment-logs-drawer.component';
+import { InboxInvoiceLogsDrawerComponent } from './invoices-details/inbox-logs-drawer/inbox-logs-drawer.component';
 
 @NgModule({
   declarations: [
