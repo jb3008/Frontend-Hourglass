@@ -534,6 +534,11 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
       ? this.endPoints.CREATE_TIME_SHEET_AS_DRAFT
       : this.endPoints.CREATE_TIME_SHEET;
   }
+  reloadAll() {
+    setTimeout(() => {
+      DrawerComponent.reinitialization();
+    }, 200);
+  }
 }
 
 export interface PeriodicElement {

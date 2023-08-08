@@ -39,6 +39,11 @@ export class InvoicesDetailsComponent implements OnInit {
     this.getAllInvoice();
   }
 
+  reloadAll() {
+    setTimeout(() => {
+      DrawerComponent.reinitialization();
+    }, 200);
+  }
   ngAfterViewInit() {
     DrawerComponent.reinitialization();
   }

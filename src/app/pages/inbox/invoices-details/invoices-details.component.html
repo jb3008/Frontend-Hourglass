@@ -59,7 +59,7 @@
           </a>
           <app-inbox-invoice-reject-drawer
             [invoiceId]="invoiceId"
-            (reloadPage)="ngOnInit()"
+            (reloadPage)="ngOnInit(); reloadAll()"
           ></app-inbox-invoice-reject-drawer>
           <a
             class="btn btn-primary btn-sm cursor-pointer ms-5"
@@ -70,7 +70,7 @@
           </a>
           <app-inbox-invoice-approve-drawer
             [invoiceId]="invoiceId"
-            (reloadPage)="ngOnInit()"
+            (reloadPage)="ngOnInit(); reloadAll()"
           ></app-inbox-invoice-approve-drawer>
         </div>
       </div>

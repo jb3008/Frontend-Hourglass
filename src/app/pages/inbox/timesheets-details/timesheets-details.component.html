@@ -417,12 +417,12 @@
 <app-inbox-reject-drawer
   [timeSheetId]="timeSheetId"
   [status]="timeSheetDetails?.status"
-  (reloadPage)="ngOnInit()"
+  (reloadPage)="ngOnInit(); reloadAll()"
 ></app-inbox-reject-drawer>
 <app-inbox-approve-drawer
   [timeSheetId]="timeSheetId"
   [status]="timeSheetDetails?.status"
-  (reloadPage)="ngOnInit()"
+  (reloadPage)="ngOnInit(); reloadAll()"
 ></app-inbox-approve-drawer>
 
 <app-attachment-logs-drawer

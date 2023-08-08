@@ -149,7 +149,7 @@ export class InboxInvoiceApproveDrawerComponent implements OnInit {
   }
 
   async updateStatus() {
-    const formData = new FormData();
+    const formData: any = new Object();
 
     // stop here if form is invalid
     if (this.statusModal.invalid) {
@@ -163,16 +163,9 @@ export class InboxInvoiceApproveDrawerComponent implements OnInit {
         const value = this.statusModal.value[key];
 
         if (value) {
-          formData.append(key, value);
+          formData[key] = value;
         }
       }
-    }
-    const file = this.statusModal.get('documentList')?.value;
-    if (file.length != 0) {
-      file.forEach((fileObj: File) => {
-        const blob = new Blob([fileObj], { type: fileObj.type });
-        formData.append('documentList', blob, fileObj.name);
-      });
     }
 
     this.apiCalls
@@ -192,17 +185,58 @@ export class InboxInvoiceApproveDrawerComponent implements OnInit {
       )
       .subscribe(async (response) => {
         if (this.isLoading) {
-          this.isLoading = false;
-          let closeBtn = document.getElementById(
-            'kt_inbox_invoice_approve_close'
-          );
-          closeBtn?.click();
-          this.reloadPage.emit(true);
-          this.cdr.detectChanges();
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'Invoice status approve successfully'
-          );
+          const file = this.statusModal.get('documentList')?.value;
+          if (file.length) {
+            const docFormData = new FormData();
+            file.forEach((fileObj: File) => {
+              const blob = new Blob([fileObj], { type: fileObj.type });
+              docFormData.append('documentList', blob, fileObj.name);
+            });
+
+            docFormData.append('invoiceId', this.invoiceId);
+            this.apiCalls
+              .post(this.endPoints.UPLOAD_INVOICE_DOCUMENT, docFormData)
+              .pipe(
+                catchError(async (err) => {
+                  this.isLoading = false;
+                  setTimeout(() => {
+                    throw err;
+                  }, 10);
+                  this.utils.showSnackBarMessage(
+                    this.snackBar,
+                    'Something went wrong on upload invoice-document'
+                  );
+                  this.cdr.detectChanges();
+                })
+              )
+              .subscribe(async (response) => {
+                if (this.isLoading) {
+                  this.isLoading = false;
+                  let closeBtn = document.getElementById(
+                    'kt_inbox_invoice_approve_close'
+                  );
+                  closeBtn?.click();
+                  this.reloadPage.emit(true);
+                  this.cdr.detectChanges();
+                  this.utils.showSnackBarMessage(
+                    this.snackBar,
+                    'Invoice status approve successfully'
+                  );
+                }
+              });
+          } else {
+            this.isLoading = false;
+            let closeBtn = document.getElementById(
+              'kt_inbox_invoice_approve_close'
+            );
+            closeBtn?.click();
+            this.reloadPage.emit(true);
+            this.cdr.detectChanges();
+            this.utils.showSnackBarMessage(
+              this.snackBar,
+              'Invoice status approve successfully'
+            );
+          }
         }
       });
   }
