@@ -253,8 +253,8 @@
             </div>
           </div>
         </div>
-        <div class="col-4 p-0 ps-4">
-          <div class="form-group">
+        <div class="col-6 p-0 ps-4 d-flex gap-3 align-items-center">
+          <div class="form-group w-50">
             <label class="mb-1">Blood Group</label>
             <input
               type="text"
@@ -263,21 +263,14 @@
               placeholder="Enter Blood Group"
             />
           </div>
-        </div>
-        <div class="col-2 p-0 ps-2">
-          <div class="form-group">
-            <label class="mb-1"
-              >Gender <span class="text-danger">*</span></label
-            >
-            <mat-select
-              class="form-select fs- py-2 w-100px rounded-start-0"
-              formControlName="gender"
-            >
-              <mat-option value="Male">Male</mat-option>
-              <mat-option value="Female">Female</mat-option>
-            </mat-select>
-          </div>
-          <div
+          <div class="form-group w-50">
+            <label class="mb-1">Gender</label>
+            <select name="" id="" class="form-select fs- py-2">
+              <option value="" selected>Male</option>
+              <option value="">Female</option>
+              <option value="">Other</option>
+          </select>
+            <div
             class="fv-plugins-message-container"
             *ngIf="submitted && f.gender.errors"
           >
@@ -285,7 +278,9 @@
               Gender is required
             </div>
           </div>
+          </div>
         </div>
+        
       </div>
     </div>
 

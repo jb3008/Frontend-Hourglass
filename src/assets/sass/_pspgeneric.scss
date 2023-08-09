@@ -61,6 +61,18 @@ tr.mat-header-row {
 }
 .display-inline{display: inline-block}
 .input-icon span.pspinpClose{right: 0; left: unset; position: absolute;}
+.btn.btn-bg-light{background-color:#F0F9FF ;}
+.qborder-table{
+    th,td{ padding-left:10px ;}
+    th.mat-header-cell:not(:first-child),
+    td.mat-cell:not(:first-child)
+     {
+      border-left: 1px solid #eff2f5;
+      padding-left:10px ;
+      padding-right: 10px ;
+     
+    }
+  }
 .drawer{
     background-color: #1e1e2d;
     padding: 0 0px;
