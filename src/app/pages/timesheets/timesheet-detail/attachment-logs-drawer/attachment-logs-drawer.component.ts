@@ -82,7 +82,7 @@ export class AttachmentLogsDrawerComponent implements OnInit {
     if (this.searchFilterInp.length > 2) {
       this.documentsList = this.documentsAllList.filter((x: any) =>
         new RegExp(this.searchFilterInp, 'i').test(x.fileName)
-      )[0];
+      );
     } else if (this.searchFilterInp.length == 0) {
       this.documentsList = this.documentsAllList;
     }

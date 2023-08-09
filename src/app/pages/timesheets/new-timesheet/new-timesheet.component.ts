@@ -522,7 +522,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
   }
   getMessage(status: string) {
     return status === 'DRAFT'
-      ? 'Time sheet drafted successfully'
+      ? 'Time sheet saved as draft successfully'
       : 'Time sheet created successfully';
   }
 }

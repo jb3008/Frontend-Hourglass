@@ -20,6 +20,7 @@ import { AuthService } from 'src/app/modules/auth';
 })
 export class WorkForceComponent implements OnInit {
   workForceData: FormGroup;
+  workForceEditData: FormGroup;
   workForceList: any = [];
   endPoints = EndPoints;
   isLoading = false;
@@ -34,8 +35,16 @@ export class WorkForceComponent implements OnInit {
     closeButtonLabel: 'Save',
     hideFooter: this.hideFooter,
   };
+  modalEditConfig: ModalConfig = {
+    modalTitle: 'Employee',
+    dismissButtonLabel: 'Cancel',
+    closeButtonLabel: 'Save',
+    hideFooter: this.hideFooter,
+  };
   @ViewChild('modal') private modalComponent: ModalComponent;
-
+  @ViewChild('modalEdit') private modalEditComponent: ModalComponent;
+  workForceDetails: any = [];
+  workForceId: number;
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
@@ -52,7 +61,7 @@ export class WorkForceComponent implements OnInit {
 
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      gender: [''],
+      gender: ['Male', Validators.required],
       workEmail: [
         '',
         Validators.compose([Validators.required, Validators.email]),
@@ -94,6 +103,58 @@ export class WorkForceComponent implements OnInit {
     });
     return await this.modalComponent.open();
   }
+
+  async openEditModal() {
+    const auth = this.utils.getAuth();
+    this.workForceEditData = this.fb.group({
+      id: [''],
+
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      gender: ['Male', Validators.required],
+      workEmail: [
+        '',
+        Validators.compose([Validators.required, Validators.email]),
+      ],
+      personalEmail: [
+        '',
+        Validators.compose([Validators.required, Validators.email]),
+      ],
+      workPhone: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
+      workExperience: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
+      mobilePhone: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
+      dateOfBirth: ['', Validators.required],
+      bloodGroup: [''],
+      designation: ['', Validators.required],
+      location: ['', Validators.required],
+      currentAddress: ['', Validators.required],
+      permanentAddress: ['', Validators.required],
+      vendorId: [auth?.vendorId, Validators.required],
+      documentList: [[]],
+      createUser: [true],
+      workForceId: [],
+    });
+    this.getWorkForceDetails();
+    return await this.modalEditComponent.open();
+  }
   async hideFooter(): Promise<boolean> {
     return true;
   }
@@ -107,7 +168,7 @@ export class WorkForceComponent implements OnInit {
 
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      gender: [''],
+      gender: ['Male', Validators.required],
       workEmail: [
         '',
         Validators.compose([Validators.required, Validators.email]),
@@ -148,11 +209,60 @@ export class WorkForceComponent implements OnInit {
       createUser: [true],
     });
 
+    this.workForceEditData = this.fb.group({
+      id: [''],
+
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      gender: ['Male', Validators.required],
+      workEmail: [
+        '',
+        Validators.compose([Validators.required, Validators.email]),
+      ],
+      personalEmail: [
+        '',
+        Validators.compose([Validators.required, Validators.email]),
+      ],
+      workPhone: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
+      workExperience: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
+      mobilePhone: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
+      dateOfBirth: ['', Validators.required],
+      bloodGroup: [''],
+      designation: ['', Validators.required],
+      location: ['', Validators.required],
+      currentAddress: ['', Validators.required],
+      permanentAddress: ['', Validators.required],
+      vendorId: [auth?.vendorId, Validators.required],
+      documentList: [[]],
+      createUser: [true],
+      workForceId: [],
+    });
     this.getAllWorkForceList();
   }
 
   get f() {
     return this.workForceData.controls;
+  }
+  get editForm() {
+    return this.workForceEditData.controls;
   }
   async save() {
     this.isLoading = true;
@@ -253,6 +363,10 @@ export class WorkForceComponent implements OnInit {
   }
   async closeModal() {
     return await this.modalComponent.closeModal();
+  }
+
+  async closeEditModal() {
+    return await this.modalEditComponent.closeModal();
   }
   changeDateToUtc(dateObj: any) {
     const date = new Date(dateObj);
@@ -433,5 +547,271 @@ export class WorkForceComponent implements OnInit {
 
   numbersOnly(event: any) {
     return this.utils.numberOnly(event);
+  }
+
+  droppedFilesEdit(allFiles: File[], name: string): void {
+    console.log('this.allFiles', allFiles);
+    console.log(this.workForceEditData.controls[name].value);
+    const fileLength = allFiles.length;
+    let flg: boolean = true;
+    for (let i = 0; i < fileLength; i++) {
+      const file = allFiles[i];
+
+      if (file.type.indexOf('image') == 0) {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Please upload documents only'
+        );
+        flg = false;
+        break;
+      } else if (file.size > 2 * 1024 * 1024) {
+        // check if file size is > 2 MB
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Maximum allowed file size is 2 MB. Please choose another file.'
+        );
+        flg = false;
+        break;
+      } else {
+        const docList = this.workForceEditData.controls[name].value;
+        if (docList.length < 6) {
+          if (this.utils.isFileExist(docList, file)) {
+            this.utils.showSnackBarMessage(
+              this.snackBar,
+              'This file "' + file.name + '" already exist.'
+            );
+            flg = false;
+            break;
+          }
+        } else {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'Maximum 6 files can be added.'
+          );
+          flg = false;
+          break;
+        }
+      }
+    }
+    if (flg) {
+      for (let i = 0; i < fileLength; i++) {
+        this.workForceEditData.controls[name].value.push(allFiles[i]);
+      }
+    }
+  }
+
+  selectFileEdit(event: any, name: string) {
+    const file = event.target.files[0];
+    if (file.type.indexOf('image') == 0) {
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Please upload documents only'
+      );
+    } else if (file.size > 2 * 1024 * 1024) {
+      // check if file size is > 2 MB
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Maximum allowed file size is 2 MB. Please choose another file.'
+      );
+    } else {
+      const docList = this.workForceEditData.controls[name].value;
+      if (docList.length < 6) {
+        if (this.utils.isFileExist(docList, file)) {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'This file "' + file.name + '" already exist.'
+          );
+        } else {
+          this.workForceEditData.controls[name].value.push(file);
+        }
+      } else {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Maximum 6 files can be added.'
+        );
+      }
+    }
+  }
+
+  clearFileEdit(name: string, index: number) {
+    this.workForceEditData.controls[name].value.splice(index, 1);
+  }
+
+  getWorkForceDetails() {
+    console.log(this.workForceId);
+
+    this.isLoading = true;
+    this.apiCalls
+      .get(this.endPoints.GET_WORK_FORCE, {
+        workForceId: this.workForceId,
+      })
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to fetch the work-force-detail'
+          );
+          this.isLoading = false;
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.isLoading = false;
+
+        this.workForceDetails = response;
+        this.workForceEditData.controls['firstName'].setValue(
+          this.workForceDetails.firstName
+        );
+        this.workForceEditData.controls['lastName'].setValue(
+          this.workForceDetails.lastName
+        );
+        if (this.workForceDetails.gender === 'Male') {
+          this.workForceEditData.controls['gender'].setValue('Male');
+        } else {
+          this.workForceEditData.controls['gender'].setValue('Female');
+        }
+        this.workForceEditData.controls['workEmail'].setValue(
+          this.workForceDetails.workEmail
+        );
+        this.workForceEditData.controls['personalEmail'].setValue(
+          this.workForceDetails.personalEmail
+        );
+        this.workForceEditData.controls['workPhone'].setValue(
+          this.workForceDetails.workPhone
+        );
+        this.workForceEditData.controls['mobilePhone'].setValue(
+          this.workForceDetails.mobilePhone
+        );
+        this.workForceEditData.controls['workExperience'].setValue(
+          this.workForceDetails.workExperience
+        );
+        this.workForceEditData.controls['dateOfBirth'].setValue(
+          new Date(this.workForceDetails.dateOfBirth)
+        );
+        this.workForceEditData.controls['bloodGroup'].setValue(
+          this.workForceDetails.bloodGroup
+        );
+        this.workForceEditData.controls['designation'].setValue(
+          this.workForceDetails.designation
+        );
+        this.workForceEditData.controls['location'].setValue(
+          this.workForceDetails.location
+        );
+        this.workForceEditData.controls['currentAddress'].setValue(
+          this.workForceDetails.currentAddress
+        );
+        this.workForceEditData.controls['permanentAddress'].setValue(
+          this.workForceDetails.permanentAddress
+        );
+        this.workForceEditData.controls['bloodGroup'].setValue(
+          this.workForceDetails.bloodGroup
+        );
+
+        console.log(this.workForceDetails);
+
+        this.cdr.detectChanges();
+        this.getAllWorkForceProfilePic(this.workForceId, this.workForceDetails);
+      });
+  }
+
+  async saveEditWorkForce() {
+    this.isLoading = true;
+    this.cdr.detectChanges();
+    const formData = new FormData();
+    this.submitted = true;
+    this.workForceEditData.controls['workForceId'].setValue(this.workForceId);
+
+    // stop here if form is invalid
+    if (this.workForceEditData.invalid) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.cdr.detectChanges();
+    if (this.workForceEditData.controls['dateOfBirth'].value) {
+      this.workForceEditData.controls['dateOfBirth'].setValue(
+        this.changeDateToUtc(
+          this.workForceEditData.controls['dateOfBirth'].value
+        )
+      );
+    }
+
+    for (const key of Object.keys(this.workForceEditData.value)) {
+      if (key != 'documentList') {
+        const value = this.workForceEditData.value[key];
+
+        if (value) {
+          formData.append(key, value);
+        }
+      }
+    }
+    const file = this.workForceEditData.get('documentList')?.value;
+    if (file.length != 0) {
+      file.forEach((fileObj: File) => {
+        const blob = new Blob([fileObj], { type: fileObj.type });
+        formData.append('documentList', blob, fileObj.name);
+      });
+    }
+    console.log(this.workForceEditData);
+    // this.apiCalls
+    //   .post(this.endPoints.CREATE_WORK_FORCE, formData)
+    //   .pipe(
+    //     catchError(async (err) => {
+    //       this.isLoading = false;
+    //       setTimeout(() => {
+    //         throw err;
+    //       }, 10);
+    //       this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
+    //       this.cdr.detectChanges();
+    //     })
+    //   )
+    //   .subscribe(async (response) => {
+    //     if (this.isLoading) {
+    //       if (this.profilePicDoc) {
+    //         const imageFormData = new FormData();
+    //         const blob = new Blob([this.profilePicDoc], {
+    //           type: this.profilePicDoc.type,
+    //         });
+    //         imageFormData.append(
+    //           'profilePicDoc',
+    //           blob,
+    //           this.profilePicDoc.name
+    //         );
+    //         imageFormData.append('workForceId', response);
+    //         this.apiCalls
+    //           .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
+    //           .pipe(
+    //             catchError(async (err) => {
+    //               this.isLoading = false;
+    //               setTimeout(() => {
+    //                 throw err;
+    //               }, 10);
+    //               this.utils.showSnackBarMessage(
+    //                 this.snackBar,
+    //                 'Something went wrong on upload profile-pic'
+    //               );
+    //               this.cdr.detectChanges();
+    //             })
+    //           )
+    //           .subscribe(async (response) => {
+    //             this.isLoading = false;
+    //             await this.modalComponent.closeModal();
+    //             this.ngOnInit();
+    //             this.utils.showSnackBarMessage(
+    //               this.snackBar,
+    //               'Employee save successfully'
+    //             );
+    //           });
+    //       } else {
+    //         this.isLoading = false;
+    //         await this.modalComponent.closeModal();
+    //         this.ngOnInit();
+    //         this.utils.showSnackBarMessage(
+    //           this.snackBar,
+    //           'Employee save successfully'
+    //         );
+    //       }
+    //     }
+    //   });
   }
 }

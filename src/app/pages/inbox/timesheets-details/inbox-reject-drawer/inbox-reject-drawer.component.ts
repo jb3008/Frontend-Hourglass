@@ -166,13 +166,6 @@ export class InboxRejectDrawerComponent implements OnInit {
         }
       }
     }
-    const file = this.statusModal.get('documentList')?.value;
-    if (file.length != 0) {
-      file.forEach((fileObj: File) => {
-        const blob = new Blob([fileObj], { type: fileObj.type });
-        formData.append('documentList', blob, fileObj.name);
-      });
-    }
 
     this.apiCalls
       .post(this.endPoints.UPDATE_TIMESHEET_STATUS, formData)
@@ -191,15 +184,57 @@ export class InboxRejectDrawerComponent implements OnInit {
       )
       .subscribe(async (response) => {
         if (this.isLoading) {
-          this.isLoading = false;
-          let closeBtn = document.getElementById('kt_inbox_reject_close');
-          closeBtn?.click();
-          this.reloadPage.emit(true);
-          this.cdr.detectChanges();
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'Time sheet status rejected successfully'
-          );
+          const file = this.statusModal.get('documentList')?.value;
+          if (file.length) {
+            const docFormData = new FormData();
+            file.forEach((fileObj: File) => {
+              const blob = new Blob([fileObj], { type: fileObj.type });
+              docFormData.append('documentList', blob, fileObj.name);
+            });
+
+            docFormData.append('timeSheetId', this.timeSheetId);
+            this.apiCalls
+              .post(this.endPoints.UPLOAD_TIME_SHEET_DOCUMENT, docFormData)
+              .pipe(
+                catchError(async (err) => {
+                  this.isLoading = false;
+                  setTimeout(() => {
+                    throw err;
+                  }, 10);
+                  this.utils.showSnackBarMessage(
+                    this.snackBar,
+                    'Something went wrong on upload timesheet-document'
+                  );
+                  this.cdr.detectChanges();
+                })
+              )
+              .subscribe(async (response) => {
+                if (this.isLoading) {
+                  this.isLoading = false;
+                  let closeBtn = document.getElementById(
+                    'kt_inbox_reject_close'
+                  );
+                  closeBtn?.click();
+                  this.reloadPage.emit(true);
+                  this.cdr.detectChanges();
+                  console.log('Uploaded with Doc');
+                  this.utils.showSnackBarMessage(
+                    this.snackBar,
+                    'Time sheet status rejected successfully'
+                  );
+                }
+              });
+          } else {
+            this.isLoading = false;
+            let closeBtn = document.getElementById('kt_inbox_reject_close');
+            closeBtn?.click();
+            this.reloadPage.emit(true);
+            this.cdr.detectChanges();
+            this.utils.showSnackBarMessage(
+              this.snackBar,
+              'Time sheet status rejected successfully'
+            );
+          }
         }
       });
   }
