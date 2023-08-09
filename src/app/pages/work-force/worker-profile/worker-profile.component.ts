@@ -69,6 +69,7 @@ export class WorkerProfileComponent implements OnInit {
   isLoading = false;
   documentsList: any;
   documentsAllList: any;
+  documentsCount: any;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((param) => {
@@ -136,6 +137,9 @@ export class WorkerProfileComponent implements OnInit {
         this.documentsList = response.filter(
           (r: any) => r.type !== 'PROFILE_PIC_DOC'
         );
+        this.documentsCount = this.documentsList.length;
+        console.log(this.documentsCount);
+
         this.documentsAllList = JSON.parse(JSON.stringify(this.documentsList));
         this.cdr.detectChanges();
       });
@@ -144,7 +148,7 @@ export class WorkerProfileComponent implements OnInit {
     if (this.searchFilterInp.length > 2) {
       this.documentsList = this.documentsAllList.filter((x: any) =>
         new RegExp(this.searchFilterInp, 'i').test(x.fileName)
-      )[0];
+      );
     } else if (this.searchFilterInp.length == 0) {
       this.documentsList = this.documentsAllList;
     }

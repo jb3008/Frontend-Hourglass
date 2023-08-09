@@ -14,13 +14,8 @@ const routes: Routes = [
     path: 'timesheets-details/:timeSheetId',
     component: TimesheetDetailComponent,
   },
-  { path: 'hm/timesheets', component: TimesheetsComponent },
-  {
-    path: 'hm/timesheets-details/:timeSheetId',
-    component: TimesheetDetailComponent,
-  },
   { path: 'invoices', component: InvoicesComponent },
-  { path: 'invoices-details', component: InvoicesDetailsComponent },
+  { path: 'invoices-details/:invoiceId', component: InvoicesDetailsComponent },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

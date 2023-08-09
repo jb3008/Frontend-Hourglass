@@ -68,7 +68,8 @@ const EndPoints = {
     '/hourglass/work-force/uploadFilesForWorkForce.api',
   UPLOAD_TIME_SHEET_DOCUMENT:
     '/hourglass/timesheet/uploadFilesForTimeSheet.api',
-  UPLOAD_INVOICE_DOCUMENT: '/hourglass/invoice/uploadFilesForInvoice.api',
+  UPLOAD_INVOICE_DOCUMENT:
+    '/hourglass/payment/invoice/uploadFilesForInvoice.api',
   REMOVE_TASK_FROM_TIMESHEET: '/hourglass/timesheet/removeTaskForTimeSheet.api',
   WORKORDER_NOTIFICATION: '/hourglass/work-order/notification/listInbox.api',
   GET_TIMESHEET_STATUS: '/hourglass/common/listTimeSheetStatus.api',
@@ -82,6 +83,13 @@ const EndPoints = {
   GET_PAYMENT_TERM: '/hourglass/common/rest/list-pay-terms.api',
   TASK_STATUS: '/hourglass/common/listAllTaskStaus.api',
   GET_CURRENCY: '/hourglass/common/listAllcurrencies.api',
+  INVOICE_INBOX_NOTIFICATION: '/hourglass/invoice/notification/listInbox.api',
+  INVOICE_OUTBOX_NOTIFICATION:
+    '/hourglass/invoice/notification//listOutbox.api',
+  GET_INVOICE_LOGS: '/hourglass/audit-log/auditLogForInvoice.api',
+  UPDATE_INVOICE_STATUS: '/hourglass/payment/invoice/updateInvoiceStatus.api',
+  READ_NOTIFICATION: '/hourglass/notification/markNotificationAsRead.api',
+  GET_NOTIFICATION_COUNT: '/hourglass/notification/getNotificationCount.api',
 };
 
 export default EndPoints;

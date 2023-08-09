@@ -1,6 +1,13 @@
-import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import EndPoints from 'src/app/common/endpoints';
@@ -11,13 +18,21 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-job-posts',
   templateUrl: './job-posts.component.html',
-  styleUrls: ['./job-posts.component.scss']
+  styleUrls: ['./job-posts.component.scss'],
 })
-
 export class JobPostsComponent implements OnInit, AfterViewInit {
-
-  displayedColumns: string[] = ['id', 'type', 'businessUnit', 'site','startDate', 'endDate',  'message','position', 'seekers'];
-  dataSource = new MatTableDataSource<any>;
+  displayedColumns: string[] = [
+    'id',
+    'type',
+    'businessUnit',
+    'site',
+    'startDate',
+    'endDate',
+    'message',
+    'position',
+    'seekers',
+  ];
+  dataSource = new MatTableDataSource<any>();
   endpoints = EndPoints;
   selectedTab = 'Active';
   isLoading = false;
@@ -27,45 +42,51 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   jobCount: any;
   queryParam: QueryParam = {
     status: 'ACTIVE',
-    types: []
-  }
-  selectedJobTypes :boolean[] = [];
+    types: [],
+  };
+  selectedJobTypes: boolean[] = [];
   filter: Filter = {} as Filter;
 
   // searchFilter:string ='';
-  @ViewChild("searchFilterInp") searchFilterInp: any;
+  @ViewChild('searchFilterInp') searchFilterInp: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor( private apiCalls: ApiCallsService, private router: Router, private route: ActivatedRoute, 
-    private cdr: ChangeDetectorRef, private utils: Utils, private snackBar: MatSnackBar){}
+  constructor(
+    private apiCalls: ApiCallsService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
+    private utils: Utils,
+    private snackBar: MatSnackBar
+  ) {}
 
-  ngOnInit(){
+  ngOnInit() {
     const searchParams = JSON.parse(sessionStorage.getItem('searchFilters')!);
     if (searchParams)
       this.queryParam = JSON.parse(JSON.stringify(searchParams));
 
     const filterData = JSON.parse(sessionStorage.getItem('filterData')!);
-    if(filterData){
+    if (filterData) {
       this.selected = filterData.selected;
       this.selectedJobTypes = filterData.selectedJobTypes;
       this.filter = filterData.filter;
     }
-    
+
     window.scroll({
-      top: 0
+      top: 0,
     });
     const userId = this.utils.getUser()!;
     this.getUserByUserId(userId);
     this.getJobTypes();
     this.getJobCount();
-    this.route.queryParams.subscribe(param => {
-      if(param?.tab){
+    this.route.queryParams.subscribe((param) => {
+      if (param?.tab) {
         this.selectedTab = param.tab;
         setTimeout(() => {
-          this.getSelectedTab(this.selectedTab,'fromDetails');
+          this.getSelectedTab(this.selectedTab, 'fromDetails');
         }, 100);
-      }else{
+      } else {
         this.getAllJobs();
       }
     });
@@ -75,34 +96,38 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  isMat:boolean= true
-  isJobBuyer:boolean= true
+  isMat: boolean = true;
+  isJobBuyer: boolean = true;
 
-  getUserByUserId(id: string){
-    const queryParam = {
-      userId: id
-    }
-    this.apiCalls.get(this.endpoints.GET_USER, queryParam)
-      .pipe(
-        catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the user');
-          throw err;
-        })
-      )
-      .subscribe((response) => {
-        this.getBusinessUnits(/*response.companyCode*/);
-        this.getSitesList(/*response.companyCode*/);
-      });
+  getUserByUserId(id: string) {
+    // const queryParam = {
+    //   userId: id
+    // }
+    // this.apiCalls.get(this.endpoints.GET_USER, queryParam)
+    //   .pipe(
+    //     catchError(async (err) => {
+    //       this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the user');
+    //       throw err;
+    //     })
+    //   )
+    //   .subscribe((response) => {
+    this.getBusinessUnits(/*response.companyCode*/);
+    this.getSitesList(/*response.companyCode*/);
+    // });
   }
 
-  getBusinessUnits(/*code: string*/){
+  getBusinessUnits(/*code: string*/) {
     // let queryParam = {
     //   companyCode: code
     // }
-    this.apiCalls.get(this.endpoints.BUSINESS_UNIT/*, queryParam*/)
+    this.apiCalls
+      .get(this.endpoints.BUSINESS_UNIT /*, queryParam*/)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the business units');
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to fetch the business units'
+          );
           throw err;
         })
       )
@@ -112,14 +137,18 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       });
   }
 
-  getSitesList(/*code: string*/){
+  getSitesList(/*code: string*/) {
     // let queryParam = {
     //   companyCode: code
     // }
-    this.apiCalls.get(this.endpoints.PLANT_LIST/*, queryParam*/)
+    this.apiCalls
+      .get(this.endpoints.PLANT_LIST /*, queryParam*/)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the sites list');
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to fetch the sites list'
+          );
           throw err;
         })
       )
@@ -129,26 +158,34 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       });
   }
 
-  getJobTypes(){
-    this.apiCalls.get(this.endpoints.JOB_TYPE)
-    .pipe(
-      catchError(async (err) => {
-        this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the job types');
-        throw err;
-      })
-    )
-    .subscribe((response) => {
-      this.jobTypes = response;
-      this.cdr.detectChanges();
-    });
-  }
-
-  getJobCount(){
-    this.isLoading = true;
-    this.apiCalls.get(this.endpoints.JOB_COUNTS)
+  getJobTypes() {
+    this.apiCalls
+      .get(this.endpoints.JOB_TYPE)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to get the job counts');
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to fetch the job types'
+          );
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.jobTypes = response;
+        this.cdr.detectChanges();
+      });
+  }
+
+  getJobCount() {
+    this.isLoading = true;
+    this.apiCalls
+      .get(this.endpoints.JOB_COUNTS)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to get the job counts'
+          );
           this.isLoading = false;
           this.cdr.detectChanges();
           throw err;
@@ -161,19 +198,23 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       });
   }
 
-  getAllJobs(){
+  getAllJobs() {
     const filterData = {
       selected: this.selected,
       selectedJobTypes: this.selectedJobTypes,
-      filter: this.filter
-    }
+      filter: this.filter,
+    };
     sessionStorage.setItem('searchFilters', JSON.stringify(this.queryParam));
     sessionStorage.setItem('filterData', JSON.stringify(filterData));
     this.isLoading = true;
-    this.apiCalls.get(this.endpoints.LIST_JOBS, this.queryParam)
+    this.apiCalls
+      .get(this.endpoints.LIST_JOBS, this.queryParam)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the jobs');
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to fetch the jobs'
+          );
           this.isLoading = false;
           throw err;
         })
@@ -185,32 +226,35 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       });
   }
 
-  goToDetails(element: any){
-    if(this.selectedTab == 'Active' || this.selectedTab == 'Close')
-      this.router.navigate(['/hm/job-posts/details'], {queryParams: {data: element.id , tab: this.selectedTab}});
-    else if(this.selectedTab == 'Draft')
-      this.router.navigate(['/hm/job-posts/creat-job-post'], {queryParams: {data: element.id , tab: this.selectedTab}})
+  goToDetails(element: any) {
+    if (this.selectedTab == 'Active' || this.selectedTab == 'Close')
+      this.router.navigate(['/hm/job-posts/details'], {
+        queryParams: { data: element.id, tab: this.selectedTab },
+      });
+    else if (this.selectedTab == 'Draft')
+      this.router.navigate(['/hm/job-posts/creat-job-post'], {
+        queryParams: { data: element.id, tab: this.selectedTab },
+      });
   }
 
-  getSelectedTab(tab:string, from?: string) {
-    if(!from)
-      this.resetFilter('tab')
+  getSelectedTab(tab: string, from?: string) {
+    if (!from) this.resetFilter('tab');
     this.selectedTab = tab;
     this.queryParam.status = this.selectedTab.toUpperCase();
     this.getAllJobs();
-    this.router.navigate([], { queryParams: {} })
+    this.router.navigate([], { queryParams: {} });
   }
 
-  searchFilter(event: any){
-    if(event.target.value && event.target.value.length > 2){
+  searchFilter(event: any) {
+    if (event.target.value && event.target.value.length > 2) {
       this.queryParam.searchText = event.target.value;
       this.getAllJobs();
-    }else{
+    } else {
       this.clearSearch();
     }
   }
 
-  filterSite(event: any){
+  filterSite(event: any) {
     this.queryParam.site = event.value;
     this.getAllJobs();
   }
@@ -221,38 +265,40 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   selected = false;
-  filterJobType(event: any, index: any){
-    if(event.target.checked){
-      if(event.target.value == 'All'){
+  filterJobType(event: any, index: any) {
+    if (event.target.checked) {
+      if (event.target.value == 'All') {
         this.selected = true;
         this.queryParam.types = []; //if we click select all with any other already selected
         this.jobTypes.forEach((type, index) => {
           this.queryParam.types?.push(type.id);
           this.selectedJobTypes[index] = true;
-        })
-      }else{
+        });
+      } else {
         this.queryParam.types?.push(event.target.value);
         this.selectedJobTypes[index] = true;
 
         this.selected = this.queryParam.types?.length == this.jobTypes.length;
       }
-    }else{
-      if(event.target.value == 'All'){
+    } else {
+      if (event.target.value == 'All') {
         this.selected = false;
         this.queryParam.types = [];
         this.jobTypes.forEach((type, index) => {
           this.selectedJobTypes[index] = false;
-        })
-      }else{
+        });
+      } else {
         this.selected = false;
-        this.queryParam.types = this.queryParam?.types?.filter(val => val != event.target.value)
+        this.queryParam.types = this.queryParam?.types?.filter(
+          (val) => val != event.target.value
+        );
         this.selectedJobTypes[index] = false;
       }
     }
     this.getAllJobs();
   }
 
-  getDate(event: any, dateType: 'startDate' | 'endDate'){
+  getDate(event: any, dateType: 'startDate' | 'endDate') {
     let date = this.changeDateToUtc(event);
     this.queryParam[dateType] = date;
     // if (dateType == 'startDate' && !!this.queryParam.endDate && this.queryParam.endDate > date) {
@@ -261,9 +307,9 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.getAllJobs();
   }
 
-  changeDateToUtc(dateObj: any){
+  changeDateToUtc(dateObj: any) {
     const date = new Date(dateObj);
-    const utcDate = date.toISOString()
+    const utcDate = date.toISOString();
     return utcDate;
   }
 
@@ -281,8 +327,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.filter.businessUnit = '';
     this.selectedJobTypes = [];
     this.selected = false;
-    if(!tab)
-      this.getAllJobs();
+    if (!tab) this.getAllJobs();
   }
 
   clearSearch() {
@@ -293,21 +338,24 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   getJobNameFromType(jobType: string) {
     // console.log('JobTypes = ', this.jobTypes, " && param = ", jobType);
     // return find(this.jobTypes, {id: jobType}).name; // TODO: Convert job name from type.
-    return jobType;  //TODO: As of now all job types are not provided by jobType API, so above code is breaking. Wait for the fix.
+    return jobType; //TODO: As of now all job types are not provided by jobType API, so above code is breaking. Wait for the fix.
   }
 
   endDateFilter = (endDate: Date | null) => {
-    return (this.queryParam?.startDate == null || endDate === null ||
-      (endDate > new Date(this.queryParam?.startDate)));
-  }
+    return (
+      this.queryParam?.startDate == null ||
+      endDate === null ||
+      endDate > new Date(this.queryParam?.startDate)
+    );
+  };
 }
 
 type Filter = {
-  startDate?: string,
-  endDate?: string,
-  businessUnit?: string,
-  site?: string,
-  searchText?: string
+  startDate?: string;
+  endDate?: string;
+  businessUnit?: string;
+  site?: string;
+  searchText?: string;
 };
 
 type QueryParam = {
@@ -315,10 +363,10 @@ type QueryParam = {
   status: string;
   searchText?: string;
   startDate?: string;
-  endDate?:string;
+  endDate?: string;
   site?: string;
   businessUnit?: string;
-  types?:string[]
+  types?: string[];
 };
 
 type JobPostCount = {
@@ -356,5 +404,5 @@ type JobPostCount = {
 //   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
 //   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
 //   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-  
+
 // ];

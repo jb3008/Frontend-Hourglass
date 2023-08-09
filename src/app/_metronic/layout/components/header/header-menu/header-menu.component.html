@@ -6,30 +6,33 @@
 <div class="menu-item q_hdr me-lg-8">
   <img src="./assets/hourglass-logo.PNG" alt="" />
 </div>
-<div class="menu-item me-lg-1 q_menu">
+<div class="menu-item me-lg-1 q_menu" *ngIf="auth?.isAdmin">
   <a
     class="menu-link py-2"
     routerLinkActive="active menu-here"
-    [routerLink]="jobPostsUrl" (click)="removeSessionStorage()"
+    [routerLink]="jobPostsUrl"
+    (click)="removeSessionStorage()"
     ><span class="menu-title"> Job Posts </span></a
   >
 </div>
 
-<div class="menu-item me-lg-1 q_menu">
+<div class="menu-item me-lg-1 q_menu" *ngIf="auth?.isAdmin">
   <a
     class="menu-link py-2"
     [class.active]="isActiveLink"
     routerLinkActive="menu-here"
-    [routerLink]="workOrderUrl" (click)="removeSessionStorage()"
+    [routerLink]="workOrderUrl"
+    (click)="removeSessionStorage()"
     ><span class="menu-title"> Work Orders</span></a
   >
 </div>
-<ng-container *ngIf="!setHiringManager">
+<ng-container *ngIf="!setHiringManager && auth?.isAdmin">
   <div class="menu-item me-lg-1 q_menu">
     <a
       class="menu-link py-2"
       routerLinkActive="active menu-here"
-      routerLink="/work-force" (click)="removeSessionStorage()"
+      routerLink="/work-force"
+      (click)="removeSessionStorage()"
       ><span class="menu-title"> Work Force</span></a
     >
   </div>
@@ -39,7 +42,8 @@
   <a
     class="menu-link py-2"
     routerLinkActive="active menu-here"
-    routerLink="/timesheets" (click)="removeSessionStorage()"
+    routerLink="/timesheets"
+    (click)="removeSessionStorage()"
     ><span class="menu-title">Timesheets</span></a
   >
 </div>
@@ -47,15 +51,26 @@
   <a
     class="menu-link py-2"
     routerLinkActive="active menu-here"
-    routerLink="hm/timesheets" (click)="removeSessionStorage()"
+    routerLink="hm/timesheets"
+    (click)="removeSessionStorage()"
     ><span class="menu-title">Timesheets</span></a
   >
 </div>
-<div class="menu-item me-lg-1 q_menu">
+<div class="menu-item me-lg-1 q_menu" *ngIf="auth?.isAdmin">
   <a
+    *ngIf="!setHiringManager"
     class="menu-link py-2"
     routerLinkActive="active menu-here"
-    routerLink="/invoices" (click)="removeSessionStorage()"
+    routerLink="/invoices"
+    (click)="removeSessionStorage()"
+    ><span class="menu-title">Invoices</span></a
+  >
+  <a
+    *ngIf="setHiringManager"
+    class="menu-link py-2"
+    routerLinkActive="active menu-here"
+    routerLink="hm/invoices"
+    (click)="removeSessionStorage()"
     ><span class="menu-title">Invoices</span></a
   >
 </div>

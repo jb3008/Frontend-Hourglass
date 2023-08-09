@@ -116,12 +116,11 @@ export class NewTaskDrawerDetailComponent implements OnInit {
       });
   }
   continue() {
+    this.getSelectedTaskList.emit(this.selection?.selected);
     this.isLoading = false;
     let closeBtn = document.getElementById('kt_new_task_close');
     closeBtn?.click();
     this.cdr.detectChanges();
-    this.getSelectedTaskList.emit(this.selection?.selected);
-    this.selection.clear();
   }
   applyFilter(event: any) {
     this.dataSource.filter = event.target.value.trim().toLowerCase();

@@ -25,15 +25,17 @@ import { InvoicesComponent } from './invoices/invoices.component';
 import { SharedModule } from '../shared.modules';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { InboxLogsDrawerComponent } from '../inbox-drawer/inbox-logs-drawer/inbox-logs-drawer.component';
-import { InboxCollaborateDrawerComponent } from '../inbox-drawer/inbox-collaborate-drawer/inbox-collaborate-drawer.component';
-import { InboxAttachmentLogsDrawerComponent } from '../inbox-drawer/inbox-attachment-logs-drawer/inbox-attachment-logs-drawer.component';
-
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { ModalsModule } from 'src/app/_metronic/partials';
 import { InboxApproveDrawerComponent } from './timesheets-details/inbox-approve-drawer/inbox-approve-drawer.component';
 import { InboxRejectDrawerComponent } from './timesheets-details/inbox-reject-drawer/inbox-reject-drawer.component';
+
+import { InboxInvoiceApproveDrawerComponent } from './invoices-details/inbox-approve-drawer/inbox-approve-drawer.component';
+import { InboxInvoiceRejectDrawerComponent } from './invoices-details/inbox-reject-drawer/inbox-reject-drawer.component';
+import { InboxInvoiceLogsDrawerComponent } from '../invoices/invoices-details/inbox-logs-drawer/inbox-logs-drawer.component';
+import { InboxInvoiceAttachmentLogsDrawerComponent } from '../invoices/invoices-details/inbox-attachment-logs-drawer/inbox-attachment-logs-drawer.component';
+import { MatSortModule } from '@angular/material/sort';
 @NgModule({
   declarations: [
     InboxComponent,
@@ -43,6 +45,8 @@ import { InboxRejectDrawerComponent } from './timesheets-details/inbox-reject-dr
     InvoicesComponent,
     InboxApproveDrawerComponent,
     InboxRejectDrawerComponent,
+    InboxInvoiceApproveDrawerComponent,
+    InboxInvoiceRejectDrawerComponent,
   ],
   imports: [
     CommonModule,
@@ -71,6 +75,7 @@ import { InboxRejectDrawerComponent } from './timesheets-details/inbox-reject-dr
     NgbTooltipModule,
     NgxDocViewerModule,
     ModalsModule,
+    MatSortModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

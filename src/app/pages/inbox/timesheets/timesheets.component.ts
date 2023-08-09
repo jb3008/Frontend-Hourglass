@@ -115,8 +115,11 @@ export class TimesheetsComponent implements OnInit {
         catchError(async (err) => {
           this.utils.showSnackBarMessage(
             this.snackBar,
-            'failed to fetch the time-sheet'
+            'failed to fetch the time-sheet notification'
           );
+          this.dataSource = new MatTableDataSource<any>([]);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
           this.isLoading = false;
           this.cdr.detectChanges();
           throw err;
@@ -180,6 +183,24 @@ export class TimesheetsComponent implements OnInit {
         this.getAllTimesheet();
         this.cdr.detectChanges();
       });
+  }
+
+  readNotification(obj: any) {
+    if (obj.notificationStatus === 'UNREAD') {
+      var formData = new FormData();
+      formData.append('notificationId', obj.notificationId);
+      this.apiCalls
+        .post(this.endPoints.READ_NOTIFICATION, formData)
+        .pipe(
+          catchError(async (err) => {
+            this.isLoading = false;
+            setTimeout(() => {
+              throw err;
+            }, 10);
+          })
+        )
+        .subscribe(async (response) => {});
+    }
   }
 }
 

@@ -26,6 +26,7 @@
       type="button"
       class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
       id="kt_invoice_add_timesheet_close"
+      (click)="selection.clear()"
     >
       <span
         [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
@@ -153,6 +154,7 @@
         type="reset"
         class="btn btn-sm btn-outline"
         id="kt_invoice_add_timesheet_close"
+        (click)="selection.clear()"
       >
         Cancel
       </button>

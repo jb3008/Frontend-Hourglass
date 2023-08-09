@@ -14,14 +14,13 @@ import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 
 @Component({
-  selector: 'app-inbox-approve-drawer',
-  templateUrl: './inbox-approve-drawer.component.html',
+  selector: 'app-inbox-invoice-reject-drawer',
+  templateUrl: './inbox-reject-drawer.component.html',
 })
-export class InboxApproveDrawerComponent implements OnInit {
-  @Input() timeSheetId: any;
+export class InboxInvoiceRejectDrawerComponent implements OnInit {
+  @Input() invoiceId: any;
   @Input() status: any;
   @Output() reloadPage = new EventEmitter<any>();
   statusModal: FormGroup;
@@ -43,11 +42,8 @@ export class InboxApproveDrawerComponent implements OnInit {
     this.auth = this.utils.getAuth();
 
     this.statusModal = this.fb.group({
-      timeSheetId: [this.timeSheetId, Validators.required],
-      status: [
-        this.auth.vendorId ? 'APPROVED_BY_VENDOR' : 'APPROVED_BY_COMPANY',
-        Validators.required,
-      ],
+      invoiceId: [this.invoiceId, Validators.required],
+      status: ['REJECTED', Validators.required],
       comment: [''],
       documentList: [[]],
     });
@@ -56,11 +52,8 @@ export class InboxApproveDrawerComponent implements OnInit {
     this.auth = this.utils.getAuth();
 
     this.statusModal = this.fb.group({
-      timeSheetId: [this.timeSheetId, Validators.required],
-      status: [
-        this.auth.vendorId ? 'APPROVED_BY_VENDOR' : 'APPROVED_BY_COMPANY',
-        Validators.required,
-      ],
+      invoiceId: [this.invoiceId, Validators.required],
+      status: ['REJECTED', Validators.required],
       comment: [''],
       documentList: [[]],
     });
@@ -155,7 +148,7 @@ export class InboxApproveDrawerComponent implements OnInit {
   }
 
   async updateStatus() {
-    const formData = new FormData();
+    const formData: any = new Object();
 
     // stop here if form is invalid
     if (this.statusModal.invalid) {
@@ -169,13 +162,13 @@ export class InboxApproveDrawerComponent implements OnInit {
         const value = this.statusModal.value[key];
 
         if (value) {
-          formData.append(key, value);
+          formData[key] = value;
         }
       }
     }
 
     this.apiCalls
-      .post(this.endPoints.UPDATE_TIMESHEET_STATUS, formData)
+      .post(this.endPoints.UPDATE_INVOICE_STATUS, formData)
       .pipe(
         catchError(async (err) => {
           this.isLoading = false;
@@ -199,9 +192,9 @@ export class InboxApproveDrawerComponent implements OnInit {
               docFormData.append('documentList', blob, fileObj.name);
             });
 
-            docFormData.append('timeSheetId', this.timeSheetId);
+            docFormData.append('invoiceId', this.invoiceId);
             this.apiCalls
-              .post(this.endPoints.UPLOAD_TIME_SHEET_DOCUMENT, docFormData)
+              .post(this.endPoints.UPLOAD_INVOICE_DOCUMENT, docFormData)
               .pipe(
                 catchError(async (err) => {
                   this.isLoading = false;
@@ -210,7 +203,7 @@ export class InboxApproveDrawerComponent implements OnInit {
                   }, 10);
                   this.utils.showSnackBarMessage(
                     this.snackBar,
-                    'Something went wrong on upload timesheet-document'
+                    'Something went wrong on upload invoice-document'
                   );
                   this.cdr.detectChanges();
                 })
@@ -219,26 +212,28 @@ export class InboxApproveDrawerComponent implements OnInit {
                 if (this.isLoading) {
                   this.isLoading = false;
                   let closeBtn = document.getElementById(
-                    'kt_inbox_approve_close'
+                    'kt_inbox_invoice__reject_close'
                   );
                   closeBtn?.click();
                   this.reloadPage.emit(true);
                   this.cdr.detectChanges();
                   this.utils.showSnackBarMessage(
                     this.snackBar,
-                    'Time sheet status approve successfully'
+                    'Invoice status rejected successfully'
                   );
                 }
               });
           } else {
             this.isLoading = false;
-            let closeBtn = document.getElementById('kt_inbox_approve_close');
+            let closeBtn = document.getElementById(
+              'kt_inbox_invoice__reject_close'
+            );
             closeBtn?.click();
             this.reloadPage.emit(true);
             this.cdr.detectChanges();
             this.utils.showSnackBarMessage(
               this.snackBar,
-              'Time sheet status approve successfully'
+              'Invoice status rejected successfully'
             );
           }
         }

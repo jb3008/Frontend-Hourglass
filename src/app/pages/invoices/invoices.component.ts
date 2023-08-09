@@ -43,9 +43,10 @@ export class InvoicesComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
+  auth: any;
   ngAfterViewInit() {}
   ngOnInit(): void {
+    this.auth = this.utils.getAuth();
     this.invoiceFilter = this.fb.group({
       invoiceTaskId: [''],
       invoiceId: [''],
@@ -98,6 +99,9 @@ export class InvoicesComponent implements OnInit {
             'failed to fetch the invoices'
           );
           this.isLoading = false;
+          this.dataSource = new MatTableDataSource<any>([]);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
           this.cdr.detectChanges();
           throw err;
         })
@@ -105,10 +109,10 @@ export class InvoicesComponent implements OnInit {
       .subscribe((response) => {
         this.invoiceList = response;
 
-        for (let index = 0; index < response.length; index++) {
-          const element = response[index];
-          element.status = element.displayStatus;
-        }
+        // for (let index = 0; index < response.length; index++) {
+        //   const element = response[index];
+        //   element.status = element.displayStatus;
+        // }
 
         this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;

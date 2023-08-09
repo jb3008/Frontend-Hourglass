@@ -220,7 +220,7 @@
                                 <div><div class="w-20px  display-inline my-1 me-1"><img class="" src="../../../assets/images/icons/case.svg" alt=""></div> {{details.type}}</div>
                                 <div class=" mt-4  d-flex">
                                     <div class="symbol symbol-35px symbol-circle me-3">
-                                            <img src="../../../assets/media/avatars/300-12.jpg" alt="">
+                                            <img [src]="details.profile || '../../../assets/media/avatars/300-12.jpg'" alt="profile-pic">
                                     </div>
 
                                     <div>
@@ -276,7 +276,7 @@
                                 <div><div class="w-20px  display-inline my-1 me-1"><img class="" src="../../../assets/images/icons/case.svg" alt=""></div> {{details.type}}</div>
                                 <div class=" mt-4  d-flex">
                                     <div class="symbol symbol-35px symbol-circle me-3">
-                                            <img src="../../../assets/media/avatars/300-12.jpg" alt="">
+                                            <img [src]="details.profile || '../../../assets/media/avatars/300-12.jpg'" alt="profile-pic">
                                     </div>
                                     <div>
                                         <span class="d-flex text-muted fs-8">Worker</span>

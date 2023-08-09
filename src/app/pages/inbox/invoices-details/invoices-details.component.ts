@@ -1,94 +1,90 @@
-import { AfterViewInit, Component, OnInit, } from '@angular/core';
-import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import EndPoints from 'src/app/common/endpoints';
+import { ApiCallsService } from 'src/app/services/api-calls.service';
+import { Utils } from 'src/app/services/utils';
+import { Observable, catchError, throwError } from 'rxjs';
+import { AuthService } from 'src/app/modules/auth';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DrawerComponent } from 'src/app/_metronic/kt/components';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-invoices-details',
   templateUrl: './invoices-details.component.html',
-  styleUrls: ['./invoices-details.component.scss']
+  styleUrls: ['./invoices-details.component.scss'],
 })
 export class InvoicesDetailsComponent implements OnInit {
-
-  constructor() { }
+  endPoints = EndPoints;
+  invoiceDetails: any = {};
+  isLoading = false;
+  auth: any;
+  invoiceId: any;
+  constructor(
+    private apiCalls: ApiCallsService,
+    private utils: Utils,
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    // DrawerComponent.reinitialization();
-
+    this.auth = this.utils.getAuth();
+    this.invoiceId = this.route.snapshot.paramMap.get('invoiceId');
+    this.getAllInvoice();
   }
 
-  ngAfterViewInit() {
-    // setTimeout(() => {
-      // console.log(   DrawerComponent.getInstance('kt_logs_drawer_toggle'))
-      // DrawerComponent.hideAll();
-      // DrawerComponent.updateAll()
+  reloadAll() {
+    setTimeout(() => {
       DrawerComponent.reinitialization();
-    // }, 0); 
-
+    }, 200);
   }
- 
-
-  displayedColumns: string[] = ['taskId', 'taskName', 'priority', 'timeSpent',  'eta', 'lastUpdate', 'status',];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-
-
-
-
-  allFiles: File[] = []; 
-
-  droppedFiles(allFiles: File[]): void {
-    console.log('this.allFiles')
-    const filesAmount = allFiles.length;
-    for (let i = 0; i < filesAmount; i++) {
-      const file = allFiles[i];
-      this.allFiles.push(file);
-    }
-    console.log(this.allFiles)
+  ngAfterViewInit() {
+    DrawerComponent.reinitialization();
   }
 
-   onReady(eventData:any) {
-    eventData.plugins.get('FileRepository').createUploadAdapter = function (loader:any) {
-      console.log('loader : ', loader)
-      console.log(btoa(loader.file));
-      // return new UploadAdapter(loader);
-    };
+  getAllInvoice() {
+    this.isLoading = true;
+
+    this.apiCalls
+      .get(this.endPoints.GET_INVOICE, {
+        invoiceId: this.invoiceId,
+      })
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to fetch the invoices'
+          );
+          this.isLoading = false;
+          this.invoiceDetails = null;
+          this.cdr.detectChanges();
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.invoiceDetails = response.length ? response[0] : null;
+        if (this.invoiceDetails) {
+          this.invoiceDetails.taxAmount = this.percentage(
+            this.invoiceDetails?.totalAmount || 0,
+            this.invoiceDetails?.taxPercentage || 0
+          );
+          this.invoiceDetails.subAmount =
+            this.invoiceDetails?.totalAmount ||
+            0 - this.invoiceDetails?.taxPercentage ||
+            0;
+        }
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      });
   }
 
-  selectFile(event: any, name: any){
-   
+  percentage(percent: number, total: number) {
+    return ((percent / 100) * total).toFixed(2);
   }
-
-
-
-
-
-
-
 }
-
-
-
-export interface PeriodicElement {
-  taskId: number;
-  taskName: string;
-  priority: string;
-  // assignTo: string;
-  timeSpent: string;
-  eta: string;
-  lastUpdate: string;
-  status: string;
-
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'High', timeSpent: '38 hrs', eta: '28/5/2023', lastUpdate: '28/5/2023', status: 'In-progress'},
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'Medium', timeSpent: '38 hrs', eta: '28/5/2023', lastUpdate: '28/5/2023', status: 'In-progress'},
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'Low', timeSpent: '38 hrs', eta: '28/5/2023', lastUpdate: '28/5/2023', status: 'In-progress'},
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'Medium', timeSpent: '38 hrs', eta: '28/5/2023', lastUpdate: '28/5/2023', status: 'In-progress'},
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'High', timeSpent: '38 hrs', eta: '28/5/2023', lastUpdate: '28/5/2023', status: 'In-progress'},
-  // {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'Medium', timeSpent: '38 hrs', eta: '28/5/2023', lastUpdate: '28/5/2023', status: 'In-progress'},
-  // {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'Low', timeSpent: '38 hrs', eta: '28/5/2023', lastUpdate: '28/5/2023', status: 'In-progress'},
-  // {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'High', timeSpent: '38 hrs', eta: '28/5/2023', lastUpdate: '28/5/2023', status: 'In-progress'},
-  // {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'Low', timeSpent: '38 hrs', eta: '28/5/2023', lastUpdate: '28/5/2023', status: 'In-progress'},
-
-];

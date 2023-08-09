@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
@@ -15,6 +22,7 @@ import { ActivatedRoute } from '@angular/router';
 export class InboxRejectDrawerComponent implements OnInit {
   @Input() timeSheetId: any;
   @Input() status: any;
+  @Output() reloadPage = new EventEmitter<any>();
   statusModal: FormGroup;
   isLoading = false;
   endPoints = EndPoints;
@@ -158,13 +166,6 @@ export class InboxRejectDrawerComponent implements OnInit {
         }
       }
     }
-    const file = this.statusModal.get('documentList')?.value;
-    if (file.length != 0) {
-      file.forEach((fileObj: File) => {
-        const blob = new Blob([fileObj], { type: fileObj.type });
-        formData.append('documentList', blob, fileObj.name);
-      });
-    }
 
     this.apiCalls
       .post(this.endPoints.UPDATE_TIMESHEET_STATUS, formData)
@@ -183,13 +184,57 @@ export class InboxRejectDrawerComponent implements OnInit {
       )
       .subscribe(async (response) => {
         if (this.isLoading) {
-          this.isLoading = false;
+          const file = this.statusModal.get('documentList')?.value;
+          if (file.length) {
+            const docFormData = new FormData();
+            file.forEach((fileObj: File) => {
+              const blob = new Blob([fileObj], { type: fileObj.type });
+              docFormData.append('documentList', blob, fileObj.name);
+            });
 
-          this.ngOnInit();
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'Time sheet status rejected successfully'
-          );
+            docFormData.append('timeSheetId', this.timeSheetId);
+            this.apiCalls
+              .post(this.endPoints.UPLOAD_TIME_SHEET_DOCUMENT, docFormData)
+              .pipe(
+                catchError(async (err) => {
+                  this.isLoading = false;
+                  setTimeout(() => {
+                    throw err;
+                  }, 10);
+                  this.utils.showSnackBarMessage(
+                    this.snackBar,
+                    'Something went wrong on upload timesheet-document'
+                  );
+                  this.cdr.detectChanges();
+                })
+              )
+              .subscribe(async (response) => {
+                if (this.isLoading) {
+                  this.isLoading = false;
+                  let closeBtn = document.getElementById(
+                    'kt_inbox_reject_close'
+                  );
+                  closeBtn?.click();
+                  this.reloadPage.emit(true);
+                  this.cdr.detectChanges();
+                  console.log('Uploaded with Doc');
+                  this.utils.showSnackBarMessage(
+                    this.snackBar,
+                    'Time sheet status rejected successfully'
+                  );
+                }
+              });
+          } else {
+            this.isLoading = false;
+            let closeBtn = document.getElementById('kt_inbox_reject_close');
+            closeBtn?.click();
+            this.reloadPage.emit(true);
+            this.cdr.detectChanges();
+            this.utils.showSnackBarMessage(
+              this.snackBar,
+              'Time sheet status rejected successfully'
+            );
+          }
         }
       });
   }

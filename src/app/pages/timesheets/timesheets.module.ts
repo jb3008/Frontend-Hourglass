@@ -24,6 +24,8 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NewTaskDrawerDetailComponent } from './timesheet-detail/new-task-drawer-detail/new-task-drawer-detail.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { ModalsModule } from 'src/app/_metronic/partials';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSortModule } from '@angular/material/sort';
 @NgModule({
   declarations: [
     TimesheetsComponent,
@@ -52,6 +54,8 @@ import { ModalsModule } from 'src/app/_metronic/partials';
     NgbTooltipModule,
     NgxDocViewerModule,
     ModalsModule,
+    MatAutocompleteModule,
+    MatSortModule,
   ],
 })
 export class TimesheetsModule {}

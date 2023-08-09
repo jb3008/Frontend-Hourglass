@@ -19,8 +19,8 @@
               <label class="col-4"
                 >Work Order <span class="text-danger">*</span></label
               >
-              <div class="col-8">
-                <mat-select
+              <div class="col-8 d-flex align-items-center">
+                <!-- <mat-select
                   class="form-select fs- py-2"
                   placeholder="Select"
                   formControlName="workOrderId"
@@ -32,7 +32,50 @@
                   >
                     {{ list.title }}
                   </mat-option>
-                </mat-select>
+                </mat-select> -->
+                <div class="position-relative w-100">
+                  <input
+                    type="text"
+                    class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
+                    placeholder="Select"
+                    [formControl]="WorkOrderCntrl"
+                    [matAutocomplete]="workOrder"
+                    (input)="
+                      WorkOrderSearch.value
+                        ? ''
+                        : invoiceData.controls['workOrderId'].setValue('')
+                    "
+                    #WorkOrderSearch
+                  />
+                  <i
+                    class="bi bi-x-lg text-active-primary inp-x cursor-pointer"
+                    *ngIf="WorkOrderSearch.value"
+                    (click)="
+                      WorkOrderSearch.value = '';
+                      getFilteredValuesForWorkOrder('reset')
+                    "
+                  ></i>
+                </div>
+                <a
+                  class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"
+                  ><i class="bi bi-search"></i
+                ></a>
+                <i
+                  class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer"
+                  ngbTooltip="You can type or search or pick the record from search button"
+                ></i>
+                <mat-autocomplete
+                  #workOrder="matAutocomplete"
+                  [displayWith]="displayFnWorkOrder"
+                  (optionSelected)="setWorkOrderValue($event)"
+                >
+                  <mat-option
+                    *ngFor="let list of WorkOrderSearchResult | async"
+                    [value]="list"
+                  >
+                    {{ list.title }}
+                  </mat-option>
+                </mat-autocomplete>
                 <div
                   class="fv-plugins-message-container"
                   *ngIf="submitted && f.workOrderId.errors"
@@ -107,17 +150,23 @@
                     (click)="picker.open()"
                     [matDatepicker]="picker"
                     placeholder=" "
+                    [max]="today"
                     formControlName="invoiceDate"
                   />
                   <div
                     class="fv-plugins-message-container"
-                    *ngIf="submitted && f.date.errors"
+                    *ngIf="submitted && f.invoiceDate.errors"
                   >
-                    <div class="fv-help-block" *ngIf="f.date.errors.required">
+                    <div
+                      class="fv-help-block"
+                      *ngIf="f.invoiceDate.errors.required"
+                    >
                       Invoice Date is required
                     </div>
                   </div>
-                  <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
+                  <span class="cursor-pointer" (click)="picker.open()"
+                    ><i class="far fa-calendar"></i
+                  ></span>
                   <mat-datepicker #picker></mat-datepicker>
                 </div>
               </div>

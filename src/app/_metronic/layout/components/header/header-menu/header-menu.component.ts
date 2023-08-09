@@ -31,7 +31,7 @@ export class HeaderMenuComponent implements OnInit {
   timeSheetUrl: string = '/timesheets';
   workOrderUrl: string = '/work-order';
   isActiveLink = false;
-
+  auth: any;
   ngOnInit(): void {
     this.setWorkOrderActive();
     this.router.events.subscribe((ev) => {
@@ -41,6 +41,7 @@ export class HeaderMenuComponent implements OnInit {
     });
 
     let auth = this.utils.getAuth();
+    this.auth = auth;
     // console.log(auth?.vendorId);
     if (auth?.vendorId) {
       this.switch_text = 'Switch to Recruiter';
@@ -171,7 +172,7 @@ export class HeaderMenuComponent implements OnInit {
       .subscribe((response) => {});
   }
 
-  removeSessionStorage(){
+  removeSessionStorage() {
     sessionStorage.removeItem('searchFilters');
     sessionStorage.removeItem('filterData');
   }

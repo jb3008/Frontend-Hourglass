@@ -24,11 +24,6 @@ const Routing: Routes = [
         (m) => m.WorkOrderModule
       ),
   },
-  // {
-  //   path: 'hm/inbox',
-  //   loadChildren: () =>
-  //     import('./hm/inbox/inbox.module').then((m) => m.InboxModule),
-  // },
 
   {
     path: 'work-order',
@@ -55,7 +50,11 @@ const Routing: Routes = [
     loadChildren: () =>
       import('./invoices/invoices.module').then((m) => m.InvoicesModule),
   },
-
+  {
+    path: 'hm/invoices',
+    loadChildren: () =>
+      import('./invoices/invoices.module').then((m) => m.InvoicesModule),
+  },
   {
     path: 'business-admin',
     loadChildren: () =>

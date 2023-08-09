@@ -119,12 +119,15 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
         //     ).title
         //   : '';
         this.timeSheetDetails.taskListDetails =
-          this.timeSheetDetails.taskListDetails.filter((r: any) => {
-            r.isNew = false;
-            r.status = r.displayStatus;
-            r.startDate = new Date(r.startDate).toISOString();
-            return r;
-          });
+          this.timeSheetDetails.taskListDetails &&
+          this.timeSheetDetails.taskListDetails.length
+            ? this.timeSheetDetails.taskListDetails.filter((r: any) => {
+                r.isNew = false;
+                r.status = r.displayStatus;
+                r.startDate = new Date(r.startDate).toISOString();
+                return r;
+              })
+            : [];
 
         this.timeSheetDetails.taskListDetails =
           this.timeSheetDetails.taskListDetails.sort(function (a: any, b: any) {
@@ -530,6 +533,11 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
     return status === 'Draft'
       ? this.endPoints.CREATE_TIME_SHEET_AS_DRAFT
       : this.endPoints.CREATE_TIME_SHEET;
+  }
+  reloadAll() {
+    setTimeout(() => {
+      DrawerComponent.reinitialization();
+    }, 200);
   }
 }
 

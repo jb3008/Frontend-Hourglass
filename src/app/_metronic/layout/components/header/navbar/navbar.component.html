@@ -1,53 +1,86 @@
 <!--begin::Search-->
-<div class="app-navbar-item align-items-stretch" [ngClass]="itemClass">
-    <!--begin::Search-->
-    <div id="kt_header_search" class="header-search d-flex align-items-stretch" data-kt-search-keypress="true"
-      data-kt-search-min-length="2" data-kt-search-enter="enter" data-kt-search-layout="menu"
-      data-kt-menu-trigger="{default: 'click'}" data-kt-menu-overflow="false" data-kt-menu-permanent="true"
-      data-kt-menu-placement="bottom-end" data-kt-search="true">
-      <!--begin::Search toggle-->
-      <div class="d-flex align-items-center" data-kt-search-element="toggle" id="kt_header_search_toggle">
-        <div [ngClass]="btnClass">
-          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen021.svg'" class="svg-icon"
-            [ngClass]="btnIconClass"></span>
-        </div>
-      </div>
-      <!--end::Search toggle-->
-      <!-- <app-search-result-inner data-kt-search-element="content" data-kt-menu="true"
-        class="menu menu-sub menu-sub-dropdown p-7 w-325px w-md-375px"></app-search-result-inner> -->
-    </div>
-  
-  </div>
-  <!--end::Search-->
-  
-  <!--begin::Activities-->
-  <div class="app-navbar-item" [ngClass]="itemClass" [routerLink]="inboxLink">
-    <!--begin::Drawer toggle-->
-    <div [ngClass]="btnClass">
-      <i class="bi bi-envelope bi bi-envelope fs-3 text-primary"></i>
-
-    </div>
-    <!--end::Drawer toggle-->
-  </div>
-  <!--end::Activities-->
-
-  
-  <!--begin::User menu-->
-  <div class="app-navbar-item" [ngClass]="itemClass">
-    <!--begin::Menu wrapper-->
-    <div class="cursor-pointer symbol" [ngClass]="userAvatarClass"
+<div
+  class="app-navbar-item align-items-stretch"
+  [ngClass]="itemClass"
+  *ngIf="auth?.isAdmin"
+>
+  <!--begin::Search-->
+  <div
+    id="kt_header_search"
+    class="header-search d-flex align-items-stretch"
+    data-kt-search-keypress="true"
+    data-kt-search-min-length="2"
+    data-kt-search-enter="enter"
+    data-kt-search-layout="menu"
     data-kt-menu-trigger="{default: 'click'}"
-      data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end"
+    data-kt-menu-overflow="false"
+    data-kt-menu-permanent="true"
+    data-kt-menu-placement="bottom-end"
+    data-kt-search="true"
+  >
+    <!--begin::Search toggle-->
+    <div
+      class="d-flex align-items-center"
+      data-kt-search-element="toggle"
+      id="kt_header_search_toggle"
     >
-      <img src="./assets/media/avatars/300-1.jpg" />
+      <div [ngClass]="btnClass">
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/general/gen021.svg'"
+          class="svg-icon"
+          [ngClass]="btnIconClass"
+        ></span>
+      </div>
     </div>
-    <!-- <app-user-inner data-kt-menu='true'></app-user-inner> -->
-    <!--end::Menu wrapper-->
+    <!--end::Search toggle-->
+    <!-- <app-search-result-inner data-kt-search-element="content" data-kt-menu="true"
+        class="menu menu-sub menu-sub-dropdown p-7 w-325px w-md-375px"></app-search-result-inner> -->
   </div>
-  <!--end::User menu-->
-  
-  <!--begin::Header menu toggle-->
-  <!-- <ng-container *ngIf="appHeaderDefaulMenuDisplay">
+</div>
+<!--end::Search-->
+
+<!--begin::Activities-->
+<div
+  class="app-navbar-item"
+  [ngClass]="itemClass"
+  [routerLink]="inboxLink"
+  *ngIf="auth?.isAdmin"
+>
+  <!--begin::Drawer toggle-->
+  <div
+    *ngIf="notificationCount > 0"
+    [ngClass]="btnClass"
+    matBadge="{{ notificationCount }}"
+    matBadgeColor="warn"
+  >
+    <i class="bi bi-envelope bi bi-envelope fs-3 text-primary"></i>
+  </div>
+  <div *ngIf="!notificationCount" [ngClass]="btnClass">
+    <i class="bi bi-envelope bi bi-envelope fs-3 text-primary"></i>
+  </div>
+  <!--end::Drawer toggle-->
+</div>
+<!--end::Activities-->
+
+<!--begin::User menu-->
+<div class="app-navbar-item" [ngClass]="itemClass" *ngIf="auth?.isAdmin">
+  <!--begin::Menu wrapper-->
+  <div
+    class="cursor-pointer symbol"
+    [ngClass]="userAvatarClass"
+    data-kt-menu-trigger="{default: 'click'}"
+    data-kt-menu-attach="parent"
+    data-kt-menu-placement="bottom-end"
+  >
+    <img src="./assets/media/avatars/300-1.jpg" />
+  </div>
+  <!-- <app-user-inner data-kt-menu='true'></app-user-inner> -->
+  <!--end::Menu wrapper-->
+</div>
+<!--end::User menu-->
+
+<!--begin::Header menu toggle-->
+<!-- <ng-container *ngIf="appHeaderDefaulMenuDisplay">
     <div class="app-navbar-item d-lg-none ms-2 me-n3" title="Show header menu">
       <div class="btn btn-icon btn-active-color-primary w-35px h-35px" id="kt_app_header_menu_toggle">
         <span [inlineSVG]="'./assets/media/icons/duotune/text/txt001.svg'" class="svg-icon"
@@ -55,5 +88,4 @@
       </div>
     </div>
   </ng-container> -->
-  <!--end::Header menu toggle-->
-  
+<!--end::Header menu toggle-->

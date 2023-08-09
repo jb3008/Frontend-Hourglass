@@ -12,8 +12,20 @@ import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
 import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, catchError, throwError } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  Observable,
+  catchError,
+  map,
+  retry,
+  startWith,
+  throwError,
+} from 'rxjs';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-new-invoice',
@@ -41,8 +53,12 @@ export class NewInvoiceComponent implements OnInit {
 
   paymentTerms: any = [];
   selectedWorkOrder: any;
+  today: any = new Date();
+  WorkOrderSearchResult: Observable<any[]>;
+  WorkOrderCntrl = new FormControl();
   ngOnInit(): void {
     // DrawerComponent.reinitialization();
+
     this.invoiceData = this.fb.group({
       workOrderId: ['', Validators.required],
       paymentTerms: [{ value: '', disabled: true }],
@@ -63,6 +79,81 @@ export class NewInvoiceComponent implements OnInit {
     });
     this.getAllPaymentTerms();
     this.getAllWorkOrders();
+  }
+
+  getFilteredValuesForWorkOrder(reset?: string) {
+    if (reset) {
+      this.invoiceData.controls['workOrderId'].setValue('');
+      this.invoiceData.controls['paymentTerms'].setValue('');
+      this.invoiceData.controls['currency'].setValue('');
+      this.invoiceData.controls['vendorId'].setValue('');
+      this.invoiceData.controls['vendorAddress'].setValue('');
+      this.invoiceData.controls['companyCode'].setValue('');
+      this.invoiceData.controls['companyAddress'].setValue('');
+
+      this.invoiceData.controls['taxPercentage'].setValue(0);
+      this.invoiceData.controls['subTotalAmount'].setValue(0);
+      this.invoiceData.controls['totalAmount'].setValue(0);
+      this.selectedTask = [];
+      this.dataSource = new MatTableDataSource<any>([]);
+      this.selectedWorkOrder = [];
+      this.cdr.detectChanges();
+    }
+
+    this.WorkOrderSearchResult = this.WorkOrderCntrl.valueChanges.pipe(
+      startWith(''),
+      map((value) => this.showSearchResultForWorkOrder(value))
+    );
+  }
+  showSearchResultForWorkOrder(data: any) {
+    return this.workOrderList.filter((obj) => {
+      let title = `${obj.title}`.toLowerCase();
+      if (data && typeof data === 'object') {
+        data = data.title;
+      }
+      let searchData = data.toLowerCase();
+      let filteredData = title.includes(searchData);
+
+      return filteredData;
+    });
+  }
+  setWorkOrderValue(event: any) {
+    let value = event.option.value.workOrderId;
+    this.invoiceData.controls['workOrderId'].setValue(value);
+    this.workOrderId = value;
+    const workOrder: any = this.workOrderList.find(
+      (r: any) => r.workOrderId === value
+    );
+    const paymentTerms = this.paymentTerms.find(
+      (r: any) => r.id == workOrder.payRate
+    );
+    this.invoiceData.controls['paymentTerms'].setValue(
+      `(${workOrder.payRate}) ` + paymentTerms?.name
+    );
+    this.invoiceData.controls['currency'].setValue(workOrder.rateCurrency);
+    this.invoiceData.controls['vendorId'].setValue(
+      workOrder?.vendorDetails?.vendorId
+    );
+    this.invoiceData.controls['vendorAddress'].setValue(
+      workOrder?.vendorDetails?.address
+    );
+    this.invoiceData.controls['companyCode'].setValue(
+      workOrder?.companyDetails?.companyCode
+    );
+    this.invoiceData.controls['companyAddress'].setValue(
+      workOrder?.companyDetails?.address
+    );
+
+    this.invoiceData.controls['taxPercentage'].setValue(0);
+    this.invoiceData.controls['subTotalAmount'].setValue(0);
+    this.invoiceData.controls['totalAmount'].setValue(0);
+    this.selectedTask = [];
+    this.dataSource = new MatTableDataSource<any>([]);
+    this.selectedWorkOrder = workOrder;
+    this.cdr.detectChanges();
+  }
+  displayFnWorkOrder(workOrder: any): string {
+    return workOrder ? `${workOrder.title}` : '';
   }
 
   get f() {
@@ -113,7 +204,7 @@ export class NewInvoiceComponent implements OnInit {
       )
       .subscribe((response) => {
         this.workOrderList = response;
-
+        this.getFilteredValuesForWorkOrder();
         this.cdr.detectChanges();
       });
   }
@@ -264,9 +355,19 @@ export class NewInvoiceComponent implements OnInit {
   }
 
   getSelectedTimesheetList(selectedTimeSheet: any) {
-    console.log(selectedTimeSheet);
     if (selectedTimeSheet.length) {
-      let timeSheetList = [];
+      const alreadyExist = this.selectedTask.filter((r: any) =>
+        selectedTimeSheet.map((a: any) => a.timeSheetId).includes(r.timeSheetId)
+      );
+      if (alreadyExist.length) {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          `Timesheet Id (${alreadyExist
+            .map((a: any) => a.timeSheetId)
+            .join(',')}) already linked.`
+        );
+        return;
+      }
       let subTotal = 0;
       for (let index = 0; index < selectedTimeSheet.length; index++) {
         const element = selectedTimeSheet[index];
@@ -274,13 +375,19 @@ export class NewInvoiceComponent implements OnInit {
         const rate = this.selectedWorkOrder.rate
           ? this.selectedWorkOrder.rate
           : 0;
-        timeSheetList.push({
+        this.selectedTask.push({
           timeSheetId: element.timeSheetId,
           timeSpent: element.timeSpent,
           unitPrice: parseFloat(rate),
           amount: element.timeSpent * rate,
         });
-        subTotal = element.timeSpent * rate;
+      }
+      for (let index = 0; index < this.selectedTask.length; index++) {
+        const element = this.selectedTask[index];
+        const rate = this.selectedWorkOrder.rate
+          ? this.selectedWorkOrder.rate
+          : 0;
+        subTotal += element.timeSpent * rate;
       }
       this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
       const totalTax = this.percentage(
@@ -292,8 +399,7 @@ export class NewInvoiceComponent implements OnInit {
         parseFloat(totalTax) + subTotal
       );
 
-      this.selectedTask = timeSheetList;
-      this.dataSource = new MatTableDataSource<any>(timeSheetList);
+      this.dataSource = new MatTableDataSource<any>(this.selectedTask);
     }
     this.cdr.detectChanges();
   }

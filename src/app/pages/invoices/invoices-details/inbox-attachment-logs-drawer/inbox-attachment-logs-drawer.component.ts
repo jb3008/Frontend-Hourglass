@@ -4,6 +4,8 @@ import {
   ViewChild,
   ChangeDetectorRef,
   Input,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,10 +18,10 @@ import { AuthService } from 'src/app/modules/auth';
 import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 
 @Component({
-  selector: 'app-attachment-logs-drawer',
-  templateUrl: './attachment-logs-drawer.component.html',
+  selector: 'app-inbox-invoice-attachment-logs-drawer',
+  templateUrl: './inbox-attachment-logs-drawer.component.html',
 })
-export class AttachmentLogsDrawerComponent implements OnInit {
+export class InboxInvoiceAttachmentLogsDrawerComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -29,6 +31,7 @@ export class AttachmentLogsDrawerComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private authService: AuthService
   ) {}
+  @Output() reloadPage = new EventEmitter<any>();
   pdfSrc: any;
   modalConfig: ModalConfig = {
     modalTitle: 'View Document',
@@ -42,14 +45,14 @@ export class AttachmentLogsDrawerComponent implements OnInit {
     return true;
   }
   ngOnInit(): void {
-    console.log(this.timeSheetId);
+    console.log(this.invoiceId);
     this.getDocuments();
   }
   ngOnChange(): void {
-    console.log(this.timeSheetId);
+    console.log(this.invoiceId);
     this.getDocuments();
   }
-  @Input() timeSheetId: any;
+  @Input() invoiceId: any;
   endPoints = EndPoints;
   isLoading = false;
   documentsList: any;
@@ -57,8 +60,8 @@ export class AttachmentLogsDrawerComponent implements OnInit {
   searchFilterInp: string;
   getDocuments() {
     let queryParam = {
-      id: this.timeSheetId,
-      attachmentType: 'TIMESHEET',
+      id: this.invoiceId,
+      attachmentType: 'INVOICE',
     };
     this.apiCalls
       .get(this.endPoints.GET_DOCUMENTS, queryParam)

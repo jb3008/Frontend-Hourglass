@@ -26,56 +26,61 @@
             class="btn btn-bg-light text-primary btn-sm"
             id="kt_timesheet_logs_drawer_toggle"
           >
-          <img src="../../../../assets/images/icons/jobpost-msg.svg" alt=""> Logs
+            <img src="../../../../assets/images/icons/jobpost-msg.svg" alt="" />
+            Logs
           </a>
           <a
             class="btn btn-bg-light text-primary btn-sm ms-5 mr-5"
             id="kt_attachment_logs_drawer_toggle"
           >
-          <img src="../../../../assets/images/icons/attachment.svg" alt="">  Attachments
+            <img src="../../../../assets/images/icons/attachment.svg" alt="" />
+            Attachments
           </a>
-          <button
-            type="button"
-            class="btn btn-sm btn-primary mr-5 my-5"
-            id="kt_inbox_approve_drawer_toggle"
-            *ngIf="timeSheetDetails?.status === 'ACTIVE'"
+          <a
+            class="btn btn-bg-lig/ht border text-primary btn-sm"
+            id="kt_inbox_collaborate_drawer_drawer_toggle"
           >
-            Approve
-          </button>
+            <img src="../../../../assets/images/icons/colla.svg" alt="" />
+            Collaborate
+          </a>
 
-          <button
-            type="button"
-            class="btn btn-sm btn-primary"
+          <a
+            class="btn btn-primary btn-sm cursor-pointer ms-5"
             id="kt_inbox_reject_drawer_toggle"
-            *ngIf="timeSheetDetails?.status === 'ACTIVE'"
+            *ngIf="auth?.vendorId && timeSheetDetails?.status === 'ACTIVE'"
           >
-            Reject
-          </button>
-          <button
-            type="button"
-            class="btn btn-sm btn-primary mr-5"
+            <i class="bi fs-4 bi-slash-circle"></i> Reject
+          </a>
+          <a
+            class="btn btn-primary btn-sm cursor-pointer ms-5"
+            *ngIf="auth?.vendorId && timeSheetDetails?.status === 'ACTIVE'"
             id="kt_inbox_approve_drawer_toggle"
-            *ngIf="timeSheetDetails?.status === 'APPROVED_BY_VENDOR'"
           >
-            Approve
-          </button>
-
-          <button
-            type="button"
-            class="btn btn-sm btn-primary"
+            <i class="bi fs-4 bi-check2-circle"></i> Approve
+          </a>
+          <a
+            class="btn btn-primary btn-sm cursor-pointer ms-5"
             id="kt_inbox_reject_drawer_toggle"
-            *ngIf="timeSheetDetails?.status === 'APPROVED_BY_VENDOR'"
+            *ngIf="
+              !auth?.vendorId &&
+              timeSheetDetails?.status === 'APPROVED_BY_VENDOR'
+            "
           >
-            Reject
-          </button>
+            <i class="bi fs-4 bi-slash-circle"></i> Reject
+          </a>
+          <a
+            class="btn btn-primary btn-sm cursor-pointer ms-5"
+            *ngIf="
+              !auth?.vendorId &&
+              timeSheetDetails?.status === 'APPROVED_BY_VENDOR'
+            "
+            id="kt_inbox_approve_drawer_toggle"
+          >
+            <i class="bi fs-4 bi-check2-circle"></i> Approve
+          </a>
         </div>
       </div>
-      <app-attachment-logs-drawer
-        [timeSheetId]="timeSheetId"
-      ></app-attachment-logs-drawer>
-      <app-timesheet-logs-drawer
-        [timeSheetId]="timeSheetId"
-      ></app-timesheet-logs-drawer>
+
       <div class="d-flex flex-wrap flex-stack mt-7">
         <div class="d-flex flex-column flex-grow-1 pe-8">
           <div class="d-flex flex-wrap lign-items-center">
@@ -84,7 +89,11 @@
               <span class="fw-bold d-flex s-">
                 <a class="cursor-pointer">
                   {{ timeSheetDetails?.workOrderId }}
-                  <img class="ms-1 align-middle" src="../../../../assets/images/icons/table-arrow.svg" alt="">
+                  <img
+                    class="ms-1 align-middle"
+                    src="../../../../assets/images/icons/table-arrow.svg"
+                    alt=""
+                  />
                 </a>
               </span>
             </div>
@@ -231,7 +240,12 @@
                 <!-- title Column -->
                 <ng-container matColumnDef="title">
                   <th mat-header-cell *matHeaderCellDef class="align-middle">
-                    <img src="../../../../assets/images/icons/text.svg" alt="" class="align-text-bottom"> Task Name
+                    <img
+                      src="../../../../assets/images/icons/text.svg"
+                      alt=""
+                      class="align-text-bottom"
+                    />
+                    Task Name
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     {{ element.title }}
@@ -241,7 +255,12 @@
                 <!-- priority Column -->
                 <ng-container matColumnDef="priority">
                   <th mat-header-cell *matHeaderCellDef class="align-middle">
-                    <img src="../../../../assets/images/icons/tag.svg" alt="" class="align-middle">  Priority
+                    <img
+                      src="../../../../assets/images/icons/tag.svg"
+                      alt=""
+                      class="align-middle"
+                    />
+                    Priority
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     <span
@@ -272,7 +291,12 @@
                 <!-- timeSpent Column -->
                 <ng-container matColumnDef="timeSpent">
                   <th mat-header-cell *matHeaderCellDef class="align-middle">
-                    <img src="../../../../assets/images/icons/tclock.svg" alt="" class="align-text-bottom">  Time Spent
+                    <img
+                      src="../../../../assets/images/icons/tclock.svg"
+                      alt=""
+                      class="align-text-bottom"
+                    />
+                    Time Spent
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     {{ element.timeSpent }}
@@ -281,7 +305,12 @@
                 <!-- eta Column -->
                 <ng-container matColumnDef="startDate">
                   <th mat-header-cell *matHeaderCellDef class="align-middle">
-                    <img src="../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  Start Date
+                    <img
+                      src="../../../../assets/images/icons/tcal.svg"
+                      alt=""
+                      class="align-text-bottom"
+                    />
+                    Start Date
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     {{ element?.startDate | date : "dd/MM/yyyy" }}
@@ -291,7 +320,12 @@
                 <!-- lastUpdate Column -->
                 <ng-container matColumnDef="finishDate">
                   <th mat-header-cell *matHeaderCellDef class="align-middle">
-                    <img src="../../../../assets/images/icons/tcal.svg" alt="" class="align-text-bottom">  Due Date
+                    <img
+                      src="../../../../assets/images/icons/tcal.svg"
+                      alt=""
+                      class="align-text-bottom"
+                    />
+                    Due Date
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     {{ element?.finishDate | date : "dd/MM/yyyy" }}
@@ -301,7 +335,12 @@
                 <!-- status Column -->
                 <ng-container matColumnDef="status">
                   <th mat-header-cell *matHeaderCellDef class="align-middle">
-                    <img src="../../../../assets/images/icons/status.svg" class="align-text-bottom" alt="">  Status
+                    <img
+                      src="../../../../assets/images/icons/status.svg"
+                      class="align-text-bottom"
+                      alt=""
+                    />
+                    Status
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     <span
@@ -348,7 +387,7 @@
         </ngb-panel>
       </ngb-accordion>
 
-      <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
+      <!-- <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
         <button
           type="button"
           routerLink="/inbox/timesheets"
@@ -365,7 +404,7 @@
         >
           Cancel
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
@@ -378,10 +417,12 @@
 <app-inbox-reject-drawer
   [timeSheetId]="timeSheetId"
   [status]="timeSheetDetails?.status"
+  (reloadPage)="ngOnInit(); reloadAll()"
 ></app-inbox-reject-drawer>
 <app-inbox-approve-drawer
   [timeSheetId]="timeSheetId"
   [status]="timeSheetDetails?.status"
+  (reloadPage)="ngOnInit(); reloadAll()"
 ></app-inbox-approve-drawer>
 
 <app-attachment-logs-drawer

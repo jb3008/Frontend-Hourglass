@@ -40,9 +40,10 @@ export class InvoicesComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
+  auth: any;
   ngAfterViewInit() {}
   ngOnInit(): void {
+    this.auth = this.utils.getAuth();
     this.invoiceFilter = this.fb.group({
       invoiceId: [''],
       invoiceDate: [''],
@@ -50,11 +51,28 @@ export class InvoicesComponent implements OnInit {
     });
     this.getAllInvoice();
   }
+  flag: any = 'Inbox';
+  isSelectedTab: string = 'Inbox';
+  changeFlag(flag: string) {
+    if (flag === 'Inbox') {
+      this.flag = 'Inbox';
+      this.isSelectedTab = flag;
+    } else {
+      this.flag = 'Outbox';
+      this.isSelectedTab = flag;
+    }
+    this.getAllInvoice();
+  }
 
   changeDateToUtc(dateObj: any) {
     const date = new Date(dateObj);
     const utcDate = date.toISOString();
     return utcDate;
+  }
+  getEndpoint() {
+    return this.flag === 'Inbox'
+      ? this.endPoints.INVOICE_INBOX_NOTIFICATION
+      : this.endPoints.INVOICE_OUTBOX_NOTIFICATION;
   }
   getAllInvoice() {
     this.isLoading = true;
@@ -72,13 +90,16 @@ export class InvoicesComponent implements OnInit {
     }
 
     this.apiCalls
-      .get(this.endPoints.GET_INVOICE, filter)
+      .get(this.getEndpoint(), filter)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(
             this.snackBar,
-            'failed to fetch the invoices'
+            'failed to fetch the invoices notification'
           );
+          this.dataSource = new MatTableDataSource<any>([]);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
           this.isLoading = false;
           this.cdr.detectChanges();
           throw err;
@@ -98,6 +119,23 @@ export class InvoicesComponent implements OnInit {
         this.isLoading = false;
         this.cdr.detectChanges();
       });
+  }
+  readNotification(obj: any) {
+    if (obj.notificationStatus === 'UNREAD') {
+      var formData = new FormData();
+      formData.append('notificationId', obj.notificationId);
+      this.apiCalls
+        .post(this.endPoints.READ_NOTIFICATION, formData)
+        .pipe(
+          catchError(async (err) => {
+            this.isLoading = false;
+            setTimeout(() => {
+              throw err;
+            }, 10);
+          })
+        )
+        .subscribe(async (response) => {});
+    }
   }
 }
 

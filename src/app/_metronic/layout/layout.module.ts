@@ -45,6 +45,7 @@ import { InboxApproveDrawerComponent } from 'src/app/pages/inbox-drawer/inbox-ap
 // import { ExtendedComponent } from './components/toolbar/extended/extended.component';
 // import { ReportsComponent } from './components/toolbar/reports/reports.component';
 // import { SaasComponent } from './components/toolbar/saas/saas.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 const routes: Routes = [
   {
@@ -94,15 +95,13 @@ const routes: Routes = [
     NgbTooltipModule,
     TranslateModule,
     ThemeModeModule,
-
+    MatBadgeModule,
 
     // InboxLogsDrawerComponent,
     // InboxAttachmentLogsDrawerComponent,
     // InboxCollaborateDrawerComponent,
     // InboxRejectDrawerComponent,
     // InboxApproveDrawerComponent,
-
-
   ],
   exports: [RouterModule],
 })

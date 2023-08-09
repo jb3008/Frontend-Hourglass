@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [WorkForceComponent, WorkerProfileComponent],
@@ -26,6 +27,7 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
+    MatSelectModule,
     NgbTooltipModule,
     NgxDocViewerModule,
   ],

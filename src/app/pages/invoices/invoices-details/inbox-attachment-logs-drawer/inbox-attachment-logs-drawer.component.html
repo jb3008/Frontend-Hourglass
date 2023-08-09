@@ -1,5 +1,5 @@
 <div
-  id="kt_attachment_logs_drawer"
+  id="kt_inbox_invoice_attachment_logs_drawer"
   class="bg-body"
   data-kt-drawer="true"
   data-kt-drawer-name="attachment_logs_drawer"
@@ -7,8 +7,8 @@
   data-kt-drawer-overlay="true"
   data-kt-drawer-width="{default:'300px', 'lg': '700px'}"
   data-kt-drawer-direction="end"
-  data-kt-drawer-toggle="#kt_attachment_logs_drawer_toggle"
-  data-kt-drawer-close="#kt_attachment_logs_close"
+  data-kt-drawer-toggle="#kt_inbox_invoice_attachment_logs_drawer_toggle"
+  data-kt-drawer-close="#kt_inbox_invoice_attachment_logs_close"
 >
   <div class="card shadow-none rounded-0 w-100">
     <div class="d-flex justify-content-between px-7">
@@ -22,7 +22,7 @@
         <button
           type="button"
           class="btn btn-sm btn-icon btn-active-light-primary mt-5 "
-          id="kt_attachment_logs_close"
+          id="kt_inbox_attachment_logs_close"
         >
           <span
             [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
@@ -34,12 +34,9 @@
     <button
       type="button"
       class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
-      id="kt_attachment_logs_close"
+      id="kt_inbox_attachment_logs_close"
     >
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
-        class="svg-icon svg-icon-1"
-      ></span>
+      <img src="./assets/media/icons/duotune/arrows/arr061.svg" alt="" />
     </button>
     <div class="card-body position-relative pt-0" id="kt_activities_body">
       <!-- <div
@@ -120,8 +117,8 @@
       </ng-container>
     </div>
   </div>
-  <!-- <div class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_attachment_logs_footer">
-    <button type="reset" class="btn  btn-sm btn-outline" id="kt_attachment_logs_close">Cancel</button>
+  <!-- <div class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_inbox_attachment_logs_footer">
+    <button type="reset" class="btn  btn-sm btn-outline" id="kt_inbox_attachment_logs_close">Cancel</button>
     <button type="reset" class="btn  btn-sm btn-primary w-100px">Send</button>
   </div> -->
 </div>

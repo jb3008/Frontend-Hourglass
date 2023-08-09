@@ -15,8 +15,21 @@ import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
 import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, catchError, throwError } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  Observable,
+  catchError,
+  map,
+  retry,
+  startWith,
+  throwError,
+} from 'rxjs';
+
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-new-timesheet',
@@ -37,17 +50,22 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
   workForceList: any[];
   selectedEmpObj: any = null;
   workOrderList: any[];
+  WorkForceSearchResult: Observable<any[]>;
+  WorkOrderSearchResult: Observable<any[]>;
+  WorkForceCntrl = new FormControl();
+  WorkOrderCntrl = new FormControl();
   endPoints = EndPoints;
   isLoading = false;
   workOrderId: any = '';
   timeSheetData: FormGroup;
   selectedTask: any = [];
+  selectedTaskForDrawer: any = [];
   displayHrs: any = 0;
   today = new Date();
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<any>([]);
-    const auth = this.authService.getAuthFromLocalStorage();
+    const auth = this.utils.getAuth();
     DrawerComponent.reinitialization();
     ToggleComponent.reinitialization();
     this.timeSheetData = this.fb.group({
@@ -65,6 +83,74 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {}
+
+  getFilteredValuesForWorkForce(reset?: string) {
+    if (reset) {
+      this.timeSheetData.controls['employeeId'].setValue('');
+    }
+    this.WorkForceSearchResult = this.WorkForceCntrl.valueChanges.pipe(
+      startWith(''),
+      map((value) => this.showSearchResult(value))
+    );
+  }
+  showSearchResult(data: any) {
+    return this.workForceList.filter((obj) => {
+      let fullName = `${obj.firstName} ${obj.lastName}`.toLowerCase();
+      if (data && typeof data === 'object') {
+        data = data.firstName + ' ' + data.lastName;
+      }
+      let searchData = data.toLowerCase();
+      let filteredData = fullName.includes(searchData);
+      return filteredData;
+    });
+  }
+  setWorkForceValue(event: any) {
+    let value = event.option.value.workForceId;
+    this.timeSheetData.controls['employeeId'].setValue(value);
+    this.selectedEmpObj = this.workForceList.find(
+      (o) => o.workForceId === value
+    );
+
+    this.cdr.detectChanges();
+  }
+  displayFn(emp: any): string {
+    return emp ? `${emp.firstName} ${emp.lastName}` : '';
+  }
+
+  getFilteredValuesForWorkOrder(reset?: string) {
+    if (reset) {
+      this.timeSheetData.controls['workOrderId'].setValue('');
+    }
+
+    this.WorkOrderSearchResult = this.WorkOrderCntrl.valueChanges.pipe(
+      startWith(''),
+      map((value) => this.showSearchResultForWorkOrder(value))
+    );
+  }
+  showSearchResultForWorkOrder(data: any) {
+    return this.workOrderList.filter((obj) => {
+      let title = `${obj.title}`.toLowerCase();
+      if (data && typeof data === 'object') {
+        data = data.title;
+      }
+      let searchData = data.toLowerCase();
+      let filteredData = title.includes(searchData);
+
+      return filteredData;
+    });
+  }
+  setWorkOrderValue(event: any) {
+    let value = event.option.value.workOrderId;
+    this.timeSheetData.controls['workOrderId'].setValue(value);
+    this.workOrderId = value;
+    this.selectedTask = [];
+    this.dataSource = new MatTableDataSource<any>([]);
+    this.displayHrs = 0.0;
+    this.cdr.detectChanges();
+  }
+  displayFnWorkOrder(workOrder: any): string {
+    return workOrder ? `${workOrder.title}` : '';
+  }
 
   displayedColumns: string[] = [
     'taskId',
@@ -92,14 +178,16 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.workForceList = response;
-
+        this.getFilteredValuesForWorkForce();
         this.cdr.detectChanges();
       });
   }
 
   getAllWorkOrders() {
     this.apiCalls
-      .get(this.endPoints.ALL_WORK_ORDERS, {})
+      .get(this.endPoints.ALL_WORK_ORDERS, {
+        vendorId: this.utils.getAuth()?.vendorId,
+      })
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(
@@ -113,7 +201,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.workOrderList = response;
-
+        this.getFilteredValuesForWorkOrder();
         this.cdr.detectChanges();
       });
   }
@@ -130,13 +218,26 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     this.displayHrs = 0.0;
     this.cdr.detectChanges();
   }
-  getSelectedTaskList(selectedTask: any) {
-    if (selectedTask.length) {
-      let taskList = [];
+  getSelectedTaskList(selectedTaskFromTask: any) {
+    this.selectedTaskForDrawer = [];
+    // const alreadyExist = this.selectedTask.filter((r: any) =>
+    //   selectedTaskFromTask.map((a: any) => a.taskId).includes(r.taskId)
+    // );
+    // if (alreadyExist.length) {
+    //   this.utils.showSnackBarMessage(
+    //     this.snackBar,
+    //     `Task Id (${alreadyExist
+    //       .map((a: any) => a.taskId)
+    //       .join(',')}) already linked.`
+    //   );
+    //   return;
+    // }
+
+    if (selectedTaskFromTask.length) {
       let totalHrs = 0;
-      for (let index = 0; index < selectedTask.length; index++) {
-        const element = selectedTask[index];
-        taskList.push({
+      for (let index = 0; index < selectedTaskFromTask.length; index++) {
+        const element = selectedTaskFromTask[index];
+        this.selectedTask.push({
           taskId: element.taskId,
           timeSpent: 0,
           startDate: this.timeSheetData.controls['fromDate'].value,
@@ -147,10 +248,13 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
           status: element.status,
         });
       }
-      this.selectedTask = taskList;
-      this.dataSource = new MatTableDataSource<any>(taskList);
+      console.log(this.selectedTask);
+      this.dataSource = new MatTableDataSource<any>(this.selectedTask);
       this.displayHrs = totalHrs.toFixed(1);
+      this.cdr.detectChanges();
     }
+
+    this.selectedTaskForDrawer = this.selectedTask;
     this.cdr.detectChanges();
   }
   changeTimeStamp() {
@@ -164,6 +268,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
   removeTask(index: number) {
     // this.timeSheetData.controls['newTimeSheetTaskList'].setValue([]);
     this.selectedTask.splice(index, 1);
+    this.selectedTaskForDrawer = this.selectedTask;
     let totalHrs = 0;
     for (let index = 0; index < this.selectedTask.length; index++) {
       const element = this.selectedTask[index];
@@ -242,7 +347,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
         );
       } else {
         const docList = this.timeSheetData.controls[name].value;
-        console.log(docList);
+
         if (docList.length < 6) {
           if (this.utils.isFileExist(docList, file)) {
             this.utils.showSnackBarMessage(
@@ -289,6 +394,22 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       );
       return;
     }
+    const alreadyExist = this.selectedTask.filter(
+      (obj: any, index: number) =>
+        this.selectedTask.findIndex(
+          (item: any) =>
+            item.startDate === obj.startDate && item.taskId === obj.taskId
+        ) === index
+    );
+
+    if (alreadyExist.length !== this.selectedTask.length) {
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        `Duplicate task linked.Please check date.`
+      );
+      return;
+    }
+
     for (let index = 0; index < this.selectedTask.length; index++) {
       const element = this.selectedTask[index];
       this.timeSheetData.controls['newTimeSheetTaskList'].value.push({
@@ -372,7 +493,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
                   this.ngOnInit();
                   this.utils.showSnackBarMessage(
                     this.snackBar,
-                    'Time sheet created successfully'
+                    this.getMessage(status)
                   );
                   this.router.navigate(['/timesheets']);
                 }
@@ -382,7 +503,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
             this.ngOnInit();
             this.utils.showSnackBarMessage(
               this.snackBar,
-              'Time sheet created successfully'
+              this.getMessage(status)
             );
             this.router.navigate(['/timesheets']);
           }
@@ -398,6 +519,11 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     return status === 'Draft'
       ? this.endPoints.CREATE_TIME_SHEET_AS_DRAFT
       : this.endPoints.CREATE_TIME_SHEET;
+  }
+  getMessage(status: string) {
+    return status === 'DRAFT'
+      ? 'Time sheet saved as draft successfully'
+      : 'Time sheet created successfully';
   }
 }
 

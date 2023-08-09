@@ -238,7 +238,9 @@
                 [matDatepicker]="dob"
                 placeholder="Select Date of Birth"
               />
-              <span class="cursor-pointer" (click)="dob.open()"><i class="far fa-calendar"></i></span>
+              <span class="cursor-pointer" (click)="dob.open()"
+                ><i class="far fa-calendar"></i
+              ></span>
               <mat-datepicker #dob></mat-datepicker>
             </div>
           </div>
@@ -268,8 +270,17 @@
               <option value="">Female</option>
               <option value="">Other</option>
           </select>
+            <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && f.gender.errors"
+          >
+            <div class="fv-help-block" *ngIf="f.gender.errors.required">
+              Gender is required
+            </div>
+          </div>
           </div>
         </div>
+        
       </div>
     </div>
 
@@ -480,6 +491,513 @@
     </div>
   </form>
 </app-modal>
+
+<app-modal
+  #modalEdit
+  [modalConfig]="modalEditConfig"
+  style="max-width: 777px"
+  data-nnn=""
+>
+  <form [formGroup]="workForceEditData">
+    <div class="container mb-6">
+      <div class="row justify-content-between">
+        <div class="col-2 p-0 pe-2">
+          <div class="symbol symbol-circle symbol-lg-90px me-5 image-upload">
+            <div (click)="fileInputImage.click()">
+              <i class="fas fa-cloud-upload-alt fs-2x"></i>
+            </div>
+            <img
+              [src]="
+                imagePath === undefined
+                  ? workForceDetails?.profile
+                  : imagePath || '../../../../assets/media/avatars/blank.png'
+              "
+              class=""
+              alt=""
+            />
+            <input
+              #fileInputImage
+              type="file"
+              (change)="selectImage($event)"
+              accept="image/*"
+            />
+          </div>
+        </div>
+        <div class="col-5 p-0 pe-5">
+          <div class="form-group">
+            <label class="mb-1"
+              >First Name <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="firstName"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Enter First Name"
+            />
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && editForm.firstName.errors"
+          >
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.firstName.errors.required"
+            >
+              First name is required
+            </div>
+          </div>
+        </div>
+        <div class="col-5 p-0 pe-5">
+          <div class="form-group">
+            <label class="mb-1"
+              >Last Name <span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              formControlName="lastName"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Enter Last Name"
+            />
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && editForm.lastName.errors"
+          >
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.lastName.errors.required"
+            >
+              Last name is required
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mb-6">
+      <div class="row justify-content-between">
+        <div class="col-6 p-0 pe-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Work Email ID <span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              formControlName="workEmail"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Enter Email ID"
+            />
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && editForm.workEmail.errors"
+          >
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.workEmail.errors.required"
+            >
+              Work Email is required
+            </div>
+            <div class="fv-help-block" *ngIf="editForm.workEmail.errors.email">
+              Email must be a valid email address
+            </div>
+          </div>
+        </div>
+        <div class="col-6 p-0 ps-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Personal Email ID <span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              formControlName="personalEmail"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Enter Email ID"
+            />
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && editForm.personalEmail.errors"
+          >
+            <div class="fv-help-block">Personal Email ID is required</div>
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.personalEmail.errors.email"
+            >
+              Email must be a valid email address
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mb-6">
+      <div class="row justify-content-between">
+        <div class="col-6 p-0 pe-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Work Phone <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="workPhone"
+              (keypress)="numbersOnly($event)"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Give Work ph Number Here"
+              maxlength="10"
+            />
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && editForm.workPhone.errors"
+          >
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.workPhone.errors.required"
+            >
+              Work Phone is required
+            </div>
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.workPhone.errors.pattern"
+            >
+              Only number allow!
+            </div>
+          </div>
+        </div>
+        <div class="col-6 p-0 ps-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Mobile Phone <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              (keypress)="numbersOnly($event)"
+              formControlName="mobilePhone"
+              maxlength="10"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Give Mobile Number Here"
+            />
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && editForm.mobilePhone.errors"
+          >
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.mobilePhone.errors.required"
+            >
+              Mobile Phone is required
+            </div>
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.mobilePhone.errors.pattern"
+            >
+              Only number allow!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mb-6">
+      <div class="row justify-content-between">
+        <div class="col-6 p-0 pe-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Date of Birth <span class="text-danger">*</span></label
+            >
+            <div
+              class="input-icon position-relative date-text input-icon-right"
+            >
+              <input
+                formControlName="dateOfBirth"
+                type="text"
+                class="form-control py-2 fs- fw-normal cursor-pointer"
+                (click)="dobUpdate.open()"
+                [max]="today"
+                [matDatepicker]="dobUpdate"
+                matSuffix
+                placeholder="Select Date of Birth"
+              />
+              <span class="cursor-pointer" (click)="dobUpdate.open()"
+                ><i class="far fa-calendar"></i
+              ></span>
+              <mat-datepicker #dobUpdate></mat-datepicker>
+            </div>
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && editForm.dateOfBirth.errors"
+          >
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.dateOfBirth.errors.required"
+            >
+              Date of Birth is required
+            </div>
+          </div>
+        </div>
+        <div class="col-4 p-0 ps-4">
+          <div class="form-group">
+            <label class="mb-1">Blood Group</label>
+            <input
+              type="text"
+              formControlName="bloodGroup"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Enter Blood Group"
+            />
+          </div>
+        </div>
+        <div class="col-2 p-0 ps-2">
+          <div class="form-group">
+            <label class="mb-1"
+              >Gender <span class="text-danger">*</span></label
+            >
+            <mat-select
+              class="form-select fs- py-2 w-100px rounded-start-0"
+              formControlName="gender"
+            >
+              <mat-option value="Male">Male</mat-option>
+              <mat-option value="Female">Female</mat-option>
+            </mat-select>
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && editForm.gender.errors"
+          >
+            <div class="fv-help-block" *ngIf="editForm.gender.errors.required">
+              Gender is required
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mb-6">
+      <div class="row justify-content-between">
+        <div class="col-6 p-0 pe-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Designation <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="designation"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Enter Designation"
+            />
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && editForm.designation.errors"
+          >
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.designation.errors.required"
+            >
+              Designation is required
+            </div>
+          </div>
+        </div>
+        <div class="col-6 p-0 ps-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Work Experience <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="workExperience"
+              class="form-control py-2 fs- fw-normal"
+              placeholder="Enter Work Exp."
+            />
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && editForm.workExperience.errors"
+          >
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.workExperience.errors.required"
+            >
+              Work Experience is required
+            </div>
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.workExperience.errors.pattern"
+            >
+              Only number allow!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mb-6">
+      <label class="mb-1">Location <span class="text-danger">*</span> </label>
+      <input
+        type="text"
+        formControlName="location"
+        class="form-control py-2 fs- fw-normal"
+        placeholder="Give Location"
+      />
+    </div>
+    <div
+      class="fv-plugins-message-container"
+      *ngIf="submitted && editForm.location.errors"
+    >
+      <div class="fv-help-block" *ngIf="editForm.location.errors.required">
+        Location is required
+      </div>
+    </div>
+    <div class="container mb-6">
+      <div class="row justify-content-between">
+        <div class="col-6 p-0 pe-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Current Address <span class="text-danger">*</span>
+            </label>
+            <textarea
+              name=""
+              id=""
+              formControlName="currentAddress"
+              cols="30"
+              rows="3"
+              class="form-control py-2 fs- fw-normal"
+            ></textarea>
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && editForm.currentAddress.errors"
+          >
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.currentAddress.errors.required"
+            >
+              Current Address is required
+            </div>
+          </div>
+        </div>
+        <div class="col-6 p-0 ps-4">
+          <div class="form-group">
+            <label class="mb-1"
+              >Permanent Address <span class="text-danger">*</span>
+            </label>
+            <textarea
+              name=""
+              id=""
+              formControlName="permanentAddress"
+              cols="30"
+              rows="3"
+              class="form-control py-2 fs- fw-normal"
+            ></textarea>
+          </div>
+          <div
+            class="fv-plugins-message-container"
+            *ngIf="submitted && editForm.permanentAddress.errors"
+          >
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.permanentAddress.errors.required"
+            >
+              Permanent Address is required
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mb-6 permissionBox">
+      <label
+        class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary"
+      >
+        <input type="checkbox" formControlName="createUser" value="All" />
+        <span></span>
+        Create User (Allow access to application)
+      </label>
+    </div>
+    <div class="mb-1">Attachments</div>
+    <div class="fv-row mb-5">
+      <!--begin::Dropzone-->
+      <div
+        class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
+        DropZone
+        (onFileDropped)="droppedFilesEdit($event, 'documentList')"
+        (click)="fileInputOther.click()"
+      >
+        <!--begin::Message-->
+        <div class="text-center w-100 text-muted">
+          <!--begin::Icon-->
+          <i class="fas fa-cloud-upload-alt fs-2x"></i>
+          <!--end::Icon-->
+          <!--begin::Info-->
+          <div class="ms-4">
+            <input
+              type="file"
+              hidden
+              #fileInputOther
+              (change)="selectFileEdit($event, 'documentList')"
+              accept=".pdf,.doc,.docx,.xls,.xlsx"
+            />
+            <h3 class="fs-5 mb-1">
+              <a class="text-primary">Click to upload </a> or Drop files here.
+            </h3>
+            <span class="fs-7 fw-semibold text-gray-400"
+              >.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb); maximum 6
+              files</span
+            >
+          </div>
+          <!--end::Info-->
+        </div>
+      </div>
+      <div
+        *ngIf="workForceEditData.controls['documentList'].value"
+        class="d-flex flex-wrap"
+      >
+        <a
+          *ngFor="
+            let doc of workForceEditData.controls['documentList'].value;
+            let index = index
+          "
+          class="me-3 mt-4 border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between mw-325px"
+        >
+          <div
+            class="text-truncate pspmw95"
+            [ngbTooltip]="doc.name"
+            [openDelay]="600"
+          >
+            {{ doc.name }}
+          </div>
+          <span class="cursor-pointer ms-3">
+            <i
+              class="bi bi-x-circle"
+              (click)="clearFileEdit('documentList', index)"
+            ></i
+          ></span>
+        </a>
+      </div>
+
+      <!--end::Dropzone-->
+    </div>
+
+    <div class="modal-footer bg-light p-3 px-5">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="closeEditModal()"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="saveEditWorkForce()"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</app-modal>
+
 <div class="content flex-column-fluid auto container-lg mb-4">
   <div class="row">
     <ng-container *ngFor="let item of workForceList; let i = index">

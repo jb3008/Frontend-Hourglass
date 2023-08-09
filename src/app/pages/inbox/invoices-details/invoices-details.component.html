@@ -1,162 +1,254 @@
 <div class="content flex-column-fluid auto container-lg mb-4">
-    <div class="card mb-5 mb-xl-10 text-gray-600">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
+  <div class="card mb-5 mb-xl-10 text-gray-600">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center">
+        <h3 class="card-title fs-4">
+          <a
+            class="cursor-pointer"
+            routerLink="/inbox/invoices"
+            *ngIf="auth?.vendorId"
+          >
+            <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i>
+          </a>
+          <a
+            class="cursor-pointer"
+            routerLink="/hm/inbox/invoices"
+            *ngIf="!auth?.vendorId"
+          >
+            <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i>
+          </a>
+          <span class="fs-7 fw-normal">Invoice</span>
+        </h3>
+        <div>
+          <a
+            class="btn btn-bg-light text-primary btn-sm"
+            id="kt_inbox_invoice_logs_drawer_toggle"
+          >
+            <img src="../../../../assets/images/icons/jobpost-msg.svg" alt="" />
+            Logs
+          </a>
+          <app-inbox-invoice-logs-drawer
+            [invoiceId]="invoiceId"
+          ></app-inbox-invoice-logs-drawer>
+          <a
+            class="btn btn-bg-light text-primary btn-sm ms-5"
+            id="kt_inbox_invoice_attachment_logs_drawer_toggle"
+          >
+            <img src="../../../../assets/images/icons/attachment.svg" alt="" />
+            Attachments
+          </a>
+          <app-inbox-invoice-attachment-logs-drawer
+            [invoiceId]="invoiceId"
+          ></app-inbox-invoice-attachment-logs-drawer>
 
-                <h3 class="card-title fs-4">
-                    <a class="cursor-pointer " routerLink="/inbox/invoices"> <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i> </a>
-                    <span class="fs-7 fw-normal">Invoice</span> 
-                </h3>
-    <div>
-    
-        <a  class=" btn btn-bg-light text-primary   btn-sm " id="kt_inbox_logs_drawer_toggle" >
-          <img src="../../../../assets/images/icons/jobpost-msg.svg" alt=""> Logs    </a>
-            <app-inbox-logs-drawer></app-inbox-logs-drawer>
-    
-        <a  class=" btn btn-bg-light text-primary btn-sm ms-5 " id="kt_inbox_attachment_logs_drawer_toggle">
-          <img src="../../../../assets/images/icons/attachment.svg" alt="">  Attachments     </a>
-             <app-inbox-attachment-logs-drawer></app-inbox-attachment-logs-drawer>
-             <div class="vr mx-5 h-25px align-middle"></div>
-        <a  class=" btn btn-bg-lig/ht border text-primary btn-sm" id="kt_inbox_collaborate_drawer_drawer_toggle">
-          <img src="../../../../assets/images/icons/colla.svg" alt="">  Collaborate     </a>
-             <app-inbox-collaborate-drawer></app-inbox-collaborate-drawer>
-    
-        <a  class="btn btn-primary btn-sm cursor-pointer ms-5 " id="kt_inbox_reject_drawer_toggle">
-             <i class="bi fs-4 bi-slash-circle"></i> Reject     </a>
-             <app-inbox-reject-drawer></app-inbox-reject-drawer>
-        <a  class=" btn btn-primary btn-sm cursor-pointer ms-5 " id="kt_inbox_approve_drawer_toggle">
-             <i class="bi fs-4 bi-check2-circle"></i> Approve     </a>
-             <app-inbox-approve-drawer></app-inbox-approve-drawer>
-    </div>
-    
-    
+          <div class="vr mx-5 h-25px align-middle"></div>
+          <a
+            class="btn btn-bg-lig/ht border text-primary btn-sm"
+            id="kt_inbox_collaborate_drawer_drawer_toggle"
+          >
+            <img src="../../../../assets/images/icons/colla.svg" alt="" />
+            Collaborate
+          </a>
+
+          <a
+            class="btn btn-primary btn-sm cursor-pointer ms-5"
+            id="kt_inbox_invoice_reject_drawer_toggle"
+            *ngIf="!auth?.vendorId && invoiceDetails?.status === 'PENDING'"
+          >
+            <i class="bi fs-4 bi-slash-circle"></i> Reject
+          </a>
+          <app-inbox-invoice-reject-drawer
+            [invoiceId]="invoiceId"
+            (reloadPage)="ngOnInit(); reloadAll()"
+          ></app-inbox-invoice-reject-drawer>
+          <a
+            class="btn btn-primary btn-sm cursor-pointer ms-5"
+            id="kt_inbox_invoice_approve_drawer_toggle"
+            *ngIf="!auth?.vendorId && invoiceDetails?.status === 'PENDING'"
+          >
+            <i class="bi fs-4 bi-check2-circle"></i> Approve
+          </a>
+          <app-inbox-invoice-approve-drawer
+            [invoiceId]="invoiceId"
+            (reloadPage)="ngOnInit(); reloadAll()"
+          ></app-inbox-invoice-approve-drawer>
+        </div>
+      </div>
+
+      <div class="d-flex flex-wrap flex-stack mt-7">
+        <div class="d-flex flex-column flex-grow-1 pe-8">
+          <div class="d-flex flex-wrap align-items-center">
+            <div class="me-5 my-1">
+              <span class="d-flex text-muted fs-8">Invoice Number</span>
+              <span class="fw-bold d-flex s-">
+                <a class="cursor-pointer">
+                  {{ invoiceDetails?.invoiceNumber }}
+                </a>
+              </span>
+            </div>
+            <div class="vr me-5 mt-4 h-20px"></div>
+
+            <div class="me-5 my-1">
+              <span class="d-flex text-muted fs-8">Status</span>
+              <span class="fw-bold d-flex s-"
+                ><span
+                  class="badge badge-light-warning"
+                  [ngClass]="{
+                    ' badge-light-warning':
+                      invoiceDetails?.status === 'PENDING',
+                    'badge-light-success':
+                      invoiceDetails?.status === 'APPROVED',
+                    'badge-light-danger': invoiceDetails?.status === 'REJECTED'
+                  }"
+                >
+                  {{ invoiceDetails?.displayStatus }}</span
+                >
+              </span>
             </div>
 
-              
-            <div class="d-flex flex-wrap flex-stack mt-7 ">
-                <div class="d-flex flex-column flex-grow-1 pe-8">
-                  <div class="d-flex flex-wrap align-items-center">
-                    <div class=" me-5 my-1">
-                      <span class="d-flex text-muted fs-8">Invoice Number</span>
-                      <span class="fw-bold d-flex s-">
-                        <a class="cursor-pointer"> 2786111763  </a>
-                        </span>
-                    </div>
-                    <div class="vr me-5 mt-4 h-20px "></div>
-                  
-                    <div class=" me-5 my-1">
-                      <span class="d-flex text-muted fs-8">Status</span>
-                      <span class="fw-bold d-flex s-"><span class="badge badge-light-warning">
-                          In-Progress</span> </span>
-                    </div>
+            <div class="vr me-5 mt-4 h-20px"></div>
 
-                    <div class="vr me-5 mt-4 h-20px "></div>
+            <div class="me-5 my-1">
+              <span class="d-flex text-muted fs-8">Submitted By</span>
 
-                    <div class=" me-5 my-1">
-                        <span class="d-flex text-muted fs-8">Submitted By</span>
-
-        <div class=" me-5 my-1 d-flex align-items-center">
-            <div class="symbol symbol-25px rounded-1 me-3">
-              <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">DR </span>
-            </div>
-            <div>
-                <span class="fw-bold d-flex align-items-center gap-3">Dianne Russell <span class="text-muted fs-8">Employee</span></span>
-
-            </div>
-          </div>
-          </div>
-                  
-                    <div class="vr me-5 mt-4 h-20px "></div>
-                    <div class=" me-5 my-1">
-                      <span class="d-flex text-muted fs-8">Invoice  Date</span>
-                      <span class="fw-bold d-flex s-">4,8000.00 USD</span>
-                    </div>
-                    <div class="vr me-5 mt-4 h-20px "></div>
-                    <div class=" me-5 my-1">
-                      <span class="d-flex text-muted fs-8">Invoice Ammount</span>
-                      <span class="fw-bold d-flex s-">Jun 12, 2023 </span>
-                    </div>
-            
-                  </div>
+              <div class="me-5 my-1 d-flex align-items-center">
+                <div class="symbol symbol-25px rounded-1 me-3">
+                  <span
+                    class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
+                    >{{ invoiceDetails?.userDetail?.firstName[0] }}
+                    {{ invoiceDetails?.userDetail?.lastName[0] }}
+                  </span>
+                </div>
+                <div>
+                  <span class="fw-bold d-flex align-items-center gap-3">
+                    {{ invoiceDetails?.userDetail?.firstName }}
+                    {{ invoiceDetails?.userDetail?.lastName }}
+                    <span class="text-muted fs-8">
+                      {{ invoiceDetails?.userDetail?.emailId }}</span
+                    ></span
+                  >
                 </div>
               </div>
+            </div>
 
-                 <div class="separator separator-dashed my-5"></div>
-                 <div class=" d-flex align-items-center justify-content-between">
-                    <div class="text-body">
-                        BILL TO <br>
-                        <p class="fw-bold fs-4 my-2">COMMAND + R </p>
-                        4140 Parker Rd. Allentown, New Mexico 31134
-                    </div>
-                    <div  class="mw-175px mh-45px border mt-3 d-flex align-items-center justify-content-center min-h-35px min-w-40px overflow-hidden"><img  src="../../../../assets/images/smartdocs.jpeg" class="mw-100 mh-100"></div>
-                 </div>
-
-
-                 <div class=" my-7 text-body fw-semibold">INVOICE ITEMS</div>
-                 <div class="table-responsive border w-100 mb-5 mt-8">
-                    <!--begin::Table-->
-                    <table class="table table-row-bordered align-middle gy-4 gs-9 m-0 fs-7 text-gray-600 ">
-                        <thead class="border-bottom border-bottom-3 fw-semibold bg-light bg-opacity-75">
-                            <tr>
-                                <td class="min-w-350px">Item Name</td>
-                                <td class="min-w-75px">Quantity</td>
-                                <td class="min-w-75px">Unit Price</td>
-                                <td class="min-w-75px">Amount</td>
-                        
-                            </tr>
-                        </thead>
-                        <tbody class="fw-semibold ">
-                         <!--begin::Table row-->
-                                <tr>
-                                  <td> <div class="symbol symbol-35px symbol-circle me-3">
-                                    <span class="symbol-label fw-bolder bg-light-warning fs-4 fas fa-clipboard-list"> </span>
-                    
-                                  </div> <span class="fw-bold text-gray-900">HGTS888022</span></td>
-                                  <td>40.0 Hr</td>
-                                  <td>60.00 $</td>
-                                  <td>2400.00 $</td>
-                                </tr>
-                                <!--end::Table row-->
-                         <!--begin::Table row-->
-                         <tr class="border-bottom border-bottom-3 ">
-                          <td> <div class="symbol symbol-35px symbol-circle me-3">
-                            <span class="symbol-label fw-bolder bg-light-warning fs-4 fas fa-clipboard-list"> </span>
-            
-                          </div> <span class="fw-bold text-gray-900">HGTS888022</span></td>
-                          <td>40.0 Hr</td>
-                          <td>60.00 $</td>
-                          <td>2400.00 $</td>
-                        </tr>
-                  
-                                <!--end::Table row-->
-                        
-                       </tbody>
-                    </table>
-                    <!--end::Table-->
-                </div>
- 
-                  
-                    <div class="d-flex justify-content-end">
-                        <div class="mw-300px">
-                        <div class="d-flex flex-stack mb-3 fs-7">
-                            <div class="fw-semibold pe-10 text-gray-600 ">SUB TOTAL</div>
-                             <div class="text-end fw-bo/ld text-gray-800">4800.00 USD</div> 
-                         </div>                     
-                        <div class="d-flex flex-stack mb-3 fs-7">
-                            <div class="fw-semibold pe-10 text-gray-600 ">TAX AMOUNT</div>
-                             <div class="text-end fw-/bold text-gray-800">
-                                <input type="text" class="form-control w-100px text-right" value="0.00">
-                             </div> 
-                         </div>                     
-                        <div class="d-flex flex-stack mb-3 fs-6">
-                            <div class="fw-semibold pe-10 text-gray-600 ">TOTAL AMOUNT</div>
-                             <div class="text-end fw-bold text-gray-800">4800.00 USD</div> 
-                         </div>                     
-                    </div>
-                    </div>
+            <div class="vr me-5 mt-4 h-20px"></div>
+            <div class="me-5 my-1">
+              <span class="d-flex text-muted fs-8">Invoice Date</span>
+              <span class="fw-bold d-flex s-">
+                {{ invoiceDetails?.invoiceDate | date : "MMM dd, yyyy" }}</span
+              >
+            </div>
+            <div class="vr me-5 mt-4 h-20px"></div>
+            <div class="me-5 my-1">
+              <span class="d-flex text-muted fs-8">Invoice Amount</span>
+              <span class="fw-bold d-flex s-"
+                >{{ invoiceDetails?.totalAmount | number : "1.2-2" }}
+                {{ invoiceDetails?.currency }}</span
+              >
+            </div>
+          </div>
         </div>
+      </div>
 
+      <div class="separator separator-dashed my-5"></div>
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="text-body">
+          BILL TO <br />
+          <p class="fw-bold fs-4 my-2">
+            {{ invoiceDetails?.companyCode }}
+          </p>
+          {{ invoiceDetails?.companyAddress }}
+        </div>
+        <div
+          class="mw-175px mh-45px border mt-3 d-flex align-items-center justify-content-center min-h-35px min-w-40px overflow-hidden"
+        >
+          <img
+            src="../../../../assets/images/smartdocs.jpeg"
+            class="mw-100 mh-100"
+          />
+        </div>
+      </div>
+
+      <div class="my-7 text-body fw-semibold">INVOICE ITEMS</div>
+      <div class="table-responsive border w-100 mb-5 mt-8">
+        <!--begin::Table-->
+        <table
+          class="table table-row-bordered align-middle gy-4 gs-9 m-0 fs-7 text-gray-600"
+        >
+          <thead
+            class="border-bottom border-bottom-3 fw-semibold bg-light bg-opacity-75"
+          >
+            <tr>
+              <td class="min-w-350px">Item Name</td>
+              <td class="min-w-75px">Quantity</td>
+              <td class="min-w-75px">Unit Price</td>
+              <td class="min-w-75px">Amount</td>
+            </tr>
+          </thead>
+          <tbody class="fw-semibold">
+            <!--begin::Table row-->
+            <tr *ngFor="let item of invoiceDetails?.invoiceTimeSheetDetails">
+              <td>
+                <div class="symbol symbol-35px symbol-circle me-3">
+                  <span
+                    class="symbol-label fw-bolder bg-light-warning fs-4 fas fa-clipboard-list"
+                  >
+                  </span>
+                </div>
+                <span class="fw-bold text-gray-900">
+                  {{ item?.timeSheetId }}</span
+                >
+              </td>
+              <td>{{ item?.hours | number : "1.2-2" }} Hr</td>
+              <td>
+                {{ item.rate | number : "1.2-2" }}
+                {{ invoiceDetails?.currency }}
+              </td>
+              <td>
+                {{ item?.amount | number : "1.2-2" }}
+                {{ invoiceDetails?.currency }}
+              </td>
+            </tr>
+            <!--end::Table row-->
+            <!--begin::Table row-->
+
+            <!--end::Table row-->
+          </tbody>
+        </table>
+        <!--end::Table-->
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <div class="mw-300px">
+          <div class="d-flex flex-stack mb-3 fs-7">
+            <div class="fw-semibold pe-10 text-gray-600">SUB TOTAL</div>
+            <div class="text-end fw-bo/ld text-gray-800">
+              {{ invoiceDetails?.subAmount | number : "1.2-2"
+              }}{{ invoiceDetails?.currency }}
+            </div>
+          </div>
+          <div class="d-flex flex-stack mb-3 fs-7">
+            <div class="fw-semibold pe-10 text-gray-600">TAX AMOUNT</div>
+            <div class="text-end fw-bo/ld text-gray-800">
+              {{ invoiceDetails?.taxAmount | number : "1.2-2"
+              }}{{ invoiceDetails?.currency }}
+            </div>
+          </div>
+          <div class="d-flex flex-stack mb-3 fs-6">
+            <div class="fw-semibold pe-10 text-gray-600">TOTAL AMOUNT</div>
+            <div class="text-end fw-bold text-gray-800">
+              {{ invoiceDetails?.totalAmount | number : "1.2-2" }}
+              {{ invoiceDetails?.currency }}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    </div>
-
-
+  </div>
+</div>
+<div
+  *ngIf="isLoading"
+  class="pause d-flex align-items-center justify-content-center"
+>
+  <div class="spinner"></div>
+</div>
