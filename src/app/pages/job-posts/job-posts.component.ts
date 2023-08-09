@@ -78,7 +78,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       this.queryParam = JSON.parse(JSON.stringify(searchParams));
 
     const filterData = JSON.parse(sessionStorage.getItem('filterData')!);
-    if (filterData){
+    if (filterData) {
       this.selectedJobTypes = filterData.selectedJobTypes;
       this.selected = filterData.selected;
       this.filter.site = filterData.filter.site;
@@ -121,62 +121,69 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   getAllJobs() {
     const filterData = {
       filter: this.filter,
-      selectedJobTypes : this.selectedJobTypes,
+      selectedJobTypes: this.selectedJobTypes,
       selected: this.selected,
       selectedJobKindAll: this.selectedJobKindAll,
       selectedJobKind: this.selectedJobKind,
       selectedJobStatusAll: this.selectedJobStatusAll,
       selectedJobStatus: this.selectedJobStatus,
-      searchText: this.filter.searchText
-    }
+      searchText: this.filter.searchText,
+    };
     sessionStorage.setItem('searchFilters', JSON.stringify(this.queryParam));
     sessionStorage.setItem('filterData', JSON.stringify(filterData));
     this.isLoading = true;
 
-    this.apiSubscriptions.forEach(sub => sub.unsubscribe());
+    this.apiSubscriptions.forEach((sub) => sub.unsubscribe());
     this.apiSubscriptions = [];
-    this.apiSubscriptions.push(this.apiCalls
-      .get(this.endpoints.LIST_JOBS, this.queryParam)
-      .pipe(
-        catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the jobs'
-          );
+    this.apiSubscriptions.push(
+      this.apiCalls
+        .get(this.endpoints.LIST_JOBS, this.queryParam)
+        .pipe(
+          catchError(async (err) => {
+            this.utils.showSnackBarMessage(
+              this.snackBar,
+              'failed to fetch the jobs'
+            );
+            this.isLoading = false;
+            throw err;
+          })
+        )
+        .subscribe((response) => {
+          this.jobDetails = response;
           this.isLoading = false;
-          throw err;
-        })
-      )
-      .subscribe((response) => {
-        this.jobDetails = response;
-        this.isLoading = false;
-        this.cdr.detectChanges();
-        if((this.selectedTab == 'AppliedJob' || this.selectedTab == 'ConfirmedJob') && this.jobDetails?.length > 0){
-          for (let index = 0; index < this.jobDetails.length; index++) {
-            const element = this.jobDetails[index];
-            this.getProfilePics(element.jobApplicationId, element);
+          this.cdr.detectChanges();
+          if (
+            (this.selectedTab == 'AppliedJob' ||
+              this.selectedTab == 'ConfirmedJob') &&
+            this.jobDetails?.length > 0
+          ) {
+            for (let index = 0; index < this.jobDetails.length; index++) {
+              const element = this.jobDetails[index];
+              this.getProfilePics(element.jobApplicationId, element);
+            }
           }
-        }
-      })
+        })
     );
-    
   }
 
   private apiSubscriptions: Subscription[] = [];
-  getProfilePics(id: any, element: any){
-    this.apiSubscriptions.push(this.apiCalls.getDocument(this.endpoints.GET_JOB_APPL_PIC, {
-      jobApplicationId : id,
-      })
-      .pipe(
-        catchError(async (err) => {
-          this.isLoading = false;
+  getProfilePics(id: any, element: any) {
+    this.apiSubscriptions.push(
+      this.apiCalls
+        .getDocument(this.endpoints.GET_JOB_APPL_PIC, {
+          jobApplicationId: id,
         })
-      )
-      .subscribe(async (response: any) => {
-        element.profile = response.size > 0 ? await this.blobToBase64(response) : undefined;
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      })
+        .pipe(
+          catchError(async (err) => {
+            this.isLoading = false;
+          })
+        )
+        .subscribe(async (response: any) => {
+          element.profile =
+            response.size > 0 ? await this.blobToBase64(response) : undefined;
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        })
     );
   }
 
@@ -184,33 +191,33 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     return new Promise((resolve, _) => {
       const reader: any = new FileReader();
       reader.onloadend = () => {
-      const base64String = reader?.result?.split(",")[1];
-      const base64WithHeader = `data:image/jpeg;base64,${base64String}`;
-      resolve(base64WithHeader);
-    };
+        const base64String = reader?.result?.split(',')[1];
+        const base64WithHeader = `data:image/jpeg;base64,${base64String}`;
+        resolve(base64WithHeader);
+      };
       reader.readAsDataURL(blob);
     });
   }
 
   getUserByUserId(id: string) {
-    const queryParam = {
-      userId: id,
-    };
-    this.apiCalls
-      .get(this.endpoints.GET_USER, queryParam)
-      .pipe(
-        catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the user'
-          );
-          throw err;
-        })
-      )
-      .subscribe((response) => {
-        this.getBusinessUnits(/*response.companyCode*/);
-        this.getSitesList(/*response.companyCode*/);
-      });
+    // const queryParam = {
+    //   userId: id,
+    // };
+    // this.apiCalls
+    //   .get(this.endpoints.GET_USER, queryParam)
+    //   .pipe(
+    //     catchError(async (err) => {
+    //       this.utils.showSnackBarMessage(
+    //         this.snackBar,
+    //         'failed to fetch the user'
+    //       );
+    //       throw err;
+    //     })
+    //   )
+    //   .subscribe((response) => {
+    this.getBusinessUnits(/*response.companyCode*/);
+    this.getSitesList(/*response.companyCode*/);
+    // });
   }
 
   getBusinessUnits(/*code: string*/) {
@@ -317,8 +324,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     // }
 
     this.selectedTab = tab;
-    if(!from)
-      this.resetFilter('selectedTab');
+    if (!from) this.resetFilter('selectedTab');
     // TODO: hack until backend API is ready to provide data based on proper status.
     const vendorId = this.utils.getVendorId();
     switch (tab) {
