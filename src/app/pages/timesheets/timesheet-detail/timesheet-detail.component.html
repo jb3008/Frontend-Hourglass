@@ -184,7 +184,7 @@
               <table
                 mat-table
                 [dataSource]="dataSource[d.date]"
-                class="table table-row-bordered text-gray-600"
+                class="table table-row-bordered text-gray-600 qborder-table"
               >
                 <!-- taskId Column -->
                 <ng-container matColumnDef="taskId">
@@ -252,7 +252,7 @@
                       type="text"
                       (keypress)="numberOnly($event)"
                       [(ngModel)]="element.timeSpent"
-                      style="width: 100%"
+                      
                       class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10"
                       placeholder="hrs"
                     />
@@ -269,7 +269,7 @@
                         type="text"
                         class="form-control pe-10 py-2 fs- fw-normal cursor-pointer "
                         (click)="picker.open()"
-                        style="width: 100%"
+                      
                         [(ngModel)]="element.startDate"
                         [disabled]="
                           !auth?.vendorId ||
@@ -296,7 +296,7 @@
                         type="text"
                         class="form-control pe-10 py-2 fs- fw-normal cursor-pointer "
                         (click)="picker.open()"
-                        style="width: 100%"
+                      
                         [disabled]="
                           !auth?.vendorId ||
                           timeSheetDetails?.status !== 'DRAFT'

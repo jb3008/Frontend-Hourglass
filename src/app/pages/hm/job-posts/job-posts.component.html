@@ -33,7 +33,7 @@
     </div>
     <div class="row g-xl-12 mb-5 mb-xl-12">
         <div class="w-250px text-gray-600">
-            <div class="card p-4">
+            <div class="card p-4 fs-6">
                 <div class="position-relative input-icon  ">
                     <input type="text" class="form-control py-2 fs- fw-normal px-11" [(ngModel)]="filter.searchText"  placeholder="Search for a Job"  (keyup)="searchFilter($event)"/>
                     <span><i class="fa fa-search "></i></span>
@@ -43,13 +43,13 @@
                 </div>
 
                 <div class="py-4">
-                    Filter by <a class="px-4 fs-8 cursor-pointer" (click)="resetFilter()">Reset Filters</a>
+                    Filter by <a class="px-4 cursor-pointer" (click)="resetFilter()">Reset Filters</a>
                 </div>
                 <div class="separator mb-5"></div>
-                <div class="fs-8 text-muted mb-5">Period</div>
+                <div class="fs-7 text-muted mb-5">Period</div>
     
                 <!--begin::Input group-->
-                <div class="fv-row">
+                <div class="fv-row ">
                     <!--begin::Label-->
                     <!--end::Label-->
                     <div class="mb-1 ">Start Date</div>
@@ -74,7 +74,7 @@
                 <!--end::Input group-->
                 <div class="separator separator-dashed my-5"></div>
 
-                <div class="fs-8 text-muted mb-3">Work Area</div>
+                <div class="fs-7 text-muted mb-3">Work Area</div>
                 <div class="mb-5">
                     <mat-select class="hide-arrow form-select fs- py-2"  placeholder="Select Site" [(value)] = "filter.site" (selectionChange)="filterSite($event)">
                         <mat-option *ngFor="let sites of sitesList" [value]="sites.code">
@@ -92,8 +92,8 @@
                 <div class="separator separator-dashed mb-5"></div>
 
     
-                <div class="fs-8 text-muted mb-5">Job Type </div>
-                <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                <div class="fs-7 text-muted mb-5">Job Type </div>
+                <label class="checkbox ">
                     <input type="checkbox" [checked]="selected" value="All" (change)="filterJobType($event, -1)"/>
                     <span></span>
                     All
@@ -113,7 +113,7 @@
             <ng-container *ngIf="isMat">
             <div class="card overflow-hidden">
                                
-                <table mat-table [dataSource]="dataSource" class="table table-row-bordered gy-2 text-gray-600">
+                <table mat-table [dataSource]="dataSource" class="table table-row-bordered gy-2 text-gray-600 fs-6">
                     <!-- jobPost Column -->
                     <ng-container matColumnDef="id">
                         <th mat-header-cell *matHeaderCellDef class="align-middle"> Job Post ID/ Title </th>
@@ -121,7 +121,7 @@
                             <div class="w-250/px">
                                 <!-- <a routerLink="details" class="cursor-pointer fw-semibold"> {{element.id}} </a> -->
                                 <div class="cursor-pointer fw-semibold text-primary" (click)="goToDetails(element)">{{element.id}}</div>
-                                <div class="text-muted fs-7 text-truncate mw-325px">{{element.title}}  </div>
+                                <div class="text-muted   text-truncate mw-325px">{{element.title}}  </div>
                             </div>
                         </td>
                     </ng-container>

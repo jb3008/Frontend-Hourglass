@@ -214,20 +214,21 @@
                 </div>
     
                 <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4 d-flex align-items-center">Work hours per <span class="text-danger">*</span>
-                    <mat-select formControlName="workHourInterval" class="form-select fs- py-2 w-90px ms-2" placeholder="Select" (selectionChange)="checkValidHrs()">
-                        <mat-option value="Daily">
-                            Daily
-                        </mat-option>
-                        <mat-option value="Weekly">
-                            Weekly
-                        </mat-option>
-                        <mat-option value="Monthly">
-                            Monthly
-                        </mat-option>
-                    </mat-select>
+                    <label class="col-4 d-flex align-items-center">Work hours <span class="text-danger">*</span>
                 </label>
-                    <div class="col-8 d-flex gap-sm-2">
+                    <div class="col-8 d-flex gap-sm-2 align-items-center">
+                        Per
+                        <mat-select formControlName="workHourInterval" class="form-select fs- py-2 w-90px ms-2" placeholder="Select" (selectionChange)="checkValidHrs()">
+                            <mat-option value="Daily">
+                                Daily
+                            </mat-option>
+                            <mat-option value="Weekly">
+                                Weekly
+                            </mat-option>
+                            <mat-option value="Monthly">
+                                Monthly
+                            </mat-option>
+                        </mat-select>
                      <a  class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary">
                       <i class="bi bi-slash-circle minus-icon" (click)="changeInputValue(workHours, '-')"></i>
     
@@ -237,6 +238,7 @@
                         <a  class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary">
                       <i class="bi bi-plus-circle" (click)="changeInputValue(workHours, '+')"></i>
                       </a>
+                      hours
                     </div>
                 </div>
     
