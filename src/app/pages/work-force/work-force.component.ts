@@ -14,6 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, catchError, throwError } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-work-force',
   templateUrl: './work-force.component.html',
@@ -53,7 +54,8 @@ export class WorkForceComponent implements OnInit {
     private apiCalls: ApiCallsService,
     private utils: Utils,
     private cdr: ChangeDetectorRef,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {}
 
   async openModal() {
@@ -730,7 +732,6 @@ export class WorkForceComponent implements OnInit {
   }
   deleteTheWorkForce() {
     this.isLoading = true;
-    console.log(this.workForceId);
 
     let queryObj = {
       workForceid: this.workForceId,
@@ -756,5 +757,16 @@ export class WorkForceComponent implements OnInit {
         );
         this.cdr.detectChanges();
       });
+  }
+
+  delete() {
+    let msg = 'Do you want to delete this employee?';
+    this.utils.showDialogWithCancelButton(this.dialog, msg, (res: any) => {
+      this.isLoading = false;
+      if (res) {
+        this.deleteTheWorkForce();
+      }
+      this.cdr.detectChanges();
+    });
   }
 }

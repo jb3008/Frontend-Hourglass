@@ -950,16 +950,37 @@
         <div class="card card-custom gutter-b card-stretch">
           <!--begin::Body-->
           <div class="d-flex justify-content-end">
-            <button
+            <!-- <button
               type="button"
-              class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
+              class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary menu-item menu-accordion menu-sub-indention"
+              data-kt-menu-trigger="click"
+              data-kt-menu-placement="bottom-end"
+              data-kt-menu-flip="top-end"
+              (click)="workForceId = item.workForceId"
+            >
+              <span class="material-symbols-outlined"> more_vert </span>
+            </button>
+            <app-dropdown-menu1></app-dropdown-menu1> -->
+
+            <button
+              class="btn btn-sm btn-icon btn-active-light-primary"
               data-kt-menu-trigger="click"
               data-kt-menu-placement="bottom-end"
               data-kt-menu-flip="top-end"
               (click)="workForceId = item.workForceId; openEditModal()"
             >
-              <span class="material-symbols-outlined"> more_vert </span>
+              <i class="bi bi-pencil fs-2"></i>
             </button>
+            <button
+              class="btn btn-sm btn-icon btn-active-light-primary"
+              data-kt-menu-trigger="click"
+              data-kt-menu-placement="bottom-end"
+              data-kt-menu-flip="top-end"
+              (click)="workForceId = item.workForceId; delete()"
+            >
+              <i class="bi bi-trash fs-2"></i>
+            </button>
+            <app-dropdown-menu1></app-dropdown-menu1>
           </div>
           <div
             class="card-body text-center pt-4 cursor-pointer"
