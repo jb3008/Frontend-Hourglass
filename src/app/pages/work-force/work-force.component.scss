@@ -1,7 +1,9 @@
 :host {
   width: 100%;
 }
-
+.wf-btn::after {
+  display:none;
+}
 ::ng-deep {
   @media (min-width: 576px) {
     .modal-dialog {

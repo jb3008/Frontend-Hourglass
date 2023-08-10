@@ -62,6 +62,19 @@ tr.mat-header-row {
 .display-inline{display: inline-block}
 .input-icon span.pspinpClose{right: 0; left: unset; position: absolute;}
 .btn.btn-bg-light{background-color:#F0F9FF ;}
+.dd-info-btn,.dd-info-btn2{
+    position: absolute;
+    right: -15px;
+    z-index: 99;
+}
+.dd-info-btn2{ right: -22px;}
+.tc_table{
+    tr th:first-child,
+    tr td:first-child{
+        max-width: 70px;
+        width: 70px;
+    }
+}
 .qborder-table{
     th,td{ padding-left:10px ;}
     th.mat-header-cell:not(:first-child),
