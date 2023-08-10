@@ -11,11 +11,22 @@ const routes: Routes = [
 
   { path: 'timesheets', component: TimesheetsComponent },
   {
-    path: 'timesheets-details/:timeSheetId',
+    path: 'inbox-timesheets-details/:timeSheetId',
+    component: TimesheetDetailComponent,
+  },
+  {
+    path: 'outbox-timesheets-details/:timeSheetId',
     component: TimesheetDetailComponent,
   },
   { path: 'invoices', component: InvoicesComponent },
-  { path: 'invoices-details/:invoiceId', component: InvoicesDetailsComponent },
+  {
+    path: 'inbox-invoices-details/:invoiceId',
+    component: InvoicesDetailsComponent,
+  },
+  {
+    path: 'outbox-invoices-details/:invoiceId',
+    component: InvoicesDetailsComponent,
+  },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

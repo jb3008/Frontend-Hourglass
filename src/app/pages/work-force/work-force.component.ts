@@ -13,6 +13,7 @@ import { Utils } from 'src/app/services/utils';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, catchError, throwError } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-work-force',
   templateUrl: './work-force.component.html',
@@ -46,6 +47,7 @@ export class WorkForceComponent implements OnInit {
   workForceDetails: any = [];
   workForceId: number;
   constructor(
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private apiCalls: ApiCallsService,
@@ -160,102 +162,107 @@ export class WorkForceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const auth = this.utils.getAuth();
-    this.profilePicDoc = null;
-    this.imagePath = undefined;
-    this.workForceData = this.fb.group({
-      id: [''],
+    this.route.queryParams.subscribe((param) => {
+      if (param.type) {
+        this.isEngagedWorker = param.type;
+      }
+      const auth = this.utils.getAuth();
+      this.profilePicDoc = null;
+      this.imagePath = undefined;
+      this.workForceData = this.fb.group({
+        id: [''],
 
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      gender: ['Male', Validators.required],
-      workEmail: [
-        '',
-        Validators.compose([Validators.required, Validators.email]),
-      ],
-      personalEmail: [
-        '',
-        Validators.compose([Validators.required, Validators.email]),
-      ],
-      workPhone: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-        ]),
-      ],
-      workExperience: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-        ]),
-      ],
-      mobilePhone: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-        ]),
-      ],
-      dateOfBirth: ['', Validators.required],
-      bloodGroup: [''],
-      designation: ['', Validators.required],
-      location: ['', Validators.required],
-      currentAddress: ['', Validators.required],
-      permanentAddress: ['', Validators.required],
-      vendorId: [auth?.vendorId, Validators.required],
-      documentList: [[]],
-      createUser: [true],
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        gender: ['Male', Validators.required],
+        workEmail: [
+          '',
+          Validators.compose([Validators.required, Validators.email]),
+        ],
+        personalEmail: [
+          '',
+          Validators.compose([Validators.required, Validators.email]),
+        ],
+        workPhone: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.pattern('^[0-9]*$'),
+          ]),
+        ],
+        workExperience: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.pattern('^[0-9]*$'),
+          ]),
+        ],
+        mobilePhone: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.pattern('^[0-9]*$'),
+          ]),
+        ],
+        dateOfBirth: ['', Validators.required],
+        bloodGroup: [''],
+        designation: ['', Validators.required],
+        location: ['', Validators.required],
+        currentAddress: ['', Validators.required],
+        permanentAddress: ['', Validators.required],
+        vendorId: [auth?.vendorId, Validators.required],
+        documentList: [[]],
+        createUser: [true],
+      });
+
+      this.workForceEditData = this.fb.group({
+        id: [''],
+
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        gender: ['Male', Validators.required],
+        workEmail: [
+          '',
+          Validators.compose([Validators.required, Validators.email]),
+        ],
+        personalEmail: [
+          '',
+          Validators.compose([Validators.required, Validators.email]),
+        ],
+        workPhone: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.pattern('^[0-9]*$'),
+          ]),
+        ],
+        workExperience: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.pattern('^[0-9]*$'),
+          ]),
+        ],
+        mobilePhone: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.pattern('^[0-9]*$'),
+          ]),
+        ],
+        dateOfBirth: ['', Validators.required],
+        bloodGroup: [''],
+        designation: ['', Validators.required],
+        location: ['', Validators.required],
+        currentAddress: ['', Validators.required],
+        permanentAddress: ['', Validators.required],
+        vendorId: [auth?.vendorId, Validators.required],
+        documentList: [[]],
+        createUser: [true],
+        workForceId: [],
+      });
+      this.getAllWorkForceList();
     });
-
-    this.workForceEditData = this.fb.group({
-      id: [''],
-
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      gender: ['Male', Validators.required],
-      workEmail: [
-        '',
-        Validators.compose([Validators.required, Validators.email]),
-      ],
-      personalEmail: [
-        '',
-        Validators.compose([Validators.required, Validators.email]),
-      ],
-      workPhone: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-        ]),
-      ],
-      workExperience: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-        ]),
-      ],
-      mobilePhone: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-        ]),
-      ],
-      dateOfBirth: ['', Validators.required],
-      bloodGroup: [''],
-      designation: ['', Validators.required],
-      location: ['', Validators.required],
-      currentAddress: ['', Validators.required],
-      permanentAddress: ['', Validators.required],
-      vendorId: [auth?.vendorId, Validators.required],
-      documentList: [[]],
-      createUser: [true],
-      workForceId: [],
-    });
-    this.getAllWorkForceList();
   }
 
   get f() {
@@ -265,7 +272,6 @@ export class WorkForceComponent implements OnInit {
     return this.workForceEditData.controls;
   }
   async save() {
-    this.isLoading = true;
     this.cdr.detectChanges();
     const formData = new FormData();
     this.submitted = true;

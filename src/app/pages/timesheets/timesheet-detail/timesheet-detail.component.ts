@@ -392,10 +392,16 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
           this.ngOnInit();
           this.utils.showSnackBarMessage(
             this.snackBar,
-            'Time sheet created successfully'
+            this.getMessage(status)
           );
         }
       });
+  }
+
+  getMessage(status: string) {
+    return status === 'DRAFT'
+      ? 'Time sheet saved as draft successfully'
+      : 'Time sheet created successfully';
   }
 
   async removeTaskFromTimeSheet(obj: any, date: any, index: number) {

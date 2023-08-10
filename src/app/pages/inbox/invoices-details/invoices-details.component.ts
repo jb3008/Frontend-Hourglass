@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DrawerComponent } from 'src/app/_metronic/kt/components';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-invoices-details',
@@ -23,6 +23,7 @@ export class InvoicesDetailsComponent implements OnInit {
   isLoading = false;
   auth: any;
   invoiceId: any;
+  isInbox: boolean;
   constructor(
     private apiCalls: ApiCallsService,
     private utils: Utils,
@@ -30,10 +31,16 @@ export class InvoicesDetailsComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private fb: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    if (this.router.url.includes('inbox-invoices-details')) {
+      this.isInbox = true;
+    } else {
+      this.isInbox = false;
+    }
     this.auth = this.utils.getAuth();
     this.invoiceId = this.route.snapshot.paramMap.get('invoiceId');
     this.getAllInvoice();

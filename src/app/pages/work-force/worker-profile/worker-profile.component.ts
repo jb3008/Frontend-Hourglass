@@ -70,11 +70,11 @@ export class WorkerProfileComponent implements OnInit {
   documentsList: any;
   documentsAllList: any;
   documentsCount: any;
-
+  type: any;
   ngOnInit(): void {
     this.route.queryParams.subscribe((param) => {
       this.workForceId = param['workForceId'];
-
+      this.type = param['type'];
       this.workForceDocument = this.fb.group({
         id: [this.workForceId, Validators.required],
         documentList: [[]],

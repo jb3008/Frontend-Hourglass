@@ -15,7 +15,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 @Component({
   selector: 'app-timesheet-detail',
@@ -31,6 +31,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     private _formBuilder: FormBuilder
   ) {}
 
@@ -50,11 +51,15 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
   isEditableNew: boolean = true;
   lstTimeSheetStatus: any;
   auth: any;
-
+  isInbox: boolean;
   today = new Date();
   ngOnInit(): void {
     this.auth = this.utils.getAuth();
-
+    if (this.router.url.includes('inbox-timesheets-details')) {
+      this.isInbox = true;
+    } else {
+      this.isInbox = false;
+    }
     this.timeSheetId = this.route.snapshot.paramMap.get('timeSheetId');
     this.getAllTimeSheetStatus();
   }

@@ -45,6 +45,7 @@
           <a
             class="btn btn-bg-lig/ht border text-primary btn-sm"
             id="kt_inbox_collaborate_drawer_drawer_toggle"
+            *ngIf="isInbox && auth?.vendorId"
           >
             <img src="../../../../assets/images/icons/colla.svg" alt="" />
             Collaborate
@@ -53,7 +54,9 @@
           <a
             class="btn btn-primary btn-sm cursor-pointer ms-5"
             id="kt_inbox_invoice_reject_drawer_toggle"
-            *ngIf="!auth?.vendorId && invoiceDetails?.status === 'PENDING'"
+            *ngIf="
+              isInbox && !auth?.vendorId && invoiceDetails?.status === 'PENDING'
+            "
           >
             <i class="bi fs-4 bi-slash-circle"></i> Reject
           </a>
@@ -64,7 +67,9 @@
           <a
             class="btn btn-primary btn-sm cursor-pointer ms-5"
             id="kt_inbox_invoice_approve_drawer_toggle"
-            *ngIf="!auth?.vendorId && invoiceDetails?.status === 'PENDING'"
+            *ngIf="
+              isInbox && !auth?.vendorId && invoiceDetails?.status === 'PENDING'
+            "
           >
             <i class="bi fs-4 bi-check2-circle"></i> Approve
           </a>

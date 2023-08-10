@@ -2,7 +2,7 @@ export class AuthModel {
   token: string;
   'user-id': string;
   vendorId: string;
-  isAdmin: boolean = true;
+  isAdmin: boolean;
   setAuth(auth: AuthModel) {
     this.token = auth.token;
     this['user-id'] = auth['user-id'];

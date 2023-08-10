@@ -119,7 +119,7 @@
               >Work Email ID <span class="text-danger">*</span></label
             >
             <input
-              type="text"
+              type="email"
               formControlName="workEmail"
               class="form-control py-2 fs- fw-normal"
               placeholder="Enter Email ID"
@@ -143,7 +143,7 @@
               >Personal Email ID <span class="text-danger">*</span></label
             >
             <input
-              type="text"
+              type="email"
               formControlName="personalEmail"
               class="form-control py-2 fs- fw-normal"
               placeholder="Enter Email ID"
@@ -153,7 +153,9 @@
             class="fv-plugins-message-container"
             *ngIf="submitted && f.personalEmail.errors"
           >
-            <div class="fv-help-block">Personal Email ID is required</div>
+            <div class="fv-help-block" *ngIf="f.personalEmail.errors.required">
+              Personal Email ID is required
+            </div>
             <div class="fv-help-block" *ngIf="f.personalEmail.errors.email">
               Email must be a valid email address
             </div>
@@ -269,18 +271,17 @@
               <option value="" selected>Male</option>
               <option value="">Female</option>
               <option value="">Other</option>
-          </select>
+            </select>
             <div
-            class="fv-plugins-message-container"
-            *ngIf="submitted && f.gender.errors"
-          >
-            <div class="fv-help-block" *ngIf="f.gender.errors.required">
-              Gender is required
+              class="fv-plugins-message-container"
+              *ngIf="submitted && f.gender.errors"
+            >
+              <div class="fv-help-block" *ngIf="f.gender.errors.required">
+                Gender is required
+              </div>
             </div>
           </div>
-          </div>
         </div>
-        
       </div>
     </div>
 
@@ -619,7 +620,12 @@
             class="fv-plugins-message-container"
             *ngIf="submitted && editForm.personalEmail.errors"
           >
-            <div class="fv-help-block">Personal Email ID is required</div>
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.personalEmail.errors.required"
+            >
+              Personal Email ID is required
+            </div>
             <div
               class="fv-help-block"
               *ngIf="editForm.personalEmail.errors.email"
@@ -1020,7 +1026,10 @@
           <div
             class="card-body text-center pt-4 cursor-pointer"
             routerLink="worker-profile"
-            [queryParams]="{ workForceId: item.workForceId }"
+            [queryParams]="{
+              workForceId: item.workForceId,
+              type: isEngagedWorker
+            }"
           >
             <!--begin::Toolbar-->
 

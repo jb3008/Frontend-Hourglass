@@ -154,8 +154,10 @@
           <!-- <a routerLink="details" class="cursor-pointer"> -->
           <a
             (click)="readNotification(element)"
-            routerLink="/inbox/timesheets-details/{{ element.timeSheetId }}"
-            *ngIf="auth?.vendorId"
+            routerLink="/inbox/inbox-timesheets-details/{{
+              element.timeSheetId
+            }}"
+            *ngIf="auth?.vendorId && flag === 'Inbox'"
           >
             {{ element.timeSheetId }}
             <img
@@ -165,9 +167,39 @@
             />
           </a>
           <a
-            routerLink="/hm/inbox/timesheets-details/{{ element.timeSheetId }}"
             (click)="readNotification(element)"
-            *ngIf="!auth?.vendorId"
+            routerLink="/inbox/outbox-timesheets-details/{{
+              element.timeSheetId
+            }}"
+            *ngIf="auth?.vendorId && flag !== 'Inbox'"
+          >
+            {{ element.timeSheetId }}
+            <img
+              class="ms-1 align-middle"
+              src="../../../../assets/images/icons/table-arrow.svg"
+              alt=""
+            />
+          </a>
+          <a
+            routerLink="/hm/inbox/inbox-timesheets-details/{{
+              element.timeSheetId
+            }}"
+            (click)="readNotification(element)"
+            *ngIf="!auth?.vendorId && flag === 'Inbox'"
+          >
+            {{ element.timeSheetId }}
+            <img
+              class="ms-1 align-middle"
+              src="../../../../assets/images/icons/table-arrow.svg"
+              alt=""
+            />
+          </a>
+          <a
+            routerLink="/hm/inbox/outbox-timesheets-details/{{
+              element.timeSheetId
+            }}"
+            (click)="readNotification(element)"
+            *ngIf="!auth?.vendorId && flag !== 'Inbox'"
           >
             {{ element.timeSheetId }}
             <img

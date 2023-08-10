@@ -118,8 +118,8 @@
           <a
             class="cursor-pointer text-primary"
             (click)="readNotification(element)"
-            routerLink="/inbox/invoices-details/{{ element.invoiceId }}"
-            *ngIf="auth?.vendorId"
+            routerLink="/inbox/inbox-invoices-details/{{ element.invoiceId }}"
+            *ngIf="auth?.vendorId && flag === 'Inbox'"
           >
             {{ element.invoiceId }}
             <img
@@ -131,8 +131,38 @@
           <a
             class="cursor-pointer text-primary"
             (click)="readNotification(element)"
-            routerLink="/hm/inbox/invoices-details/{{ element.invoiceId }}"
-            *ngIf="!auth?.vendorId"
+            routerLink="/inbox/outbox-invoices-details/{{ element.invoiceId }}"
+            *ngIf="auth?.vendorId && flag !== 'Inbox'"
+          >
+            {{ element.invoiceId }}
+            <img
+              class="ms-1 align-middle"
+              src="../../../../assets/images/icons/table-arrow.svg"
+              alt=""
+            />
+          </a>
+          <a
+            class="cursor-pointer text-primary"
+            (click)="readNotification(element)"
+            routerLink="/hm/inbox/inbox-invoices-details/{{
+              element.invoiceId
+            }}"
+            *ngIf="!auth?.vendorId && flag === 'Inbox'"
+          >
+            {{ element.invoiceId }}
+            <img
+              class="ms-1 align-middle"
+              src="../../../../assets/images/icons/table-arrow.svg"
+              alt=""
+            />
+          </a>
+          <a
+            class="cursor-pointer text-primary"
+            (click)="readNotification(element)"
+            routerLink="/hm/inbox/outbox-invoices-details/{{
+              element.invoiceId
+            }}"
+            *ngIf="!auth?.vendorId && flag !== 'Inbox'"
           >
             {{ element.invoiceId }}
             <img

@@ -40,20 +40,28 @@
             class="btn btn-bg-lig/ht border text-primary btn-sm"
             id="kt_inbox_collaborate_drawer_drawer_toggle"
           >
-            <img src="../../../../assets/images/icons/colla.svg" alt="" />
+            <img
+              src="../../../../assets/images/icons/colla.svg"
+              alt=""
+              *ngIf="auth?.vendorId"
+            />
             Collaborate
           </a>
 
           <a
             class="btn btn-primary btn-sm cursor-pointer ms-5"
             id="kt_inbox_reject_drawer_toggle"
-            *ngIf="auth?.vendorId && timeSheetDetails?.status === 'ACTIVE'"
+            *ngIf="
+              isInbox && auth?.vendorId && timeSheetDetails?.status === 'ACTIVE'
+            "
           >
             <i class="bi fs-4 bi-slash-circle"></i> Reject
           </a>
           <a
             class="btn btn-primary btn-sm cursor-pointer ms-5"
-            *ngIf="auth?.vendorId && timeSheetDetails?.status === 'ACTIVE'"
+            *ngIf="
+              isInbox && auth?.vendorId && timeSheetDetails?.status === 'ACTIVE'
+            "
             id="kt_inbox_approve_drawer_toggle"
           >
             <i class="bi fs-4 bi-check2-circle"></i> Approve
@@ -62,6 +70,7 @@
             class="btn btn-primary btn-sm cursor-pointer ms-5"
             id="kt_inbox_reject_drawer_toggle"
             *ngIf="
+              isInbox &&
               !auth?.vendorId &&
               timeSheetDetails?.status === 'APPROVED_BY_VENDOR'
             "
@@ -71,6 +80,7 @@
           <a
             class="btn btn-primary btn-sm cursor-pointer ms-5"
             *ngIf="
+              isInbox &&
               !auth?.vendorId &&
               timeSheetDetails?.status === 'APPROVED_BY_VENDOR'
             "
