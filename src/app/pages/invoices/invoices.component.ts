@@ -166,7 +166,7 @@ export class InvoicesComponent implements OnInit {
   }
   onKeypressEvent(event: any) {
     setTimeout(() => {
-      if (event.target.value.length >= 2) {
+      if (event.target.value.length > 2) {
         this.getAllInvoice();
       } else if (event.target.value.length === 0) {
         this.getAllInvoice();
