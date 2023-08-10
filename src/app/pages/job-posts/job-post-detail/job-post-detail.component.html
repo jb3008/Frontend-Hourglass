@@ -72,9 +72,9 @@
         </div>
 
         <div class=" my-4">
-          <div> <div class="w-20px display-inline my-1 me-1"><img class="" src="../../../../assets/images/icons/calendar.svg" alt=""> </div> {{jobDetails?.startDate | date:'MMM dd'}} - {{jobDetails?.endDate | date:'dd MMM, yyyy'}}</div>
-          <div> <div class="w-20px  display-inline my-1 me-1"><img class="" src="../../../../assets/images/icons/case.svg" alt=""></div> {{jobDetails?.type}}</div>
-          <div class="mw-175px mh-45px border mt-3 d-flex align-items-center justify-content-center min-h-35px min-w-40px overflow-hidden"><img src="../../../../assets/images/smartdocs.jpeg" class="mw-100 mh-100" ></div>        </div>
+          <div> <div class="w-20px display-inline my-1 me-1"><img class="" src="./assets/images/icons/calendar.svg" alt=""> </div> {{jobDetails?.startDate | date:'MMM dd'}} - {{jobDetails?.endDate | date:'dd MMM, yyyy'}}</div>
+          <div> <div class="w-20px  display-inline my-1 me-1"><img class="" src="./assets/images/icons/case.svg" alt=""></div> {{jobDetails?.type}}</div>
+          <div class="mw-175px mh-45px border mt-3 d-flex align-items-center justify-content-center min-h-35px min-w-40px overflow-hidden"><img src="./assets/images/smartdocs.jpeg" class="mw-100 mh-100" ></div>        </div>
       </div>
       <!-- Tabs Start:: -->
       <div class="d-flex overflow-auto border-top">
@@ -294,10 +294,10 @@
         <!--begin::Lable-->
         <div class="font-weight-bolder text-warning py-1 font-size-lg w-250px">
           <a href="javascript:;" (click)="getAttachment(documents.id, documents.fileName)" class="btn btn-icon btn-active-color-primary btn-sm me-3"> 
-            <img src="../../../../assets/images/icons/download.svg" alt=""> 
+            <img src="./assets/images/icons/download.svg" alt=""> 
           </a>
           <a href="javascript:;" class="btn btn-icon btn-active-color-primary btn-sm " (click)="openModal(documents.id)"> 
-            <img src="../../../../assets/images/icons/eye.svg" alt=""> 
+            <img src="./assets/images/icons/eye.svg" alt=""> 
           </a>
         </div>
         <!--end::Lable-->
@@ -325,7 +325,7 @@
               <div
                 class="d-flex flex-center flex-shrink-0 bg-light rounded w-120px h-150px w-lg-120px h-lg-120px me-7 mb-4">
                 <img class="w-100 h-100" [src]="profilePic" alt="profile-pic">
-                <!-- <img class="w-100 h-100" src="../../../../../../assets/media/avatars/300-7.jpg" alt="image"> -->
+                <!-- <img class="w-100 h-100" src="./../../assets/media/avatars/300-7.jpg" alt="image"> -->
               </div>
               <!--end::Image-->
 
@@ -408,10 +408,10 @@
               <!-- <div class="d-flex w-sm-100 mr-2"><span class="badge badge-light-primary w-auto">Docktype name</span></div> -->
               <div class="font-weight-bolder text-warning py-1 font-size-lg min-w-100px">
                 <a href="javascript:;" (click)="getAttachment(doc.id, doc.fileName)" class="btn btn-icon  btn-active-color-primary btn-sm me-3">
-                  <img src="../../../../assets/images/icons/download.svg" alt="">
+                  <img src="./assets/images/icons/download.svg" alt="">
                 </a>
                 <a href="javascript:;" (click)="openModal(doc.id)" class="btn btn-icon   btn-active-color-primary btn-sm">
-                  <img src="../../../../assets/images/icons/eye.svg" alt="">
+                  <img src="./assets/images/icons/eye.svg" alt="">
                  </a>
               </div>
             </div>

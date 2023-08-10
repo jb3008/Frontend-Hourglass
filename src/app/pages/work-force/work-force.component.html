@@ -950,7 +950,20 @@
         <div class="card card-custom gutter-b card-stretch">
           <!--begin::Body-->
           <div class="d-flex justify-content-end">
-            <button
+
+            <div ngbDropdown class="d-flex justify-content-start"  placement="bottom-end">
+              <button class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary wf-btn"
+               id="dropdownMenu" ngbDropdownToggle>
+              <img src="./assets/images/icons/wf-dot.svg" alt="">
+              </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownMenu">
+                <button ngbDropdownItem (click)="workForceId = item.workForceId; openEditModal()">Edit</button>
+                <button ngbDropdownItem (click)="workForceId = item.workForceId; delete()">Delete</button>
+              </div>
+       </div>
+
+
+            <!-- <button
               type="button"
               class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary menu-item menu-accordion menu-sub-indention"
               data-kt-menu-trigger="click"
@@ -959,10 +972,10 @@
               (click)="workForceId = item.workForceId"
             >
               <span class="material-symbols-outlined"> more_vert </span>
-            </button>
+            </button> -->
             <!-- <app-dropdown-menu1></app-dropdown-menu1> -->
 
-            <button
+            <!-- <button
               class="btn btn-sm btn-icon btn-active-light-primary"
               data-kt-menu-trigger="click"
               data-kt-menu-placement="bottom-end"
@@ -979,7 +992,7 @@
               (click)="workForceId = item.workForceId; delete()"
             >
               <i class="bi bi-trash fs-2"></i>
-            </button>
+            </button> -->
             <app-dropdown-menu1></app-dropdown-menu1>
           </div>
           <div

@@ -10,7 +10,7 @@ import { SharedModule } from '../shared.modules';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -33,6 +33,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     NgxDocViewerModule,
     DropdownMenusModule,
     MatDialogModule,
+    NgbDropdownModule
   ],
   providers: [MatDatepickerModule, MatNativeDateModule],
 })

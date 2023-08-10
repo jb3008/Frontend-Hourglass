@@ -47,7 +47,7 @@
           </div>
           <div class="form-group  mb-5">
               <label class="mb-1">Assignee<span class="text-danger">*</span></label>
-              <div class="d-flex align-items-center">
+              <div class="d-flex align-items-center position-relative">
                 <div class="position-relative w-100">
                 <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
                           placeholder="Select"
@@ -60,7 +60,7 @@
   
                           </div>
                            <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
-                   <i class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer" ngbTooltip="You can type or search or pick the record from search button"></i>
+                   <i class="bi bi-info-circle-fill   fs-4 cursor-pointer dd-info-btn2" ngbTooltip="You can type or search or pick the record from search button"></i>
                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="setAssigneeValue($event)">
                       <mat-option *ngFor="let assignee of assigneeFilteredList | async" [value]="assignee">
                                    {{assignee.firstName}} {{assignee.lastName}}

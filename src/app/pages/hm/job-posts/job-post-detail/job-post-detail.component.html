@@ -67,9 +67,9 @@
         </div>
 
         <div class=" my-4">
-          <div> <div class="w-20px display-inline my-1 me-1"><img class="" src="../../../../../assets/images/icons/calendar.svg" alt=""> </div> {{jobDetails?.startDate | date:'MMM dd'}} - {{jobDetails?.endDate | date:'dd MMM, yyyy'}}</div>
-          <div><div class="w-20px  display-inline my-1 me-1"><img class="" src="../../../../../assets/images/icons/case.svg" alt=""></div>  {{jobDetails?.type}}</div>
-          <div class="mw-175px mh-45px border mt-3 d-flex align-items-center justify-content-center min-h-35px min-w-40px overflow-hidden"><img src="../../../../assets/images/smartdocs.jpeg" class="mw-100 mh-100" ></div>
+          <div> <div class="w-20px display-inline my-1 me-1"><img class="" src="./assets/images/icons/calendar.svg" alt=""> </div> {{jobDetails?.startDate | date:'MMM dd'}} - {{jobDetails?.endDate | date:'dd MMM, yyyy'}}</div>
+          <div><div class="w-20px  display-inline my-1 me-1"><img class="" src="./assets/images/icons/case.svg" alt=""></div>  {{jobDetails?.type}}</div>
+          <div class="mw-175px mh-45px border mt-3 d-flex align-items-center justify-content-center min-h-35px min-w-40px overflow-hidden"><img src="./assets/images/smartdocs.jpeg" class="mw-100 mh-100" ></div>
         </div>
       </div>
       <!-- Tabs Start:: -->
@@ -286,10 +286,10 @@
         <!--begin::Lable-->
         <div class="font-weight-bolder text-warning py-1 font-size-lg w-250px">
           <a href="javascript:;" (click)="getAttachment(documents.id, documents.fileName)" class="btn btn-icon  btn-active-color-primary btn-sm me-3">
-            <img src="../../../../../assets/images/icons/download.svg" alt="">
+            <img src="./assets/images/icons/download.svg" alt="">
           </a>
           <a href="javascript:;" class="btn btn-icon btn-sm " (click)="openModal(documents.id)"> 
-            <img src="../../../../../assets/images/icons/eye.svg" alt="">
+            <img src="./assets/images/icons/eye.svg" alt="">
           </a>
         </div>
         <!--end::Lable-->
@@ -313,7 +313,7 @@
           
           <!-- appID Column -->
           <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tdoc.svg" alt="" class="align-text-bottom"> Application ID</th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tdoc.svg" alt="" class="align-text-bottom"> Application ID</th>
             <td mat-cell *matCellDef="let element" class="align-middle"> 
               
               <a id="kt_application_drawer_toggle" class="fw-bold cursor-pointer" (click)="getApplicationDetails(element.id); setSelectedJobSeeker(element)"> {{element.id}}  </a>
@@ -322,7 +322,7 @@
                   
           <!-- worker Column -->
           <ng-container matColumnDef="worker">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/manager.svg" class="align-text-bottom" alt=""> 
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom" alt=""> 
               Worker </th>
             <td mat-cell *matCellDef="let element" class="align-middle">
               <div  class="symbol symbol-35px  rounded-1 me-3">
@@ -335,7 +335,7 @@
           
           <!-- appliedBy Column -->
           <ng-container matColumnDef="appliedBy">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/manager.svg" class="align-text-bottom" alt="">  Applied by  </th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom" alt="">  Applied by  </th>
             <td mat-cell *matCellDef="let element" class="align-middle">
               {{element.appliedBy?.firstName}} {{element.appliedBy?.lastName}}
            </td>
@@ -344,13 +344,13 @@
           
           <!-- lastUpdate Column -->
           <ng-container matColumnDef="modifierDate">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tclock.svg" alt="" class="align-text-bottom">  Last Update </th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tclock.svg" alt="" class="align-text-bottom">  Last Update </th>
             <td mat-cell *matCellDef="let element" class="align-middle"> {{element.modifierDate | date:'MMMM d, yyyy h:mm a'}} </td>
           </ng-container>
 
           <!-- costing Column -->
           <ng-container matColumnDef="workRate">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tcost.svg" alt="" class="align-text-bottom"> Costing </th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tcost.svg" alt="" class="align-text-bottom"> Costing </th>
             <td mat-cell *matCellDef="let element" class="align-middle"> {{element.workRate}} {{element.workRateCurrency}} </td>
           </ng-container>
         
@@ -361,13 +361,13 @@
               <div class="d-flex align-items-center justify-content-center gap-5">
 
                 <a id="kt_logs_drawer_toggle" class="cursor-pointer" (click)="setApplicationId(element.id)">
-                <img src="../../../../../assets/images/icons/jobpost-timer.svg" alt="">
+                <img src="./assets/images/icons/jobpost-timer.svg" alt="">
                   <!-- <i class="bi bi-clock fw-bold text-primary"></i> -->
                 </a>
 
                 <a id="kt_chat_drawer_toggle" class="cursor-pointer ">
                   <!-- <i class="bi bi-chat-left-text"></i>  -->
-                  <img src="../../../../../assets/images/icons/jobpost-msg.svg" alt="">
+                  <img src="./assets/images/icons/jobpost-msg.svg" alt="">
                   <span class="text-danger ms-2 fw-bold">5</span> </a>
               
                     <div ngbDropdown class="d-flex justify-content-start"  placement="bottom-end">
@@ -414,7 +414,7 @@
         
         <!-- appID Column -->
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/text.svg" alt="" class="align-text-bottom"> Application ID</th>
+          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/text.svg" alt="" class="align-text-bottom"> Application ID</th>
           <td mat-cell *matCellDef="let element" class="align-middle"> 
             <a id="kt_application_drawer_toggle" class="fw-bold cursor-pointer" (click)="getApplicationDetails(element.id)"> {{element.id}}  </a>
             <!-- <app-application-drawer></app-application-drawer> -->
@@ -423,7 +423,7 @@
                 
         <!-- worker Column -->
         <ng-container matColumnDef="worker">
-          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/manager.svg" class="align-text-bottom" alt=""> 
+          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom" alt=""> 
             Worker </th>
           <td mat-cell *matCellDef="let element" class="align-middle">
             <div  class="symbol symbol-35px  rounded-1 me-3">
@@ -436,20 +436,20 @@
         
         <!-- appliedBy Column -->
         <ng-container matColumnDef="appliedBy">
-          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/manager.svg" class="align-text-bottom" alt="">  Applied by  </th>
+          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom" alt="">  Applied by  </th>
           <td mat-cell *matCellDef="let element" class="align-middle">{{element.appliedBy?.firstName}} {{element.appliedBy?.lastName}} </td>
         </ng-container>
    
         
         <!-- lastUpdate Column -->
         <ng-container matColumnDef="modifierDate">
-          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tclock.svg" alt="" class="align-text-bottom">  Last Update </th>
+          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tclock.svg" alt="" class="align-text-bottom">  Last Update </th>
           <td mat-cell *matCellDef="let element" class="align-middle"> {{element.modifierDate | date:'MMMM d, yyyy h:mm a'}} </td>
         </ng-container>
 
         <!-- costing Column -->
         <ng-container matColumnDef="workRate">
-          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="../../../../../assets/images/icons/tcost.svg" alt="" class="align-text-bottom">  Costing </th>
+          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tcost.svg" alt="" class="align-text-bottom">  Costing </th>
           <td mat-cell *matCellDef="let element" class="align-middle"> {{element.workRate}} {{element.workRateCurrency}} </td>
         </ng-container>
       
@@ -459,9 +459,9 @@
           <td mat-cell *matCellDef="let element" class="align-middle"> 
             <div class="d-flex align-items-center justify-content-start gap-5">
 
-              <a id="kt_logs_drawer_toggle" class="btn btn-icon btn-sm "><img src="../../../../../assets/images/icons/jobpost-timer.svg" alt=""></a>
+              <a id="kt_logs_drawer_toggle" class="btn btn-icon btn-sm "><img src="./assets/images/icons/jobpost-timer.svg" alt=""></a>
 
-              <a id="kt_chat_drawer_toggle" class="btn btn-icon btn-sm"><img src="../../../../../assets/images/icons/jobpost-msg.svg" alt=""></a>
+              <a id="kt_chat_drawer_toggle" class="btn btn-icon btn-sm"><img src="./assets/images/icons/jobpost-msg.svg" alt=""></a>
 
                   <!-- <span  class="badge  fw-normal"
                   [ngClass]="{' badge-light-primary': element.action === 'Offer Letter sent', 
