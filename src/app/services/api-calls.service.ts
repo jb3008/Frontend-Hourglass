@@ -60,5 +60,16 @@ export class ApiCallsService {
     });
   }
 
+  put(endpoint: any, data?: any, queryParam?: any): Observable<any> {
+    const token: any = this.utils.getAuth();
+    const _headers = new HttpHeaders({
+      ['Auth-Token']: token.token,
+    });
+    return this.http.put(`${this.host_url}${endpoint}`, data, {
+      params: queryParam,
+      headers: _headers,
+      responseType: 'text',
+    });
+  }
   // { 'headers': { "Content-Type": "multipart/form-data" } }
 }

@@ -44,8 +44,8 @@ export class WorkForceComponent implements OnInit {
   };
   @ViewChild('modal') private modalComponent: ModalComponent;
   @ViewChild('modalEdit') private modalEditComponent: ModalComponent;
-  workForceDetails: any = [];
-  workForceId: number;
+  workForceDetails: any = null;
+  workForceId: any;
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -150,7 +150,6 @@ export class WorkForceComponent implements OnInit {
       currentAddress: ['', Validators.required],
       permanentAddress: ['', Validators.required],
       vendorId: [auth?.vendorId, Validators.required],
-      documentList: [[]],
       createUser: [true],
       workForceId: [],
     });
@@ -169,6 +168,7 @@ export class WorkForceComponent implements OnInit {
       const auth = this.utils.getAuth();
       this.profilePicDoc = null;
       this.imagePath = undefined;
+      this.workForceId = undefined;
       this.workForceData = this.fb.group({
         id: [''],
 
@@ -257,7 +257,6 @@ export class WorkForceComponent implements OnInit {
         currentAddress: ['', Validators.required],
         permanentAddress: ['', Validators.required],
         vendorId: [auth?.vendorId, Validators.required],
-        documentList: [[]],
         createUser: [true],
         workForceId: [],
       });
@@ -555,94 +554,6 @@ export class WorkForceComponent implements OnInit {
     return this.utils.numberOnly(event);
   }
 
-  droppedFilesEdit(allFiles: File[], name: string): void {
-    console.log('this.allFiles', allFiles);
-    console.log(this.workForceEditData.controls[name].value);
-    const fileLength = allFiles.length;
-    let flg: boolean = true;
-    for (let i = 0; i < fileLength; i++) {
-      const file = allFiles[i];
-
-      if (file.type.indexOf('image') == 0) {
-        this.utils.showSnackBarMessage(
-          this.snackBar,
-          'Please upload documents only'
-        );
-        flg = false;
-        break;
-      } else if (file.size > 2 * 1024 * 1024) {
-        // check if file size is > 2 MB
-        this.utils.showSnackBarMessage(
-          this.snackBar,
-          'Maximum allowed file size is 2 MB. Please choose another file.'
-        );
-        flg = false;
-        break;
-      } else {
-        const docList = this.workForceEditData.controls[name].value;
-        if (docList.length < 6) {
-          if (this.utils.isFileExist(docList, file)) {
-            this.utils.showSnackBarMessage(
-              this.snackBar,
-              'This file "' + file.name + '" already exist.'
-            );
-            flg = false;
-            break;
-          }
-        } else {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'Maximum 6 files can be added.'
-          );
-          flg = false;
-          break;
-        }
-      }
-    }
-    if (flg) {
-      for (let i = 0; i < fileLength; i++) {
-        this.workForceEditData.controls[name].value.push(allFiles[i]);
-      }
-    }
-  }
-
-  selectFileEdit(event: any, name: string) {
-    const file = event.target.files[0];
-    if (file.type.indexOf('image') == 0) {
-      this.utils.showSnackBarMessage(
-        this.snackBar,
-        'Please upload documents only'
-      );
-    } else if (file.size > 2 * 1024 * 1024) {
-      // check if file size is > 2 MB
-      this.utils.showSnackBarMessage(
-        this.snackBar,
-        'Maximum allowed file size is 2 MB. Please choose another file.'
-      );
-    } else {
-      const docList = this.workForceEditData.controls[name].value;
-      if (docList.length < 6) {
-        if (this.utils.isFileExist(docList, file)) {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'This file "' + file.name + '" already exist.'
-          );
-        } else {
-          this.workForceEditData.controls[name].value.push(file);
-        }
-      } else {
-        this.utils.showSnackBarMessage(
-          this.snackBar,
-          'Maximum 6 files can be added.'
-        );
-      }
-    }
-  }
-
-  clearFileEdit(name: string, index: number) {
-    this.workForceEditData.controls[name].value.splice(index, 1);
-  }
-
   getWorkForceDetails() {
     console.log(this.workForceId);
 
@@ -673,8 +584,12 @@ export class WorkForceComponent implements OnInit {
         );
         if (this.workForceDetails.gender === 'Male') {
           this.workForceEditData.controls['gender'].setValue('Male');
-        } else {
+        } else if (this.workForceDetails.gender === 'Female') {
           this.workForceEditData.controls['gender'].setValue('Female');
+        } else if (this.workForceDetails.gender === 'Other') {
+          this.workForceEditData.controls['gender'].setValue('Other');
+        } else {
+          this.workForceEditData.controls['gender'].setValue('Male');
         }
         this.workForceEditData.controls['workEmail'].setValue(
           this.workForceDetails.workEmail
@@ -721,10 +636,9 @@ export class WorkForceComponent implements OnInit {
   }
 
   async saveEditWorkForce() {
-    this.isLoading = true;
-    this.cdr.detectChanges();
-    const formData = new FormData();
+    const formData: any = new Object();
     this.submitted = true;
+    this.workForceEditData.controls['id'].setValue(this.workForceId);
     this.workForceEditData.controls['workForceId'].setValue(this.workForceId);
 
     // stop here if form is invalid
@@ -747,77 +661,100 @@ export class WorkForceComponent implements OnInit {
         const value = this.workForceEditData.value[key];
 
         if (value) {
-          formData.append(key, value);
+          formData[key] = value;
         }
       }
     }
-    const file = this.workForceEditData.get('documentList')?.value;
-    if (file.length != 0) {
-      file.forEach((fileObj: File) => {
-        const blob = new Blob([fileObj], { type: fileObj.type });
-        formData.append('documentList', blob, fileObj.name);
-      });
-    }
+
     console.log(this.workForceEditData);
-    // this.apiCalls
-    //   .post(this.endPoints.CREATE_WORK_FORCE, formData)
-    //   .pipe(
-    //     catchError(async (err) => {
-    //       this.isLoading = false;
-    //       setTimeout(() => {
-    //         throw err;
-    //       }, 10);
-    //       this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
-    //       this.cdr.detectChanges();
-    //     })
-    //   )
-    //   .subscribe(async (response) => {
-    //     if (this.isLoading) {
-    //       if (this.profilePicDoc) {
-    //         const imageFormData = new FormData();
-    //         const blob = new Blob([this.profilePicDoc], {
-    //           type: this.profilePicDoc.type,
-    //         });
-    //         imageFormData.append(
-    //           'profilePicDoc',
-    //           blob,
-    //           this.profilePicDoc.name
-    //         );
-    //         imageFormData.append('workForceId', response);
-    //         this.apiCalls
-    //           .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
-    //           .pipe(
-    //             catchError(async (err) => {
-    //               this.isLoading = false;
-    //               setTimeout(() => {
-    //                 throw err;
-    //               }, 10);
-    //               this.utils.showSnackBarMessage(
-    //                 this.snackBar,
-    //                 'Something went wrong on upload profile-pic'
-    //               );
-    //               this.cdr.detectChanges();
-    //             })
-    //           )
-    //           .subscribe(async (response) => {
-    //             this.isLoading = false;
-    //             await this.modalComponent.closeModal();
-    //             this.ngOnInit();
-    //             this.utils.showSnackBarMessage(
-    //               this.snackBar,
-    //               'Employee save successfully'
-    //             );
-    //           });
-    //       } else {
-    //         this.isLoading = false;
-    //         await this.modalComponent.closeModal();
-    //         this.ngOnInit();
-    //         this.utils.showSnackBarMessage(
-    //           this.snackBar,
-    //           'Employee save successfully'
-    //         );
-    //       }
-    //     }
-    //   });
+    this.apiCalls
+      .put(this.endPoints.UPDATE_WORK_FORCE, formData)
+      .pipe(
+        catchError(async (err) => {
+          this.isLoading = false;
+          setTimeout(() => {
+            throw err;
+          }, 10);
+          this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe(async (response) => {
+        if (this.isLoading) {
+          if (this.profilePicDoc) {
+            const imageFormData = new FormData();
+            const blob = new Blob([this.profilePicDoc], {
+              type: this.profilePicDoc.type,
+            });
+            imageFormData.append(
+              'profilePicDoc',
+              blob,
+              this.profilePicDoc.name
+            );
+            imageFormData.append('workForceId', this.workForceId);
+            this.apiCalls
+              .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
+              .pipe(
+                catchError(async (err) => {
+                  this.isLoading = false;
+                  setTimeout(() => {
+                    throw err;
+                  }, 10);
+                  this.utils.showSnackBarMessage(
+                    this.snackBar,
+                    'Something went wrong on upload profile-pic'
+                  );
+                  this.cdr.detectChanges();
+                })
+              )
+              .subscribe(async (response) => {
+                this.isLoading = false;
+                await this.modalEditComponent.closeModal();
+                this.ngOnInit();
+                this.utils.showSnackBarMessage(
+                  this.snackBar,
+                  'Employee update successfully'
+                );
+              });
+          } else {
+            this.isLoading = false;
+            await this.modalEditComponent.closeModal();
+            this.ngOnInit();
+            this.utils.showSnackBarMessage(
+              this.snackBar,
+              'Employee update successfully'
+            );
+          }
+        }
+      });
+  }
+  deleteTheWorkForce() {
+    this.isLoading = true;
+    console.log(this.workForceId);
+
+    let queryObj = {
+      workForceid: this.workForceId,
+    };
+    this.apiCalls
+      .delete(this.endPoints.DELETE_WORK_FORCE, queryObj)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to delete the work force'
+          );
+          this.isLoading = false;
+          this.cdr.detectChanges();
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.isLoading = false;
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Employee deleted successfully'
+        );
+        this.cdr.detectChanges();
+      });
   }
 }

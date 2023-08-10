@@ -90,6 +90,8 @@ const EndPoints = {
   UPDATE_INVOICE_STATUS: '/hourglass/payment/invoice/updateInvoiceStatus.api',
   READ_NOTIFICATION: '/hourglass/notification/markNotificationAsRead.api',
   GET_NOTIFICATION_COUNT: '/hourglass/notification/getNotificationCount.api',
+  UPDATE_WORK_FORCE: '/hourglass/work-force/update.api',
+  DELETE_WORK_FORCE: '/hourglass/work-force/delete.api',
 };
 
 export default EndPoints;

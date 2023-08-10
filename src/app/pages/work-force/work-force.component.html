@@ -513,6 +513,7 @@
                   ? workForceDetails?.profile
                   : imagePath || '../../../../assets/media/avatars/blank.png'
               "
+              onError="this.src='../../../../assets/media/avatars/blank.png'"
               class=""
               alt=""
             />
@@ -757,15 +758,14 @@
         </div>
         <div class="col-2 p-0 ps-2">
           <div class="form-group">
-            <label class="mb-1"
-              >Gender <span class="text-danger">*</span></label
-            >
+            <label class="mb-1">Gender </label>
             <mat-select
               class="form-select fs- py-2 w-100px rounded-start-0"
               formControlName="gender"
             >
-              <mat-option value="Male">Male</mat-option>
+              <mat-option value="Male" selected>Male</mat-option>
               <mat-option value="Female">Female</mat-option>
+              <mat-option value="Other">Other</mat-option>
             </mat-select>
           </div>
           <div
@@ -921,69 +921,6 @@
         Create User (Allow access to application)
       </label>
     </div>
-    <div class="mb-1">Attachments</div>
-    <div class="fv-row mb-5">
-      <!--begin::Dropzone-->
-      <div
-        class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
-        DropZone
-        (onFileDropped)="droppedFilesEdit($event, 'documentList')"
-        (click)="fileInputOther.click()"
-      >
-        <!--begin::Message-->
-        <div class="text-center w-100 text-muted">
-          <!--begin::Icon-->
-          <i class="fas fa-cloud-upload-alt fs-2x"></i>
-          <!--end::Icon-->
-          <!--begin::Info-->
-          <div class="ms-4">
-            <input
-              type="file"
-              hidden
-              #fileInputOther
-              (change)="selectFileEdit($event, 'documentList')"
-              accept=".pdf,.doc,.docx,.xls,.xlsx"
-            />
-            <h3 class="fs-5 mb-1">
-              <a class="text-primary">Click to upload </a> or Drop files here.
-            </h3>
-            <span class="fs-7 fw-semibold text-gray-400"
-              >.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb); maximum 6
-              files</span
-            >
-          </div>
-          <!--end::Info-->
-        </div>
-      </div>
-      <div
-        *ngIf="workForceEditData.controls['documentList'].value"
-        class="d-flex flex-wrap"
-      >
-        <a
-          *ngFor="
-            let doc of workForceEditData.controls['documentList'].value;
-            let index = index
-          "
-          class="me-3 mt-4 border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between mw-325px"
-        >
-          <div
-            class="text-truncate pspmw95"
-            [ngbTooltip]="doc.name"
-            [openDelay]="600"
-          >
-            {{ doc.name }}
-          </div>
-          <span class="cursor-pointer ms-3">
-            <i
-              class="bi bi-x-circle"
-              (click)="clearFileEdit('documentList', index)"
-            ></i
-          ></span>
-        </a>
-      </div>
-
-      <!--end::Dropzone-->
-    </div>
 
     <div class="modal-footer bg-light p-3 px-5">
       <button
@@ -1019,6 +956,7 @@
               data-kt-menu-trigger="click"
               data-kt-menu-placement="bottom-end"
               data-kt-menu-flip="top-end"
+              (click)="workForceId = item.workForceId; openEditModal()"
             >
               <span class="material-symbols-outlined"> more_vert </span>
             </button>
