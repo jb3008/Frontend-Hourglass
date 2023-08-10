@@ -34,6 +34,7 @@ export class TimesheetsComponent implements OnInit {
     'timeSpent',
     'status',
   ];
+  isApiLoad: boolean = false;
   dataSource = new MatTableDataSource<PeriodicElement>([]);
   endPoints = EndPoints;
   auth: any;
@@ -46,6 +47,7 @@ export class TimesheetsComponent implements OnInit {
   ngAfterViewInit() {}
   ngOnInit(): void {
     this.auth = this.utils.getAuth();
+    this.isApiLoad = false;
     this.timeSheetFilter = this.fb.group({
       timeSheetTaskId: [''],
       timeSheetId: [''],
@@ -62,8 +64,18 @@ export class TimesheetsComponent implements OnInit {
     const utcDate = date.toISOString();
     return utcDate;
   }
+  onKeypressEvent(event: any) {
+    setTimeout(() => {
+      if (event.target.value.length >= 2) {
+        this.getAllTimesheet();
+      } else if (event.target.value.length === 0) {
+        this.getAllTimesheet();
+      }
+    });
+  }
   getAllTimesheet() {
     this.isLoading = true;
+    this.isApiLoad = false;
     let filter: any = {};
     if (this.timeSheetFilter.controls['status'].value !== 'All') {
       filter.status = [this.timeSheetFilter.controls['status'].value];
@@ -97,6 +109,7 @@ export class TimesheetsComponent implements OnInit {
             this.snackBar,
             'failed to fetch the time-sheet'
           );
+          this.isApiLoad = true;
           this.dataSource = new MatTableDataSource<any>([]);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
@@ -127,6 +140,7 @@ export class TimesheetsComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.isLoading = false;
+        this.isApiLoad = true;
         this.cdr.detectChanges();
       });
   }

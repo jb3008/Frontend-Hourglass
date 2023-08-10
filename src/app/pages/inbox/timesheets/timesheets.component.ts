@@ -24,7 +24,7 @@ export class TimesheetsComponent implements OnInit {
     private fb: FormBuilder
   ) {}
   timeSheetList: any = [];
-
+  isApiLoad: boolean = false;
   displayedColumns: string[] = [
     'timeSheetId',
     'employee',
@@ -46,6 +46,7 @@ export class TimesheetsComponent implements OnInit {
   flag: any = 'Inbox';
   ngAfterViewInit() {}
   ngOnInit(): void {
+    this.isApiLoad = false;
     this.auth = this.utils.getAuth();
     this.timeSheetFilter = this.fb.group({
       timeSheetTaskId: [''],
@@ -83,6 +84,7 @@ export class TimesheetsComponent implements OnInit {
   }
 
   getAllTimesheet() {
+    this.isApiLoad = false;
     this.isLoading = true;
     let filter: any = {};
     if (this.timeSheetFilter.controls['status'].value !== 'All') {
@@ -121,6 +123,7 @@ export class TimesheetsComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.isLoading = false;
+          this.isApiLoad = true;
           this.cdr.detectChanges();
           throw err;
         })
@@ -144,6 +147,7 @@ export class TimesheetsComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.isLoading = false;
+        this.isApiLoad = true;
         this.cdr.detectChanges();
       });
   }
@@ -201,6 +205,15 @@ export class TimesheetsComponent implements OnInit {
         )
         .subscribe(async (response) => {});
     }
+  }
+  onKeypressEvent(event: any) {
+    setTimeout(() => {
+      if (event.target.value.length >= 2) {
+        this.getAllTimesheet();
+      } else if (event.target.value.length === 0) {
+        this.getAllTimesheet();
+      }
+    });
   }
 }
 

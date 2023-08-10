@@ -26,6 +26,8 @@
           formControlName="timeSheetId"
           class="form-control py-2 px-3 fs- fw-normal pe-10"
           placeholder="Search by Timesheet # "
+          (keypress)="onKeypressEvent($event)"
+          (keydown)="onKeypressEvent($event)"
         />
         <span><i class="fa fa-search"></i></span>
       </div>
@@ -35,6 +37,8 @@
           formControlName="workOrderId"
           class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10"
           placeholder="Search by Work Order"
+          (keypress)="onKeypressEvent($event)"
+          (keydown)="onKeypressEvent($event)"
         />
         <span><i class="fa fa-search"></i></span>
       </div>
@@ -44,6 +48,8 @@
           formControlName="searchByEmployee"
           class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10"
           placeholder="Search by Employee"
+          (keypress)="onKeypressEvent($event)"
+          (keydown)="onKeypressEvent($event)"
         />
         <span><i class="fa fa-search"></i></span>
       </div>
@@ -53,6 +59,7 @@
           id=""
           formControlName="status"
           class="form-select fs- py-2 w-200px"
+          (change)="getAllTimesheet()"
         >
           <option value="All">All Status</option>
           <option value="DRAFT">Draft</option>
@@ -72,6 +79,7 @@
           formControlName="fromDate"
           [matDatepicker]="picker"
           placeholder="Select From Date"
+          (dateChange)="getAllTimesheet()"
         />
         <span class="cursor-pointer" (click)="picker.open()"
           ><i class="far fa-calendar"></i
@@ -87,6 +95,7 @@
           [matDatepicker]="pickerTo"
           formControlName="toDate"
           placeholder="Select To Date"
+          (dateChange)="getAllTimesheet()"
         />
         <span class="cursor-pointer" (click)="pickerTo.open()"
           ><i class="far fa-calendar"></i
@@ -307,7 +316,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <div
-      *ngIf="dataSource.data.length === 0"
+      *ngIf="isApiLoad && dataSource.data.length === 0"
       class="text-center fw-bold fs-3 mt-2"
     >
       No Records Found

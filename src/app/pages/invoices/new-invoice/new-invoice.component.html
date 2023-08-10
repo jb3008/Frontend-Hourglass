@@ -73,7 +73,7 @@
                     *ngFor="let list of WorkOrderSearchResult | async"
                     [value]="list"
                   >
-                    {{ list.title }}
+                    {{ list.title }} ({{ list.workOrderId }})
                   </mat-option>
                 </mat-autocomplete>
                 <div

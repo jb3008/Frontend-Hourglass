@@ -24,7 +24,7 @@ export class InvoicesComponent implements OnInit {
     private authService: AuthService,
     private fb: FormBuilder
   ) {}
-
+  isApiLoad: boolean = false;
   displayedColumns: string[] = [
     'invoiceId',
     'invoiceDate',
@@ -43,6 +43,7 @@ export class InvoicesComponent implements OnInit {
   auth: any;
   ngAfterViewInit() {}
   ngOnInit(): void {
+    this.isApiLoad = false;
     this.auth = this.utils.getAuth();
     this.invoiceFilter = this.fb.group({
       invoiceId: [''],
@@ -76,6 +77,7 @@ export class InvoicesComponent implements OnInit {
   }
   getAllInvoice() {
     this.isLoading = true;
+    this.isApiLoad = false;
     let filter: any = {};
     if (this.invoiceFilter.controls['status'].value !== 'All') {
       filter.status = [this.invoiceFilter.controls['status'].value];
@@ -101,6 +103,7 @@ export class InvoicesComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.isLoading = false;
+          this.isApiLoad = true;
           this.cdr.detectChanges();
           throw err;
         })
@@ -117,6 +120,7 @@ export class InvoicesComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.isLoading = false;
+        this.isApiLoad = true;
         this.cdr.detectChanges();
       });
   }
@@ -136,6 +140,15 @@ export class InvoicesComponent implements OnInit {
         )
         .subscribe(async (response) => {});
     }
+  }
+  onKeypressEvent(event: any) {
+    setTimeout(() => {
+      if (event.target.value.length >= 2) {
+        this.getAllInvoice();
+      } else if (event.target.value.length === 0) {
+        this.getAllInvoice();
+      }
+    });
   }
 }
 

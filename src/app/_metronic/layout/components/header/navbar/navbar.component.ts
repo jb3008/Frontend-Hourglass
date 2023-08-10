@@ -39,6 +39,9 @@ export class NavbarComponent implements OnInit {
     }
 
     this.getNotificationCounter();
+    setInterval(() => {
+      this.getNotificationCounter();
+    }, 300000);
   }
   getNotificationCounter() {
     this.apiCalls
