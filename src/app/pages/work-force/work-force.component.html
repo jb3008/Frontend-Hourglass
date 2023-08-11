@@ -759,14 +759,14 @@
         <div class="col-2 p-0 ps-2">
           <div class="form-group">
             <label class="mb-1">Gender </label>
-            <mat-select
+            <select
               class="form-select fs- py-2 w-100px rounded-start-0"
               formControlName="gender"
             >
-              <mat-option value="Male" selected>Male</mat-option>
-              <mat-option value="Female">Female</mat-option>
-              <mat-option value="Other">Other</mat-option>
-            </mat-select>
+              <option value="Male" selected>Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
           <div
             class="fv-plugins-message-container"
@@ -950,18 +950,33 @@
         <div class="card card-custom gutter-b card-stretch">
           <!--begin::Body-->
           <div class="d-flex justify-content-end">
-
-            <div ngbDropdown class="d-flex justify-content-start"  placement="bottom-end">
-              <button class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary wf-btn"
-               id="dropdownMenu" ngbDropdownToggle>
-              <img src="./assets/images/icons/wf-dot.svg" alt="">
+            <div
+              ngbDropdown
+              class="d-flex justify-content-start"
+              placement="bottom-end"
+            >
+              <button
+                class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary wf-btn"
+                id="dropdownMenu"
+                ngbDropdownToggle
+              >
+                <img src="./assets/images/icons/wf-dot.svg" alt="" />
               </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownMenu">
-                <button ngbDropdownItem (click)="workForceId = item.workForceId; openEditModal()">Edit</button>
-                <button ngbDropdownItem (click)="workForceId = item.workForceId; delete()">Delete</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownMenu">
+                <button
+                  ngbDropdownItem
+                  (click)="workForceId = item.workForceId; openEditModal()"
+                >
+                  Edit
+                </button>
+                <button
+                  ngbDropdownItem
+                  (click)="workForceId = item.workForceId; delete()"
+                >
+                  Delete
+                </button>
               </div>
-       </div>
-
+            </div>
 
             <!-- <button
               type="button"

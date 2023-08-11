@@ -60,6 +60,18 @@ export class ApiCallsService {
     });
   }
 
+  deleteWithTextResponse(endpoint: any, queryParams?: any): Observable<any> {
+    const token: any = this.utils.getAuth();
+    const _headers = new HttpHeaders({
+      ['Auth-Token']: token.token,
+    });
+    return this.http.delete(`${this.host_url}${endpoint}`, {
+      params: queryParams,
+      headers: _headers,
+      responseType: 'text',
+    });
+  }
+
   put(endpoint: any, data?: any, queryParam?: any): Observable<any> {
     const token: any = this.utils.getAuth();
     const _headers = new HttpHeaders({

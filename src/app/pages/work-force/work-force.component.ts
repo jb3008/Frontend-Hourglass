@@ -737,7 +737,7 @@ export class WorkForceComponent implements OnInit {
       workForceid: this.workForceId,
     };
     this.apiCalls
-      .delete(this.endPoints.DELETE_WORK_FORCE, queryObj)
+      .deleteWithTextResponse(this.endPoints.DELETE_WORK_FORCE, queryObj)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(
@@ -751,6 +751,7 @@ export class WorkForceComponent implements OnInit {
       )
       .subscribe((response) => {
         this.isLoading = false;
+        this.ngOnInit();
         this.utils.showSnackBarMessage(
           this.snackBar,
           'Employee deleted successfully'
