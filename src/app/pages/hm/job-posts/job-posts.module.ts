@@ -12,6 +12,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import { JobPostDetailComponent } from './job-post-detail/job-post-detail.component';
 import { CreateJobPostComponent } from './create-job-post/create-job-post.component';
@@ -55,6 +56,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatInputModule,
     MatNativeDateModule,
     MatTabsModule,
+    MatCheckboxModule,
     InlineSVGModule,
     MatSelectModule,
     MatDialogModule,

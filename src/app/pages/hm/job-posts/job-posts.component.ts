@@ -266,8 +266,8 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
 
   selected = false;
   filterJobType(event: any, index: any) {
-    if (event.target.checked) {
-      if (event.target.value == 'All') {
+    if (event.checked) {
+      if (event.source.value == 'All') {
         this.selected = true;
         this.queryParam.types = []; //if we click select all with any other already selected
         this.jobTypes.forEach((type, index) => {
@@ -275,13 +275,13 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
           this.selectedJobTypes[index] = true;
         });
       } else {
-        this.queryParam.types?.push(event.target.value);
+        this.queryParam.types?.push(event.source.value);
         this.selectedJobTypes[index] = true;
 
         this.selected = this.queryParam.types?.length == this.jobTypes.length;
       }
     } else {
-      if (event.target.value == 'All') {
+      if (event.source.value == 'All') {
         this.selected = false;
         this.queryParam.types = [];
         this.jobTypes.forEach((type, index) => {
@@ -290,7 +290,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       } else {
         this.selected = false;
         this.queryParam.types = this.queryParam?.types?.filter(
-          (val) => val != event.target.value
+          (val) => val != event.source.value
         );
         this.selectedJobTypes[index] = false;
       }

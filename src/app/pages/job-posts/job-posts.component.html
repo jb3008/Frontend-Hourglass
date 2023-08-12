@@ -51,51 +51,76 @@
                 <div class="separator mb-5"></div>
 
                 <div class="fs-8 text-muted mb-5">Job Type </div>
-                <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                <!-- <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
                     <input type="checkbox" [checked]="selected" value="All" (change)="filterJobType($event, -1)"/>
                     <span></span>
                     All
-                </label>
-                <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary"
-                    *ngFor="let types of jobTypes;let index = index;">
-                    <input type="checkbox" [checked]="selectedJobTypes[index]" [value]="types.id" (change)="filterJobType($event, index)"/>
-                    <span></span>
+                </label> -->
+                <mat-checkbox color="primary"
+                 [checked]="selected" value="All" (change)="filterJobType($event, -1)">
+                    All
+                </mat-checkbox>
+
+                <label *ngFor="let types of jobTypes;let index = index;">
+                    <mat-checkbox color="primary"  [checked]="selectedJobTypes[index]" [value]="types.id" (change)="filterJobType($event, index)">
+                    <!-- <span></span> -->
                     {{types.name}}
+                </mat-checkbox>
                 </label>
 
                 <ng-container *ngIf="selectedTab=='AppliedJob'">
                     <div class="fs-8 text-muted mb-2 mt-5">JOB Status </div>
-                    <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                    <!-- <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
                             <input type="checkbox" value="All" [checked]="selectedJobStatusAll" (change)="filterJobStatus($event, -1)"/>
                         <span></span> All Types
+                    </label> -->
+                    <mat-checkbox color="primary"
+                    [checked]="selectedJobStatusAll" value="All" (change)="filterJobStatus($event, -1)">
+                       All Types
+                   </mat-checkbox>
+                    <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                        <mat-checkbox color="primary" value="OfferSent" [checked]="selectedJobStatus[0]" (change)="filterJobStatus($event, 0)">
+                        <!-- <span></span>  -->
+                        Offer Sent
+                    </mat-checkbox>
                     </label>
                     <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
-                            <input type="checkbox" value="OfferSent" [checked]="selectedJobStatus[0]" (change)="filterJobStatus($event, 0)"/>
-                        <span></span> Offer Sent
+                           <mat-checkbox color="primary" value="OnHold" [checked]="selectedJobStatus[1]" (change)="filterJobStatus($event, 1)">
+                        <!-- <span></span> -->
+                          On Hold
+                          </mat-checkbox>
                     </label>
                     <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
-                        <input type="checkbox" value="OnHold" [checked]="selectedJobStatus[1]" (change)="filterJobStatus($event, 1)"/>
-                        <span></span>  On Hold
-                    </label>
-                    <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
-                        <input type="checkbox" value="Rejected" [checked]="selectedJobStatus[2]" (change)="filterJobStatus($event, 2)"/>
-                        <span></span>  Rejected
+                           <mat-checkbox color="primary" value="Rejected" [checked]="selectedJobStatus[2]" (change)="filterJobStatus($event, 2)">
+                        <!-- <span></span> -->
+                          Rejected
+                          </mat-checkbox>
                     </label>
                     </ng-container>
            
                     <div class="separator separator-dashed my-5"></div>
             <div class="fs-8 text-muted mb-2">PAY RATE </div>
-                <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                <!-- <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
                     <input type="checkbox" value="All" [checked]="selectedJobKindAll" (change)="filterJobKind($event, -1)"/>
                     <span></span> All 
+                </label> -->
+
+                <mat-checkbox color="primary"
+                [checked]="selectedJobKindAll" value="All" (change)="filterJobKind($event, -1)">
+                   All 
+               </mat-checkbox>
+
+                <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                       <mat-checkbox color="primary" value="Hourly" [checked]="selectedJobKind[0]" (change)="filterJobKind($event, 0)">
+                    <!-- <span></span> -->
+                     Hour Based
+                     </mat-checkbox>
                 </label>
                 <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
-                    <input type="checkbox" value="Hourly" [checked]="selectedJobKind[0]" (change)="filterJobKind($event, 0)"/>
-                    <span></span> Hour Based
-                </label>
-                <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
-                    <input type="checkbox" value="Fixed" [checked]="selectedJobKind[1]" (change)="filterJobKind($event, 1)"/>
-                    <span></span> Fixed
+                       <mat-checkbox color="primary" value="Fixed" [checked]="selectedJobKind[1]" (change)="filterJobKind($event, 1)">
+                    <!-- <span></span> -->
+                     Fixed
+                     </mat-checkbox>
                 </label>
                            
                 <div class="separator separator-dashed my-5"></div>
