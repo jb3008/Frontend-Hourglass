@@ -372,8 +372,8 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
 
   selected = false;
   filterJobType(event: any, index: any) {
-    if (event.target.checked) {
-      if (event.target.value == 'All') {
+    if (event.checked) {
+      if (event.source.value == 'All') {
         this.selected = true;
         this.queryParam.types = []; //if we click select all with any other already selected
         this.jobTypes.forEach((type, index) => {
@@ -381,13 +381,15 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
           this.selectedJobTypes[index] = true;
         });
       } else {
-        this.queryParam.types?.push(event.target.value);
+        this.queryParam.types?.push(event.source.value);
         this.selectedJobTypes[index] = true;
 
+        // this.selected = this.queryParam.types?.length == this.jobTypes.length;
         this.selected = this.queryParam.types?.length == this.jobTypes.length;
+        // (this.queryParam.types?.length == this.jobTypes.length) ?this.selected = true : this.selected = false;
       }
     } else {
-      if (event.target.value == 'All') {
+      if (event.source.value == 'All') {
         this.selected = false;
         this.queryParam.types = [];
         this.jobTypes.forEach((type, index) => {
@@ -396,7 +398,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       } else {
         this.selected = false;
         this.queryParam.types = this.queryParam?.types?.filter(
-          (jobType) => jobType != event.target.value
+          (jobType) => jobType != event.source.value
         );
         this.selectedJobTypes[index] = false;
       }
@@ -405,26 +407,26 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   filterJobKind(event: any, index: any) {
-    if (event.target.checked) {
-      if (event.target.value == 'All') {
+    if (event.checked) {
+      if (event.source.value == 'All') {
         this.selectedJobKindAll = true;
         this.queryParam.jobKind = []; //if we click select all with any other already selected
         this.selectedJobKind = [true, true];
       } else {
-        this.queryParam.jobKind?.push(event.target.value);
+        this.queryParam.jobKind?.push(event.source.value);
         this.selectedJobKind[index] = true;
 
         this.selectedJobKindAll = this.queryParam.jobKind?.length == 2;
       }
     } else {
-      if (event.target.value == 'All') {
+      if (event.source.value == 'All') {
         this.selectedJobKindAll = false;
         this.queryParam.jobKind = [];
         this.selectedJobKind = [false, false];
       } else {
         this.selectedJobKindAll = false;
         this.queryParam.jobKind = this.queryParam?.jobKind?.filter(
-          (jobKind: string) => jobKind != event.target.value
+          (jobKind: string) => jobKind != event.source.value
         );
         this.selectedJobKind[index] = false;
       }
@@ -433,26 +435,26 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   filterJobStatus(event: any, index: any) {
-    if (event.target.checked) {
-      if (event.target.value == 'All') {
+    if (event.checked) {
+      if (event.source.value == 'All') {
         this.selectedJobStatusAll = true;
         this.queryParam.jobStatus = ['OfferSent', 'OnHold', 'Rejected']; //if we click select all with any other already selected
         this.selectedJobStatus = [true, true, true];
       } else {
-        this.queryParam.jobStatus?.push(event.target.value);
+        this.queryParam.jobStatus?.push(event.source.value);
         this.selectedJobStatus[index] = true;
 
         this.selectedJobStatusAll = this.queryParam.jobStatus?.length == 3;
       }
     } else {
-      if (event.target.value == 'All') {
+      if (event.source.value == 'All') {
         this.selectedJobStatusAll = false;
         this.queryParam.jobStatus = [];
         this.selectedJobStatus = [false, false, false];
       } else {
         this.selectedJobStatusAll = false;
         this.queryParam.jobStatus = this.queryParam?.jobStatus?.filter(
-          (jobStatus: string) => jobStatus != event.target.value
+          (jobStatus: string) => jobStatus != event.source.value
         );
         this.selectedJobStatus[index] = false;
       }

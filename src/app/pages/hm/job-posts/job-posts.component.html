@@ -93,16 +93,21 @@
 
     
                 <div class="fs-7 text-muted mb-5">Job Type </div>
-                <label class="checkbox ">
+                <!-- <label class="checkbox ">
                     <input type="checkbox" [checked]="selected" value="All" (change)="filterJobType($event, -1)"/>
                     <span></span>
                     All
-                </label>
-                <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary"
-                    *ngFor="let types of jobTypes;let index = index;">
-                    <input type="checkbox" [checked]="selectedJobTypes[index]" [value]="types.id" (change)="filterJobType($event, index)"/>
-                    <span></span>
+                </label> -->
+                <mat-checkbox color="primary"
+                [checked]="selected" value="All" (change)="filterJobType($event, -1)">
+                   All
+               </mat-checkbox>
+
+                <label *ngFor="let types of jobTypes;let index = index;">
+                    <mat-checkbox color="primary" [checked]="selectedJobTypes[index]" [value]="types.id" (change)="filterJobType($event, index)">
+                    <!-- <span></span> -->
                     {{types.name}}
+                </mat-checkbox>
                 </label>
                 <div class="separator separator-dashed my-5"></div>
             </div>

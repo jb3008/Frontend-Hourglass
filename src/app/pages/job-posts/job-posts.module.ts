@@ -9,6 +9,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { MatSelectModule } from '@angular/material/select';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
@@ -39,6 +40,7 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     ReactiveFormsModule,
     CKEditorModule,
     MatSelectModule,
+    MatCheckboxModule,
     JobPostsRoutingModule,
     MatTableModule,
     SharedModule,
