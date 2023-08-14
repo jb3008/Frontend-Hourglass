@@ -15,6 +15,8 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { CustomValidator } from '../directive/custom.validator';
+
 @Component({
   selector: 'app-work-force',
   templateUrl: './work-force.component.html',
@@ -63,8 +65,20 @@ export class WorkForceComponent implements OnInit {
     this.workForceData = this.fb.group({
       id: [''],
 
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: [
+        '',
+        Validators.compose([
+          Validators.required,
+          CustomValidator.cannotContainSpace,
+        ]),
+      ],
+      lastName: [
+        '',
+        Validators.compose([
+          Validators.required,
+          CustomValidator.cannotContainSpace,
+        ]),
+      ],
       gender: ['Male', Validators.required],
       workEmail: [
         '',
@@ -97,65 +111,64 @@ export class WorkForceComponent implements OnInit {
       ],
       dateOfBirth: ['', Validators.required],
       bloodGroup: [''],
-      designation: ['', Validators.required],
-      location: ['', Validators.required],
-      currentAddress: ['', Validators.required],
-      permanentAddress: ['', Validators.required],
+      designation: ['', Validators.compose([Validators.required])],
+      location: ['', Validators.compose([Validators.required])],
+      currentAddress: ['', Validators.compose([Validators.required])],
+      permanentAddress: ['', Validators.compose([Validators.required])],
       vendorId: [auth?.vendorId, Validators.required],
       documentList: [[]],
       createUser: [true],
     });
+
+    this.workForceData.reset();
+    this.workForceData.setErrors(null); // could be removed
+    this.workForceData.updateValueAndValidity();
+    this.workForceData.controls['gender'].setValue('Male');
+    this.workForceData.controls['documentList'].setValue([]);
+    this.workForceData.controls['createUser'].setValue(true);
+    this.workForceData.controls['vendorId'].setValue(auth?.vendorId);
+    this.submitted = false;
+    this.cdr.detectChanges();
+
     return await this.modalComponent.open();
   }
 
-  async openEditModal() {
-    const auth = this.utils.getAuth();
-    this.workForceEditData = this.fb.group({
-      id: [''],
+  async openEditModal(item: any) {
+    this.workForceDetails = item;
+    this.workForceData.reset();
+    this.workForceData.setErrors(null); // could be removed
+    this.workForceData.updateValueAndValidity();
+    this.submitted = false;
+    this.workForceId = item.id;
+    this.workForceEditData.controls['id'].setValue(item.workForceId);
+    this.workForceEditData.controls['workForceId'].setValue(item.workForceId);
+    this.workForceEditData.controls['firstName'].setValue(item.firstName);
+    this.workForceEditData.controls['lastName'].setValue(item.lastName);
+    this.workForceEditData.controls['gender'].setValue(item.gender);
+    this.workForceEditData.controls['workEmail'].setValue(item.workEmail);
+    this.workForceEditData.controls['personalEmail'].setValue(
+      item.personalEmail
+    );
+    this.workForceEditData.controls['workPhone'].setValue(item.workPhone);
+    this.workForceEditData.controls['mobilePhone'].setValue(item.mobilePhone);
+    this.workForceEditData.controls['workExperience'].setValue(
+      item.workExperience
+    );
+    this.workForceEditData.controls['dateOfBirth'].setValue(
+      new Date(item.dateOfBirth)
+    );
+    this.workForceEditData.controls['bloodGroup'].setValue(item.bloodGroup);
+    this.workForceEditData.controls['designation'].setValue(item.designation);
+    this.workForceEditData.controls['location'].setValue(item.location);
+    this.workForceEditData.controls['currentAddress'].setValue(
+      item.currentAddress
+    );
+    this.workForceEditData.controls['permanentAddress'].setValue(
+      item.permanentAddress
+    );
+    this.workForceEditData.controls['bloodGroup'].setValue(item.bloodGroup);
+    this.workForceData.controls['vendorId'].setValue(item?.vendorId);
 
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      gender: ['Male', Validators.required],
-      workEmail: [
-        '',
-        Validators.compose([Validators.required, Validators.email]),
-      ],
-      personalEmail: [
-        '',
-        Validators.compose([Validators.required, Validators.email]),
-      ],
-      workPhone: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-        ]),
-      ],
-      workExperience: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-        ]),
-      ],
-      mobilePhone: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-        ]),
-      ],
-      dateOfBirth: ['', Validators.required],
-      bloodGroup: [''],
-      designation: ['', Validators.required],
-      location: ['', Validators.required],
-      currentAddress: ['', Validators.required],
-      permanentAddress: ['', Validators.required],
-      vendorId: [auth?.vendorId, Validators.required],
-      createUser: [true],
-      workForceId: [],
-    });
-    this.getWorkForceDetails();
     return await this.modalEditComponent.open();
   }
   async hideFooter(): Promise<boolean> {
@@ -174,8 +187,20 @@ export class WorkForceComponent implements OnInit {
       this.workForceData = this.fb.group({
         id: [''],
 
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
+        firstName: [
+          '',
+          Validators.compose([
+            Validators.required,
+            CustomValidator.cannotContainSpace,
+          ]),
+        ],
+        lastName: [
+          '',
+          Validators.compose([
+            Validators.required,
+            CustomValidator.cannotContainSpace,
+          ]),
+        ],
         gender: ['Male', Validators.required],
         workEmail: [
           '',
@@ -207,21 +232,32 @@ export class WorkForceComponent implements OnInit {
           ]),
         ],
         dateOfBirth: ['', Validators.required],
-        bloodGroup: [''],
-        designation: ['', Validators.required],
-        location: ['', Validators.required],
-        currentAddress: ['', Validators.required],
-        permanentAddress: ['', Validators.required],
+        bloodGroup: ['', CustomValidator.cannotContainSpace],
+        designation: ['', Validators.compose([Validators.required])],
+        location: ['', Validators.compose([Validators.required])],
+        currentAddress: ['', Validators.compose([Validators.required])],
+        permanentAddress: ['', Validators.compose([Validators.required])],
         vendorId: [auth?.vendorId, Validators.required],
         documentList: [[]],
         createUser: [true],
       });
-
       this.workForceEditData = this.fb.group({
         id: [''],
-
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
+        workForceId: [''],
+        firstName: [
+          '',
+          Validators.compose([
+            Validators.required,
+            CustomValidator.cannotContainSpace,
+          ]),
+        ],
+        lastName: [
+          '',
+          Validators.compose([
+            Validators.required,
+            CustomValidator.cannotContainSpace,
+          ]),
+        ],
         gender: ['Male', Validators.required],
         workEmail: [
           '',
@@ -254,13 +290,11 @@ export class WorkForceComponent implements OnInit {
         ],
         dateOfBirth: ['', Validators.required],
         bloodGroup: [''],
-        designation: ['', Validators.required],
-        location: ['', Validators.required],
-        currentAddress: ['', Validators.required],
-        permanentAddress: ['', Validators.required],
+        designation: ['', Validators.compose([Validators.required])],
+        location: ['', Validators.compose([Validators.required])],
+        currentAddress: ['', Validators.compose([Validators.required])],
+        permanentAddress: ['', Validators.compose([Validators.required])],
         vendorId: [auth?.vendorId, Validators.required],
-        createUser: [true],
-        workForceId: [],
       });
       this.getAllWorkForceList();
     });
@@ -273,12 +307,26 @@ export class WorkForceComponent implements OnInit {
     return this.workForceEditData.controls;
   }
   async save() {
-    this.cdr.detectChanges();
+    for (const key of Object.keys(this.workForceData.value)) {
+      if (key != 'documentList') {
+        const value = this.workForceData.value[key];
+        if (value) {
+        }
+      }
+    }
+
     const formData = new FormData();
     this.submitted = true;
 
     // stop here if form is invalid
     if (this.workForceData.invalid) {
+      this.cdr.detectChanges();
+      const controls = this.workForceData.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          console.log(name);
+        }
+      }
       return;
     }
 
@@ -556,95 +604,17 @@ export class WorkForceComponent implements OnInit {
     return this.utils.numberOnly(event);
   }
 
-  getWorkForceDetails() {
-    console.log(this.workForceId);
-
-    this.isLoading = true;
-    this.apiCalls
-      .get(this.endPoints.GET_WORK_FORCE, {
-        workForceId: this.workForceId,
-      })
-      .pipe(
-        catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the work-force-detail'
-          );
-          this.isLoading = false;
-          throw err;
-        })
-      )
-      .subscribe((response) => {
-        this.isLoading = false;
-
-        this.workForceDetails = response;
-        this.workForceEditData.controls['firstName'].setValue(
-          this.workForceDetails.firstName
-        );
-        this.workForceEditData.controls['lastName'].setValue(
-          this.workForceDetails.lastName
-        );
-        if (this.workForceDetails.gender === 'Male') {
-          this.workForceEditData.controls['gender'].setValue('Male');
-        } else if (this.workForceDetails.gender === 'Female') {
-          this.workForceEditData.controls['gender'].setValue('Female');
-        } else if (this.workForceDetails.gender === 'Other') {
-          this.workForceEditData.controls['gender'].setValue('Other');
-        } else {
-          this.workForceEditData.controls['gender'].setValue('Male');
-        }
-        this.workForceEditData.controls['workEmail'].setValue(
-          this.workForceDetails.workEmail
-        );
-        this.workForceEditData.controls['personalEmail'].setValue(
-          this.workForceDetails.personalEmail
-        );
-        this.workForceEditData.controls['workPhone'].setValue(
-          this.workForceDetails.workPhone
-        );
-        this.workForceEditData.controls['mobilePhone'].setValue(
-          this.workForceDetails.mobilePhone
-        );
-        this.workForceEditData.controls['workExperience'].setValue(
-          this.workForceDetails.workExperience
-        );
-        this.workForceEditData.controls['dateOfBirth'].setValue(
-          new Date(this.workForceDetails.dateOfBirth)
-        );
-        this.workForceEditData.controls['bloodGroup'].setValue(
-          this.workForceDetails.bloodGroup
-        );
-        this.workForceEditData.controls['designation'].setValue(
-          this.workForceDetails.designation
-        );
-        this.workForceEditData.controls['location'].setValue(
-          this.workForceDetails.location
-        );
-        this.workForceEditData.controls['currentAddress'].setValue(
-          this.workForceDetails.currentAddress
-        );
-        this.workForceEditData.controls['permanentAddress'].setValue(
-          this.workForceDetails.permanentAddress
-        );
-        this.workForceEditData.controls['bloodGroup'].setValue(
-          this.workForceDetails.bloodGroup
-        );
-
-        console.log(this.workForceDetails);
-
-        this.cdr.detectChanges();
-        this.getAllWorkForceProfilePic(this.workForceId, this.workForceDetails);
-      });
-  }
-
   async saveEditWorkForce() {
     const formData: any = new Object();
     this.submitted = true;
-    this.workForceEditData.controls['id'].setValue(this.workForceId);
-    this.workForceEditData.controls['workForceId'].setValue(this.workForceId);
-
     // stop here if form is invalid
     if (this.workForceEditData.invalid) {
+      const controls = this.workForceEditData.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          console.log(name);
+        }
+      }
       return;
     }
 
@@ -668,7 +638,6 @@ export class WorkForceComponent implements OnInit {
       }
     }
 
-    console.log(this.workForceEditData);
     this.apiCalls
       .put(this.endPoints.UPDATE_WORK_FORCE, formData)
       .pipe(

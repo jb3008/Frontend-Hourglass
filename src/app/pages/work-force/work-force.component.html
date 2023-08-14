@@ -85,6 +85,12 @@
             <div class="fv-help-block" *ngIf="f.firstName.errors.required">
               First name is required
             </div>
+            <div
+              class="fv-help-block"
+              *ngIf="f.firstName.errors.cannotContainSpace"
+            >
+              First name cannot contain space.
+            </div>
           </div>
         </div>
         <div class="col-5 p-0 pe-5">
@@ -105,6 +111,12 @@
           >
             <div class="fv-help-block" *ngIf="f.lastName.errors.required">
               Last name is required
+            </div>
+            <div
+              class="fv-help-block"
+              *ngIf="f.lastName.errors.cannotContainSpace"
+            >
+              Last name cannot contain space.
             </div>
           </div>
         </div>
@@ -264,13 +276,22 @@
               class="form-control py-2 fs- fw-normal"
               placeholder="Enter Blood Group"
             />
+            <div
+              class="fv-plugins-message-container"
+              *ngIf="submitted && f.bloodGroup.errors"
+            ></div>
           </div>
           <div class="form-group w-50">
             <label class="mb-1">Gender</label>
-            <select name="" id="" class="form-select fs- py-2">
-              <option value="" selected>Male</option>
-              <option value="">Female</option>
-              <option value="">Other</option>
+            <select
+              name="gender"
+              id="gender"
+              class="form-select fs- py-2"
+              formControlName="gender"
+            >
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
             </select>
             <div
               class="fv-plugins-message-container"
@@ -315,6 +336,7 @@
             </label>
             <input
               type="text"
+              (keypress)="numbersOnly($event)"
               formControlName="workExperience"
               class="form-control py-2 fs- fw-normal"
               placeholder="Enter Work Exp."
@@ -547,6 +569,12 @@
             >
               First name is required
             </div>
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.firstName.errors.cannotContainSpace"
+            >
+              First name cannot contain space.
+            </div>
           </div>
         </div>
         <div class="col-5 p-0 pe-5">
@@ -570,6 +598,12 @@
               *ngIf="editForm.lastName.errors.required"
             >
               Last name is required
+            </div>
+            <div
+              class="fv-help-block"
+              *ngIf="editForm.lastName.errors.cannotContainSpace"
+            >
+              Last name cannot contain space.
             </div>
           </div>
         </div>
@@ -763,7 +797,7 @@
               class="form-select fs- py-2 w-100px rounded-start-0"
               formControlName="gender"
             >
-              <option value="Male" selected>Male</option>
+              <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </select>
@@ -912,7 +946,7 @@
         </div>
       </div>
     </div>
-    <div class="container mb-6 permissionBox">
+    <!-- <div class="container mb-6 permissionBox">
       <label
         class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary"
       >
@@ -920,7 +954,7 @@
         <span></span>
         Create User (Allow access to application)
       </label>
-    </div>
+    </div> -->
 
     <div class="modal-footer bg-light p-3 px-5">
       <button
@@ -935,7 +969,7 @@
         class="btn btn-primary"
         (click)="saveEditWorkForce()"
       >
-        Save
+        Update
       </button>
     </div>
   </form>
@@ -963,10 +997,7 @@
                 <img src="./assets/images/icons/wf-dot.svg" alt="" />
               </button>
               <div ngbDropdownMenu aria-labelledby="dropdownMenu">
-                <button
-                  ngbDropdownItem
-                  (click)="workForceId = item.workForceId; openEditModal()"
-                >
+                <button ngbDropdownItem (click)="openEditModal(item)">
                   Edit
                 </button>
                 <button
