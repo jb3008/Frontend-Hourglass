@@ -47,6 +47,8 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     status: 'ACTIVE',
     types: [],
     jobKind: [],
+    pageNo: 1,
+    pageSize: 10
   };
 
   selectedJobTypes: boolean[] = [];
@@ -57,6 +59,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   selectedJobStatus: boolean[] = [false, false, false];
   pageSize = 10;
   currentPage = 0;
+  totalJobCount = 0;
 
   // searchFilter:string ='';
   @ViewChild('searchFilterInp') searchFilterInp: any;
@@ -76,6 +79,10 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     const searchParams = JSON.parse(sessionStorage.getItem('searchFilters')!);
     if (searchParams)
       this.queryParam = JSON.parse(JSON.stringify(searchParams));
+    
+    this.queryParam.status = 'ACTIVE';
+    this.queryParam.pageNo = 1;
+    this.queryParam.pageSize = 10;
 
     const filterData = JSON.parse(sessionStorage.getItem('filterData')!);
     if (filterData) {
@@ -114,8 +121,11 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize;
+    // this.currentPage = event.pageIndex;
+    // this.pageSize = event.pageSize;
+    this.queryParam.pageNo = event.pageIndex + 1;
+    this.queryParam.pageSize = event.pageSize;
+    this.getAllJobs();
   }
 
   getAllJobs() {
@@ -150,6 +160,10 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         )
         .subscribe((response) => {
           this.jobDetails = response;
+          setTimeout(() => {
+            this.paginator.pageIndex = this.queryParam.pageNo - 1;
+            this.paginator.length = this.totalJobCount;
+          });
           this.isLoading = false;
           this.cdr.detectChanges();
           if (
@@ -300,6 +314,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.jobCount = response;
+        this.totalJobCount = this.jobCount.activeJobPost;
         this.isLoading = false;
         this.cdr.detectChanges();
       });
@@ -318,7 +333,12 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedTab(tab: string, from?: string) {
-    this.pageSize = 10;
+    if(tab == 'NewJob') this.totalJobCount = this.jobCount.activeJobPost;
+    else if(tab == 'AppliedJob') this.totalJobCount = this.jobCount.appliedJobCount;
+    else if (tab == 'ConfirmedJob') this.totalJobCount = this.jobCount.confirmedJobCount;
+    this.queryParam.pageNo = 1;
+    this.queryParam.pageSize = 10;
+    this.paginator.pageSize = 10;
     // if (this.selectedTab == tab) {
     //   return false;
     // }
@@ -523,6 +543,8 @@ type QueryParam = {
   businessUnit?: string;
   types?: string[];
   jobKind?: string[];
+  pageNo:number;
+  pageSize:number;
 };
 
 type JobPostCount = {

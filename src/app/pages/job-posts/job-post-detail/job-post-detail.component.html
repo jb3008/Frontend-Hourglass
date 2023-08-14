@@ -336,7 +336,7 @@
                       class="bi bi-arrow-right"></i></span></a>
                 <div class=" row m-0 fs-7">
                   <label class="col-5 col-form-label text-muted p-1">Application Id</label>
-                  <div class="col-7"> <span class="  form-control-plaintext  p-1 fw-bold">{{applicationDetails?.applicationid}}</span></div>
+                  <div class="col-7"> <span class="  form-control-plaintext  p-1 fw-bold">{{applicationDetails?.applicationId}}</span></div>
                 </div>
                 <div class="row m-0 fs-7">
                   <label class="col-5 col-form-label text-muted p-1">Work Experience</label>
@@ -346,19 +346,19 @@
                 </div>
                 <div class="row m-0 fs-7">
                   <label class="col-5 col-form-label text-muted p-1">Availability</label>
-                  <div class="col-7"> <span class="  form-control-plaintext  p-1 fw-bold">{{applicationDetails?.availabledate | date:'dd MMM, yyyy'}}</span></div>
+                  <div class="col-7"> <span class="  form-control-plaintext  p-1 fw-bold">{{applicationDetails?.availableDate | date:'dd MMM, yyyy'}}</span></div>
                 </div>
                 <div class="row m-0 fs-7">
                   <label class="col-5 col-form-label text-muted p-1">Work Rate</label>
-                  <div class="col-7 mt-1"> <span class="d-inline bg-light-warning form-control-plaintext  p-1 fw-bold">{{applicationDetails?.workrate}} {{applicationDetails?.workratecurrency}}/hr</span></div>
+                  <div class="col-7 mt-1"> <span class="d-inline bg-light-warning form-control-plaintext  p-1 fw-bold">{{applicationDetails?.workRate}} {{applicationDetails?.workRateCurrency}}/hr</span></div>
                 </div>
 
               </div>
               
               <div class="min-w-150px ">
                 <div *ngIf="offerDetails.length > 0 && !actionTaken" class="text-center fw-bold">
-                  <s>{{applicationDetails?.workrate}} {{applicationDetails?.workratecurrency}} <span *ngIf="jobDetails?.jobKind == 'Hourly'">/hr</span></s>
-                  <h3>{{offerDetails[0]?.rate}} {{applicationDetails?.workratecurrency}}<span *ngIf="jobDetails?.jobKind == 'Hourly'">/hr</span></h3>
+                  <s>{{applicationDetails?.workRate}} {{applicationDetails?.workRateCurrency}} <span *ngIf="jobDetails?.jobKind == 'Hourly'">/hr</span></s>
+                  <h3>{{offerDetails[0]?.rate}} {{applicationDetails?.workRateCurrency}}<span *ngIf="jobDetails?.jobKind == 'Hourly'">/hr</span></h3>
                 </div>
                   <div *ngIf="offerDetails.length > 0 && !actionTaken">
                     <button class="btn btn-sm btn-primary w-100 mb-3" type="button" (click)="offerLetterAction('accept')"
@@ -368,7 +368,7 @@
                     id="kt_view_offer_letter_drawer_toggle">View Offer Letter</button>
                 </div>
               </div>
-              <app-view-offer-letter-drawer [offerDetails]="offerDetails" [rate]="applicationDetails?.workrate" [currency]="applicationDetails?.workratecurrency"></app-view-offer-letter-drawer>
+              <app-view-offer-letter-drawer [offerDetails]="offerDetails" [rate]="applicationDetails?.workRate" [currency]="applicationDetails?.workRateCurrency"></app-view-offer-letter-drawer>
             </div>
 
             <div class="separator my-4"></div>

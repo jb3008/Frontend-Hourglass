@@ -23,13 +23,13 @@
             <a data-bs-toggle="tab" class="nav-link px-4 fw-semibold" (click)="getSelectedTab('AppliedJob')"
                 [ngClass]="{'active': selectedTab=='AppliedJob', 'cursor-pointer': selectedTab !=='AppliedJob'}"> Applied Jobs <span
                     class="badge badge-light-warning ms-3"><i
-                        class="bi bi-arrow-up-right px-1 text-warning fs-9 me-2"></i> {{jobCount?.appliedjobcount}}</span></a>
+                        class="bi bi-arrow-up-right px-1 text-warning fs-9 me-2"></i> {{jobCount?.appliedJobCount}}</span></a>
         </li>
         <li class="nav-item">
             <a data-bs-toggle="tab" class="nav-link px-4 fw-semibold" (click)="getSelectedTab('ConfirmedJob')"
                 [ngClass]="{'active': selectedTab=='ConfirmedJob', 'cursor-pointer': selectedTab !=='ConfirmedJob'}"> Confirmed Jobs
                 <span
-                    class="badge badge-light-success ms-3"><i class="bi bi-check2-circle fs-7 me-2"></i> {{jobCount?.confirmedjobcount}}</span></a>
+                    class="badge badge-light-success ms-3"><i class="bi bi-check2-circle fs-7 me-2"></i> {{jobCount?.confirmedJobCount}}</span></a>
         </li>
     </ul>
     <!-- <a href="" class="btn btn-primary btn-sm cursor-pointer my-2" routerLink="creat-job-post" > Create Job Post</a> -->
@@ -147,7 +147,7 @@
 
     <div class="col ">
         <ng-container *ngIf="selectedTab=='NewJob'">
-            <ng-container *ngFor="let details of jobDetails | slice: currentPage * pageSize : (currentPage + 1) * pageSize">
+            <ng-container *ngFor="let details of jobDetails">
                 <div class="card mb-2 ">
                     <div class="card-body py-5">
 
@@ -319,7 +319,7 @@
             No Records Found
         </div>
 
-        <mat-paginator *ngIf="jobDetails.length > 0" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 30]" [length]="jobDetails.length"
+        <mat-paginator *ngIf="jobDetails.length > 0" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 30]" [length]="totalJobCount"
                (page)="onPageChange($event)">
         </mat-paginator>
 
