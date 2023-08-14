@@ -40,10 +40,14 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   sitesList: any[] = [];
   jobTypes: any[] = [];
   jobCount: any;
+  totalJobsCount: any;
   queryParam: QueryParam = {
     status: 'ACTIVE',
     types: [],
+    pageNo: 1,
+    pageSize: 10
   };
+  pageSize = 10;
   selectedJobTypes: boolean[] = [];
   filter: Filter = {} as Filter;
 
@@ -66,12 +70,16 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     if (searchParams)
       this.queryParam = JSON.parse(JSON.stringify(searchParams));
 
+    this.queryParam.status = 'ACTIVE';
     const filterData = JSON.parse(sessionStorage.getItem('filterData')!);
     if (filterData) {
       this.selected = filterData.selected;
       this.selectedJobTypes = filterData.selectedJobTypes;
       this.filter = filterData.filter;
     }
+
+    this.queryParam.pageNo = 1;
+    this.queryParam.pageSize = 10;
 
     window.scroll({
       top: 0,
@@ -193,9 +201,16 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.jobCount = response;
+        this.totalJobsCount = this.jobCount.activeCount;
         this.isLoading = false;
         this.cdr.detectChanges();
       });
+  }
+
+  onPaginatorPageChange(event: any){
+    this.queryParam.pageNo = event.pageIndex + 1;
+    this.queryParam.pageSize = event.pageSize;
+    this.getAllJobs();
   }
 
   getAllJobs() {
@@ -222,6 +237,10 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       .subscribe((response) => {
         this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;
+        setTimeout(() => {
+          this.paginator.pageIndex = this.queryParam.pageNo - 1;
+          this.paginator.length = this.totalJobsCount;
+        });
         this.isLoading = false;
       });
   }
@@ -238,6 +257,13 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedTab(tab: string, from?: string) {
+    this.queryParam.pageNo = 1;
+    this.queryParam.pageSize = 10;
+    this.paginator.pageSize = 10;
+    if(tab == 'Active') this.totalJobsCount = this.jobCount.activeCount;
+    else if(tab == 'Draft') this.totalJobsCount = this.jobCount.draftCount;
+    else if(tab == 'Close') this.totalJobsCount = this.jobCount.closeCount;
+
     if (!from) this.resetFilter('tab');
     this.selectedTab = tab;
     this.queryParam.status = this.selectedTab.toUpperCase();
@@ -367,6 +393,8 @@ type QueryParam = {
   site?: string;
   businessUnit?: string;
   types?: string[];
+  pageNo:number;
+  pageSize:number;
 };
 
 type JobPostCount = {

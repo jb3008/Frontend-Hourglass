@@ -93,7 +93,7 @@ export class JobPostDetailComponent implements OnInit {
         this.applicationDetails = response;
         this.getApplicationCompleteDetails();
         this.getOfferDetails();
-        this.getApplicationAttachment(this.applicationDetails.applicationid);
+        this.getApplicationAttachment(this.applicationDetails.applicationId);
         this.cdr.detectChanges();
       })
   }
@@ -101,7 +101,7 @@ export class JobPostDetailComponent implements OnInit {
   getApplicationCompleteDetails(){
     this.loading = true;
     let queryParam = {
-      workForceId  : this.applicationDetails.workerid
+      workForceId  : this.applicationDetails.workerId
     }
     this.apiCalls.get(this.endPoints.GET_FULL_APPL_DETAILS, queryParam)
       .pipe(catchError(async (error) => {
@@ -112,7 +112,7 @@ export class JobPostDetailComponent implements OnInit {
       .subscribe((response) => {
         this.loading = false;
         this.applicationCompleteDetails = response;  
-        this.getWorkForceProfilePic(this.applicationDetails.applicationid);      
+        this.getWorkForceProfilePic(this.applicationDetails.applicationId);      
         this.cdr.detectChanges();
       })
   }
@@ -170,8 +170,8 @@ export class JobPostDetailComponent implements OnInit {
   }
 
   getWorkExperience(){
-    const years = Math.floor(this.applicationDetails?.workexpmonths / 12);
-    const months = this.applicationDetails?.workexpmonths % 12;
+    const years = Math.floor(this.applicationDetails?.workExpInMonths / 12);
+    const months = this.applicationDetails?.workExpInMonths % 12;
 
     if (years > 0) {
       if (months > 0) {
@@ -209,7 +209,7 @@ export class JobPostDetailComponent implements OnInit {
   getOfferDetails(){
     this.loading = true;
     let queryParam = {
-      jobApplicationId: this.applicationDetails.applicationid
+      jobApplicationId: this.applicationDetails.applicationId
     }
     this.apiCalls.get(this.endPoints.GET_OFFER_LETTER_APPL, queryParam)
       .pipe(catchError(async (error) => {
@@ -249,7 +249,7 @@ export class JobPostDetailComponent implements OnInit {
     this.utils.showDialogWithCancelButton(this.dialog, msg, (res: any) => {
       if(res){
         let queryParam = {
-          jobAppId : this.applicationDetails?.applicationid,
+          jobAppId : this.applicationDetails?.applicationId,
           offerId : this.offerDetails[0].id
         }
         if(status == 'accept'){
