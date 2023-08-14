@@ -36,7 +36,7 @@
         </select> -->
         <mat-select class="form-select fs- py-2  w-200px" [(value)]="filterValue.type" (selectionChange)="filterByType($event)">
           <mat-option value="All Types">All Types</mat-option>
-          <mat-option *ngFor="let types of jobTypes" [value]="types.id">
+          <mat-option *ngFor="let types of jobTypes" [value]="types.code">
             {{types.name}}
           </mat-option>
         </mat-select>

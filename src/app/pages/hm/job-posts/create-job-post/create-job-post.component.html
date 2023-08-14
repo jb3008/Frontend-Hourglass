@@ -78,7 +78,7 @@
                     <label class="col-4">Job Type <span class="text-danger">*</span></label>
                     <div class="col-8">
                         <mat-select formControlName="jobType" placeholder="Select" class="form-select fs- py-2">
-                            <mat-option *ngFor="let type of jobTypes" [value]="type.id">
+                            <mat-option *ngFor="let type of jobTypes" [value]="type.code">
                                 {{type.name}}
                             </mat-option>
                         </mat-select>
