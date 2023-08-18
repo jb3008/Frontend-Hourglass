@@ -52,8 +52,13 @@ const EndPoints = {
   GET_JOBAPPL_COUNTS: '/hourglass/vendor/getJobApplicationCounts.api',
   GET_TASK_FOR_WORK_ORDER_LIST: '/hourglass/task/tasksForWorkOrderId.api',
   GET_TIME_SHEET: '/hourglass/timesheet/listTimeSheet.api',
+  GET_TIME_SHEET_COUNT: '/hourglass/timesheet/listTimeSheetCount.api',
+  GET_TIME_SHEET_WITH_PAGINATION:
+    '/hourglass/timesheet/listTimeSheetWithPagination.api',
   GET_TIME_SHEET_NOTIFICATION:
     '/hourglass/timesheet/notification/listInbox.api',
+  GET_TIME_SHEET_NOTIFICATION_COUNT:
+    '/hourglass/timesheet/notification/listInboxCount.api',
   GET_TIME_SHEET_DETAILS: '/hourglass/timesheet/getTimeSheetDetails.api',
   CREATE_TIME_SHEET: '/hourglass/timesheet/create.api',
   CREATE_TIME_SHEET_AS_DRAFT: '/hourglass/timesheet/saveDraftTimeSheet.api',
@@ -76,10 +81,13 @@ const EndPoints = {
   GET_TIMESHEET_LOGS: '/hourglass/audit-log/auditLogForTimeSheet.api',
   UPDATE_TIMESHEET_STATUS: '/hourglass/timesheet/updateTimeSheetStatus.api',
   GET_INVOICE: '/hourglass/payment/invoice/listInvoice.api',
+  GET_INVOICE_COUNT: '/hourglass/payment/invoice/listInvoiceCount.api',
   TIMESHEET_LIST_FOR_INVOICE:
     '/hourglass/timesheet/listTimeSheetForInvoice.api',
   CREATE_INVOICE: '/hourglass/payment/invoice/create.api',
   GET_TIME_SHEET_OUTBOX: '/hourglass/timesheet/notification/listOutbox.api',
+  GET_TIME_SHEET_OUTBOX_COUNT:
+    '/hourglass/timesheet/notification/listOutboxCount.api',
   GET_PAYMENT_TERM: '/hourglass/common/rest/list-pay-terms.api',
   TASK_STATUS: '/hourglass/common/listAllTaskStaus.api',
   GET_CURRENCY: '/hourglass/common/listAllcurrencies.api',

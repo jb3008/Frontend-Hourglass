@@ -53,15 +53,28 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
   auth: any;
   isInbox: boolean;
   today = new Date();
+  pageSize: number = 10;
+  pageNo: number = 0;
+  totalCount: number = 0;
+  sortBy: string = 'timeSheetId';
+  sortOrder: string = 'desc';
+  flag: string = 'inbox';
   ngOnInit(): void {
-    this.auth = this.utils.getAuth();
-    if (this.router.url.includes('inbox-timesheets-details')) {
-      this.isInbox = true;
-    } else {
-      this.isInbox = false;
-    }
-    this.timeSheetId = this.route.snapshot.paramMap.get('timeSheetId');
-    this.getAllTimeSheetStatus();
+    this.route.queryParams.subscribe((param) => {
+      this.pageNo = param['pageNo'] ? parseInt(param['pageNo']) : 0;
+      this.pageSize = param['pageSize'] ? parseInt(param['pageSize']) : 0;
+      this.sortBy = param['sortBy'] ? param['sortBy'] : 'timeSheetId';
+      this.flag = param['flag'] ? param['flag'] : 'Inbox';
+      this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'DESC';
+      this.auth = this.utils.getAuth();
+      if (this.router.url.includes('inbox-timesheets-details')) {
+        this.isInbox = true;
+      } else {
+        this.isInbox = false;
+      }
+      this.timeSheetId = this.route.snapshot.paramMap.get('timeSheetId');
+      this.getAllTimeSheetStatus();
+    });
   }
 
   ngAfterViewInit() {

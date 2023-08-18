@@ -23,6 +23,10 @@ export class InvoicesDetailsComponent implements OnInit {
   isLoading = false;
   auth: any;
   invoiceId: any;
+  pageNo: number = 0;
+  pageSize: number = 10;
+  sortBy: string = 'timeSheetId';
+  sortOrder: string = 'DESC';
   constructor(
     private apiCalls: ApiCallsService,
     private utils: Utils,
@@ -34,10 +38,15 @@ export class InvoicesDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.auth = this.utils.getAuth();
-
-    this.invoiceId = this.route.snapshot.paramMap.get('invoiceId');
-    this.getAllInvoice();
+    this.route.queryParams.subscribe((param) => {
+      this.pageNo = param['pageNo'] ? parseInt(param['pageNo']) : 0;
+      this.pageSize = param['pageSize'] ? parseInt(param['pageSize']) : 0;
+      this.sortBy = param['sortBy'] ? param['sortBy'] : 'timeSheetId';
+      this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'DESC';
+      this.auth = this.utils.getAuth();
+      this.invoiceId = this.route.snapshot.paramMap.get('invoiceId');
+      this.getAllInvoice();
+    });
   }
 
   ngAfterViewInit() {

@@ -13,6 +13,12 @@
           <a
             class="cursor-pointer"
             routerLink="/timesheets"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder
+            }"
             *ngIf="auth?.vendorId"
           >
             <i class="fas fa-arrow-left me-3"></i>
@@ -21,6 +27,12 @@
           <a
             class="cursor-pointer"
             routerLink="/hm/timesheets"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder
+            }"
             *ngIf="!auth?.vendorId"
           >
             <i class="fas fa-arrow-left me-3"></i>
@@ -272,7 +284,6 @@
                       type="text"
                       (keypress)="numberOnly($event)"
                       [(ngModel)]="element.timeSpent"
-                      
                       class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10"
                       placeholder="hrs"
                     />
@@ -294,7 +305,6 @@
                         type="text"
                         class="form-control pe-10 py-2 fs- fw-normal cursor-pointer"
                         (click)="picker.open()"
-                      
                         [(ngModel)]="element.startDate"
                         [disabled]="
                           !auth?.vendorId ||
@@ -328,7 +338,6 @@
                         type="text"
                         class="form-control pe-10 py-2 fs- fw-normal cursor-pointer"
                         (click)="picker.open()"
-                      
                         [disabled]="
                           !auth?.vendorId ||
                           timeSheetDetails?.status !== 'DRAFT'

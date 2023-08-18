@@ -51,12 +51,22 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
   lstTimeSheetStatus: any;
   auth: any;
   today = new Date();
+  pageNo: number = 0;
+  pageSize: number = 10;
+  sortBy: string = 'timeSheetId';
+  sortOrder: string = 'DESC';
   ngOnInit(): void {
     // DrawerComponent.reinitialization();
-    this.auth = this.utils.getAuth();
+    this.route.queryParams.subscribe((param) => {
+      this.pageNo = param['pageNo'] ? parseInt(param['pageNo']) : 0;
+      this.pageSize = param['pageSize'] ? parseInt(param['pageSize']) : 0;
+      this.sortBy = param['sortBy'] ? param['sortBy'] : 'timeSheetId';
+      this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'DESC';
+      this.auth = this.utils.getAuth();
 
-    this.timeSheetId = this.route.snapshot.paramMap.get('timeSheetId');
-    this.getAllTimeSheetStatus();
+      this.timeSheetId = this.route.snapshot.paramMap.get('timeSheetId');
+      this.getAllTimeSheetStatus();
+    });
   }
 
   ngAfterViewInit() {

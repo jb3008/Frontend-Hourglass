@@ -127,6 +127,9 @@
         (click)="
           timeSheetFilter.reset();
           timeSheetFilter.controls['status'].setValue('All');
+          paginator.pageIndex = 0;
+          sort.active = 'timeSheetId';
+          sort.direction = 'desc';
           getAllTimesheet()
         "
       >
@@ -139,9 +142,8 @@
     <table
       mat-table
       matSort
-      matSortActive="timeSheetId"
-      matSortDirection="desc"
-      [dataSource]="dataSource"
+      matSortDisableClear
+      [dataSource]="timeSheetList"
       class="table border-bottom table-row-bordered text-gray-600 m-0"
     >
       <!-- timesheet Column -->
@@ -163,6 +165,13 @@
           <!-- <a routerLink="details" class="cursor-pointer"> -->
           <a
             (click)="readNotification(element)"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder,
+              flag: flag
+            }"
             routerLink="/inbox/inbox-timesheets-details/{{
               element.timeSheetId
             }}"
@@ -180,6 +189,13 @@
             routerLink="/inbox/outbox-timesheets-details/{{
               element.timeSheetId
             }}"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder,
+              flag: flag
+            }"
             *ngIf="auth?.vendorId && flag !== 'Inbox'"
           >
             {{ element.timeSheetId }}
@@ -194,6 +210,12 @@
               element.timeSheetId
             }}"
             (click)="readNotification(element)"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder
+            }"
             *ngIf="!auth?.vendorId && flag === 'Inbox'"
           >
             {{ element.timeSheetId }}
@@ -207,6 +229,12 @@
             routerLink="/hm/inbox/outbox-timesheets-details/{{
               element.timeSheetId
             }}"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder
+            }"
             (click)="readNotification(element)"
             *ngIf="!auth?.vendorId && flag !== 'Inbox'"
           >
@@ -231,7 +259,7 @@
           Employee
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
-          <div class="me-10 my-1 d-flex">
+          <div class="me-10 my-1 d-flex" *ngIf="element?.workForceDetails">
             <div class="symbol symbol-35px rounded-1 me-3">
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
                 >{{ element?.workForceDetails?.firstName?.charAt(0)
@@ -271,14 +299,14 @@
             {{ element.workOrderId }}
             <img
               class="ms-1 align-middle"
-              src="./assets/images/icons/table-arrow.svg"
+              src="./../assets/images/icons/table-arrow.svg"
               alt=""
             />
           </a>
         </td>
       </ng-container>
-      ['timeSheetId', 'employee', 'workOrderId', 'fromDate','toDate',
-      'timeSpent', 'status'];
+      ['invoice', 'employee', 'workOrder', 'invoiceDate','dueDate', 'amount',
+      'status'];
 
       <!-- fromDate Column -->
       <ng-container matColumnDef="fromDate">
@@ -322,12 +350,7 @@
 
       <!-- totalhr Column -->
       <ng-container matColumnDef="timeSpent">
-        <th
-          mat-header-cell
-          mat-sort-header
-          *matHeaderCellDef
-          class="align-middle"
-        >
+        <th mat-header-cell *matHeaderCellDef class="align-middle">
           <img
             src="./assets/images/icons/tclock.svg"
             alt=""
@@ -342,12 +365,7 @@
 
       <!-- status Column -->
       <ng-container matColumnDef="status">
-        <th
-          mat-header-cell
-          mat-sort-header
-          *matHeaderCellDef
-          class="align-middle"
-        >
+        <th mat-header-cell *matHeaderCellDef class="align-middle">
           <img
             src="./assets/images/icons/status.svg"
             class="align-text-bottom"
@@ -375,23 +393,19 @@
         *matHeaderRowDef="displayedColumns"
         class="bg-light-primary"
       ></tr>
-      <tr
-        [ngClass]="{ highlight: row?.notificationStatus === 'UNREAD' }"
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-      ></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <div
-      *ngIf="isApiLoad && dataSource.data.length === 0"
+      *ngIf="isApiLoad && timeSheetList.length === 0"
       class="text-center fw-bold fs-3 mt-2"
     >
       No Records Found
     </div>
     <mat-paginator
-      [pageSize]="30"
-      [pageSizeOptions]="[30, 50, 100]"
+      #paginator
+      [length]="totalCount"
+      [pageSizeOptions]="[10, 30, 50, 100]"
       showFirstLastButtons
-      aria-label="Select page of periodic elements"
     >
     </mat-paginator>
   </div>

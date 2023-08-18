@@ -113,6 +113,9 @@
         (click)="
           timeSheetFilter.reset();
           timeSheetFilter.controls['status'].setValue('All');
+          paginator.pageIndex = 0;
+          sort.active = 'timeSheetId';
+          sort.direction = 'desc';
           getAllTimesheet()
         "
       >
@@ -125,9 +128,8 @@
     <table
       mat-table
       matSort
-      matSortActive="timeSheetId"
-      matSortDirection="desc"
-      [dataSource]="dataSource"
+      matSortDisableClear
+      [dataSource]="timeSheetList"
       class="table border-bottom table-row-bordered text-gray-600 m-0"
     >
       <!-- timesheet Column -->
@@ -147,7 +149,15 @@
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <!-- <a routerLink="details" class="cursor-pointer"> -->
-          <a routerLink="timesheet-detail/{{ element.timeSheetId }}">
+          <a
+            routerLink="timesheet-detail/{{ element.timeSheetId }}"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder
+            }"
+          >
             {{ element.timeSheetId }}
             <img
               class="ms-1 align-middle"
@@ -260,12 +270,7 @@
 
       <!-- totalhr Column -->
       <ng-container matColumnDef="timeSpent">
-        <th
-          mat-header-cell
-          mat-sort-header
-          *matHeaderCellDef
-          class="align-middle"
-        >
+        <th mat-header-cell *matHeaderCellDef class="align-middle">
           <img
             src="./assets/images/icons/tclock.svg"
             alt=""
@@ -280,12 +285,7 @@
 
       <!-- status Column -->
       <ng-container matColumnDef="status">
-        <th
-          mat-header-cell
-          mat-sort-header
-          *matHeaderCellDef
-          class="align-middle"
-        >
+        <th mat-header-cell *matHeaderCellDef class="align-middle">
           <img
             src="./assets/images/icons/status.svg"
             class="align-text-bottom"
@@ -316,16 +316,16 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <div
-      *ngIf="isApiLoad && dataSource.data.length === 0"
+      *ngIf="isApiLoad && timeSheetList.length === 0"
       class="text-center fw-bold fs-3 mt-2"
     >
       No Records Found
     </div>
     <mat-paginator
-      [pageSize]="30"
-      [pageSizeOptions]="[30, 50, 100]"
+      #paginator
+      [length]="totalCount"
+      [pageSizeOptions]="[10, 30, 50, 100]"
       showFirstLastButtons
-      aria-label="Select page of periodic elements"
     >
     </mat-paginator>
   </div>

@@ -5,10 +5,19 @@ import { MatTableDataSource } from '@angular/material/table';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
-import { Observable, catchError, throwError } from 'rxjs';
+import {
+  catchError,
+  merge,
+  throwError,
+  Observable,
+  of as observableOf,
+} from 'rxjs';
+import { map, startWith, switchMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
 @Component({
   selector: 'app-timesheets',
   templateUrl: './timesheets.component.html',
@@ -21,7 +30,9 @@ export class TimesheetsComponent implements OnInit {
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
   timeSheetList: any = [];
   isApiLoad: boolean = false;
@@ -42,9 +53,37 @@ export class TimesheetsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   timeSheetFilter: FormGroup;
+  pageSize: number = 10;
+  pageNo: number = 0;
+  totalCount: number = 0;
+  sortBy: string = 'timeSheetId';
+  sortOrder: string = 'desc';
   lstTimeSheetStatus: any;
   flag: any = 'Inbox';
-  ngAfterViewInit() {}
+
+  ngAfterViewInit() {
+    this.route.queryParams.subscribe((param) => {
+      this.sort.sortChange.subscribe(() => {
+        this.sortBy = this.sort.active;
+        this.sortOrder = this.sort.direction;
+        this.paginator.pageIndex = 0;
+      });
+      this.paginator.pageIndex = param['pageNo']
+        ? parseInt(param['pageNo'])
+        : 0;
+      this.paginator.pageSize = param['pageSize']
+        ? parseInt(param['pageSize'])
+        : 10;
+      this.sortBy = param['sortBy'] ? param['sortBy'] : 'timeSheetId';
+      this.flag = param['flag'] ? param['flag'] : this.flag;
+      this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'desc';
+      this.sort.active = this.sortBy;
+      this.sort.direction = this.sortOrder === 'desc' ? 'desc' : 'asc';
+
+      this.getAllTimeSheetStatus();
+      this.cdr.detectChanges();
+    });
+  }
   ngOnInit(): void {
     this.isApiLoad = false;
     this.auth = this.utils.getAuth();
@@ -74,6 +113,10 @@ export class TimesheetsComponent implements OnInit {
       this.flag = 'Outbox';
       this.isSelectedTab = flag;
     }
+    this.paginator.pageIndex = 0;
+    this.sort.active = 'timeSheetId';
+    this.sort.direction = 'desc';
+    this.paginator.pageSize = 10;
     this.getAllTimesheet();
   }
 
@@ -82,10 +125,82 @@ export class TimesheetsComponent implements OnInit {
       ? this.endPoints.GET_TIME_SHEET_NOTIFICATION
       : this.endPoints.GET_TIME_SHEET_OUTBOX;
   }
+  getEndpointCount(flag: string) {
+    return flag === 'Inbox'
+      ? this.endPoints.GET_TIME_SHEET_NOTIFICATION_COUNT
+      : this.endPoints.GET_TIME_SHEET_OUTBOX_COUNT;
+  }
+
+  // getAllTimesheet() {
+  //   this.isApiLoad = false;
+  //   this.isLoading = true;
+  //   let filter: any = {};
+  //   if (this.timeSheetFilter.controls['status'].value !== 'All') {
+  //     filter.status = [this.timeSheetFilter.controls['status'].value];
+  //   }
+  //   if (this.timeSheetFilter.controls['searchByEmployee'].value) {
+  //     filter.searchByEmployee =
+  //       this.timeSheetFilter.controls['searchByEmployee'].value;
+  //   }
+  //   if (this.timeSheetFilter.controls['timeSheetId'].value) {
+  //     filter.timeSheetId = this.timeSheetFilter.controls['timeSheetId'].value;
+  //   }
+  //   if (this.timeSheetFilter.controls['workOrderId'].value) {
+  //     filter.workOrderId = this.timeSheetFilter.controls['workOrderId'].value;
+  //   }
+  //   if (this.timeSheetFilter.controls['fromDate'].value) {
+  //     filter.fromDate = this.changeDateToUtc(
+  //       this.timeSheetFilter.controls['fromDate'].value
+  //     );
+  //   }
+  //   if (this.timeSheetFilter.controls['toDate'].value) {
+  //     filter.toDate = this.changeDateToUtc(
+  //       this.timeSheetFilter.controls['toDate'].value
+  //     );
+  //   }
+
+  //   this.apiCalls
+  //     .get(this.getEndpoint(this.flag), filter)
+  //     .pipe(
+  //       catchError(async (err) => {
+  //         this.utils.showSnackBarMessage(
+  //           this.snackBar,
+  //           'failed to fetch the time-sheet notification'
+  //         );
+  //         this.dataSource = new MatTableDataSource<any>([]);
+  //         this.dataSource.paginator = this.paginator;
+  //         this.dataSource.sort = this.sort;
+  //         this.isLoading = false;
+  //         this.isApiLoad = true;
+  //         this.cdr.detectChanges();
+  //         throw err;
+  //       })
+  //     )
+  //     .subscribe((response) => {
+  //       this.timeSheetList = response;
+  //       for (let index = 0; index < response.length; index++) {
+  //         const element = response[index];
+
+  //         element.timeSpent = 0;
+  //         if (element.taskListDetails?.length) {
+  //           for (let i = 0; i < element.taskListDetails.length; i++) {
+  //             element.timeSpent += element.taskListDetails[i].timeSpent
+  //               ? parseInt(element.taskListDetails[i].timeSpent)
+  //               : 0;
+  //           }
+  //         }
+  //         element.status = element.displayStatus;
+  //       }
+  //       this.dataSource = new MatTableDataSource<any>(response);
+  //       this.dataSource.paginator = this.paginator;
+  //       this.dataSource.sort = this.sort;
+  //       this.isLoading = false;
+  //       this.isApiLoad = true;
+  //       this.cdr.detectChanges();
+  //     });
+  // }
 
   getAllTimesheet() {
-    this.isApiLoad = false;
-    this.isLoading = true;
     let filter: any = {};
     if (this.timeSheetFilter.controls['status'].value !== 'All') {
       filter.status = [this.timeSheetFilter.controls['status'].value];
@@ -111,44 +226,96 @@ export class TimesheetsComponent implements OnInit {
       );
     }
 
-    this.apiCalls
-      .get(this.getEndpoint(this.flag), filter)
+    merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the time-sheet notification'
-          );
-          this.dataSource = new MatTableDataSource<any>([]);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.isLoading = false;
-          this.isApiLoad = true;
-          this.cdr.detectChanges();
-          throw err;
+        startWith({}),
+        switchMap(() => {
+          this.isLoading = true;
+          this.isApiLoad = false;
+          filter.pageNo = this.paginator.pageIndex + 1;
+          filter.pageSize = this.paginator.pageSize;
+          this.pageSize = this.paginator.pageSize;
+          this.pageNo = this.paginator.pageIndex;
+          switch (this.sort.active) {
+            case 'timeSheetId':
+              filter.sortingType =
+                this.sort.direction === 'desc'
+                  ? 'By_TimeSheet_ID_Descending'
+                  : 'By_TimeSheet_ID';
+              break;
+            case 'workOrderId':
+              filter.sortingType =
+                this.sort.direction === 'desc'
+                  ? 'By_WorkOrder_ID_Descending'
+                  : 'By_WorkOrder_ID';
+              break;
+            case 'fromDate':
+              filter.sortingType =
+                this.sort.direction === 'desc'
+                  ? 'By_FromDate_Descending'
+                  : 'By_FromDate';
+              break;
+            case 'toDate':
+              filter.sortingType =
+                this.sort.direction === 'desc'
+                  ? 'By_ToDate_Descending'
+                  : 'By_ToDate';
+              break;
+            default:
+              filter.sortingType =
+                this.sort.direction === 'desc'
+                  ? 'By_TimeSheet_ID_Descending'
+                  : 'By_TimeSheet_ID';
+              break;
+          }
+
+          return this.apiCalls
+            .get(this.getEndpoint(this.flag), filter)
+            .pipe(catchError(() => observableOf(null)));
+        }),
+        map((data) => {
+          return data;
         })
       )
       .subscribe((response) => {
-        this.timeSheetList = response;
-        for (let index = 0; index < response.length; index++) {
-          const element = response[index];
+        this.apiCalls
+          .get(this.getEndpointCount(this.flag), filter)
+          .pipe(
+            catchError(async (err) => {
+              this.utils.showSnackBarMessage(
+                this.snackBar,
+                'failed to fetch the time-sheet'
+              );
+              this.isApiLoad = true;
+              this.timeSheetList = [];
+              this.isLoading = false;
+              this.cdr.detectChanges();
+              throw err;
+            })
+          )
+          .subscribe((responseCount) => {
+            this.totalCount = responseCount;
 
-          element.timeSpent = 0;
-          if (element.taskListDetails?.length) {
-            for (let i = 0; i < element.taskListDetails.length; i++) {
-              element.timeSpent += element.taskListDetails[i].timeSpent
-                ? parseInt(element.taskListDetails[i].timeSpent)
-                : 0;
+            for (let index = 0; index < response.length; index++) {
+              const element = response[index];
+
+              element.timeSpent = 0;
+
+              if (element.taskListDetails?.length) {
+                for (let i = 0; i < element.taskListDetails.length; i++) {
+                  element.timeSpent += element.taskListDetails[i].timeSpent
+                    ? parseInt(element.taskListDetails[i].timeSpent)
+                    : 0;
+                }
+              }
+              element.status = element.displayStatus;
             }
-          }
-          element.status = element.displayStatus;
-        }
-        this.dataSource = new MatTableDataSource<any>(response);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.isLoading = false;
-        this.isApiLoad = true;
-        this.cdr.detectChanges();
+            this.timeSheetList = response;
+
+            this.isLoading = false;
+            this.isApiLoad = true;
+            this.cdr.detectChanges();
+          });
       });
   }
 

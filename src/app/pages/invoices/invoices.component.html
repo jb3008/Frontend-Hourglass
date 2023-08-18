@@ -124,7 +124,7 @@
   <div class="mt-5 mb-7 border">
     <table
       mat-table
-      [dataSource]="dataSource"
+      [dataSource]="invoiceList"
       matSort
       matSortActive="invoiceId"
       matSortDirection="desc"
@@ -149,7 +149,32 @@
           <!-- <a routerLink="details" class="cursor-pointer"> -->
           <a
             class="cursor-pointer"
+            *ngIf="auth?.vendorId"
             routerLink="invoices-details/{{ element.invoiceId }}"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder
+            }"
+          >
+            {{ element.invoiceNumber }}
+            <img
+              class="ms-1 align-middle"
+              src="./../assets/images/icons/table-arrow.svg"
+              alt=""
+            />
+          </a>
+          <a
+            class="cursor-pointer"
+            *ngIf="!auth?.vendorId"
+            routerLink="invoices-details/{{ element.invoiceId }}"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder
+            }"
           >
             {{ element.invoiceNumber }}
             <img
@@ -163,7 +188,12 @@
 
       <!-- employee Column -->
       <ng-container matColumnDef="employee">
-        <th mat-header-cell *matHeaderCellDef class="align-middle">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="align-middle"
+        >
           <img
             src="./assets/images/icons/manager.svg"
             class="align-text-bottom"
@@ -325,15 +355,15 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <div
-      *ngIf="dataSource.data.length === 0"
+      *ngIf="isApiLoad && invoiceList.length === 0"
       class="text-center fw-bold fs-3 mt-2"
     >
       No Records Found
     </div>
     <mat-paginator
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      [pageSize]="10"
-      aria-label="Select page of users"
+      [length]="totalCount"
+      [pageSizeOptions]="[10, 30, 50, 100]"
+      showFirstLastButtons
     ></mat-paginator>
   </div>
 </div>

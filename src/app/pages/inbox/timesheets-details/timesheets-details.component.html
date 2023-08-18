@@ -6,6 +6,13 @@
           <a
             class="cursor-pointer"
             routerLink="/inbox/timesheets"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder,
+              flag: flag
+            }"
             *ngIf="auth?.vendorId"
           >
             <i class="fas fa-arrow-left me-3"></i>
@@ -14,6 +21,13 @@
           <a
             class="cursor-pointer"
             routerLink="/hm/inbox/timesheets"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder,
+              flag: flag
+            }"
             *ngIf="!auth?.vendorId"
           >
             <i class="fas fa-arrow-left me-3"></i>
