@@ -397,7 +397,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         this.selected = true;
         this.queryParam.types = []; //if we click select all with any other already selected
         this.jobTypes.forEach((type, index) => {
-          this.queryParam.types?.push(type.id);
+          this.queryParam.types?.push(type.code);
           this.selectedJobTypes[index] = true;
         });
       } else {

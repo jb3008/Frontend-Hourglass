@@ -104,7 +104,7 @@
                </mat-checkbox>
 
                 <label *ngFor="let types of jobTypes;let index = index;">
-                    <mat-checkbox color="primary" [checked]="selectedJobTypes[index]" [value]="types.id" (change)="filterJobType($event, index)">
+                    <mat-checkbox color="primary" [checked]="selectedJobTypes[index]" [value]="types.code" (change)="filterJobType($event, index)">
                     <!-- <span></span> -->
                     {{types.name}}
                 </mat-checkbox>
