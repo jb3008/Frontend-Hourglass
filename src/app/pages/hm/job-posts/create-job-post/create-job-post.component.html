@@ -48,9 +48,10 @@
                         [formControl]="hiringManagerCntrl"
                         [matAutocomplete]="auto"
                         (input)="hiringManagerSearch.value ? '' : jobPostData.controls['hiringManager'].setValue('')"
-                        #hiringManagerSearch>
+                        #hiringManagerSearch
+                        (keyup)="getHiringManagersByKey(hiringManagerSearch.value)">
                         <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="hiringManagerSearch.value"
-                            (click)="hiringManagerSearch.value = '';getFilteredValuesForHm('reset')"></i>
+                            (click)="hiringManagerSearch.value = '';getFilteredValuesForHm('reset');getHiringManagersByKey('')"></i>
 
                         </div>
                          <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
@@ -244,12 +245,34 @@
     
                 <div class="form-group row mb-5 d-flex align-items-center">
                     <label class="col-4">Cost Center <span class="text-danger">*</span></label>
-                    <div class="col-8">
-                        <mat-select formControlName="costCenter" class="form-select fs- py-2" placeholder="Select">
+                   <!-- <div class="col-8">
+                         <mat-select formControlName="costCenter" class="form-select fs- py-2" placeholder="Select">
                             <mat-option *ngFor="let costCenter of costCenterList" [value]="costCenter.code">
                                 {{getDisplayText(costCenter.name, costCenter.code)}}
                             </mat-option>
                         </mat-select>
+                    </div> -->
+                    <div class="col-8  d-flex align-items-center position-relative">
+                        <div class="position-relative w-100">
+                            <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
+                        placeholder="Select"
+                        [formControl]="costCenterCntrl"
+                        [matAutocomplete]="autoCost"
+                        (input)="costCenterSearch.value ? '' : jobPostData.controls['costCenterCntrl'].setValue('')"
+                        #costCenterSearch
+                        (keyup)="getcostCenterByKey(costCenterSearch.value)">
+                        <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="costCenterSearch.value"
+                            (click)="costCenterSearch.value = '';getFilteredValuesForHm('reset');getcostCenterByKey('')"></i>
+
+                        </div>
+                         <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
+                 <i class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer dd-info-btn" ngbTooltip="You can type or search or pick the record from search button"></i>
+                 <mat-autocomplete #autoCost="matAutocomplete" [displayWith]="displayFnCost" (optionSelected)="setcostCenterValue($event)">
+                    <mat-option *ngFor="let hm of costCenterSearchResult | async" [value]="hm">
+                        {{getDisplayText(hm.name, hm.code)}}
+
+                    </mat-option>
+                  </mat-autocomplete>
                     </div>
                 </div>
     

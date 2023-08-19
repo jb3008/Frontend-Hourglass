@@ -14,6 +14,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NewTaskDrawerComponent } from './work-order-details/new-task-drawer/new-task-drawer.component';
 import { SharedModule } from '../../shared.modules';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
+
 import { MatInputModule } from '@angular/material/input';
 
 import { MatTabsModule } from '@angular/material/tabs';
@@ -52,6 +54,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatCheckboxModule,
     MatTableModule,
     MatPaginatorModule,
+    MatSortModule,
     MatInputModule,
     MatNativeDateModule,
     MatTabsModule,

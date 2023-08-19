@@ -46,6 +46,7 @@ import { InboxApproveDrawerComponent } from 'src/app/pages/inbox-drawer/inbox-ap
 // import { ReportsComponent } from './components/toolbar/reports/reports.component';
 // import { SaasComponent } from './components/toolbar/saas/saas.component';
 import { MatBadgeModule } from '@angular/material/badge';
+import { UserProfileComponent } from './components/header/navbar/user-profile/user-profile.component';
 
 const routes: Routes = [
   {
@@ -68,6 +69,7 @@ const routes: Routes = [
     TopbarComponent,
     PageTitleComponent,
     HeaderMenuComponent,
+    UserProfileComponent,
     // EngagesComponent,
     SidebarComponent,
     SidebarLogoComponent,
