@@ -316,8 +316,8 @@
           </div>
           <mat-select class="form-select fs- py-2  w-200px" [(value)]="filterValue.status" (selectionChange)="filterByStatus($event)">
             <mat-option value="All Status">All Status</mat-option>
-            <mat-option *ngFor="let status of statusLists" [value]="status">
-              {{status}}
+            <mat-option *ngFor="let status of statusLists" [value]="status.code">
+              {{status.display}}
             </mat-option>
           </mat-select>
           <div class="position-relative input-icon input-icon-right">

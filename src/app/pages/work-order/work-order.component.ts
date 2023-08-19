@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +7,8 @@ import { catchError } from 'rxjs/internal/operators/catchError';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
+import {MatSort, SortDirection} from '@angular/material/sort';
+import {Sort} from '@angular/material/sort';
 
 @Component({
   selector: 'app-work-order',
@@ -19,6 +21,7 @@ export class WorkOrderComponent implements OnInit {
     private router: Router, private route: ActivatedRoute) { }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = ['workOrderId', 'type', 'title', 'jobPostId', 'priority', 'startDate', 'endDate', 'managerDetails', 'status'];
   dataSource = new MatTableDataSource<any>();
   loading= false;
@@ -29,8 +32,14 @@ export class WorkOrderComponent implements OnInit {
   filterObj: FilterObj = {
     vendorId: sessionStorage.getItem('vendorId')!,
     status: [],
-    type: []
+    type: [],
+    pageNo: 1,
+    pageSize: 10
   }
+
+  pageSize = 10;
+  currentPage = 0;
+  totalWorkOrderCount = 0;
 
   filterValue: FilterValue = {
     type: 'All Types',
@@ -48,8 +57,34 @@ export class WorkOrderComponent implements OnInit {
     });
     this.getJobTypes();
     this.getWorkOrderStatus();
+    this.getWorkOrderCount();
   }
 
+  onPageChange(event: PageEvent) {
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.filterObj.pageNo = event.pageIndex + 1;
+    this.filterObj.pageSize = event.pageSize;
+    this.getAllWorkOrders(this.filterObj);
+  }
+  sortData(sort: any) {
+    const data = this.dataSource.data
+
+    if (!sort.active || sort.direction === '') {
+      this.dataSource.data = data;
+    } else {
+      this.dataSource.data = data.sort((a, b) => {
+        const aValue = (a as any)[sort.active];
+        const bValue = (b as any)[sort.active];
+        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+      });
+    }
+    setTimeout(() => {
+      this.paginator.pageIndex = this.filterObj.pageNo - 1;
+      this.paginator.length = this.totalWorkOrderCount;
+    });
+  }
+  
   getJobTypes(){
     this.apiCalls.get(this.endPoints.JOB_TYPE)
     .pipe(
@@ -97,11 +132,39 @@ export class WorkOrderComponent implements OnInit {
       .subscribe((response) => {
         this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+
+        setTimeout(() => {
+          this.paginator.pageIndex = this.filterObj.pageNo - 1;
+          this.paginator.length = this.totalWorkOrderCount;
+        });
         this.loading = false;
         this.cdr.detectChanges();
       });
   }
 
+  getWorkOrderCount() {
+    // this.isLoading = true;
+    this.apiCalls
+      .get(this.endPoints.ALL_WORK_ORDERS_COUNT)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to get the job counts'
+          );
+          // this.isLoading = false;
+          this.cdr.detectChanges();
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        console.log('response', response)
+        // this.jobCount = response;
+        this.totalWorkOrderCount = response
+        this.cdr.detectChanges();
+      });
+  }
   goToDetails(element: any){
     const queryParams = this.isFromInbox ? { workOrderId: element.workOrderId, from: 'inbox' } : { workOrderId: element.workOrderId };
     this.router.navigate(['/work-order/details'], {queryParams})
@@ -195,6 +258,8 @@ type FilterObj = {
   type?: string[];
   startDate?: string;
   endDate?:string;
+  pageNo: number;
+  pageSize: number;
 };
 
 type FilterValue = {

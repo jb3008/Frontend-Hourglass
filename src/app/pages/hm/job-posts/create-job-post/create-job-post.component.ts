@@ -25,6 +25,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   costCenterList: any[] = [];
   hiringManager: any[] = [];
   hiringManagerSearchResult: Observable<any[]>;
+  costCenterSearchResult: Observable<any[]>;
   jobTypes: any[] = [];
   timesheetFrequency: any[] = [];
   legalEntities: any[] = [];
@@ -44,6 +45,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   dialogRef: MatDialogRef<DialogComponent>;
   today = new Date();
   hiringManagerCntrl = new FormControl();
+  costCenterCntrl = new FormControl();
 
   @ViewChild('siteSelect') siteSelect: MatSelect;
 
@@ -88,7 +90,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       this.selectedTab = param['tab'];
     });
 
-    this.getHiringManagers();
+    // this.getHiringManagers();
     this.getJobType();
     this.getTimeSheetFrequency();
     this.getCostCenter();
@@ -199,6 +201,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     const differenceInMilliseconds = Math.abs(endDate - startDate);
     const differenceInDays = Math.round(differenceInMilliseconds / oneDay);
     this.hiringManagerCntrl.setValue(this.draftJobDetails.managerDetails);
+    this.costCenterCntrl.setValue(this.draftJobDetails.costCenterDetails);
     setTimeout(() => {
       this.jobPostData.patchValue({
         jobTitle: this.draftJobDetails.title,
@@ -219,13 +222,16 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
         timesheetFreq: this.draftJobDetails.timeSheetFreq,
         workHourInterval: this.draftJobDetails.workHourInterval,
         workHours: this.draftJobDetails.workHours,
-        costCenter: this.draftJobDetails.costCenter,
+        costCenter: this.draftJobDetails.costCenterDetails,
         payTerms: this.draftJobDetails.payTerms,
         legalEntity: this.draftJobDetails.companyDetails?.companyCode,
         site: this.draftJobDetails.siteDetails?.code,
         location: this.draftJobDetails.siteDetails?.city,
         businessUnit: this.draftJobDetails.businessUnitDetails?.code
       })
+      // console.log(this.draftJobDetails.managerDetails)
+      // console.log(    this.draftJobDetails.costCenterDetails)
+      // console.log(this.draftJobDetails)
       let site = this.siteList.filter(obj => obj.code == this.draftJobDetails.siteDetails?.code);
       this.siteSelect.value = site[0];
       this.cdr.detectChanges();
@@ -240,44 +246,133 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   displayFn(hiringManager: any): string {
     return hiringManager ? `${hiringManager.firstName} ${hiringManager.lastName}` : '';
   }
-  
-  showSearchResult(data: any){
-    return this.hiringManager.filter(obj => {
-      let fullName = `${obj.firstName} ${obj.lastName}`.toLowerCase();
-      if(data && typeof data === 'object'){
-        data = data.firstName + ' ' + data.lastName;
-      }
-      let searchData = data.toLowerCase();
-      let filteredData = fullName.includes(searchData);
-      return filteredData
-    })
+ ; 
+  displayFnCost(costCenterList: any): string {
+    // return costCenterList ? `${costCenterList.name} ${costCenterList.code}` : '';
+    return costCenterList ?  costCenterList.name + ' (' + costCenterList.code + ')' : '';
   }
+  
+  // showSearchResult(data: any){
+  //   return this.hiringManager.filter(obj => {
+  //     let fullName = `${obj.firstName} ${obj.lastName}`.toLowerCase();
+  //     if(data && typeof data === 'object'){
+  //       data = data.firstName + ' ' + data.lastName;
+  //     }
+  //     let searchData = data.toLowerCase();
+  //     let filteredData = fullName.includes(searchData);
+  //     return filteredData
+  //   })
+  // }
 
   setHiringManagerValue(event: any){
     let value = event.option.value.userId;
     this.jobPostData.controls['hiringManager'].setValue(value);
   }
-
-  getHiringManagers(){
-    this.getDropDownValues(this.endPoints.HIRING_MANGER).subscribe({
-      next: response => {
-        this.hiringManager = response;
-        this.getFilteredValuesForHm();
-      },
-      error: error => {
-        console.log(error);
-      }
-    })
+  setcostCenterValue(event: any){
+    let value = event.option.value.code;
+    this.jobPostData.controls['costCenter'].setValue(value);
   }
+
+  // getHiringManagers(){
+  //   this.getDropDownValues(this.endPoints.HIRING_MANGER).subscribe({
+  //     next: response => {
+  //       this.hiringManager = response;
+  //       this.getFilteredValuesForHm();
+  //     },
+  //     error: error => {
+  //       console.log(error);
+  //     }
+  //   })
+  // }
+  hiringManagerSearchResultbyKey =[];
+  getHiringManagersByKey(event: any) {
+    let searchTerm = '';
+    searchTerm = event
+    // console.log(searchTerm)
+    // this.isLoading = true;
+    let queryParams = {
+      name: searchTerm
+    }
+    if(searchTerm.length >0) {
+
+
+    this.apiCalls.get(this.endPoints.HIRING_MANGER_BY_KEY,queryParams)
+      .pipe(catchError(async (err) => {
+        // this.isLoading = false;
+        setTimeout(() => {
+          throw err;  
+        }, 10);
+        this.cdr.detectChanges();
+      }))
+      .subscribe(response => {
+        // console.log('response', response)
+        // this.hiringManager = response;
+
+        this.hiringManagerSearchResult = this.hiringManagerCntrl.valueChanges.pipe(
+          startWith(''),
+          map(value => response)
+        )
+        // this.getFilteredValuesForHm();
+        this.cdr.detectChanges();
+      })
+    }
+    else{
+      this.hiringManagerSearchResult = this.hiringManagerCntrl.valueChanges.pipe(
+        startWith(''),
+        map(value => [])
+      )
+    }
+  }
+
+
+  getcostCenterByKey(event: any) {
+    let searchTerm = '';
+    searchTerm = event
+    // console.log(searchTerm)
+    // this.isLoading = true;
+    let queryParams = {
+      name: searchTerm
+    }
+    if(searchTerm.length >0) {
+
+
+    this.apiCalls.get(this.endPoints.COST_CENTER_BY_KEY,queryParams)
+      .pipe(catchError(async (err) => {
+        // this.isLoading = false;
+        setTimeout(() => {
+          throw err;  
+        }, 10);
+        this.cdr.detectChanges();
+      }))
+      .subscribe(response => {
+        // this.hiringManager = response;
+
+        this.costCenterSearchResult = this.costCenterCntrl.valueChanges.pipe(
+          startWith(''),
+          map(value => response)
+        )
+        // this.getFilteredValuesForHm();
+        this.cdr.detectChanges();
+      })
+    }
+    else{
+      this.costCenterSearchResult = this.costCenterCntrl.valueChanges.pipe(
+        startWith(''),
+        map(value => [])
+      )
+    }
+  }
+
+
 
   getFilteredValuesForHm(reset?: string){
     if(reset){
       this.jobPostData.controls['hiringManager'].setValue('');
     }
-    this.hiringManagerSearchResult = this.hiringManagerCntrl.valueChanges.pipe(
-      startWith(''),
-      map(value => this.showSearchResult(value))
-    )
+    // this.hiringManagerSearchResult = this.hiringManagerCntrl.valueChanges.pipe(
+    //   startWith(''),
+    //   map(value => this.showSearchResult(value))
+    // )
   }
 
   getJobType(){
@@ -568,6 +663,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       // } else {
         // formData.append('id', '0');
       // }
+      console.log(formData)
 
       this.apiCalls.post(status == 'draft' ? this.endPoints.DRAFT_JOB : this.endPoints.CREATE_JOB, formData)
       .pipe(catchError(async (err) => {

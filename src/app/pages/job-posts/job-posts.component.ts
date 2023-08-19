@@ -121,8 +121,8 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   onPageChange(event: PageEvent) {
-    // this.currentPage = event.pageIndex;
-    // this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
     this.queryParam.pageNo = event.pageIndex + 1;
     this.queryParam.pageSize = event.pageSize;
     this.getAllJobs();

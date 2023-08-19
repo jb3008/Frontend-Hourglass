@@ -20,6 +20,7 @@ import { ModalsModule } from 'src/app/_metronic/partials';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSortModule } from '@angular/material/sort';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatCheckboxModule,
     MatSelectModule,
     MatPaginatorModule,
+    MatSortModule,
     ModalsModule,
     NgxDocViewerModule,
     MatAutocompleteModule
