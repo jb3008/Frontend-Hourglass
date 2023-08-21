@@ -24,6 +24,12 @@ export class InvoicesDetailsComponent implements OnInit {
   auth: any;
   invoiceId: any;
   isInbox: boolean;
+  pageSize: number = 10;
+  pageNo: number = 0;
+  totalCount: number = 0;
+  sortBy: string = 'invoiceId';
+  sortOrder: string = 'desc';
+  flag: string = 'inbox';
   constructor(
     private apiCalls: ApiCallsService,
     private utils: Utils,
@@ -36,14 +42,21 @@ export class InvoicesDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.router.url.includes('inbox-invoices-details')) {
-      this.isInbox = true;
-    } else {
-      this.isInbox = false;
-    }
-    this.auth = this.utils.getAuth();
-    this.invoiceId = this.route.snapshot.paramMap.get('invoiceId');
-    this.getAllInvoice();
+    this.route.queryParams.subscribe((param) => {
+      this.pageNo = param['pageNo'] ? parseInt(param['pageNo']) : 0;
+      this.pageSize = param['pageSize'] ? parseInt(param['pageSize']) : 10;
+      this.sortBy = param['sortBy'] ? param['sortBy'] : 'invoiceId';
+      this.flag = param['flag'] ? param['flag'] : 'Inbox';
+      this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'DESC';
+      if (this.router.url.includes('inbox-invoices-details')) {
+        this.isInbox = true;
+      } else {
+        this.isInbox = false;
+      }
+      this.auth = this.utils.getAuth();
+      this.invoiceId = this.route.snapshot.paramMap.get('invoiceId');
+      this.getAllInvoice();
+    });
   }
 
   reloadAll() {

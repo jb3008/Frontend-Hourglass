@@ -124,10 +124,9 @@
   <div class="mt-5 mb-7 border">
     <table
       mat-table
-      [dataSource]="invoiceList"
       matSort
-      matSortActive="invoiceId"
-      matSortDirection="desc"
+      matSortDisableClear
+      [dataSource]="invoiceList"
       class="table border-bottom table-row-bordered text-gray-600 m-0"
     >
       <!-- invoice Column -->
@@ -361,9 +360,11 @@
       No Records Found
     </div>
     <mat-paginator
+      #paginator
       [length]="totalCount"
       [pageSizeOptions]="[10, 30, 50, 100]"
       showFirstLastButtons
-    ></mat-paginator>
+    >
+    </mat-paginator>
   </div>
 </div>

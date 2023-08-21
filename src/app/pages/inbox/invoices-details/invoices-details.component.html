@@ -6,6 +6,13 @@
           <a
             class="cursor-pointer"
             routerLink="/inbox/invoices"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder,
+              flag: flag
+            }"
             *ngIf="auth?.vendorId"
           >
             <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i>
@@ -13,6 +20,13 @@
           <a
             class="cursor-pointer"
             routerLink="/hm/inbox/invoices"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder,
+              flag: flag
+            }"
             *ngIf="!auth?.vendorId"
           >
             <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i>
@@ -167,10 +181,7 @@
         <div
           class="mw-175px mh-45px border mt-3 d-flex align-items-center justify-content-center min-h-35px min-w-40px overflow-hidden"
         >
-          <img
-            src="./assets/images/smartdocs.jpeg"
-            class="mw-100 mh-100"
-          />
+          <img src="./assets/images/smartdocs.jpeg" class="mw-100 mh-100" />
         </div>
       </div>
 

@@ -64,8 +64,6 @@ export class InvoicesComponent implements OnInit {
   auth: any;
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     this.route.queryParams.subscribe((param) => {
       this.sort.sortChange.subscribe(() => {
         this.sortBy = this.sort.active;
@@ -75,10 +73,11 @@ export class InvoicesComponent implements OnInit {
       this.paginator.pageIndex = param['pageNo']
         ? parseInt(param['pageNo'])
         : 0;
+
       this.paginator.pageSize = param['pageSize']
         ? parseInt(param['pageSize'])
         : 10;
-      this.sortBy = param['sortBy'] ? param['sortBy'] : 'timeSheetId';
+      this.sortBy = param['sortBy'] ? param['sortBy'] : 'invoiceId';
       this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'desc';
       this.sort.active = this.sortBy;
       this.sort.direction = this.sortOrder === 'desc' ? 'desc' : 'asc';
@@ -139,8 +138,8 @@ export class InvoicesComponent implements OnInit {
         startWith({}),
         switchMap(() => {
           this.isLoading = true;
+          console.log(this.paginator.pageIndex);
           this.isApiLoad = false;
-
           filter.pageNo = this.paginator.pageIndex + 1;
           filter.pageSize = this.paginator.pageSize;
           this.pageSize = this.paginator.pageSize;
@@ -246,6 +245,7 @@ export class InvoicesComponent implements OnInit {
       .subscribe((response) => {
         this.workForceList = response;
         this.getAllInvoice();
+
         this.cdr.detectChanges();
       });
   }

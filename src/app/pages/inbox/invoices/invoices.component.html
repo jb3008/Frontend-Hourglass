@@ -45,7 +45,7 @@
         />
         <span><i class="fa fa-search"></i></span>
       </div>
-      <div class="position-relative input-icon input-icon-right">
+      <!-- <div class="position-relative input-icon input-icon-right">
         <input
           type="text"
           formControlName="workOrderId"
@@ -55,8 +55,8 @@
           (keydown)="onKeypressEvent($event)"
         />
         <span><i class="fa fa-search"></i></span>
-      </div>
-      <div class="position-relative input-icon input-icon-right">
+      </div> -->
+      <!-- <div class="position-relative input-icon input-icon-right">
         <input
           type="text"
           formControlName="searchByEmployee"
@@ -66,7 +66,7 @@
           (keydown)="onKeypressEvent($event)"
         />
         <span><i class="fa fa-search"></i></span>
-      </div>
+      </div> -->
       <select
         name=""
         id=""
@@ -98,7 +98,7 @@
         ></span>
         <mat-datepicker #picker></mat-datepicker>
       </div>
-      <div class="position-relative input-icon input-icon-right">
+      <!-- <div class="position-relative input-icon input-icon-right">
         <input
           type="text"
           class="form-control py-2 fs- fw-normal cursor-pointer pe-10"
@@ -112,7 +112,7 @@
           ><i class="far fa-calendar"></i
         ></span>
         <mat-datepicker #picker1></mat-datepicker>
-      </div>
+      </div> -->
 
       <a
         class="btn btn-light-primary btn-sm cursor-pointer"
@@ -136,9 +136,8 @@
     <table
       mat-table
       matSort
-      matSortActive="invoiceId"
-      matSortDirection="desc"
-      [dataSource]="dataSource"
+      matSortDisableClear
+      [dataSource]="invoiceList"
       class="table border-bottom table-row-bordered text-gray-600 m-0"
     >
       <!-- invoice Column -->
@@ -162,9 +161,16 @@
             class="cursor-pointer text-primary"
             (click)="readNotification(element)"
             routerLink="/inbox/inbox-invoices-details/{{ element.invoiceId }}"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder,
+              flag: flag
+            }"
             *ngIf="auth?.vendorId && flag === 'Inbox'"
           >
-            {{ element.invoiceId }}
+            {{ element.invoiceNumber }}
             <img
               class="ms-1 align-middle"
               src="./assets/images/icons/table-arrow.svg"
@@ -174,6 +180,13 @@
           <a
             class="cursor-pointer text-primary"
             (click)="readNotification(element)"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder,
+              flag: flag
+            }"
             routerLink="/inbox/outbox-invoices-details/{{ element.invoiceId }}"
             *ngIf="auth?.vendorId && flag !== 'Inbox'"
           >
@@ -187,6 +200,13 @@
           <a
             class="cursor-pointer text-primary"
             (click)="readNotification(element)"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder,
+              flag: flag
+            }"
             routerLink="/hm/inbox/inbox-invoices-details/{{
               element.invoiceId
             }}"
@@ -202,6 +222,13 @@
           <a
             class="cursor-pointer text-primary"
             (click)="readNotification(element)"
+            [queryParams]="{
+              pageNo: pageNo,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortOrder: sortOrder,
+              flag: flag
+            }"
             routerLink="/hm/inbox/outbox-invoices-details/{{
               element.invoiceId
             }}"
@@ -237,7 +264,12 @@
       </ng-container>
       <!-- submittedby Column -->
       <ng-container matColumnDef="submittedby">
-        <th mat-header-cell *matHeaderCellDef class="align-middle">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          class="align-middle"
+        >
           <img
             src="./assets/images/icons/manager.svg"
             class="align-text-bottom"
@@ -329,15 +361,17 @@
       ></tr>
     </table>
     <div
-      *ngIf="isApiLoad && dataSource.data.length === 0"
+      *ngIf="isApiLoad && invoiceList.length === 0"
       class="text-center fw-bold fs-3 mt-2"
     >
       No Records Found
     </div>
     <mat-paginator
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      [pageSize]="10"
-      aria-label="Select page of users"
-    ></mat-paginator>
+      #paginator
+      [length]="totalCount"
+      [pageSizeOptions]="[10, 30, 50, 100]"
+      showFirstLastButtons
+    >
+    </mat-paginator>
   </div>
 </div>

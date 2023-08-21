@@ -77,9 +77,8 @@ export class TimesheetsComponent implements OnInit {
       this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'desc';
       this.sort.active = this.sortBy;
       this.sort.direction = this.sortOrder === 'desc' ? 'desc' : 'asc';
-
-      this.getAllTimeSheetStatus();
       this.cdr.detectChanges();
+      this.getAllTimeSheetStatus();
     });
   }
 

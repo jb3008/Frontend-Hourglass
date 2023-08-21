@@ -62,7 +62,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((param) => {
       this.pageNo = param['pageNo'] ? parseInt(param['pageNo']) : 0;
-      this.pageSize = param['pageSize'] ? parseInt(param['pageSize']) : 0;
+      this.pageSize = param['pageSize'] ? parseInt(param['pageSize']) : 10;
       this.sortBy = param['sortBy'] ? param['sortBy'] : 'timeSheetId';
       this.flag = param['flag'] ? param['flag'] : 'Inbox';
       this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'DESC';

@@ -96,8 +96,11 @@ const EndPoints = {
   TASK_STATUS: '/hourglass/common/listAllTaskStaus.api',
   GET_CURRENCY: '/hourglass/common/listAllcurrencies.api',
   INVOICE_INBOX_NOTIFICATION: '/hourglass/invoice/notification/listInbox.api',
-  INVOICE_OUTBOX_NOTIFICATION:
-    '/hourglass/invoice/notification//listOutbox.api',
+  INVOICE_OUTBOX_NOTIFICATION: '/hourglass/invoice/notification/listOutbox.api',
+  INVOICE_INBOX_NOTIFICATION_COUNT:
+    '/hourglass/invoice/notification/listInboxCount.api',
+  INVOICE_OUTBOX_NOTIFICATION_COUNT:
+    '/hourglass/invoice/notification//listOutboxCount.api',
   GET_INVOICE_LOGS: '/hourglass/audit-log/auditLogForInvoice.api',
   UPDATE_INVOICE_STATUS: '/hourglass/payment/invoice/updateInvoiceStatus.api',
   READ_NOTIFICATION: '/hourglass/notification/markNotificationAsRead.api',

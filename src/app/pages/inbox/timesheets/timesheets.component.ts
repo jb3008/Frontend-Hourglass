@@ -76,6 +76,7 @@ export class TimesheetsComponent implements OnInit {
         : 10;
       this.sortBy = param['sortBy'] ? param['sortBy'] : 'timeSheetId';
       this.flag = param['flag'] ? param['flag'] : this.flag;
+      this.isSelectedTab = this.flag;
       this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'desc';
       this.sort.active = this.sortBy;
       this.sort.direction = this.sortOrder === 'desc' ? 'desc' : 'asc';

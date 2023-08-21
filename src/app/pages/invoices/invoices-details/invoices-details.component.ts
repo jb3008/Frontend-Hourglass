@@ -25,7 +25,7 @@ export class InvoicesDetailsComponent implements OnInit {
   invoiceId: any;
   pageNo: number = 0;
   pageSize: number = 10;
-  sortBy: string = 'timeSheetId';
+  sortBy: string = 'invoiceId';
   sortOrder: string = 'DESC';
   constructor(
     private apiCalls: ApiCallsService,
@@ -40,8 +40,8 @@ export class InvoicesDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((param) => {
       this.pageNo = param['pageNo'] ? parseInt(param['pageNo']) : 0;
-      this.pageSize = param['pageSize'] ? parseInt(param['pageSize']) : 0;
-      this.sortBy = param['sortBy'] ? param['sortBy'] : 'timeSheetId';
+      this.pageSize = param['pageSize'] ? parseInt(param['pageSize']) : 10;
+      this.sortBy = param['sortBy'] ? param['sortBy'] : 'invoiceId';
       this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'DESC';
       this.auth = this.utils.getAuth();
       this.invoiceId = this.route.snapshot.paramMap.get('invoiceId');
