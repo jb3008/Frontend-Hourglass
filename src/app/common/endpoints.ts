@@ -8,9 +8,11 @@ const EndPoints = {
   JOB_TYPE: '/hourglass/common/rest/job-type.api',
   TIMESHEET_FREQ: '/hourglass/common/rest/getTimeFrequencyList.api',
   PAY_TERMS: '/hourglass/common/rest/list-pay-terms.api',
+  PAY_TERMS_BY_KEY: '/hourglass/common/pay-term/search.api',
   LEGAL_ENTITY: '/hourglass/common/rest/getCompanyList.api',
   PLANT_LIST: '/hourglass/plant/plant/listPlantsForCompnay', // Lokesh 11-Jul-23 -> Changed API as per Backend team request.
   BUSINESS_UNIT: '/hourglass/job-post/business-unit/list.api',
+  BUSINESS_UNIT_BY_KEY: '/hourglass/business-unit/search.api',
   COST_CENTER: '/hourglass/job-post/cost-center/list.api',
   COST_CENTER_BY_KEY: '/hourglass/common/cost-center/search.api',
   CREATE_JOB: '/hourglass/job-post/create.api',

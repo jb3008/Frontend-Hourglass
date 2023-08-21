@@ -22,14 +22,18 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   endPoints  = EndPoints;
   siteList: any[] = [];
   businessUnits: any[] = [];
+  businessUnitsList: any[] = [];
   costCenterList: any[] = [];
   hiringManager: any[] = [];
   hiringManagerSearchResult: Observable<any[]>;
   costCenterSearchResult: Observable<any[]>;
+  payTermsSearchResult: Observable<any[]>;
+  businessUnitsSearchResult : Observable<any[]>;
   jobTypes: any[] = [];
   timesheetFrequency: any[] = [];
   legalEntities: any[] = [];
   payTerms: any[] = [];
+  payTermsList: any[] = [];
   draftDetails: any[] = [];
   currencies: any[] = [];
   jobPostData: FormGroup;
@@ -46,6 +50,8 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   today = new Date();
   hiringManagerCntrl = new FormControl();
   costCenterCntrl = new FormControl();
+  payTermsCntrl = new FormControl();
+  businessUnitsCntrl = new FormControl();
 
   @ViewChild('siteSelect') siteSelect: MatSelect;
 
@@ -101,8 +107,9 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       this.getJobDocuments(this.jobId);
       
     }
+    this.businessUnitsCntrl.disable();
   }
-
+ 
   ngOnDestroy(): void {
   }
   
@@ -193,7 +200,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
 
   setDraftDataOnUi(){
     this.getPlantsList(this.draftJobDetails.companyDetails.companyCode);
-    this.getBusinessUnits(this.draftJobDetails.companyDetails.companyCode);
+    // this.getBusinessUnits(this.draftJobDetails.companyDetails.companyCode);
     this.jobKind = this.draftJobDetails.jobKind;
     const oneDay = 24 * 60 * 60 * 1000;
     const startDate: any = new Date(this.draftJobDetails.startDate);
@@ -202,6 +209,8 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     const differenceInDays = Math.round(differenceInMilliseconds / oneDay);
     this.hiringManagerCntrl.setValue(this.draftJobDetails.managerDetails);
     this.costCenterCntrl.setValue(this.draftJobDetails.costCenterDetails);
+    this.payTermsCntrl.setValue(this.draftJobDetails.payTermDetails);
+    this.businessUnitsCntrl.setValue(this.draftJobDetails.businessUnitDetails);
     setTimeout(() => {
       this.jobPostData.patchValue({
         jobTitle: this.draftJobDetails.title,
@@ -222,7 +231,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
         timesheetFreq: this.draftJobDetails.timeSheetFreq,
         workHourInterval: this.draftJobDetails.workHourInterval,
         workHours: this.draftJobDetails.workHours,
-        costCenter: this.draftJobDetails.costCenterDetails,
+        costCenter: this.draftJobDetails.costCenterDetails?.code,
         payTerms: this.draftJobDetails.payTerms,
         legalEntity: this.draftJobDetails.companyDetails?.companyCode,
         site: this.draftJobDetails.siteDetails?.code,
@@ -230,7 +239,8 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
         businessUnit: this.draftJobDetails.businessUnitDetails?.code
       })
       // console.log(this.draftJobDetails.managerDetails)
-      // console.log(    this.draftJobDetails.costCenterDetails)
+      console.log( this.draftJobDetails.payTerms)
+      console.log(this.draftJobDetails.timeSheetFreq)
       // console.log(this.draftJobDetails)
       let site = this.siteList.filter(obj => obj.code == this.draftJobDetails.siteDetails?.code);
       this.siteSelect.value = site[0];
@@ -250,6 +260,16 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   displayFnCost(costCenterList: any): string {
     // return costCenterList ? `${costCenterList.name} ${costCenterList.code}` : '';
     return costCenterList ?  costCenterList.name + ' (' + costCenterList.code + ')' : '';
+  }
+  displayFnpayTerms(payTerms: any): any {
+    // console.log(payTerms)
+    // return payTerms ? `${payTerms.name} ${payTerms.code}` : '';
+    return payTerms ?  payTerms.name + ' (' + payTerms.id + ')' : '';
+  }
+  displayFnbUnits(bUnits: any): any {
+    // console.log(bUnits)
+    // return bUnits ? `${bUnits.name} ${bUnits.code}` : '';
+    return bUnits ?  bUnits.name + ' (' + bUnits.code + ')' : '';
   }
   
   // showSearchResult(data: any){
@@ -271,6 +291,18 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   setcostCenterValue(event: any){
     let value = event.option.value.code;
     this.jobPostData.controls['costCenter'].setValue(value);
+  }
+  setpayTermsValue(event: any){
+    let value = event.option.value.code;
+    // console.log(event)
+    // console.log(value)
+    this.jobPostData.controls['payTerms'].setValue(value);
+  }
+  setUnitsValue(event: any){
+    let value = event.option.value.code;
+    console.log(event)
+    console.log(value)
+    this.jobPostData.controls['businessUnit'].setValue(value);
   }
 
   // getHiringManagers(){
@@ -362,6 +394,80 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       )
     }
   }
+  getpayTermsByKey(event: any) {
+    let searchTerm = '';
+    searchTerm = event
+    // console.log(searchTerm)
+    // this.isLoading = true;
+    let queryParams = {
+      name: searchTerm
+    }
+    if(searchTerm.length >0) {
+
+
+    this.apiCalls.get(this.endPoints.PAY_TERMS_BY_KEY,queryParams)
+      .pipe(catchError(async (err) => {
+        // this.isLoading = false;
+        setTimeout(() => {
+          throw err;  
+        }, 10);
+        this.cdr.detectChanges();
+      }))
+      .subscribe(response => {
+        // this.hiringManager = response;
+
+        this.payTermsSearchResult = this.payTermsCntrl.valueChanges.pipe(
+          startWith(''),
+          map(value => response)
+        )
+        // this.getFilteredValuesForHm();
+        this.cdr.detectChanges();
+      })
+    }
+    else{
+      this.payTermsSearchResult = this.payTermsCntrl.valueChanges.pipe(
+        startWith(''),
+        map(value => [])
+      )
+    }
+  }
+  getbusinessUnitsByKey(event: any) {
+    let searchTerm = '';
+    searchTerm = event
+    // console.log(searchTerm)
+    // this.isLoading = true;
+    let queryParams = {
+      name: searchTerm
+    }
+    if(searchTerm.length >0) {
+
+
+    this.apiCalls.get(this.endPoints.BUSINESS_UNIT_BY_KEY,queryParams)
+      .pipe(catchError(async (err) => {
+        // this.isLoading = false;
+        setTimeout(() => {
+          throw err;  
+        }, 10);
+        this.cdr.detectChanges();
+      }))
+      .subscribe(response => {
+        // this.hiringManager = response;
+
+        this.businessUnitsSearchResult = this.businessUnitsCntrl.valueChanges.pipe(
+          startWith(''),
+          map(value => response)
+        )
+        // this.getFilteredValuesForHm();
+        this.cdr.detectChanges();
+      })
+    }
+    else{
+      this.businessUnitsSearchResult = this.payTermsCntrl.valueChanges.pipe(
+        startWith(''),
+        map(value => [])
+      )
+    }
+  }
 
 
 
@@ -390,6 +496,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     this.getDropDownValues(this.endPoints.TIMESHEET_FREQ).subscribe({
       next: response => {
         this.timesheetFrequency = response;
+        // console.log('timesheetFrequency')
       },
       error: error => {
         console.log(error);
@@ -444,7 +551,8 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   getPaymenTerms(){
     this.getDropDownValues(this.endPoints.PAY_TERMS).subscribe({
       next: response => {
-        this.payTerms = response;
+        this.payTermsList = response;
+        // console.log('getPaymenTerms')
       },
       error: error => {
         console.log(error);
@@ -482,10 +590,11 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   
   getLegalEntityCode(event: any){
     this.getPlantsList(event.value);
-    this.getBusinessUnits(event.value);
+    // this.getBusinessUnits(event.value);
     this.jobPostData.controls['site'].setValue(null);
     this.jobPostData.controls['businessUnit'].setValue(null);
     this.jobPostData.controls['location'].setValue(null);
+    this.businessUnitsCntrl.enable();
   }
 
   setLocationValue(event: any){
@@ -698,6 +807,9 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   }
 
   getDisplayText(name: string, code: string) {
+    return name + ' (' + code + ')'; 
+  }
+  getDisplayPayText(name: any, code: any) {
     return name + ' (' + code + ')'; 
   }
 
