@@ -44,7 +44,7 @@
                     <div class="col-8  d-flex align-items-center position-relative">
                         <div class="position-relative w-100">
                             <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
-                        placeholder="Select"
+                        placeholder="Type and select hiring manager"
                         [formControl]="hiringManagerCntrl"
                         [matAutocomplete]="auto"
                         (input)="hiringManagerSearch.value ? '' : jobPostData.controls['hiringManager'].setValue('')"
@@ -104,14 +104,14 @@
                 <div class="form-group row mb-5 d-flex align-items-center">
                     <label class="col-4">What kind of Job it is? <span class="text-danger">*</span></label>
                     <div class="col-8">
-                        <div class="radio-inline">
-                            <label class="radio radio-outline radio-outline-2x radio-primary me-5">
-                                <input formControlName="jobKind" type="radio" value="Fixed" (click)="jobKind='Fixed'; changeRateValue()">
+                        <div class="radio-inline ">
+                            <label class="radio radio-outline radio-outline-2x cursor-pointer radio-primary me-5">
+                                <input formControlName="jobKind" class="cursor-pointer" type="radio" value="Fixed" (click)="jobKind='Fixed'; changeRateValue()">
                                 <span></span>
                                 Fixed
                             </label>
-                            <label class="radio radio-outline radio-outline-2x radio-primary">
-                                <input formControlName="jobKind" type="radio" value="Hourly" (click)="jobKind='Hourly'; changeRateValue()">
+                            <label class="radio radio-outline radio-outline-2x cursor-pointer radio-primary">
+                                <input formControlName="jobKind" class="cursor-pointer" type="radio" value="Hourly" (click)="jobKind='Hourly'; changeRateValue()">
                                 <span></span>
                                 Hour based
                             </label>
@@ -124,7 +124,7 @@
                     <div class="col-8 d-flex align-items-center">
                   
                         <input *ngIf="jobKind == 'Hourly'" type="input" formControlName="workRate" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                        placeholder="Enter amount" (keypress)="numberAndDecimalOnly($event)">
+                        placeholder="Enter Amount" (keypress)="numberAndDecimalOnly($event)">
                         
                         <ng-container *ngIf="jobKind == 'Fixed'">
                             <label class="me-2">Min</label>
@@ -255,7 +255,7 @@
                     <div class="col-8  d-flex align-items-center position-relative">
                         <div class="position-relative w-100">
                             <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
-                        placeholder="Select"
+                        placeholder="Type and select cost center"
                         [formControl]="costCenterCntrl"
                         [matAutocomplete]="autoCost"
                         (input)="costCenterSearch.value ? '' : jobPostData.controls['costCenterCntrl'].setValue('')"
@@ -288,7 +288,7 @@
                     <div class="col-8  d-flex align-items-center position-relative">
                         <div class="position-relative w-100">
                             <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
-                        placeholder="Select"
+                        placeholder="Type and select payment terms"
                         [formControl]="payTermsCntrl"
                         [matAutocomplete]="autoPay"
                         (input)="payTermsSearch.value ? '' : jobPostData.controls['payTermsCntrl'].setValue('')"
@@ -355,7 +355,7 @@
                         <div class="position-relative w-100">
                             <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
                      
-                        placeholder="Select"
+                        placeholder="Type and select business unit"
                         [formControl]="businessUnitsCntrl"
                         [matAutocomplete]="autobUnit"
                         (input)="businessUnitsSearch.value ? '' : jobPostData.controls['businessUnitsCntrl'].setValue('')"

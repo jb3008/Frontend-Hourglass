@@ -76,6 +76,7 @@ tr.mat-header-row {
     }
 }
 .qborder-table{
+    border-bottom:  1px solid #eff2f5;
     th,td{ padding-left:10px ;}
     th.mat-header-cell:not(:first-child),
     td.mat-cell:not(:first-child)
@@ -85,6 +86,7 @@ tr.mat-header-row {
       padding-right: 10px ;
      
     }
+ 
   }
 .drawer{
     background-color: #1e1e2d;
@@ -146,4 +148,28 @@ tr.mat-header-row {
         }
         .form-select{font-weight: unset;}
         .bg-nego{background: #FBF6F0}
+        .qt-nav .nav-item .nav-link.active,
+        .qt-nav .nav-item .nav-link:hover:not(.disabled){
+            background-color: #F0F9FF;
+            .badge-light-primary{ background-color: rgb(226, 243, 255)}
+        }
+        .q-high{
+            background-color: #FEF3F2;
+            color: #B42318;
+            i{color: #F04438;}
+        }
+        .q-med{
+            background-color: #FFFAEB;
+            color: #B54708;
+            i{color: #F79009;}
+        }
+        .q-success{
+            background-color: #ECFDF3;
+            color: #027A48;
+            i{color: #12B76A;}
+        }
+        .q-link-text{
+            color: #0086C9;
+        }
+        // .badge-light-primary{ background-color: rgb(226, 243, 255)}
 // }
