@@ -291,7 +291,7 @@
                         placeholder="Type and select payment terms"
                         [formControl]="payTermsCntrl"
                         [matAutocomplete]="autoPay"
-                        (input)="payTermsSearch.value ? '' : jobPostData.controls['payTermsCntrl'].setValue('')"
+                        (input)="payTermsSearch.value ? '' : jobPostData.controls['payTerms'].setValue('')"
                         #payTermsSearch
                         (keyup)="getpayTermsByKey(payTermsSearch.value)">
                         <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="payTermsSearch.value"
