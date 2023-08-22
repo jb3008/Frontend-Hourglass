@@ -200,7 +200,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
 
   setDraftDataOnUi(){
     this.getPlantsList(this.draftJobDetails.companyDetails.companyCode);
-    // this.getBusinessUnits(this.draftJobDetails.companyDetails.companyCode);
+    this.getBusinessUnits(this.draftJobDetails.companyDetails.companyCode);
     this.jobKind = this.draftJobDetails.jobKind;
     const oneDay = 24 * 60 * 60 * 1000;
     const startDate: any = new Date(this.draftJobDetails.startDate);
@@ -590,7 +590,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   
   getLegalEntityCode(event: any){
     this.getPlantsList(event.value);
-    // this.getBusinessUnits(event.value);
+    this.getBusinessUnits(event.value);
     this.jobPostData.controls['site'].setValue(null);
     this.jobPostData.controls['businessUnit'].setValue(null);
     this.jobPostData.controls['location'].setValue(null);

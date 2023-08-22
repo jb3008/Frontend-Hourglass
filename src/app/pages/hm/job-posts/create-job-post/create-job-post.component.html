@@ -346,12 +346,12 @@
 
                 <div class="form-group mb-5">
                     <label class="mb-1">Business Unit <span class="text-danger">*</span></label>
-                    <!-- <mat-select formControlName="businessUnit" class="form-select fs- py-2" placeholder="Select">
+                    <mat-select formControlName="businessUnit" class="form-select fs- py-2" placeholder="Select">
                         <mat-option *ngFor="let units of businessUnits" [value]="units.code">
                             {{getDisplayText(units.name, units.code)}}
                         </mat-option>
-                    </mat-select> -->
-                    <div class="c/ol-8  d-flex align-items-center position-relative">
+                    </mat-select>
+                    <!-- <div class="c/ol-8  d-flex align-items-center position-relative">
                         <div class="position-relative w-100 m/e-3">
                             <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 roun/ded-end-0 "
                      
@@ -366,15 +366,14 @@
                             (click)="businessUnitsSearch.value = '';getpayTermsByKey('')"></i>
 
                         </div>
-                         <!-- <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0  me-3"><i class="bi bi-search"></i></a> -->
-                 <!-- <i class="bi bi-info-circle-fill ms-3  fs-4 cursor-pointer dd-info-btn" ngbTooltip="You can type or search or pick the record from search button"></i> -->
+                    
                  <mat-autocomplete #autobUnit="matAutocomplete" [displayWith]="displayFnbUnits" (optionSelected)="setUnitsValue($event)">
                     <mat-option *ngFor="let bUnit of businessUnitsSearchResult | async" [value]="bUnit">
                         {{getDisplayPayText(bUnit.name, bUnit.code)}}
 
                     </mat-option>
                   </mat-autocomplete>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- <div class="form-group mb-5 d-flex align-items-center">

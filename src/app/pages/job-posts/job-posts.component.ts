@@ -333,12 +333,12 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedTab(tab: string, from?: string) {
-    if(tab == 'NewJob') this.totalJobCount = this.jobCount.activeJobPost;
-    else if(tab == 'AppliedJob') this.totalJobCount = this.jobCount.appliedJobCount;
-    else if (tab == 'ConfirmedJob') this.totalJobCount = this.jobCount.confirmedJobCount;
+    if(tab == 'NewJob') this.totalJobCount = this.jobCount?.activeJobPost;
+    else if(tab == 'AppliedJob') this.totalJobCount = this.jobCount?.appliedJobCount;
+    else if (tab == 'ConfirmedJob') this.totalJobCount = this.jobCount?.confirmedJobCount;
     this.queryParam.pageNo = 1;
     this.queryParam.pageSize = 10;
-    this.paginator.pageSize = 10;
+    // this.paginator.pageSize = 10;
     // if (this.selectedTab == tab) {
     //   return false;
     // }

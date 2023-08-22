@@ -260,9 +260,9 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.queryParam.pageNo = 1;
     this.queryParam.pageSize = 10;
     this.paginator.pageSize = 10;
-    if(tab == 'Active') this.totalJobsCount = this.jobCount.activeCount;
-    else if(tab == 'Draft') this.totalJobsCount = this.jobCount.draftCount;
-    else if(tab == 'Close') this.totalJobsCount = this.jobCount.closeCount;
+    if(tab == 'Active') this.totalJobsCount = this.jobCount?.activeCount;
+    else if(tab == 'Draft') this.totalJobsCount = this.jobCount?.draftCount;
+    else if(tab == 'Close') this.totalJobsCount = this.jobCount?.closeCount;
 
     if (!from) this.resetFilter('tab');
     this.selectedTab = tab;
