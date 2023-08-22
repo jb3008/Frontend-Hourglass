@@ -92,6 +92,8 @@ export class WorkForceComponent implements OnInit {
         '',
         Validators.compose([
           Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(10),
           Validators.pattern('^[0-9]*$'),
         ]),
       ],
@@ -106,6 +108,8 @@ export class WorkForceComponent implements OnInit {
         '',
         Validators.compose([
           Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(10),
           Validators.pattern('^[0-9]*$'),
         ]),
       ],
@@ -214,6 +218,8 @@ export class WorkForceComponent implements OnInit {
           '',
           Validators.compose([
             Validators.required,
+            Validators.minLength(10),
+            Validators.maxLength(10),
             Validators.pattern('^[0-9]*$'),
           ]),
         ],
@@ -228,6 +234,8 @@ export class WorkForceComponent implements OnInit {
           '',
           Validators.compose([
             Validators.required,
+            Validators.minLength(10),
+            Validators.maxLength(10),
             Validators.pattern('^[0-9]*$'),
           ]),
         ],
@@ -271,6 +279,8 @@ export class WorkForceComponent implements OnInit {
           '',
           Validators.compose([
             Validators.required,
+            Validators.minLength(10),
+            Validators.maxLength(10),
             Validators.pattern('^[0-9]*$'),
           ]),
         ],
@@ -285,6 +295,8 @@ export class WorkForceComponent implements OnInit {
           '',
           Validators.compose([
             Validators.required,
+            Validators.minLength(10),
+            Validators.maxLength(10),
             Validators.pattern('^[0-9]*$'),
           ]),
         ],

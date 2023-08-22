@@ -212,7 +212,7 @@
             }}"
             *ngIf="!auth?.vendorId && flag === 'Inbox'"
           >
-            {{ element.invoiceId }}
+            {{ element.invoiceNumber }}
             <img
               class="ms-1 align-middle"
               src="./assets/images/icons/table-arrow.svg"
@@ -234,7 +234,7 @@
             }}"
             *ngIf="!auth?.vendorId && flag !== 'Inbox'"
           >
-            {{ element.invoiceId }}
+            {{ element.invoiceNumber }}
             <img
               class="ms-1 align-middle"
               src="./assets/images/icons/table-arrow.svg"

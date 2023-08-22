@@ -117,7 +117,7 @@ export class InvoicesComponent implements OnInit {
         this.invoiceFilter.controls['searchByEmployee'].value;
     }
     if (this.invoiceFilter.controls['invoiceId'].value) {
-      filter.invoiceId = this.invoiceFilter.controls['invoiceId'].value;
+      filter.invoiceNumber = this.invoiceFilter.controls['invoiceId'].value;
     }
     if (this.invoiceFilter.controls['workOrderId'].value) {
       filter.workOrderId = this.invoiceFilter.controls['workOrderId'].value;

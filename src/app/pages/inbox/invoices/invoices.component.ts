@@ -182,7 +182,7 @@ export class InvoicesComponent implements OnInit {
       filter.status = [this.invoiceFilter.controls['status'].value];
     }
     if (this.invoiceFilter.controls['invoiceId'].value) {
-      filter.invoiceId = this.invoiceFilter.controls['invoiceId'].value;
+      filter.invoiceNumber = this.invoiceFilter.controls['invoiceId'].value;
     }
     if (this.invoiceFilter.controls['invoiceDate'].value) {
       filter.invoiceDate = this.changeDateToUtc(

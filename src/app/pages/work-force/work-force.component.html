@@ -202,6 +202,14 @@
             <div class="fv-help-block" *ngIf="f.workPhone.errors.pattern">
               Only number allow!
             </div>
+            <div
+              *ngIf="
+                f.workPhone.errors.maxlength || f.workPhone.errors.minlength
+              "
+              class="fv-help-block"
+            >
+              Work Phone must be at least 10 numbers.
+            </div>
           </div>
         </div>
         <div class="col-6 p-0 ps-4">
@@ -213,7 +221,6 @@
               type="text"
               (keypress)="numbersOnly($event)"
               formControlName="mobilePhone"
-              maxlength="10"
               class="form-control py-2 fs- fw-normal"
               placeholder="Give Mobile Number Here"
             />
@@ -227,6 +234,14 @@
             </div>
             <div class="fv-help-block" *ngIf="f.mobilePhone.errors.pattern">
               Only number allow!
+            </div>
+            <div
+              *ngIf="
+                f.mobilePhone.errors.maxlength || f.mobilePhone.errors.minlength
+              "
+              class="fv-help-block"
+            >
+              Mobile Phone must be at least 10 numbers.
             </div>
           </div>
         </div>
@@ -704,6 +719,15 @@
             >
               Only number allow!
             </div>
+            <div
+              *ngIf="
+                editForm.workPhone.errors.maxlength ||
+                editForm.workPhone.errors.minlength
+              "
+              class="fv-help-block"
+            >
+              Work Phone must be at least 10 numbers.
+            </div>
           </div>
         </div>
         <div class="col-6 p-0 ps-4">
@@ -735,6 +759,15 @@
               *ngIf="editForm.mobilePhone.errors.pattern"
             >
               Only number allow!
+            </div>
+            <div
+              *ngIf="
+                editForm.mobilePhone.errors.maxlength ||
+                editForm.mobilePhone.errors.minlength
+              "
+              class="fv-help-block"
+            >
+              Mobile Phone must be at least 10 numbers.
             </div>
           </div>
         </div>
