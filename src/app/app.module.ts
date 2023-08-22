@@ -22,6 +22,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { FakeAPIService } from './_fake/fake-api.service';
 import { DialogComponent } from './common/dialog/dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CloseScrollStrategy, Overlay } from '@angular/cdk/overlay';
+import {
+  MAT_AUTOCOMPLETE_SCROLL_STRATEGY,
+  MatAutocompleteModule,
+} from '@angular/material/autocomplete';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -32,7 +38,9 @@ function appInitializer(authService: AuthService) {
     });
   };
 }
-
+function scrollFactory(overlay: Overlay): () => CloseScrollStrategy {
+  return () => overlay.scrollStrategies.close();
+}
 @NgModule({
   declarations: [AppComponent, DialogComponent],
   imports: [
@@ -68,6 +76,11 @@ function appInitializer(authService: AuthService) {
       useValue: { duration: 3000 },
     },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
+    {
+      provide: MAT_AUTOCOMPLETE_SCROLL_STRATEGY,
+      useFactory: scrollFactory,
+      deps: [Overlay],
+    },
   ],
   bootstrap: [AppComponent],
 })

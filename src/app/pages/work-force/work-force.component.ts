@@ -172,6 +172,7 @@ export class WorkForceComponent implements OnInit {
     );
     this.workForceEditData.controls['bloodGroup'].setValue(item.bloodGroup);
     this.workForceData.controls['vendorId'].setValue(item?.vendorId);
+    this.workForceData.controls['documentList'].setValue([]);
 
     return await this.modalEditComponent.open();
   }
@@ -307,6 +308,7 @@ export class WorkForceComponent implements OnInit {
         currentAddress: ['', Validators.compose([Validators.required])],
         permanentAddress: ['', Validators.compose([Validators.required])],
         vendorId: [auth?.vendorId, Validators.required],
+        documentList: [[]],
       });
       this.getAllWorkForceList();
     });
@@ -549,7 +551,56 @@ export class WorkForceComponent implements OnInit {
       }
     }
   }
+  droppedFilesEdit(allFiles: File[], name: string): void {
+    console.log('this.allFiles', allFiles);
+    console.log(this.workForceEditData.controls[name].value);
+    const fileLength = allFiles.length;
+    let flg: boolean = true;
+    for (let i = 0; i < fileLength; i++) {
+      const file = allFiles[i];
 
+      if (file.type.indexOf('image') == 0) {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Please upload documents only'
+        );
+        flg = false;
+        break;
+      } else if (file.size > 2 * 1024 * 1024) {
+        // check if file size is > 2 MB
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Maximum allowed file size is 2 MB. Please choose another file.'
+        );
+        flg = false;
+        break;
+      } else {
+        const docList = this.workForceEditData.controls[name].value;
+        if (docList.length < 6) {
+          if (this.utils.isFileExist(docList, file)) {
+            this.utils.showSnackBarMessage(
+              this.snackBar,
+              'This file "' + file.name + '" already exist.'
+            );
+            flg = false;
+            break;
+          }
+        } else {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'Maximum 6 files can be added.'
+          );
+          flg = false;
+          break;
+        }
+      }
+    }
+    if (flg) {
+      for (let i = 0; i < fileLength; i++) {
+        this.workForceEditData.controls[name].value.push(allFiles[i]);
+      }
+    }
+  }
   selectFile(event: any, name: string) {
     const file = event.target.files[0];
     if (file.type.indexOf('image') == 0) {
@@ -582,9 +633,43 @@ export class WorkForceComponent implements OnInit {
       }
     }
   }
-
+  selectFileEdit(event: any, name: string) {
+    const file = event.target.files[0];
+    if (file.type.indexOf('image') == 0) {
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Please upload documents only'
+      );
+    } else if (file.size > 2 * 1024 * 1024) {
+      // check if file size is > 2 MB
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Maximum allowed file size is 2 MB. Please choose another file.'
+      );
+    } else {
+      const docList = this.workForceEditData.controls[name].value;
+      if (docList.length < 6) {
+        if (this.utils.isFileExist(docList, file)) {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'This file "' + file.name + '" already exist.'
+          );
+        } else {
+          this.workForceEditData.controls[name].value.push(file);
+        }
+      } else {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Maximum 6 files can be added.'
+        );
+      }
+    }
+  }
   clearFile(name: string, index: number) {
     this.workForceData.controls[name].value.splice(index, 1);
+  }
+  clearFileEdit(name: string, index: number) {
+    this.workForceEditData.controls[name].value.splice(index, 1);
   }
 
   selectImage(event: any) {
@@ -631,7 +716,9 @@ export class WorkForceComponent implements OnInit {
     }
 
     this.isLoading = true;
+
     this.cdr.detectChanges();
+
     if (this.workForceEditData.controls['dateOfBirth'].value) {
       this.workForceEditData.controls['dateOfBirth'].setValue(
         this.changeDateToUtc(
@@ -649,6 +736,18 @@ export class WorkForceComponent implements OnInit {
         }
       }
     }
+    const docFormData = new FormData();
+    const file = this.workForceEditData.get('documentList')?.value;
+    docFormData.append(
+      'workForceId',
+      this.workForceEditData.controls['workForceId'].value
+    );
+    if (file.length != 0) {
+      file.forEach((fileObj: File) => {
+        const blob = new Blob([fileObj], { type: fileObj.type });
+        docFormData.append('documentList', blob, fileObj.name);
+      });
+    }
 
     this.apiCalls
       .put(this.endPoints.UPDATE_WORK_FORCE, formData)
@@ -664,19 +763,9 @@ export class WorkForceComponent implements OnInit {
       )
       .subscribe(async (response) => {
         if (this.isLoading) {
-          if (this.profilePicDoc) {
-            const imageFormData = new FormData();
-            const blob = new Blob([this.profilePicDoc], {
-              type: this.profilePicDoc.type,
-            });
-            imageFormData.append(
-              'profilePicDoc',
-              blob,
-              this.profilePicDoc.name
-            );
-            imageFormData.append('workForceId', this.workForceId);
-            this.apiCalls
-              .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
+          if (file.length != 0) {
+            await this.apiCalls
+              .post(this.endPoints.UPLOAD_WORK_FORCE_DOCUMENT, docFormData)
               .pipe(
                 catchError(async (err) => {
                   this.isLoading = false;
@@ -685,28 +774,104 @@ export class WorkForceComponent implements OnInit {
                   }, 10);
                   this.utils.showSnackBarMessage(
                     this.snackBar,
-                    'Something went wrong on upload profile-pic'
+                    'Something went wrong upload document'
                   );
                   this.cdr.detectChanges();
                 })
               )
-              .subscribe(async (response) => {
-                this.isLoading = false;
-                await this.modalEditComponent.closeModal();
-                this.ngOnInit();
-                this.utils.showSnackBarMessage(
-                  this.snackBar,
-                  'Employee update successfully'
-                );
+              .subscribe(async (responseDoc) => {
+                if (this.isLoading) {
+                  if (this.profilePicDoc) {
+                    const imageFormData = new FormData();
+                    const blob = new Blob([this.profilePicDoc], {
+                      type: this.profilePicDoc.type,
+                    });
+                    imageFormData.append(
+                      'profilePicDoc',
+                      blob,
+                      this.profilePicDoc.name
+                    );
+                    imageFormData.append('workForceId', this.workForceId);
+                    this.apiCalls
+                      .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
+                      .pipe(
+                        catchError(async (err) => {
+                          this.isLoading = false;
+                          setTimeout(() => {
+                            throw err;
+                          }, 10);
+                          this.utils.showSnackBarMessage(
+                            this.snackBar,
+                            'Something went wrong on upload profile-pic'
+                          );
+                          this.cdr.detectChanges();
+                        })
+                      )
+                      .subscribe(async (response) => {
+                        this.isLoading = false;
+                        await this.modalEditComponent.closeModal();
+                        this.ngOnInit();
+                        this.utils.showSnackBarMessage(
+                          this.snackBar,
+                          'Employee update successfully'
+                        );
+                      });
+                  } else {
+                    this.isLoading = false;
+                    await this.modalEditComponent.closeModal();
+                    this.ngOnInit();
+                    this.utils.showSnackBarMessage(
+                      this.snackBar,
+                      'Employee update successfully'
+                    );
+                  }
+                }
               });
           } else {
-            this.isLoading = false;
-            await this.modalEditComponent.closeModal();
-            this.ngOnInit();
-            this.utils.showSnackBarMessage(
-              this.snackBar,
-              'Employee update successfully'
-            );
+            if (this.profilePicDoc) {
+              const imageFormData = new FormData();
+              const blob = new Blob([this.profilePicDoc], {
+                type: this.profilePicDoc.type,
+              });
+              imageFormData.append(
+                'profilePicDoc',
+                blob,
+                this.profilePicDoc.name
+              );
+              imageFormData.append('workForceId', this.workForceId);
+              this.apiCalls
+                .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
+                .pipe(
+                  catchError(async (err) => {
+                    this.isLoading = false;
+                    setTimeout(() => {
+                      throw err;
+                    }, 10);
+                    this.utils.showSnackBarMessage(
+                      this.snackBar,
+                      'Something went wrong on upload profile-pic'
+                    );
+                    this.cdr.detectChanges();
+                  })
+                )
+                .subscribe(async (response) => {
+                  this.isLoading = false;
+                  await this.modalEditComponent.closeModal();
+                  this.ngOnInit();
+                  this.utils.showSnackBarMessage(
+                    this.snackBar,
+                    'Employee update successfully'
+                  );
+                });
+            } else {
+              this.isLoading = false;
+              await this.modalEditComponent.closeModal();
+              this.ngOnInit();
+              this.utils.showSnackBarMessage(
+                this.snackBar,
+                'Employee update successfully'
+              );
+            }
           }
         }
       });

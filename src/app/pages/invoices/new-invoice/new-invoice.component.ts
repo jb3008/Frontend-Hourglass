@@ -58,7 +58,7 @@ export class NewInvoiceComponent implements OnInit {
   WorkOrderCntrl = new FormControl();
   ngOnInit(): void {
     // DrawerComponent.reinitialization();
-
+    window.addEventListener('scroll', this.scrollEvent, true);
     this.invoiceData = this.fb.group({
       workOrderId: ['', Validators.required],
       paymentTerms: [{ value: '', disabled: true }],
@@ -80,6 +80,13 @@ export class NewInvoiceComponent implements OnInit {
     this.getAllPaymentTerms();
     this.getAllWorkOrders();
   }
+
+  scrollEvent = (event: any): void => {
+    let element = document.querySelector('.mat-autocomplete-panel');
+    if (element) {
+      element.parentNode?.removeChild(element);
+    }
+  };
 
   getFilteredValuesForWorkOrder(reset?: string) {
     if (reset) {

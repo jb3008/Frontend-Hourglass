@@ -26,6 +26,8 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { ModalsModule } from 'src/app/_metronic/partials';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSortModule } from '@angular/material/sort';
+import { ScrollDispatcher, ScrollingModule } from '@angular/cdk/scrolling';
+
 @NgModule({
   declarations: [
     TimesheetsComponent,
@@ -56,6 +58,8 @@ import { MatSortModule } from '@angular/material/sort';
     ModalsModule,
     MatAutocompleteModule,
     MatSortModule,
+    ScrollingModule,
   ],
+  providers: [ScrollDispatcher],
 })
 export class TimesheetsModule {}

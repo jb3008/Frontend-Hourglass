@@ -2,7 +2,7 @@
   width: 100%;
 }
 .wf-btn::after {
-  display:none;
+  display: none;
 }
 ::ng-deep {
   @media (min-width: 576px) {
@@ -18,6 +18,9 @@
         padding: 1.75rem 2.5rem;
       }
     }
+  }
+  .pause {
+    z-index: 999999;
   }
 }
 
@@ -52,7 +55,7 @@
   }
 }
 form {
-  label{
+  label {
     font-weight: bold;
   }
 }

@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -31,6 +32,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 @Component({
   selector: 'app-new-timesheet',
   templateUrl: './new-timesheet.component.html',
@@ -64,6 +66,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
   today = new Date();
 
   ngOnInit(): void {
+    window.addEventListener('scroll', this.scrollEvent, true);
     this.dataSource = new MatTableDataSource<any>([]);
     const auth = this.utils.getAuth();
     DrawerComponent.reinitialization();
@@ -81,7 +84,12 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     this.getAllWorkForceList();
     this.getAllWorkOrders();
   }
-
+  scrollEvent = (event: any): void => {
+    let element = document.querySelector('.mat-autocomplete-panel');
+    if (element) {
+      element.parentNode?.removeChild(element);
+    }
+  };
   ngAfterViewInit() {}
 
   getFilteredValuesForWorkForce(reset?: string) {
