@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
@@ -53,11 +53,14 @@ export class WorkOrderComponent implements OnInit {
       }else{
         this.isFromInbox = false;
       }
+      !param['pN'] ?this.filterObj.pageNo = 1 : this.filterObj.pageNo = param['pN'];
+!param['pS']?this.filterObj.pageSize = 10 : this.filterObj.pageSize = param['pS'] ;
       this.getAllWorkOrders(this.filterObj);
     });
     this.getJobTypes();
     this.getWorkOrderStatus();
     this.getWorkOrderCount();
+    
   }
 
   onPageChange(event: PageEvent) {
@@ -66,6 +69,14 @@ export class WorkOrderComponent implements OnInit {
     this.filterObj.pageNo = event.pageIndex + 1;
     this.filterObj.pageSize = event.pageSize;
     this.getAllWorkOrders(this.filterObj);
+    const pagenatorInfo:Params = {pS: this.filterObj.pageSize ,pN: this.filterObj.pageNo } 
+
+    this.router.navigate(
+      [],
+      {
+        relativeTo:this.route,
+        queryParams: pagenatorInfo
+      })
   }
   sortData(sort: any) {
     const data = this.dataSource.data
