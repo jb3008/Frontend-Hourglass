@@ -468,9 +468,14 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   submitWorkOrder(status: string){
     const formData = new FormData();
     let workRateValue = this.workOrderData.controls['workRate'].value;
-    this.workOrderData.controls['workRate'].setValue(workRateValue.replace(/,/g, ''));
+    if(workRateValue){
+      this.workOrderData.controls['workRate'].setValue(workRateValue.replace(/,/g, ''));
+    }
     let minBudget = this.workOrderData.controls['minBudget'].value;
-    this.workOrderData.controls['minBudget'].setValue(minBudget.replace(/,/g, ''));
+    
+    if(minBudget){
+      this.workOrderData.controls['minBudget'].setValue(minBudget.replace(/,/g, ''));
+    }
 
     this.workOrderData.controls['maxBudget'].setValue(minBudget);
     let maxBudget = this.workOrderData.controls['maxBudget'].value;
