@@ -55,12 +55,12 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
    
 
 
-console.log(param['pS'] )
-console.log(param['pN'] )
+// console.log(param['pS'] )
+// console.log(param['pN'] )
 
 !param['pN'] ?this.filterObj.pageNo = 1 : this.filterObj.pageNo = param['pN'];
 !param['pS']?this.filterObj.pageSize = 10 : this.filterObj.pageSize = param['pS'] ;
-console.log(this.filterObj )
+// console.log(this.filterObj )
 this.getAllWorkOrders(this.filterObj);
     });
 
@@ -83,8 +83,8 @@ this.getAllWorkOrders(this.filterObj);
     this.filterObj.pageNo = event.pageIndex + 1;
     this.filterObj.pageSize = event.pageSize;
     this.getAllWorkOrders(this.filterObj);
-    console.log( this.filterObj.pageNo)
-    console.log(  this.filterObj.pageSize)
+    // console.log( this.filterObj.pageNo)
+    // console.log(  this.filterObj.pageSize)
 
     const pagenatorInfo:Params = {pS: this.filterObj.pageSize ,pN: this.filterObj.pageNo } 
 
