@@ -160,10 +160,10 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         )
         .subscribe((response) => {
           this.jobDetails = response;
-          setTimeout(() => {
-            this.paginator.pageIndex = this.queryParam.pageNo - 1;
-            this.paginator.length = this.totalJobCount;
-          });
+          // setTimeout(() => {
+          //   this.paginator.pageIndex = this.queryParam.pageNo - 1;
+          //   this.paginator.length = this.totalJobCount;
+          // });
           this.isLoading = false;
           this.cdr.detectChanges();
           if (
@@ -239,7 +239,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     //   companyCode: code
     // }
     this.apiCalls
-      .get(this.endpoints.BUSINESS_UNIT /*, queryParam*/)
+      .get(this.endpoints.BUSINESS_UNIT_BY_KEY /*, queryParam*/)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(
