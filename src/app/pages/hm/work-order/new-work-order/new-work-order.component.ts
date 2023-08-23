@@ -38,12 +38,16 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   joblistsSearchResult: Observable<any[]>;
   vendorList: any[] = [];
   vendorSearchResult: Observable<any[]>;
+  costCenterSearchResult: Observable<any[]>;
+  payTermsSearchResult: Observable<any[]>;
   currencies: any[] = [];
   workOrderKind = 'Hourly';
   workOrderData: FormGroup;
   hiringManagerCntrl = new FormControl();
   vendorCntrl = new FormControl();
   jobPostCntrl = new FormControl();
+  costCenterCntrl = new FormControl();
+  payTermsCntrl = new FormControl();
 
   @ViewChild('siteSelect') siteSelect: MatSelect;
   
@@ -99,6 +103,14 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   displayFnJobPost(job: any): string {
     return job ? `${job.id} ${job.title}` : '';
   }
+
+  displayFnCost(costCenterList: any): string {
+    return costCenterList ?  costCenterList.name + ' (' + costCenterList.code + ')' : '';
+  }
+
+  displayFnpayTerms(payTerms: any): any {
+    return payTerms ?  payTerms.name + ' (' + payTerms.id + ')' : '';
+  }
   
   showSearchResult(data: any){
     return this.hiringManager.filter(obj => {
@@ -151,6 +163,24 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     this.workOrderData.controls['jobPostId'].setValue(value);
   }
 
+  setcostCenterValue(event: any){
+    let value = event.option.value.code;
+    this.workOrderData.controls['costCenter'].setValue(value);
+  }
+
+  setpayTermsValue(event: any){
+    let value = event.option.value.code;
+    this.workOrderData.controls['payTerms'].setValue(value);
+  }
+
+  getDisplayText(name: string, code: string) {
+    return name + ' (' + code + ')'; 
+  }
+
+  getDisplayPayText(name: any, code: any) {
+    return name + ' (' + code + ')'; 
+  }
+
   getHiringManagers(){
     this.getDropDownValues(this.endpoints.HIRING_MANGER).subscribe({
       next: response => {
@@ -181,6 +211,69 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       this.joblistsSearchResult = this.jobPostCntrl.valueChanges.pipe(
         startWith(''),
         map(value => this.showSearchResultFoJobPost(value))
+      )
+    }
+  }
+
+  getcostCenterByKey(event: any) {
+    let searchTerm = '';
+    searchTerm = event;
+    let queryParams = {
+      name: searchTerm
+    }
+    if(searchTerm.length >0) {
+
+    this.apiCalls.get(this.endpoints.COST_CENTER_BY_KEY,queryParams)
+      .pipe(catchError(async (err) => {
+        setTimeout(() => {
+          throw err;  
+        }, 10);
+        this.cdr.detectChanges();
+      }))
+      .subscribe(response => {
+        this.costCenterSearchResult = this.costCenterCntrl.valueChanges.pipe(
+          startWith(''),
+          map(value => response)
+        )
+        this.cdr.detectChanges();
+      })
+    }
+    else{
+      this.costCenterSearchResult = this.costCenterCntrl.valueChanges.pipe(
+        startWith(''),
+        map(value => [])
+      )
+    }
+  }
+
+  getpayTermsByKey(event: any) {
+    let searchTerm = '';
+    searchTerm = event;
+    let queryParams = {
+      name: searchTerm
+    }
+    if(searchTerm.length >0) {
+
+
+    this.apiCalls.get(this.endpoints.PAY_TERMS_BY_KEY,queryParams)
+      .pipe(catchError(async (err) => {
+        setTimeout(() => {
+          throw err;  
+        }, 10);
+        this.cdr.detectChanges();
+      }))
+      .subscribe(response => {
+        this.payTermsSearchResult = this.payTermsCntrl.valueChanges.pipe(
+          startWith(''),
+          map(value => response)
+        )
+        this.cdr.detectChanges();
+      })
+    }
+    else{
+      this.payTermsSearchResult = this.payTermsCntrl.valueChanges.pipe(
+        startWith(''),
+        map(value => [])
       )
     }
   }

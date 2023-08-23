@@ -273,23 +273,67 @@
 
                     <div class="form-group row mb-5 d-flex align-items-center">
                         <label class="col-4">Cost Center <span class="text-danger">*</span></label>
-                        <div class="col-8">
+                        <!-- <div class="col-8">
                             <mat-select formControlName="costCenter" class="form-select fs- py-2" placeholder="Select">
                                 <mat-option *ngFor="let costCenter of costCenterList" [value]="costCenter.code">
                                     {{costCenter.name}} ({{costCenter.code}})
                                 </mat-option>
                             </mat-select>
+                        </div> -->
+                        <div class="col-8  d-flex align-items-center position-relative">
+                            <div class="position-relative w-100">
+                                <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
+                            placeholder="Type and select cost center"
+                            [formControl]="costCenterCntrl"
+                            [matAutocomplete]="autoCost"
+                            (input)="costCenterSearch.value ? '' : workOrderData.controls['costCenter'].setValue('')"
+                            #costCenterSearch
+                            (keyup)="getcostCenterByKey(costCenterSearch.value)">
+                            <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="costCenterSearch.value"
+                                (click)="costCenterSearch.value = '';getcostCenterByKey('')"></i>
+    
+                            </div>
+                             <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
+                     <i class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer dd-info-btn" ngbTooltip="You can type or search or pick the record from search button"></i>
+                     <mat-autocomplete #autoCost="matAutocomplete" [displayWith]="displayFnCost" (optionSelected)="setcostCenterValue($event)">
+                        <mat-option *ngFor="let cost of costCenterSearchResult | async" [value]="cost">
+                            {{getDisplayText(cost.name, cost.code)}}
+    
+                        </mat-option>
+                      </mat-autocomplete>
                         </div>
                     </div>
 
                     <div class="form-group row mb-5 d-flex align-items-center">
                         <label class="col-4">Payment Terms <span class="text-danger">*</span></label>
-                        <div class="col-8">
+                        <!-- <div class="col-8">
                             <mat-select formControlName="payTerms" class="form-select fs- py-2" placeholder="Select">
                                 <mat-option *ngFor="let terms of payTerms" [value]="terms.id">
                                     {{terms.name}} ({{terms.id}})
                                 </mat-option>
                             </mat-select>
+                        </div> -->
+                        <div class="col-8  d-flex align-items-center position-relative">
+                            <div class="position-relative w-100">
+                                <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
+                            placeholder="Type and select payment terms"
+                            [formControl]="payTermsCntrl"
+                            [matAutocomplete]="autoPay"
+                            (input)="payTermsSearch.value ? '' : workOrderData.controls['payTerms'].setValue('')"
+                            #payTermsSearch
+                            (keyup)="getpayTermsByKey(payTermsSearch.value)">
+                            <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="payTermsSearch.value"
+                                (click)="payTermsSearch.value = '';getpayTermsByKey('')"></i>
+    
+                            </div>
+                             <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
+                     <i class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer dd-info-btn" ngbTooltip="You can type or search or pick the record from search button"></i>
+                     <mat-autocomplete #autoPay="matAutocomplete" [displayWith]="displayFnpayTerms" (optionSelected)="setpayTermsValue($event)">
+                        <mat-option *ngFor="let pay of payTermsSearchResult | async" [value]="pay">
+                            {{getDisplayPayText(pay.name, pay.id)}}
+    
+                        </mat-option>
+                      </mat-autocomplete>
                         </div>
                     </div>
 
