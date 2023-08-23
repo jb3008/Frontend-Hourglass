@@ -129,7 +129,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     //   companyCode: code
     // }
     this.apiCalls
-      .get(this.endpoints.BUSINESS_UNIT /*, queryParam*/)
+      .get(this.endpoints.BUSINESS_UNIT_BY_KEY /*, queryParam*/)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(
