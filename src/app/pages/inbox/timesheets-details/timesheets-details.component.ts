@@ -53,19 +53,10 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
   auth: any;
   isInbox: boolean;
   today = new Date();
-  pageSize: number = 10;
-  pageNo: number = 0;
-  totalCount: number = 0;
-  sortBy: string = 'timeSheetId';
-  sortOrder: string = 'desc';
-  flag: string = 'inbox';
+  queryParamData: any;
   ngOnInit(): void {
     this.route.queryParams.subscribe((param) => {
-      this.pageNo = param['pageNo'] ? parseInt(param['pageNo']) : 0;
-      this.pageSize = param['pageSize'] ? parseInt(param['pageSize']) : 10;
-      this.sortBy = param['sortBy'] ? param['sortBy'] : 'timeSheetId';
-      this.flag = param['flag'] ? param['flag'] : 'Inbox';
-      this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'DESC';
+      this.queryParamData = param;
       this.auth = this.utils.getAuth();
       if (this.router.url.includes('inbox-timesheets-details')) {
         this.isInbox = true;

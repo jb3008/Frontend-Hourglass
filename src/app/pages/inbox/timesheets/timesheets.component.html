@@ -73,7 +73,7 @@
           id=""
           formControlName="status"
           class="form-select fs- py-2 w-200px"
-          (change)="getAllTimesheet()"
+          (change)="ReloadTable()"
         >
           <option value="All">All Status</option>
           <option value="DRAFT">Draft</option>
@@ -93,7 +93,7 @@
           formControlName="fromDate"
           [matDatepicker]="picker"
           placeholder="Select From Date"
-          (dateChange)="getAllTimesheet()"
+          (dateChange)="ReloadTable()"
         />
         <span class="cursor-pointer" (click)="picker.open()"
           ><i class="far fa-calendar"></i
@@ -109,7 +109,7 @@
           [matDatepicker]="pickerTo"
           formControlName="toDate"
           placeholder="Select To Date"
-          (dateChange)="getAllTimesheet()"
+          (dateChange)="ReloadTable()"
         />
         <span class="cursor-pointer" (click)="pickerTo.open()"
           ><i class="far fa-calendar"></i
@@ -119,7 +119,7 @@
 
       <a
         class="btn btn-light-primary btn-sm cursor-pointer"
-        (click)="getAllTimesheet()"
+        (click)="ReloadTable()"
         >Search</a
       >
       <a
@@ -127,10 +127,7 @@
         (click)="
           timeSheetFilter.reset();
           timeSheetFilter.controls['status'].setValue('All');
-          paginator.pageIndex = 0;
-          sort.active = 'timeSheetId';
-          sort.direction = 'desc';
-          getAllTimesheet()
+          ReloadTable()
         "
       >
         Reset</a
@@ -163,81 +160,7 @@
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <!-- <a routerLink="details" class="cursor-pointer"> -->
-          <a
-            (click)="readNotification(element)"
-            [queryParams]="{
-              pageNo: pageNo,
-              pageSize: pageSize,
-              sortBy: sortBy,
-              sortOrder: sortOrder,
-              flag: flag
-            }"
-            routerLink="/inbox/inbox-timesheets-details/{{
-              element.timeSheetId
-            }}"
-            *ngIf="auth?.vendorId && flag === 'Inbox'"
-          >
-            {{ element.timeSheetId }}
-            <img
-              class="ms-1 align-middle"
-              src="./assets/images/icons/table-arrow.svg"
-              alt=""
-            />
-          </a>
-          <a
-            (click)="readNotification(element)"
-            routerLink="/inbox/outbox-timesheets-details/{{
-              element.timeSheetId
-            }}"
-            [queryParams]="{
-              pageNo: pageNo,
-              pageSize: pageSize,
-              sortBy: sortBy,
-              sortOrder: sortOrder,
-              flag: flag
-            }"
-            *ngIf="auth?.vendorId && flag !== 'Inbox'"
-          >
-            {{ element.timeSheetId }}
-            <img
-              class="ms-1 align-middle"
-              src="./assets/images/icons/table-arrow.svg"
-              alt=""
-            />
-          </a>
-          <a
-            routerLink="/hm/inbox/inbox-timesheets-details/{{
-              element.timeSheetId
-            }}"
-            (click)="readNotification(element)"
-            [queryParams]="{
-              pageNo: pageNo,
-              pageSize: pageSize,
-              sortBy: sortBy,
-              sortOrder: sortOrder
-            }"
-            *ngIf="!auth?.vendorId && flag === 'Inbox'"
-          >
-            {{ element.timeSheetId }}
-            <img
-              class="ms-1 align-middle"
-              src="./assets/images/icons/table-arrow.svg"
-              alt=""
-            />
-          </a>
-          <a
-            routerLink="/hm/inbox/outbox-timesheets-details/{{
-              element.timeSheetId
-            }}"
-            [queryParams]="{
-              pageNo: pageNo,
-              pageSize: pageSize,
-              sortBy: sortBy,
-              sortOrder: sortOrder
-            }"
-            (click)="readNotification(element)"
-            *ngIf="!auth?.vendorId && flag !== 'Inbox'"
-          >
+          <a (click)="goDetail(element)">
             {{ element.timeSheetId }}
             <img
               class="ms-1 align-middle"
@@ -407,6 +330,7 @@
     </div>
     <mat-paginator
       #paginator
+      (page)="handlePageEvent($event)"
       [length]="totalCount"
       [pageSizeOptions]="[10, 30, 50, 100]"
       showFirstLastButtons

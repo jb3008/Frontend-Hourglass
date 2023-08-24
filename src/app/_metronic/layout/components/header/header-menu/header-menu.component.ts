@@ -32,6 +32,7 @@ export class HeaderMenuComponent implements OnInit {
   workOrderUrl: string = '/work-order';
   isActiveLink = false;
   auth: any;
+
   ngOnInit(): void {
     this.setWorkOrderActive();
     this.router.events.subscribe((ev) => {

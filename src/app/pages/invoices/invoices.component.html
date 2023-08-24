@@ -61,7 +61,7 @@
         id=""
         class="form-select fs- py-2 w-200px"
         formControlName="status"
-        (change)="getAllInvoice()"
+        (change)="ReloadTable()"
       >
         <option value="All">All Status</option>
         <option value="PENDING">Pending</option>
@@ -80,7 +80,7 @@
           [matDatepicker]="picker"
           formControlName="invoiceDate"
           placeholder="Select Invoice Dates"
-          (dateChange)="getAllInvoice()"
+          (dateChange)="ReloadTable()"
         />
         <span class="cursor-pointer" (click)="picker.open()"
           ><i class="far fa-calendar"></i
@@ -95,7 +95,7 @@
           [matDatepicker]="picker1"
           formControlName="dueDate"
           placeholder="Select Due Dates"
-          (dateChange)="getAllInvoice()"
+          (dateChange)="ReloadTable()"
         />
         <span class="cursor-pointer" (click)="picker1.open()"
           ><i class="far fa-calendar"></i
@@ -105,7 +105,7 @@
 
       <a
         class="btn btn-light-primary btn-sm cursor-pointer"
-        (click)="getAllInvoice()"
+        (click)="ReloadTable()"
         >Search</a
       >
       <a
@@ -113,7 +113,7 @@
         (click)="
           invoiceFilter.reset();
           invoiceFilter.controls['status'].setValue('All');
-          getAllInvoice()
+          ReloadTable()
         "
       >
         Reset</a
@@ -149,13 +149,7 @@
           <a
             class="cursor-pointer"
             *ngIf="auth?.vendorId"
-            routerLink="invoices-details/{{ element.invoiceId }}"
-            [queryParams]="{
-              pageNo: pageNo,
-              pageSize: pageSize,
-              sortBy: sortBy,
-              sortOrder: sortOrder
-            }"
+            (click)="goDetail(element.invoiceId)"
           >
             {{ element.invoiceNumber }}
             <img
@@ -167,13 +161,7 @@
           <a
             class="cursor-pointer"
             *ngIf="!auth?.vendorId"
-            routerLink="invoices-details/{{ element.invoiceId }}"
-            [queryParams]="{
-              pageNo: pageNo,
-              pageSize: pageSize,
-              sortBy: sortBy,
-              sortOrder: sortOrder
-            }"
+            (click)="goDetail(element.invoiceId)"
           >
             {{ element.invoiceNumber }}
             <img
@@ -361,10 +349,17 @@
     </div>
     <mat-paginator
       #paginator
+      (page)="handlePageEvent($event)"
       [length]="totalCount"
       [pageSizeOptions]="[10, 30, 50, 100]"
       showFirstLastButtons
     >
     </mat-paginator>
   </div>
+</div>
+<div
+  *ngIf="isLoading"
+  class="pause d-flex align-items-center justify-content-center"
+>
+  <div class="spinner"></div>
 </div>

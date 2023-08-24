@@ -43,6 +43,12 @@
     class="menu-link py-2"
     routerLinkActive="active menu-here"
     routerLink="/timesheets"
+    [queryParams]="{
+      pageNo: 0,
+      pageSize: 10,
+      sortBy: 'timeSheetId',
+      sortOrder: 'desc'
+    }"
     (click)="removeSessionStorage()"
     ><span class="menu-title">Timesheets</span></a
   >
@@ -52,6 +58,12 @@
     class="menu-link py-2"
     routerLinkActive="active menu-here"
     routerLink="hm/timesheets"
+    [queryParams]="{
+      pageNo: 0,
+      pageSize: 10,
+      sortBy: 'timeSheetId',
+      sortOrder: 'desc'
+    }"
     (click)="removeSessionStorage()"
     ><span class="menu-title">Timesheets</span></a
   >
@@ -62,6 +74,12 @@
     class="menu-link py-2"
     routerLinkActive="active menu-here"
     routerLink="/invoices"
+    [queryParams]="{
+      pageNo: 0,
+      pageSize: 10,
+      sortBy: 'invoiceId',
+      sortOrder: 'desc'
+    }"
     (click)="removeSessionStorage()"
     ><span class="menu-title">Invoices</span></a
   >
@@ -70,6 +88,12 @@
     class="menu-link py-2"
     routerLinkActive="active menu-here"
     routerLink="hm/invoices"
+    [queryParams]="{
+      pageNo: 0,
+      pageSize: 10,
+      sortBy: 'invoiceId',
+      sortOrder: 'desc'
+    }"
     (click)="removeSessionStorage()"
     ><span class="menu-title">Invoices</span></a
   >

@@ -13,12 +13,7 @@
           <a
             class="cursor-pointer"
             routerLink="/timesheets"
-            [queryParams]="{
-              pageNo: pageNo,
-              pageSize: pageSize,
-              sortBy: sortBy,
-              sortOrder: sortOrder
-            }"
+            [queryParams]="queryParamData"
             *ngIf="auth?.vendorId"
           >
             <i class="fas fa-arrow-left me-3"></i>
@@ -27,12 +22,7 @@
           <a
             class="cursor-pointer"
             routerLink="/hm/timesheets"
-            [queryParams]="{
-              pageNo: pageNo,
-              pageSize: pageSize,
-              sortBy: sortBy,
-              sortOrder: sortOrder
-            }"
+            [queryParams]="queryParamData"
             *ngIf="!auth?.vendorId"
           >
             <i class="fas fa-arrow-left me-3"></i>

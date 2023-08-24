@@ -17,6 +17,8 @@ import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
+
 @Component({
   selector: 'app-timesheets',
   templateUrl: './timesheets.component.html',
@@ -59,13 +61,15 @@ export class TimesheetsComponent implements OnInit {
   totalCount: number = 0;
   sortBy: string = 'timeSheetId';
   sortOrder: string = 'desc';
-
+  queryParamData: any;
   ngAfterViewInit() {
     this.route.queryParams.subscribe((param) => {
+      this.queryParamData = param;
       this.sort.sortChange.subscribe(() => {
         this.sortBy = this.sort.active;
         this.sortOrder = this.sort.direction;
         this.paginator.pageIndex = 0;
+        this.getAllTimesheet();
       });
       this.paginator.pageIndex = param['pageNo']
         ? parseInt(param['pageNo'])
@@ -77,9 +81,46 @@ export class TimesheetsComponent implements OnInit {
       this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'desc';
       this.sort.active = this.sortBy;
       this.sort.direction = this.sortOrder === 'desc' ? 'desc' : 'asc';
-      this.cdr.detectChanges();
+
       this.getAllTimeSheetStatus();
+      for (var i in this.timeSheetFilter.controls) {
+        if (this.queryParamData[i]) {
+          if (i === 'fromDate') {
+            this.timeSheetFilter.controls[i].setValue(
+              new Date(this.queryParamData[i])
+            );
+          } else if (i === 'toDate') {
+            this.timeSheetFilter.controls[i].setValue(
+              new Date(this.queryParamData[i])
+            );
+          } else {
+            this.timeSheetFilter.controls[i].setValue(this.queryParamData[i]);
+          }
+        }
+      }
+      this.cdr.detectChanges();
     });
+  }
+
+  goDetail(timeSheetId: any) {
+    const queryParam: any = {
+      pageNo: this.paginator.pageIndex,
+      pageSize: this.paginator.pageSize,
+      sortBy: this.sort.active,
+      sortOrder: this.sort.direction,
+    };
+    for (var i in this.timeSheetFilter.controls) {
+      queryParam[i] = this.timeSheetFilter.controls[i].value;
+    }
+    if (this.auth.vendorId) {
+      this.router.navigate(['/timesheets/timesheet-detail', timeSheetId], {
+        queryParams: queryParam,
+      });
+    } else {
+      this.router.navigate(['/hm/timesheets/timesheet-detail', timeSheetId], {
+        queryParams: queryParam,
+      });
+    }
   }
 
   ngOnInit(): void {
@@ -103,14 +144,16 @@ export class TimesheetsComponent implements OnInit {
   onKeypressEvent(event: any) {
     setTimeout(() => {
       if (event.target.value.length > 2) {
-        this.getAllTimesheet();
+        this.ReloadTable();
       } else if (event.target.value.length === 0) {
-        this.getAllTimesheet();
+        this.ReloadTable();
       }
     });
   }
 
   getAllTimesheet() {
+    this.isLoading = true;
+    this.isApiLoad = false;
     let filter: any = {};
     if (this.timeSheetFilter.controls['status'].value !== 'All') {
       filter.status = [this.timeSheetFilter.controls['status'].value];
@@ -135,100 +178,135 @@ export class TimesheetsComponent implements OnInit {
         this.timeSheetFilter.controls['toDate'].value
       );
     }
+    filter.pageNo = this.paginator.pageIndex + 1;
+    filter.pageSize = this.paginator.pageSize;
 
-    merge(this.sort.sortChange, this.paginator.page)
+    switch (this.sort.active) {
+      case 'timeSheetId':
+        filter.sortingType =
+          this.sort.direction === 'desc'
+            ? 'By_TimeSheet_ID_Descending'
+            : 'By_TimeSheet_ID';
+        break;
+      case 'workOrderId':
+        filter.sortingType =
+          this.sort.direction === 'desc'
+            ? 'By_WorkOrder_ID_Descending'
+            : 'By_WorkOrder_ID';
+        break;
+      case 'fromDate':
+        filter.sortingType =
+          this.sort.direction === 'desc'
+            ? 'By_FromDate_Descending'
+            : 'By_FromDate';
+        break;
+      case 'toDate':
+        filter.sortingType =
+          this.sort.direction === 'desc' ? 'By_ToDate_Descending' : 'By_ToDate';
+        break;
+      default:
+        filter.sortingType =
+          this.sort.direction === 'desc'
+            ? 'By_TimeSheet_ID_Descending'
+            : 'By_TimeSheet_ID';
+        break;
+    }
+    this.apiCalls
+      .get(this.endPoints.GET_TIME_SHEET, filter)
       .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoading = true;
-          this.isApiLoad = false;
-          filter.pageNo = this.paginator.pageIndex + 1;
-          filter.pageSize = this.paginator.pageSize;
-          this.pageSize = this.paginator.pageSize;
-          this.pageNo = this.paginator.pageIndex;
-          switch (this.sort.active) {
-            case 'timeSheetId':
-              filter.sortingType =
-                this.sort.direction === 'desc'
-                  ? 'By_TimeSheet_ID_Descending'
-                  : 'By_TimeSheet_ID';
-              break;
-            case 'workOrderId':
-              filter.sortingType =
-                this.sort.direction === 'desc'
-                  ? 'By_WorkOrder_ID_Descending'
-                  : 'By_WorkOrder_ID';
-              break;
-            case 'fromDate':
-              filter.sortingType =
-                this.sort.direction === 'desc'
-                  ? 'By_FromDate_Descending'
-                  : 'By_FromDate';
-              break;
-            case 'toDate':
-              filter.sortingType =
-                this.sort.direction === 'desc'
-                  ? 'By_ToDate_Descending'
-                  : 'By_ToDate';
-              break;
-            default:
-              filter.sortingType =
-                this.sort.direction === 'desc'
-                  ? 'By_TimeSheet_ID_Descending'
-                  : 'By_TimeSheet_ID';
-              break;
-          }
-
-          return this.apiCalls
-            .get(this.endPoints.GET_TIME_SHEET, filter)
-            .pipe(catchError(() => observableOf(null)));
-        }),
-        map((data) => {
-          return data;
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to fetch the GET_TIME_SHEET'
+          );
+          this.totalCount = 0;
+          this.isApiLoad = true;
+          this.timeSheetList = [];
+          this.isLoading = false;
+          this.cdr.detectChanges();
+          throw err;
         })
       )
       .subscribe((response) => {
-        this.apiCalls
-          .get(this.endPoints.GET_TIME_SHEET_COUNT, filter)
-          .pipe(
-            catchError(async (err) => {
-              this.utils.showSnackBarMessage(
-                this.snackBar,
-                'failed to fetch the time-sheet'
-              );
-              this.isApiLoad = true;
-              this.timeSheetList = [];
+        if (this.isLoading) {
+          this.apiCalls
+            .get(this.endPoints.GET_TIME_SHEET_COUNT, filter)
+            .pipe(
+              catchError(async (err) => {
+                this.utils.showSnackBarMessage(
+                  this.snackBar,
+                  'failed to fetch the time-sheet'
+                );
+                this.totalCount = 0;
+                this.isApiLoad = true;
+                this.timeSheetList = [];
+                this.isLoading = false;
+                this.cdr.detectChanges();
+                throw err;
+              })
+            )
+            .subscribe((responseCount) => {
+              this.totalCount = responseCount;
+
+              for (let index = 0; index < response.length; index++) {
+                const element = response[index];
+
+                element.timeSpent = 0;
+
+                if (element.taskListDetails?.length) {
+                  for (let i = 0; i < element.taskListDetails.length; i++) {
+                    element.timeSpent += element.taskListDetails[i].timeSpent
+                      ? parseInt(element.taskListDetails[i].timeSpent)
+                      : 0;
+                  }
+                }
+                element.status = element.displayStatus;
+              }
+              this.timeSheetList = response;
+
               this.isLoading = false;
-              this.cdr.detectChanges();
-              throw err;
-            })
-          )
-          .subscribe((responseCount) => {
-            this.totalCount = responseCount;
+              this.isApiLoad = true;
+              const queryParamObj: any = {
+                pageNo: this.paginator.pageIndex.toString(),
+                pageSize: this.paginator.pageSize.toString(),
+                sortBy: this.sort.active,
+                sortOrder: this.sort.direction,
+              };
+              for (var i in this.timeSheetFilter.controls) {
+                queryParamObj[i] = this.timeSheetFilter.controls[i].value;
+              }
 
-            for (let index = 0; index < response.length; index++) {
-              const element = response[index];
+              var queryParams = new URLSearchParams();
 
-              element.timeSpent = 0;
-
-              if (element.taskListDetails?.length) {
-                for (let i = 0; i < element.taskListDetails.length; i++) {
-                  element.timeSpent += element.taskListDetails[i].timeSpent
-                    ? parseInt(element.taskListDetails[i].timeSpent)
-                    : 0;
+              // // Set new or modify existing parameter value.
+              for (var i in queryParamObj) {
+                if (queryParamObj[i]) {
+                  queryParams.set(i, queryParamObj[i]);
                 }
               }
-              element.status = element.displayStatus;
-            }
-            this.timeSheetList = response;
+              console.log(queryParamObj);
+              var newURL = location.href.split('?')[0];
+              window.history.pushState(
+                'object',
+                document.title,
+                newURL + '?' + queryParams.toString()
+              );
 
-            this.isLoading = false;
-            this.isApiLoad = true;
-            this.cdr.detectChanges();
-          });
+              this.cdr.detectChanges();
+            });
+        }
       });
   }
-
+  handlePageEvent(e: PageEvent) {
+    this.getAllTimesheet();
+  }
+  ReloadTable() {
+    this.paginator.pageIndex = 0;
+    this.paginator.pageSize = 10;
+    this.sort.active = 'timeSheetId';
+    this.sort.direction = 'desc';
+    this.getAllTimesheet();
+  }
   getAllWorkForceList() {
     this.apiCalls
       .get(this.endPoints.LIST_WORK_FORCE, {})
@@ -243,7 +321,7 @@ export class TimesheetsComponent implements OnInit {
       )
       .subscribe((response) => {
         this.workForceList = response;
-        this.getAllTimesheet();
+        this.ReloadTable();
         this.cdr.detectChanges();
       });
   }
@@ -262,7 +340,7 @@ export class TimesheetsComponent implements OnInit {
       .subscribe((response) => {
         this.lstTimeSheetStatus = response;
 
-        this.getAllTimesheet();
+        this.ReloadTable();
         this.cdr.detectChanges();
       });
   }

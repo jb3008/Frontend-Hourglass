@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import EndPoints from 'src/app/common/endpoints';
@@ -57,13 +57,15 @@ export class InvoicesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   auth: any;
-
+  queryParamData: any;
   ngAfterViewInit() {
     this.route.queryParams.subscribe((param) => {
+      this.queryParamData = param;
       this.sort.sortChange.subscribe(() => {
         this.sortBy = this.sort.active;
         this.sortOrder = this.sort.direction;
         this.paginator.pageIndex = 0;
+        this.getAllInvoice();
       });
       this.paginator.pageIndex = param['pageNo']
         ? parseInt(param['pageNo'])
@@ -77,8 +79,18 @@ export class InvoicesComponent implements OnInit {
       this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'desc';
       this.sort.active = this.sortBy;
       this.sort.direction = this.sortOrder === 'desc' ? 'desc' : 'asc';
-
-      this.getAllInvoice();
+      for (var i in this.invoiceFilter.controls) {
+        if (this.queryParamData[i]) {
+          if (i === 'invoiceDate') {
+            this.invoiceFilter.controls[i].setValue(
+              new Date(this.queryParamData[i])
+            );
+          } else {
+            this.invoiceFilter.controls[i].setValue(this.queryParamData[i]);
+          }
+        }
+      }
+      this.ReloadTable();
       this.cdr.detectChanges();
     });
   }
@@ -90,7 +102,6 @@ export class InvoicesComponent implements OnInit {
       invoiceDate: [''],
       status: ['All'],
     });
-    // this.getAllInvoice();
   }
   flag: any = 'Inbox';
   isSelectedTab: string = 'Inbox';
@@ -102,13 +113,18 @@ export class InvoicesComponent implements OnInit {
       this.flag = 'Outbox';
       this.isSelectedTab = flag;
     }
+    this.ReloadTable();
+  }
+  ReloadTable() {
     this.paginator.pageIndex = 0;
-    this.sort.active = 'invoiceId';
-    this.sort.direction = 'desc';
     this.paginator.pageSize = 10;
+    this.sort.active = 'timeSheetId';
+    this.sort.direction = 'desc';
     this.getAllInvoice();
   }
-
+  handlePageEvent(e: PageEvent) {
+    this.getAllInvoice();
+  }
   changeDateToUtc(dateObj: any) {
     const date = new Date(dateObj);
     const utcDate = date.toISOString();
@@ -124,55 +140,6 @@ export class InvoicesComponent implements OnInit {
       ? this.endPoints.INVOICE_INBOX_NOTIFICATION_COUNT
       : this.endPoints.INVOICE_OUTBOX_NOTIFICATION_COUNT;
   }
-  // getAllInvoice() {
-  //   this.isLoading = true;
-  //   this.isApiLoad = false;
-  //   let filter: any = {};
-  //   if (this.invoiceFilter.controls['status'].value !== 'All') {
-  //     filter.status = [this.invoiceFilter.controls['status'].value];
-  //   }
-  //   if (this.invoiceFilter.controls['invoiceId'].value) {
-  //     filter.invoiceId = this.invoiceFilter.controls['invoiceId'].value;
-  //   }
-  //   if (this.invoiceFilter.controls['invoiceDate'].value) {
-  //     filter.invoiceDate = this.changeDateToUtc(
-  //       this.invoiceFilter.controls['invoiceDate'].value
-  //     );
-  //   }
-
-  //   this.apiCalls
-  //     .get(this.getEndpoint(), filter)
-  //     .pipe(
-  //       catchError(async (err) => {
-  //         this.utils.showSnackBarMessage(
-  //           this.snackBar,
-  //           'failed to fetch the invoices notification'
-  //         );
-  //         this.dataSource = new MatTableDataSource<any>([]);
-  //         this.dataSource.paginator = this.paginator;
-  //         this.dataSource.sort = this.sort;
-  //         this.isLoading = false;
-  //         this.isApiLoad = true;
-  //         this.cdr.detectChanges();
-  //         throw err;
-  //       })
-  //     )
-  //     .subscribe((response) => {
-  //       this.invoiceList = response;
-  //       console.log(response);
-
-  //       for (let index = 0; index < response.length; index++) {
-  //         const element = response[index];
-  //       }
-
-  //       this.dataSource = new MatTableDataSource<any>(response);
-  //       this.dataSource.paginator = this.paginator;
-  //       this.dataSource.sort = this.sort;
-  //       this.isLoading = false;
-  //       this.isApiLoad = true;
-  //       this.cdr.detectChanges();
-  //     });
-  // }
 
   getAllInvoice() {
     this.isLoading = true;
@@ -189,90 +156,115 @@ export class InvoicesComponent implements OnInit {
         this.invoiceFilter.controls['invoiceDate'].value
       );
     }
+    filter.pageNo = this.paginator.pageIndex + 1;
+    filter.pageSize = this.paginator.pageSize;
 
-    merge(this.sort.sortChange, this.paginator.page)
+    switch (this.sort.active) {
+      case 'invoiceId':
+        filter.sortingType =
+          this.sort.direction === 'desc'
+            ? 'By_Invoice_Num_Descending'
+            : 'By_Invoice_Num';
+        break;
+
+      case 'submittedby':
+        filter.sortingType =
+          this.sort.direction === 'desc'
+            ? 'By_Created_by_Descending'
+            : 'By_Created_by';
+        break;
+      case 'invoiceDate':
+        filter.sortingType =
+          this.sort.direction === 'desc' ? 'By_Date_Descending' : 'By_Date';
+        break;
+
+      case 'amount':
+        filter.sortingType =
+          this.sort.direction === 'desc' ? 'By_Amount_Descending' : 'By_Amount';
+        break;
+      case 'status':
+        filter.sortingType =
+          this.sort.direction === 'desc' ? 'By_Status_Descending' : 'By_Status';
+        break;
+      default:
+        filter.sortingType =
+          this.sort.direction === 'desc'
+            ? 'By_Invoice_Num_Descending'
+            : 'By_Invoice_Num';
+        break;
+    }
+
+    this.apiCalls
+      .get(this.getEndpoint(), filter)
       .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoading = true;
-          this.isApiLoad = false;
-          filter.pageNo = this.paginator.pageIndex + 1;
-          filter.pageSize = this.paginator.pageSize;
-          this.pageSize = this.paginator.pageSize;
-          this.pageNo = this.paginator.pageIndex;
-
-          switch (this.sort.active) {
-            case 'invoiceId':
-              filter.sortingType =
-                this.sort.direction === 'desc'
-                  ? 'By_Invoice_Num_Descending'
-                  : 'By_Invoice_Num';
-              break;
-
-            case 'submittedby':
-              filter.sortingType =
-                this.sort.direction === 'desc'
-                  ? 'By_Created_by_Descending'
-                  : 'By_Created_by';
-              break;
-            case 'invoiceDate':
-              filter.sortingType =
-                this.sort.direction === 'desc'
-                  ? 'By_Date_Descending'
-                  : 'By_Date';
-              break;
-
-            case 'amount':
-              filter.sortingType =
-                this.sort.direction === 'desc'
-                  ? 'By_Amount_Descending'
-                  : 'By_Amount';
-              break;
-            case 'status':
-              filter.sortingType =
-                this.sort.direction === 'desc'
-                  ? 'By_Status_Descending'
-                  : 'By_Status';
-              break;
-            default:
-              filter.sortingType =
-                this.sort.direction === 'desc'
-                  ? 'By_Invoice_Num_Descending'
-                  : 'By_Invoice_Num';
-              break;
-          }
-
-          return this.apiCalls
-            .get(this.getEndpoint(), filter)
-            .pipe(catchError(() => observableOf(null)));
-        }),
-        map((data) => {
-          return data;
+        catchError(async (err) => {
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            'failed to fetch the jobs'
+          );
+          this.totalCount = 0;
+          this.isApiLoad = true;
+          this.invoiceList = [];
+          this.isLoading = false;
+          this.cdr.detectChanges();
+          throw err;
         })
       )
       .subscribe((response) => {
-        this.apiCalls
-          .get(this.getEndpointCount(), filter)
-          .pipe(
-            catchError(async (err) => {
-              this.utils.showSnackBarMessage(
-                this.snackBar,
-                'failed to fetch the invoices'
-              );
-              this.isApiLoad = true;
-              this.invoiceList = [];
-              this.isLoading = false;
-              this.cdr.detectChanges();
-              throw err;
-            })
-          )
-          .subscribe((responseCount) => {
-            this.totalCount = responseCount;
-            this.invoiceList = response;
-            this.isLoading = false;
-            this.isApiLoad = true;
-            this.cdr.detectChanges();
-          });
+        if (this.isLoading) {
+          this.apiCalls
+            .get(this.getEndpointCount(), filter)
+            .pipe(
+              catchError(async (err) => {
+                this.utils.showSnackBarMessage(
+                  this.snackBar,
+                  'failed to fetch the invoice'
+                );
+                this.totalCount = 0;
+                this.isApiLoad = true;
+                this.invoiceList = [];
+                this.isLoading = false;
+                this.cdr.detectChanges();
+                throw err;
+              })
+            )
+            .subscribe((responseCount) => {
+              if (this.isLoading) {
+                this.totalCount = responseCount;
+                this.invoiceList = response;
+                this.isLoading = false;
+                this.isApiLoad = true;
+                const queryParamObj: any = {
+                  pageNo: this.paginator.pageIndex.toString(),
+                  pageSize: this.paginator.pageSize.toString(),
+                  sortBy: this.sort.active,
+                  sortOrder: this.sort.direction,
+                  flag: this.flag,
+                };
+                for (var i in this.invoiceFilter.controls) {
+                  queryParamObj[i] = this.invoiceFilter.controls[i].value;
+                }
+
+                var queryParams = new URLSearchParams();
+
+                // // Set new or modify existing parameter value.
+                for (var i in queryParamObj) {
+                  if (queryParamObj[i]) {
+                    queryParams.set(i, queryParamObj[i]);
+                  }
+                }
+
+                var newURL = location.href.split('?')[0];
+                window.history.pushState(
+                  'object',
+                  document.title,
+                  newURL + '?' + queryParams.toString()
+                );
+
+                this.cdr.detectChanges();
+              }
+            });
+        }
       });
   }
   readNotification(obj: any) {
@@ -295,11 +287,57 @@ export class InvoicesComponent implements OnInit {
   onKeypressEvent(event: any) {
     setTimeout(() => {
       if (event.target.value.length > 2) {
-        this.getAllInvoice();
+        this.ReloadTable();
       } else if (event.target.value.length === 0) {
-        this.getAllInvoice();
+        this.ReloadTable();
       }
     });
+  }
+  goDetail(element: any) {
+    this.readNotification(element);
+    const queryParam: any = {
+      pageNo: this.paginator.pageIndex,
+      pageSize: this.paginator.pageSize,
+      sortBy: this.sort.active,
+      sortOrder: this.sort.direction,
+      flag: this.flag,
+    };
+    for (var i in this.invoiceFilter.controls) {
+      queryParam[i] = this.invoiceFilter.controls[i].value;
+    }
+    if (this.auth.vendorId) {
+      if (this.flag === 'Inbox') {
+        this.router.navigate(
+          ['/inbox/inbox-invoices-details/', element.invoiceId],
+          {
+            queryParams: queryParam,
+          }
+        );
+      } else {
+        this.router.navigate(
+          ['/inbox/outbox-invoices-details/', element.invoiceId],
+          {
+            queryParams: queryParam,
+          }
+        );
+      }
+    } else {
+      if (this.flag === 'Inbox') {
+        this.router.navigate(
+          ['/hm/inbox/inbox-invoices-details/', element.invoiceId],
+          {
+            queryParams: queryParam,
+          }
+        );
+      } else {
+        this.router.navigate(
+          ['/hm/inbox/outbox-invoices-details/', element.invoiceId],
+          {
+            queryParams: queryParam,
+          }
+        );
+      }
+    }
   }
 }
 
