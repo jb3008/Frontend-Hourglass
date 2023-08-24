@@ -58,7 +58,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       hiringManager: ['', Validators.required],
       priority: ['Medium'],
       type: ['', Validators.required],
-      vendor: ['', Validators.required],
+      vendorId: ['', Validators.required],
       jobPostId: [''],
       startDate: ['', Validators.required],
       kind: ['', Validators.required],
@@ -155,7 +155,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
 
   setVendorValue(event: any){
     let value = event.option.value.vendorId;
-    this.workOrderData.controls['vendor'].setValue(value);
+    this.workOrderData.controls['vendorId'].setValue(value);
   }
   
   setJobPostValue(event: any){

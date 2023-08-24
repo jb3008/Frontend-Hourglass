@@ -150,10 +150,10 @@
                             placeholder="Select"
                             [formControl]="vendorCntrl"
                             [matAutocomplete]="vAuto"
-                            (input)="vendorSearch.value ? '' : workOrderData.controls['vendor'].setValue('')"
+                            (input)="vendorSearch.value ? '' : workOrderData.controls['vendorId'].setValue('')"
                             #vendorSearch>
                             <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="vendorSearch.value"
-                                (click)="vendorSearch.value = '';getFilteredValues('vendor', 'reset')"></i>
+                                (click)="vendorSearch.value = '';getFilteredValues('vendorId', 'reset')"></i>
     
                             </div>
                              <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
