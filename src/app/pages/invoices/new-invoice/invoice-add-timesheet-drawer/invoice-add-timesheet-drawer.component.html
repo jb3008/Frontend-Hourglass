@@ -42,7 +42,7 @@
         <table
           mat-table
           [dataSource]="dataSource"
-          class="table table-row-bordered text-gray-600"
+          class="table table-row-bordered text-gray-600 qfs-13 "
         >
           <!-- Checkbox Column -->
           <ng-container matColumnDef="select" class="align-middle">
@@ -111,13 +111,13 @@
             </th>
             <td mat-cell *matCellDef="let element" class="align-middle">
               <span
-                class="badge badge-light-primary"
+                class="fw-semibold"
                 [ngClass]="{
-                  ' badge-light-warning': element.status === 'IN_PROGRESS',
-                  'badge-light-success':
+                  ' text-warning': element.status === 'IN_PROGRESS',
+                  'text-success':
                     element.status === 'APPROVED_BY_COMPANY' ||
                     element.status === 'APPROVED_BY_VENDOR',
-                  'badge-light-danger': element.status === 'REJECTED'
+                  'text-danger': element.status === 'REJECTED'
                 }"
                 >{{ element.displayStatus }}</span
               >

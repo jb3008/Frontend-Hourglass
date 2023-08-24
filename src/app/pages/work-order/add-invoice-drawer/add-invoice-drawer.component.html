@@ -34,7 +34,7 @@
     </div>
 
     <div class="card-body position-relative "  id="kt_activities_body">
-        <table mat-table [dataSource]="dataSource" class="table border table-row-bordered gy-2 text-gray-600">
+        <table mat-table [dataSource]="dataSource" class="table border table-row-bordered gy-2 text-gray-600 qfs-13 ">
           <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef class="align-middle px-4">
@@ -94,8 +94,10 @@
             <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef class="align-middle"> Status </th>
                 <td mat-cell *matCellDef="let element" class="align-middle">
-                    <span class="badge badge-light-danger" 
-                    [ngClass]="{' badge-light-warning': element.status === 'In-progress', 'badge-light-success' : element.status === 'Approved' , 'badge-light-danger' : element.status === 'Rejected' }">{{element.status}}</span>
+                    <span class="fw-semibold" 
+                    [ngClass]="{' text-warning': element.status === 'In-progress', 
+                    'text-success' : element.status === 'Approved' , 
+                    'text-danger' : element.status === 'Rejected' }">{{element.status}}</span>
                 </td>
             </ng-container>
 

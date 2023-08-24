@@ -1,14 +1,15 @@
 <!-- <p  routerLink="details">work-order works!</p>
 <p  routerLink="new-work-order">new-order works!</p> -->
 <div class="content flex-column-fluid auto container-lg mb-4">
-  <div class="d-flex justify-content-between align-items-center">
+  <div class="d-flex justify-content-between align-items-center mb-5" [ngClass]="{' mt-2': auth?.vendorId}">
+
     <div>
       <h6 class="text-dark text-gray-800 fs-2 mt-7 me-1">Timesheets</h6>
-      <div class="mt-2 mb-7 text-muted block">
+      <!-- <div class="mt-2 mb-7 text-muted block">
         A timesheet is a document used to track the record the amount of time an
         individual spends on different tasks or projects ,providing a clear
         overview of work hours and activities.
-      </div>
+      </div> -->
     </div>
     <a
       routerLink="new-timesheet"
@@ -127,7 +128,7 @@
       matSort
       matSortDisableClear
       [dataSource]="timeSheetList"
-      class="table border-bottom table-row-bordered text-gray-600 m-0"
+      class="table border-bottom table-row-bordered text-gray-600 m-0  qfs-13 "
     >
       <!-- timesheet Column -->
       <ng-container matColumnDef="timeSheetId">
@@ -140,20 +141,20 @@
           <img
             src="./assets/images/icons/tdoc.svg"
             alt=""
-            class="align-text-bottom"
-          />
+            class="align-text-bottom me-1"
+          /> 
           Timesheet #
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <!-- <a routerLink="details" class="cursor-pointer"> -->
-          <a
+          <a class="cursor-pointer text-primary fw-semibold"
             (click)="goDetail(element.timeSheetId)"
             routerLink="timesheet-detail/{{ element.timeSheetId }}"
           >
             {{ element.timeSheetId }}
             <img
               class="ms-1 align-middle"
-              src="./../assets/images/icons/table-arrow.svg"
+              src="./assets/images/icons/table-arrow.svg"
               alt=""
             />
           </a>
@@ -165,9 +166,9 @@
         <th mat-header-cell *matHeaderCellDef class="align-middle">
           <img
             src="./assets/images/icons/manager.svg"
-            class="align-text-bottom"
+            class="align-text-bottom me-1"
             alt=""
-          />
+          /> 
           Employee
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
@@ -202,16 +203,16 @@
           <img
             src="./assets/images/icons/tdoc.svg"
             alt=""
-            class="align-text-bottom"
-          />
+            class="align-text-bottom me-1"
+          /> 
           Work Order #
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
-          <a>
+          <a class="cursor-pointer text-primary fw-semibold">
             {{ element.workOrderId }}
             <img
               class="ms-1 align-middle"
-              src="./../assets/images/icons/table-arrow.svg"
+              src="./assets/images/icons/table-arrow.svg"
               alt=""
             />
           </a>
@@ -231,8 +232,8 @@
           <img
             src="./assets/images/icons/tcal.svg"
             alt=""
-            class="align-text-bottom"
-          />
+            class="align-text-bottom me-1"
+          /> 
           From Date
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
@@ -247,11 +248,11 @@
           mat-sort-header
           *matHeaderCellDef
           class="align-middle"
-        >
+        > 
           <img
             src="./assets/images/icons/tcal.svg"
             alt=""
-            class="align-text-bottom"
+            class="align-text-bottom me-1"
           />
           Due Date
         </th>
@@ -266,8 +267,8 @@
           <img
             src="./assets/images/icons/tclock.svg"
             alt=""
-            class="align-text-bottom"
-          />
+            class="align-text-bottom me-1"
+          /> 
           Total Work hr
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
@@ -280,18 +281,18 @@
         <th mat-header-cell *matHeaderCellDef class="align-middle">
           <img
             src="./assets/images/icons/status.svg"
-            class="align-text-bottom"
+            class="align-text-bottom me-1"
             alt=""
-          />
+          /> 
           Status
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <span
-            class="badge badge-light-danger badge-light-primary"
+            class="fw-semibold"
             [ngClass]="{
-              ' badge-light-warning': element.status === 'In Process',
-              'badge-light-success': element.status === 'Approved',
-              'badge-light-danger': element.status === 'Rejected'
+              ' text-warning': element.status === 'In Process',
+              'text-success': element.status === 'Approved',
+              'text-danger': element.status === 'Rejected'
             }"
             >{{
               element.status === "In Process" ? "In-Process" : element.status
@@ -309,7 +310,7 @@
     </table>
     <div
       *ngIf="isApiLoad && timeSheetList.length === 0"
-      class="text-center fw-bold fs-3 mt-2"
+      class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center"
     >
       No Records Found
     </div>

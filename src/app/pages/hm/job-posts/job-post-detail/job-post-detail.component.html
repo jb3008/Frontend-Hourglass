@@ -279,7 +279,7 @@
           <span class="text-muted ">Uploaded by <a class="q-link-text">{{documents?.userDetails?.firstName}} {{documents?.userDetails?.lastName}}</a> on {{ documents.modifierDate | date : "fullDate" }} {{ documents.modifierDate | date: 'hh:mm a' }}</span>
         </div>
         <div class="d-flex  w-sm-100 mr-2">
-          <span class="badge badge-light-primary w-auto ">{{documents.type}}</span>
+          <span class="badge badge-light-primary qfs-12 w-auto ">{{documents.type}}</span>
         </div>
         <!--end::Title-->
 
@@ -296,14 +296,16 @@
       </div>
     </ng-container>
 
-    <div *ngIf="apiLoad && documentsList.length == 0"  class="text-center fw-bold fs-3 mt-2">
+
+    <div *ngIf="apiLoad && documentsList.length == 0"  class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
+
       No Records Found
     </div>
 
   </ng-container>
   <ng-container *ngIf="isSelectedTab=='JobSeekers'">
       <div class="d-flex row align-items-center mb-4 bg-white rounded m-0">
-        <table mat-table [dataSource]="dataSource" class="table table-row-bordered text-gray-600" >
+        <table mat-table [dataSource]="dataSource" class="table table-row-bordered text-gray-600 qfs-13 " >
        
           <!-- vendor Column -->
           <ng-container matColumnDef="title">
@@ -313,7 +315,7 @@
           
           <!-- appID Column -->
           <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tdoc.svg" alt="" class="align-text-bottom"> Application ID</th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tdoc.svg" alt="" class="align-text-bottom me-1 "> Application ID</th>
             <td mat-cell *matCellDef="let element" class="align-middle"> 
               
               <a id="kt_application_drawer_toggle" class="fw-bold cursor-pointer" (click)="getApplicationDetails(element.id); setSelectedJobSeeker(element)"> {{element.id}}  </a>
@@ -322,7 +324,7 @@
                   
           <!-- worker Column -->
           <ng-container matColumnDef="worker">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom" alt=""> 
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom me-1 " alt=""> 
               Worker </th>
             <td mat-cell *matCellDef="let element" class="align-middle">
               <div  class="symbol symbol-35px  rounded-1 me-3">
@@ -335,7 +337,7 @@
           
           <!-- appliedBy Column -->
           <ng-container matColumnDef="appliedBy">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom" alt="">  Applied by  </th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom me-1 " alt="">  Applied by  </th>
             <td mat-cell *matCellDef="let element" class="align-middle">
               {{element.appliedBy?.firstName}} {{element.appliedBy?.lastName}}
            </td>
@@ -344,13 +346,13 @@
           
           <!-- lastUpdate Column -->
           <ng-container matColumnDef="modifierDate">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tclock.svg" alt="" class="align-text-bottom">  Last Update </th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tclock.svg" alt="" class="align-text-bottom me-1 ">  Last Update </th>
             <td mat-cell *matCellDef="let element" class="align-middle"> {{element.modifierDate | date:'MMMM d, yyyy h:mm a'}} </td>
           </ng-container>
 
           <!-- costing Column -->
           <ng-container matColumnDef="workRate">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tcost.svg" alt="" class="align-text-bottom"> Costing </th>
+            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tcost.svg" alt="" class="align-text-bottom me-1 "> Costing </th>
             <td mat-cell *matCellDef="let element" class="align-middle"> {{element.workRate}} {{element.workRateCurrency}} </td>
           </ng-container>
         
@@ -390,7 +392,8 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;">
           </tr>
         </table>
-        <div *ngIf="apiLoad && dataSource.data.length == 0"  class="text-center fw-bold fs-3 mt-2">
+
+        <div *ngIf="apiLoad && dataSource.data.length == 0"  class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
           No Records Found
         </div>
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
@@ -404,7 +407,7 @@
 
   <ng-container *ngIf="isSelectedTab=='Interviewed'">
     <div class="d-flex row align-items-center mb-4 bg-white rounded m-0">
-      <table mat-table [dataSource]="dataSource" class="table table-row-bordered text-gray-600" >
+      <table mat-table [dataSource]="dataSource" class="table table-row-bordered text-gray-600 qfs-13 " >
        
         <!-- vendor Column -->
         <ng-container matColumnDef="title">
@@ -414,7 +417,7 @@
         
         <!-- appID Column -->
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/text.svg" alt="" class="align-text-bottom"> Application ID</th>
+          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/text.svg" alt="" class="align-text-bottom me-1 "> Application ID</th>
           <td mat-cell *matCellDef="let element" class="align-middle"> 
             <a id="kt_application_drawer_toggle" class="fw-bold cursor-pointer" (click)="getApplicationDetails(element.id)"> {{element.id}}  </a>
             <!-- <app-application-drawer></app-application-drawer> -->
@@ -423,7 +426,7 @@
                 
         <!-- worker Column -->
         <ng-container matColumnDef="worker">
-          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom" alt=""> 
+          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom me-1 " alt=""> 
             Worker </th>
           <td mat-cell *matCellDef="let element" class="align-middle">
             <div  class="symbol symbol-35px  rounded-1 me-3">
@@ -436,20 +439,20 @@
         
         <!-- appliedBy Column -->
         <ng-container matColumnDef="appliedBy">
-          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom" alt="">  Applied by  </th>
+          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom me-1 " alt="">  Applied by  </th>
           <td mat-cell *matCellDef="let element" class="align-middle">{{element.appliedBy?.firstName}} {{element.appliedBy?.lastName}} </td>
         </ng-container>
    
         
         <!-- lastUpdate Column -->
         <ng-container matColumnDef="modifierDate">
-          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tclock.svg" alt="" class="align-text-bottom">  Last Update </th>
+          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tclock.svg" alt="" class="align-text-bottom me-1 ">  Last Update </th>
           <td mat-cell *matCellDef="let element" class="align-middle"> {{element.modifierDate | date:'MMMM d, yyyy h:mm a'}} </td>
         </ng-container>
 
         <!-- costing Column -->
         <ng-container matColumnDef="workRate">
-          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tcost.svg" alt="" class="align-text-bottom">  Costing </th>
+          <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tcost.svg" alt="" class="align-text-bottom me-1 ">  Costing </th>
           <td mat-cell *matCellDef="let element" class="align-middle"> {{element.workRate}} {{element.workRateCurrency}} </td>
         </ng-container>
       
@@ -489,7 +492,8 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;">
         </tr>
       </table>
-      <div *ngIf="apiLoad && dataSource.data.length == 0" class="text-center fw-bold fs-3 mt-2">
+
+      <div *ngIf="apiLoad && dataSource.data.length == 0" class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
         No Records Found
       </div>
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
