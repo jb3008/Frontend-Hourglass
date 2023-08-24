@@ -320,7 +320,7 @@
           <table
             mat-table
             [dataSource]="dataSource"
-            class="table table-row-bordered text-gray-600 taskTable"
+            class="table table-row-bordered text-gray-600 taskTable qfs-13 "
           >
             <!-- taskId Column -->
             <ng-container matColumnDef="taskId">
@@ -343,8 +343,8 @@
                 <img
                   src="./assets/images/icons/text.svg"
                   alt=""
-                  class="align-text-bottom"
-                />
+                  class="align-text-bottom me-1"
+                /> 
                 Task Name
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
@@ -358,8 +358,8 @@
                 <img
                   src="./assets/images/icons/tag.svg"
                   alt=""
-                  class="align-middle"
-                />
+                  class="align-middle me-1"
+                /> 
                 Priority
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
@@ -394,8 +394,8 @@
                 <img
                   src="./assets/images/icons/tclock.svg"
                   alt=""
-                  class="align-text-bottom"
-                />
+                  class="align-text-bottom me-1"
+                /> 
                 Time Spent (hrs)
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
@@ -418,8 +418,8 @@
                 <img
                   src="./assets/images/icons/tcal.svg"
                   alt=""
-                  class="align-text-bottom"
-                />
+                  class="align-text-bottom me-1"
+                /> 
                 Start Date
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
@@ -449,8 +449,8 @@
                 <img
                   src="./assets/images/icons/tcal.svg"
                   alt=""
-                  class="align-text-bottom"
-                />
+                  class="align-text-bottom me-1"
+                /> 
                 Due Date
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
@@ -479,20 +479,20 @@
               <th mat-header-cell *matHeaderCellDef class="align-middle">
                 <img
                   src="./assets/images/icons/status.svg"
-                  class="align-text-bottom"
+                  class="align-text-bottom me-1"
                   alt=""
-                />
+                /> 
                 Status
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
                 <span
-                  class="badge badge-light-success"
+                  class="fw-semibold"
                   [ngClass]="{
-                    ' badge-light-warning': element.status === 'IN_PROGRESS',
-                    'badge-light-success':
+                    ' text-warning': element.status === 'IN_PROGRESS',
+                    'text-success':
                       element.status === 'APPROVED' ||
                       element.status === 'COMPLETED',
-                    'badge-light-danger': element.status === 'REJECTED'
+                    'text-danger': element.status === 'REJECTED'
                   }"
                   >{{ element.displayStatus }}</span
                 >

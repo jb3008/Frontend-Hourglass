@@ -26,6 +26,7 @@
 }
 tr.mat-header-row {
     height: 44px!important;
+    th{font-size: 12px;font-weight: 500;}
 }
 .input-icon span {
     left: 0;
@@ -153,7 +154,30 @@ tr.mat-header-row {
             background-color: #F0F9FF;
             .badge-light-primary{ background-color: rgb(226, 243, 255)}
         }
-        .q-high{
+        .qfs-11{font-size: 11px}
+        .qfs-12{font-size: 12px}
+        .qfs-13{font-size: 13px}
+        .qfs-14{font-size: 14px}
+        .badge{font-size: 12px}
+        .q-high,
+                .q-med,
+                .q-success {
+                    font-size: 12px;
+                    font-weight: 500;
+                    padding: 2px 8px 2px 6px;
+                  line-height: 18px;
+        
+                    i {
+                        color: #F79009;
+                        width: 8px;
+                        height: 8px;
+                        font-size: 8px!important;
+                        margin-right: 5px;
+                    }
+        
+                }
+        
+                .q-high{
             background-color: #FEF3F2;
             color: #B42318;
             i{color: #F04438;}
@@ -171,5 +195,6 @@ tr.mat-header-row {
         .q-link-text{
             color: #0086C9;
         }
+        .text-yellow{color: #EE9D01;}
         // .badge-light-primary{ background-color: rgb(226, 243, 255)}
 // }

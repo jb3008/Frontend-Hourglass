@@ -36,7 +36,7 @@
     </div>
     <div class="row g-xl-12 mb-5 mb-xl-12">
         <div class="w-250px text-gray-600 h-100">
-            <div class="card p-4">
+            <div class="card p-4 fs-6">
                 <div class="position-relative input-icon  ">
                     <input type="text" class="form-control py-2 fs- fw-normal px-11" [(ngModel)]="filter.searchText"  placeholder="Search for a Job"  (keyup)="searchFilter($event)"/>
                     <span><i class="fa fa-search "></i></span>
@@ -315,7 +315,7 @@
             </ng-container>
         </ng-container>
 
-        <div *ngIf="jobDetails.length == 0" class="text-center fw-bold fs-3 mt-2">
+        <div *ngIf="jobDetails.length == 0" class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
             No Records Found
         </div>
 

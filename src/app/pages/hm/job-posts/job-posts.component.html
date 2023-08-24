@@ -118,7 +118,7 @@
             <ng-container *ngIf="isMat">
             <div class="card overflow-hidden">
                                
-                <table mat-table [dataSource]="dataSource" class="table table-row-bordered gy-2 text-gray-600 fs-6">
+                <table mat-table [dataSource]="dataSource" class="table table-row-bordered gy-2 text-gray-600  qfs-13 ">
                     <!-- jobPost Column -->
                     <ng-container matColumnDef="id">
                         <th mat-header-cell *matHeaderCellDef class="align-middle"> Job Post ID/ Title </th>
@@ -196,7 +196,7 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
-                <div *ngIf="dataSource.data.length == 0" class="text-center fw-bold fs-3 mt-2">
+                <div *ngIf="dataSource.data.length == 0" class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
                     No Records Found
                 </div>
     

@@ -287,7 +287,7 @@
           <span class="text-muted ">Uploaded by <a class="q-link-text">{{documents?.userDetails?.firstName}} {{documents?.userDetails?.lastName}}</a> on {{ documents.modifierDate | date : "fullDate" }} {{ documents.modifierDate | date: 'hh:mm a' }}</span>
         </div>
         <div class="d-flex  w-sm-100 mr-2">
-          <span class="badge badge-light-primary w-auto ">{{documents.type}}</span>
+          <span class="badge badge-light-primary qfs-12 w-auto ">{{documents.type}}</span>
         </div>
         <!--end::Title-->
 
@@ -304,7 +304,7 @@
       </div>
     </ng-container>
 
-    <div *ngIf="documentsList.length == 0" class="text-center fw-bold fs-3 mt-2">
+    <div *ngIf="documentsList.length == 0" class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
       No Records Found
    </div>
 
@@ -415,7 +415,7 @@
                  </a>
               </div>
             </div>
-            <div *ngIf="applicationAttachement.length == 0" class="fw-bold fs-6 mt-2">
+            <div *ngIf="applicationAttachement.length == 0" class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
               No Records Found
            </div>
 
