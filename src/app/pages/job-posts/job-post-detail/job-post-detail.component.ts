@@ -20,6 +20,7 @@ export class JobPostDetailComponent implements OnInit {
   jobId: string;
   parentTab: string;
   loading = false;
+  apiLoad = false;
   endPoints = EndPoints;
   jobDetails: any;
   documentsList: any[] = [];
@@ -119,6 +120,7 @@ export class JobPostDetailComponent implements OnInit {
 
   getApplicationAttachment(id: string){
     this.loading = true;
+    this.apiLoad = false;
     let queryParam = {
       id: id,
       attachmentType: 'JOB_APPLICATION',
@@ -128,12 +130,14 @@ export class JobPostDetailComponent implements OnInit {
       .pipe(
         catchError(async (error) => {
           this.loading = false;
+          this.apiLoad = true;
           this.cdr.detectChanges();
           throw error;
         })
       )
       .subscribe((response) => {
         this.loading = false;
+        this.apiLoad = true;
         this.applicationAttachement = response;
         this.cdr.detectChanges();
       });
@@ -227,6 +231,7 @@ export class JobPostDetailComponent implements OnInit {
 
   getJobDocuments(id: string){
     this.loading = true;
+    this.apiLoad = false;
     let queryParam = {
       id: id,
       attachmentType: 'JOB_POST'
@@ -234,11 +239,13 @@ export class JobPostDetailComponent implements OnInit {
     this.apiCalls.get(this.endPoints.GET_DOCUMENTS, queryParam)
       .pipe(catchError(async (error) => {
         this.loading = false;
+        this.apiLoad = true;
         this.cdr.detectChanges();
         throw error;
       }))
       .subscribe((response) => {
         this.loading = false;
+        this.apiLoad = true;
         this.documentsList = response;
         this.cdr.detectChanges();
       })

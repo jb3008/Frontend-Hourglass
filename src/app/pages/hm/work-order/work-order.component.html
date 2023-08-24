@@ -180,7 +180,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;">
           </tr>
         </table>
-        <div *ngIf="dataSource.data.length == 0" class="text-center fw-bold fs-3 mt-2">
+        <div *ngIf="apiLoad && dataSource.data.length == 0" class="text-center fw-bold fs-3 mt-2">
           No Records Found
       </div>
         <mat-paginator 
