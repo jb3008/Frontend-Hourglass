@@ -37,6 +37,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   endpoints = EndPoints;
   selectedTab = 'NewJob';
   isLoading = false;
+  apiLoad = false;
   jobDetails: any[] = [];
   businessUnits: any[] = [];
   sitesList: any[] = [];
@@ -76,6 +77,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
+    this.apiLoad = false;
     const searchParams = JSON.parse(sessionStorage.getItem('searchFilters')!);
     if (searchParams)
       this.queryParam = JSON.parse(JSON.stringify(searchParams));
@@ -129,6 +131,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   getAllJobs() {
+    this.apiLoad = false;
     const filterData = {
       filter: this.filter,
       selectedJobTypes: this.selectedJobTypes,
@@ -155,6 +158,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
               'failed to fetch the jobs'
             );
             this.isLoading = false;
+            this.apiLoad = true;
             throw err;
           })
         )
@@ -165,6 +169,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
           //   this.paginator.length = this.totalJobCount;
           // });
           this.isLoading = false;
+          this.apiLoad = true;
           this.cdr.detectChanges();
           if (
             (this.selectedTab == 'AppliedJob' ||

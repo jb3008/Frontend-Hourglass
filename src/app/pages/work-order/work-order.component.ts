@@ -25,6 +25,7 @@ export class WorkOrderComponent implements OnInit {
   displayedColumns: string[] = ['workOrderId', 'type', 'title', 'jobPostId', 'priority', 'startDate', 'endDate', 'managerDetails', 'status'];
   dataSource = new MatTableDataSource<any>();
   loading= false;
+  apiLoad= false;
   isFromInbox = false;
   jobTypes: any[] = [];
   workOrderStatus: any[] = [];
@@ -47,6 +48,7 @@ export class WorkOrderComponent implements OnInit {
   } as FilterValue;
 
   ngOnInit(): void {
+    this.apiLoad = false;
     this.route.queryParams.subscribe(param => {
       if(param['from'] == 'inbox'){
         this.isFromInbox = true;
@@ -130,12 +132,14 @@ export class WorkOrderComponent implements OnInit {
 
   getAllWorkOrders(filterObj: any){
     this.loading = true;
+    this.apiLoad = false;
     const endPoint = this.isFromInbox ? this.endPoints.WORKORDER_NOTIFICATION : this.endPoints.ALL_WORK_ORDERS;
     this.apiCalls.get(endPoint, filterObj)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the work orders');
           this.loading = false;
+          this.apiLoad = true;
           this.cdr.detectChanges();
           throw err;
         })
@@ -150,6 +154,7 @@ export class WorkOrderComponent implements OnInit {
           this.paginator.length = this.totalWorkOrderCount;
         });
         this.loading = false;
+        this.apiLoad = true;
         this.cdr.detectChanges();
       });
   }

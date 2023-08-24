@@ -283,7 +283,7 @@
           </div>
         </ng-container>
 
-        <div *ngIf="documentsList.length == 0" class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
+        <div *ngIf="apiLoad && documentsList.length == 0" class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
           No Records Found
        </div>
 
@@ -440,7 +440,8 @@
             </tr>
           </table>
 
-          <div *ngIf="dataSource.data.length == 0" class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
+
+          <div *ngIf="apiLoad && dataSource.data.length == 0" class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
             No Records Found
          </div>
 

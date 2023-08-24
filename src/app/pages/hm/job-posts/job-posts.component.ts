@@ -50,6 +50,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   pageSize = 10;
   selectedJobTypes: boolean[] = [];
   filter: Filter = {} as Filter;
+  apiLoad = false;
 
   // searchFilter:string ='';
   @ViewChild('searchFilterInp') searchFilterInp: any;
@@ -66,6 +67,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
+    this.apiLoad = false;
     const searchParams = JSON.parse(sessionStorage.getItem('searchFilters')!);
     if (searchParams)
       this.queryParam = JSON.parse(JSON.stringify(searchParams));
@@ -214,6 +216,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   getAllJobs() {
+    this.apiLoad = false;
     const filterData = {
       selected: this.selected,
       selectedJobTypes: this.selectedJobTypes,
@@ -231,6 +234,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
             'failed to fetch the jobs'
           );
           this.isLoading = false;
+          this.apiLoad = true;
           throw err;
         })
       )
@@ -242,6 +246,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
           this.paginator.length = this.totalJobsCount;
         });
         this.isLoading = false;
+        this.apiLoad = true;
       });
   }
 

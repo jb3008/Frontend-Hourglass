@@ -33,6 +33,7 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
   statusLists: any[] = [];
   taskDetails: any;
   isFromInbox = false;
+  apiLoad = false;
   dataSource = new MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('taskdrawer', { static: false }) taskdrawer: NewTaskDrawerComponent;
@@ -140,6 +141,7 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
 
   getDocuments(){
     this.loading = true;
+    this.apiLoad = false;
     let queryObj = {
       id : this.workOrderID,
       attachmentType : 'WORK_ORDER'
@@ -149,12 +151,14 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
         catchError(async (err) => {
           this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the documents');
           this.loading = false;
+          this.apiLoad = true;
           throw err;
         })
       )
       .subscribe((response) => {
         this.documentsList = response;
         this.loading = false;
+        this.apiLoad = true;
         this.cdr.detectChanges();
       });
   }
@@ -208,11 +212,13 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
 
   getTaskList(obj: any){
     this.loading = true;
+    this.apiLoad = false;
     this.apiCalls.get(this.endpoints.TASK_LIST_HM, obj)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(this.snackBar, 'failed to get the task list');
           this.loading = false;
+          this.apiLoad = true;
           this.cdr.detectChanges();
           throw err;
         })
@@ -221,6 +227,7 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
         this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;
         this.loading = false;
+        this.apiLoad = true;
         this.cdr.detectChanges();
       });
   }

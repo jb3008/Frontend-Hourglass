@@ -39,6 +39,7 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
   pageSize = this.filterObj.pageSize;
   currentPage = 0;
   totalWorkOrderCount = 0;
+  apiLoad = false;
 
   filterValue: FilterValue = {
     type: 'All Types',
@@ -46,6 +47,7 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
   } as FilterValue;
 
   ngOnInit(): void {
+    this.apiLoad = false;
     this.route.queryParams.subscribe(param => {
       if(param['from'] == 'inbox'){
         this.isFromInbox = true;
@@ -142,12 +144,14 @@ this.getAllWorkOrders(this.filterObj);
 
   getAllWorkOrders(filterObj?: any){
     this.loading = true;
+    this.apiLoad = false;
     const endPoint = this.isFromInbox ? this.endPoints.WORKORDER_NOTIFICATION : this.endPoints.ALL_WORK_ORDERS;
     this.apiCalls.get(endPoint, filterObj)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the work orders');
           this.loading = false;
+          this.apiLoad = true;
           this.cdr.detectChanges();
           throw err;
         })
@@ -168,6 +172,7 @@ this.getAllWorkOrders(this.filterObj);
      
 
         this.loading = false;
+        this.apiLoad = true;
         this.cdr.detectChanges();
    
       });

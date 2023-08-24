@@ -296,7 +296,9 @@
       </div>
     </ng-container>
 
-    <div *ngIf="documentsList.length == 0"  class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
+
+    <div *ngIf="apiLoad && documentsList.length == 0"  class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
+
       No Records Found
     </div>
 
@@ -390,7 +392,8 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;">
           </tr>
         </table>
-        <div *ngIf="dataSource.data.length == 0"  class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
+
+        <div *ngIf="apiLoad && dataSource.data.length == 0"  class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
           No Records Found
         </div>
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
@@ -489,7 +492,8 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;">
         </tr>
       </table>
-      <div *ngIf="dataSource.data.length == 0" class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
+
+      <div *ngIf="apiLoad && dataSource.data.length == 0" class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
         No Records Found
       </div>
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>

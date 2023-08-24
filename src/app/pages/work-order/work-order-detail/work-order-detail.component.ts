@@ -29,6 +29,7 @@ export class WorkOrderDetailComponent implements OnInit {
   endpoints = EndPoints;
   workOrderID: any;
   loading = false;
+  apiLoad = false;
   workOrderDetails: any;
   documentsList: any[] = [];
   statusLists: any[] = [];
@@ -141,11 +142,13 @@ export class WorkOrderDetailComponent implements OnInit {
 
   getTaskList(obj: any){
     this.loading = true;
+    this.apiLoad = false;
     this.apiCalls.get(this.endpoints.TASK_LIST_HM, obj)
       .pipe(
         catchError(async (err) => {
           this.utils.showSnackBarMessage(this.snackBar, 'failed to get the task list');
           this.loading = false;
+          this.apiLoad = true;
           this.cdr.detectChanges();
           throw err;
         })
@@ -154,6 +157,7 @@ export class WorkOrderDetailComponent implements OnInit {
         this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;
         this.loading = false;
+        this.apiLoad = true;
         this.cdr.detectChanges();
       });
   }
@@ -232,6 +236,7 @@ export class WorkOrderDetailComponent implements OnInit {
   
   getDocuments(){
     this.loading = true;
+    this.apiLoad = false;
     let queryObj = {
       id : this.workOrderID,
       attachmentType : 'WORK_ORDER'
@@ -241,12 +246,14 @@ export class WorkOrderDetailComponent implements OnInit {
         catchError(async (err) => {
           this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the documents');
           this.loading = false;
+          this.apiLoad = true;
           throw err;
         })
       )
       .subscribe((response) => {
         this.documentsList = response;
         this.loading = false;
+        this.apiLoad = true;
         this.cdr.detectChanges();
       });
   }

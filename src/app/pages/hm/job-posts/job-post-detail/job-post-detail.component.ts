@@ -38,6 +38,7 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
   timeSheetFrequencyList: any = {'W': 'Weekly', '2W': 'Bi-Weekly', 'M': 'Monthly'};
   selectedJobSeeker: any = null;
   clickedApplication: string;
+  apiLoad = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -172,6 +173,7 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
   }
 
   getJobDocuments(id: string){
+    this.apiLoad = false;
     this.loading = true;
     let queryParam = {
       id: id,
@@ -180,12 +182,14 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
     this.apiCalls.get(this.endPoints.GET_DOCUMENTS, queryParam)
       .pipe(catchError(async (error) => {
         this.loading = false;
+        this.apiLoad = true;
         this.cdr.detectChanges();
         console.log(error);
         throw error;
       }))
       .subscribe((response) => {
         this.loading = false;
+        this.apiLoad = true;
         this.documentsList = response;
         this.cdr.detectChanges();
       })
@@ -193,12 +197,14 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
 
   getJobSeekersList(id: string){
     this.loading = true;
+    this.apiLoad = false;
     let queryParam = {
       jobPostId: id
     }
     this.apiCalls.get(this.endPoints.JOB_SEEKERS_LIST, queryParam)
       .pipe(catchError(async (error) => {
         this.loading = false;
+        this.apiLoad = true;
         console.log(error);
         this.cdr.detectChanges();
         throw error;
@@ -208,6 +214,7 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
         this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.apiLoad = true;
         this.loading = false;
         this.cdr.detectChanges();
       })
@@ -215,12 +222,14 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
 
   getInterviewedList(id: string){
     this.loading = true;
+    this.apiLoad = false;
     let queryParam = {
       jobPostId: id
     }
     this.apiCalls.get(this.endPoints.INTERVIEWED_LIST, queryParam)
       .pipe(catchError(async (error) => {
         this.loading = false;
+        this.apiLoad = true;
         console.log(error);
         this.cdr.detectChanges();
         throw error;
@@ -230,6 +239,7 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.loading = false;
+        this.apiLoad = true;
         this.cdr.detectChanges();
       })
   }
