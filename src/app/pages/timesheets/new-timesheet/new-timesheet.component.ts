@@ -24,6 +24,7 @@ import {
   startWith,
   throwError,
 } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import {
   FormBuilder,
@@ -96,10 +97,24 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     if (reset) {
       this.timeSheetData.controls['employeeId'].setValue('');
     }
-    this.WorkForceSearchResult = this.WorkForceCntrl.valueChanges.pipe(
-      startWith(''),
-      map((value) => this.showSearchResult(value))
-    );
+    const auth = this.utils.getAuth();
+    if (!auth?.isAdmin && this.workForceList.length) {
+      this.timeSheetData.controls['employeeId'].setValue(
+        this.workForceList[0].workForceId
+      );
+      this.WorkForceSearchResult = this.WorkForceCntrl.valueChanges.pipe(
+        startWith(''),
+        map((value) => this.showSearchResult(value)),
+        tap(() => this.WorkForceCntrl.setValue(this.workForceList[0]))
+      );
+      this.WorkForceCntrl.disable();
+      this.cdr.detectChanges();
+    } else {
+      this.WorkForceSearchResult = this.WorkForceCntrl.valueChanges.pipe(
+        startWith(''),
+        map((value) => this.showSearchResult(value))
+      );
+    }
   }
   showSearchResult(data: any) {
     return this.workForceList.filter((obj) => {
@@ -185,6 +200,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((response) => {
+        const auth = this.utils.getAuth();
         this.workForceList = response;
         this.getFilteredValuesForWorkForce();
         this.cdr.detectChanges();
@@ -462,10 +478,10 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       .pipe(
         catchError(async (err) => {
           this.isLoading = false;
-          setTimeout(() => {
-            throw err;
-          }, 10);
-          this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
+          this.utils.showSnackBarMessage(
+            this.snackBar,
+            err.error || 'Something went wrong'
+          );
           this.cdr.detectChanges();
         })
       )

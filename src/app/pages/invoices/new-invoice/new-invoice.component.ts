@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { DrawerComponent } from 'src/app/_metronic/kt/components';
@@ -27,6 +28,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 @Component({
   selector: 'app-new-invoice',
   templateUrl: './new-invoice.component.html',
@@ -56,6 +58,9 @@ export class NewInvoiceComponent implements OnInit {
   today: any = new Date();
   WorkOrderSearchResult: Observable<any[]>;
   WorkOrderCntrl = new FormControl();
+
+  @ViewChild('WorkOrderSearch', { read: MatAutocompleteTrigger })
+  autoComplete: MatAutocompleteTrigger;
   ngOnInit(): void {
     // DrawerComponent.reinitialization();
     window.addEventListener('scroll', this.scrollEvent, true);
@@ -82,10 +87,14 @@ export class NewInvoiceComponent implements OnInit {
   }
 
   scrollEvent = (event: any): void => {
-    let element = document.querySelector('.mat-autocomplete-panel');
-    if (element) {
-      element.parentNode?.removeChild(element);
-    }
+    // let element = document.querySelector('.mat-autocomplete-panel');
+    // if (element) {
+    //   // element.parentNode?.removeChild(element);
+    // }
+
+    if (this.autoComplete.panelOpen)
+      // this.autoComplete.closePanel();
+      this.autoComplete.updatePosition();
   };
 
   getFilteredValuesForWorkOrder(reset?: string) {
@@ -131,6 +140,7 @@ export class NewInvoiceComponent implements OnInit {
     const workOrder: any = this.workOrderList.find(
       (r: any) => r.workOrderId === value
     );
+    // console.log(this.paymentTerms, workOrder.payRate);
     const paymentTerms = this.paymentTerms.find(
       (r: any) => r.id == workOrder.payRate
     );

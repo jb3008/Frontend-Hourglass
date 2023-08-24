@@ -61,7 +61,11 @@
             id="kt_inbox_collaborate_drawer_drawer_toggle"
             *ngIf="isInbox && auth?.vendorId"
           >
-            <img src="./assets/images/icons/colla.svg" alt="" />
+            <img
+              src="./assets/images/icons/colla.svg"
+              alt=""
+              *ngIf="!auth?.vendorId"
+            />
             Collaborate
           </a>
 
