@@ -26,8 +26,11 @@
     
     <div class="d-flex align-items-start gap-4 ">
         <div class="position-relative input-icon input-icon-right">
-            <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4  pe-10" [(ngModel)]="filterValue.workOrderId" (keyup)="applySearchFilter($event)" (keypress)="numbersOnly($event)" placeholder="Search by work order #"/>
+            <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4  pe-15" [(ngModel)]="filterValue.workOrderId" (keyup)="applySearchFilter($event)" (keypress)="numbersOnly($event)" placeholder="Search by work order #"/>
             <span><i class="fa fa-search "></i></span>
+            <span class="cursor-pointer text-active-primary pspinpRytClose" 
+            (click) = "filterValue.workOrderId = '';clearSearch('workOrderId');" *ngIf="filterValue.workOrderId && filterValue.workOrderId != ''">
+            <i class="bi bi-x-lg text-active-primary"></i></span>
         </div>
         <!-- <select  name="" id="" class="form-select fs- py-2  w-200px">
             <option  value="">Select</option>
@@ -39,8 +42,11 @@
           </mat-option>
         </mat-select>
         <div class="position-relative input-icon input-icon-right">
-            <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10" [(ngModel)]="filterValue.searchByManager" placeholder="Search By Manager" (keyup)="filterByManager($event)"/>
+            <input type="text" class="form-control py-2 px-3 fs- fw-normal ps-4 pe-15" [(ngModel)]="filterValue.searchByManager" placeholder="Search By Manager" (keyup)="filterByManager($event)"/>
             <span><i class="fa fa-search "></i></span>
+            <span class="cursor-pointer text-active-primary pspinpRytClose" 
+            (click) = "filterValue.searchByManager = '';clearSearch('searchByManager');" *ngIf="filterValue.searchByManager && filterValue.searchByManager != ''">
+            <i class="bi bi-x-lg text-active-primary"></i></span>
         </div>
 
         <mat-select class="form-select fs- py-2  w-200px" [(value)]="filterValue.status" (selectionChange)="filterByStatus($event)">
