@@ -62,6 +62,7 @@ tr.mat-header-row {
 }
 .display-inline{display: inline-block}
 .input-icon span.pspinpClose{right: 0; left: unset; position: absolute;}
+.input-icon span.pspinpRytClose{right: 28px;left: unset;position: absolute;width: 20px;}
 .btn.btn-bg-light{background-color:#F0F9FF ;}
 .dd-info-btn,.dd-info-btn2{
     position: absolute;
@@ -196,5 +197,7 @@ tr.mat-header-row {
             color: #0086C9;
         }
         .text-yellow{color: #EE9D01;}
+        .ck-body-wrapper .ck.ck-balloon-panel {margin-top: -7px}
+        
         // .badge-light-primary{ background-color: rgb(226, 243, 255)}
 // }
