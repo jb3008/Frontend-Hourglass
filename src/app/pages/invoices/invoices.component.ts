@@ -314,8 +314,7 @@ export class InvoicesComponent implements OnInit {
       )
       .subscribe((response) => {
         this.workForceList = response;
-        this.paginator.pageIndex = 0;
-        this.ReloadTable();
+        this.getAllInvoice();
         this.cdr.detectChanges();
       });
   }

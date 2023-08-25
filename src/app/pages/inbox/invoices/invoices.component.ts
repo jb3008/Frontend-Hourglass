@@ -90,7 +90,7 @@ export class InvoicesComponent implements OnInit {
           }
         }
       }
-      this.ReloadTable();
+      this.getAllInvoice();
       this.cdr.detectChanges();
     });
   }

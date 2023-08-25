@@ -55,6 +55,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     // DrawerComponent.reinitialization();
     this.route.queryParams.subscribe((param) => {
+      console.log(param);
       this.queryParamData = param;
       this.auth = this.utils.getAuth();
 

@@ -364,7 +364,7 @@ export class TimesheetsComponent implements OnInit {
       )
       .subscribe((response) => {
         this.lstTimeSheetStatus = response;
-        this.ReloadTable();
+        this.getAllTimesheet();
         this.cdr.detectChanges();
       });
   }

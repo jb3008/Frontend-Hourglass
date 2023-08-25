@@ -82,7 +82,6 @@ export class TimesheetsComponent implements OnInit {
       this.sort.active = this.sortBy;
       this.sort.direction = this.sortOrder === 'desc' ? 'desc' : 'asc';
 
-      this.getAllTimeSheetStatus();
       for (var i in this.timeSheetFilter.controls) {
         if (this.queryParamData[i]) {
           if (i === 'fromDate') {
@@ -98,6 +97,7 @@ export class TimesheetsComponent implements OnInit {
           }
         }
       }
+      this.getAllTimeSheetStatus();
       this.cdr.detectChanges();
     });
   }
@@ -307,24 +307,7 @@ export class TimesheetsComponent implements OnInit {
     this.sort.direction = 'desc';
     this.getAllTimesheet();
   }
-  getAllWorkForceList() {
-    this.apiCalls
-      .get(this.endPoints.LIST_WORK_FORCE, {})
-      .pipe(
-        catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the work-force'
-          );
-          throw err;
-        })
-      )
-      .subscribe((response) => {
-        this.workForceList = response;
-        this.ReloadTable();
-        this.cdr.detectChanges();
-      });
-  }
+
   getAllTimeSheetStatus() {
     this.apiCalls
       .get(this.endPoints.GET_TIMESHEET_STATUS, {})
@@ -340,7 +323,7 @@ export class TimesheetsComponent implements OnInit {
       .subscribe((response) => {
         this.lstTimeSheetStatus = response;
 
-        this.ReloadTable();
+        this.getAllTimesheet();
         this.cdr.detectChanges();
       });
   }
