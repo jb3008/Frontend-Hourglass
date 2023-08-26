@@ -50,7 +50,6 @@ export class ViewOfferLetterDrawerComponent implements OnInit, OnChanges {
   }
 
   getOfferDocuments(){
-    debugger
     let queryParam = {
       id : this.offerDetails[0]?.id,
       attachmentType : 'JOB_OFFER'
