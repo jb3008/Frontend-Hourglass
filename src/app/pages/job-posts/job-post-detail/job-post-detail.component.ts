@@ -20,6 +20,8 @@ export class JobPostDetailComponent implements OnInit {
   jobId: string;
   parentTab: string;
   loading = false;
+  pageNo: string;
+  pageSize: string;
   apiLoad = false;
   endPoints = EndPoints;
   jobDetails: any;
@@ -51,6 +53,8 @@ export class JobPostDetailComponent implements OnInit {
       this.jobId = param['jobId'];
       this.parentTab = param['tab'];
       this.isSelectedTab = this.parentTab == 'AppliedJob' ? 'Application' : 'Details';
+      this.pageNo = param['pageNo'];
+      this.pageSize = param['pageSize'];
     });
     if(this.isSelectedTab == 'Application'){
       this.getSelectedTab(this.isSelectedTab);

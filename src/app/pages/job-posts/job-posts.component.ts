@@ -107,6 +107,10 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.getJobTypes();
     this.getJobCount();
     this.route.queryParams.subscribe((param) => {
+      if(param?.pageNo){
+        this.queryParam.pageNo = param['pageNo'];
+        this.queryParam.pageSize = param['pageSize'];
+      }
       if (param?.tab) {
         this.selectedTab = param.tab;
         setTimeout(() => {
@@ -164,10 +168,10 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         )
         .subscribe((response) => {
           this.jobDetails = response;
-          // setTimeout(() => {
-          //   this.paginator.pageIndex = this.queryParam.pageNo - 1;
-          //   this.paginator.length = this.totalJobCount;
-          // });
+          setTimeout(() => {
+            this.paginator.pageIndex = this.queryParam.pageNo - 1;
+            this.paginator.length = this.totalJobCount;
+          },100);
           this.isLoading = false;
           this.apiLoad = true;
           this.cdr.detectChanges();
@@ -331,7 +335,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     //     queryParams: { jobId: elementId, tab: this.selectedTab },
     //   });
     this.router.navigate(['/job-posts/details'], {
-      queryParams: { jobId: elementId, tab: this.selectedTab },
+      queryParams: { jobId: elementId, tab: this.selectedTab, pageNo: this.queryParam.pageNo, pageSize: this.queryParam.pageSize },
     });
     // else if(this.selectedTab == 'AppliedJob')
     //   this.router.navigate(['/hm/job-posts/creat-job-post'], {queryParams: {data: element.id , tab: this.selectedTab}})
@@ -341,8 +345,13 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     if(tab == 'NewJob') this.totalJobCount = this.jobCount?.activeJobPost;
     else if(tab == 'AppliedJob') this.totalJobCount = this.jobCount?.appliedJobCount;
     else if (tab == 'ConfirmedJob') this.totalJobCount = this.jobCount?.confirmedJobCount;
-    this.queryParam.pageNo = 1;
-    this.queryParam.pageSize = 10;
+    if(!from){
+      this.queryParam.pageNo = 1;
+      this.queryParam.pageSize = 10;
+      this.pageSize = 10;
+    }else{
+      this.pageSize = this.queryParam.pageSize;
+    }
     // this.paginator.pageSize = 10;
     // if (this.selectedTab == tab) {
     //   return false;

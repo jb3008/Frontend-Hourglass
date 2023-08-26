@@ -3,7 +3,7 @@
   </div>
 <div class="content flex-column-fluid auto container-lg mb-4">
   <div class="py-5 fw-bold">
-   <a class="cursor-pointer text-body" routerLink="/hm/job-posts" [queryParams]="{ tab: selectedTab }"> <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i> #{{jobDetails?.id}}</a>
+   <a class="cursor-pointer text-body" routerLink="/hm/job-posts" [queryParams]="{ tab: selectedTab, pageNo: pageNo, pageSize: pageSize }"> <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i> #{{jobDetails?.id}}</a>
    <span  class="badge badge-light-success fw-normal ms-3">
     <i  class="fas fa-yin-yangfas fa-circle px-1 text-success fs-10"></i> Published </span>
   </div>

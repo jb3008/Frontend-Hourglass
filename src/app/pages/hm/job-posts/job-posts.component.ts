@@ -91,6 +91,10 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.getJobTypes();
     this.getJobCount();
     this.route.queryParams.subscribe((param) => {
+      if(param?.pageNo){
+        this.queryParam.pageNo = param['pageNo'];
+        this.queryParam.pageSize = param['pageSize'];
+      }
       if (param?.tab) {
         this.selectedTab = param.tab;
         setTimeout(() => {
@@ -253,18 +257,22 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   goToDetails(element: any) {
     if (this.selectedTab == 'Active' || this.selectedTab == 'Close')
       this.router.navigate(['/hm/job-posts/details'], {
-        queryParams: { data: element.id, tab: this.selectedTab },
+        queryParams: { data: element.id, tab: this.selectedTab, pageNo: this.queryParam.pageNo, pageSize: this.queryParam.pageSize },
       });
     else if (this.selectedTab == 'Draft')
       this.router.navigate(['/hm/job-posts/creat-job-post'], {
-        queryParams: { data: element.id, tab: this.selectedTab },
+        queryParams: { data: element.id, tab: this.selectedTab, pageNo: this.queryParam.pageNo, pageSize: this.queryParam.pageSize },
       });
   }
 
   getSelectedTab(tab: string, from?: string) {
-    this.queryParam.pageNo = 1;
-    this.queryParam.pageSize = 10;
-    this.paginator.pageSize = 10;
+    if(!from){
+      this.queryParam.pageNo = 1;
+      this.queryParam.pageSize = 10;
+      this.paginator.pageSize = 10;
+    }else{
+      this.paginator.pageSize = this.queryParam.pageSize;
+    }
     if(tab == 'Active') this.totalJobsCount = this.jobCount?.activeCount;
     else if(tab == 'Draft') this.totalJobsCount = this.jobCount?.draftCount;
     else if(tab == 'Close') this.totalJobsCount = this.jobCount?.closeCount;

@@ -29,6 +29,8 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
   documentsList: any[] = [];
   jobDetails: any;
   selectedTab: string;
+  pageNo: string;
+  pageSize: string;
   applicationDetails: any;
   applicantsDetails: any;
   costCenterList: any[] = [];
@@ -70,6 +72,8 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
     this.route.queryParams.subscribe(param => {
       this.jobID = param['data'];
       this.selectedTab = param['tab'];
+      this.pageNo = param['pageNo'];
+      this.pageSize = param['pageSize'];
     });
     this.getCostCenterList();
     this.getPaymentTermsList();
