@@ -64,7 +64,7 @@
                             [formControl]="hiringManagerCntrl"
                             [matAutocomplete]="auto"
                             (input)="hiringManagerSearch.value ? '' : workOrderData.controls['hiringManager'].setValue('')"
-                            #hiringManagerSearch>
+                            #hiringManagerSearch (keyup)="getHiringManagersByKey(hiringManagerSearch.value)">
                             <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="hiringManagerSearch.value"
                                 (click)="hiringManagerSearch.value = '';getFilteredValues('hiringManager', 'reset')"></i>
     

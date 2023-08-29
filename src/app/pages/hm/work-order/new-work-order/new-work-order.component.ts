@@ -82,7 +82,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     const userId = this.utils.getUser()!;
     // this.getUserByUserId(userId);
     this.vendorsList();
-    this.getHiringManagers();
+    // this.getHiringManagers();
     this.getAllJobs();
     this.getJobType();
     this.getTimeSheetFrequency();
@@ -181,16 +181,56 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     return name + ' (' + code + ')'; 
   }
 
-  getHiringManagers(){
-    this.getDropDownValues(this.endpoints.HIRING_MANGER).subscribe({
-      next: response => {
-        this.hiringManager = response;
-        this.getFilteredValues('hiringManager');
-      },
-      error: error => {
-        console.log(error);
-      }
-    })
+  // getHiringManagers(){
+  //   this.getDropDownValues(this.endpoints.HIRING_MANGER).subscribe({
+  //     next: response => {
+  //       this.hiringManager = response;
+  //       this.getFilteredValues('hiringManager');
+  //     },
+  //     error: error => {
+  //       console.log(error);
+  //     }
+  //   })
+  // }
+
+  hiringManagerSearchResultbyKey =[];
+  getHiringManagersByKey(event: any) {
+    let searchTerm = '';
+    searchTerm = event
+    // console.log(searchTerm)
+    // this.isLoading = true;
+    let queryParams = {
+      name: searchTerm
+    }
+    if(searchTerm.length >0) {
+
+
+    this.apiCalls.get(this.endpoints.HIRING_MANGER_BY_KEY,queryParams)
+      .pipe(catchError(async (err) => {
+        // this.isLoading = false;
+        setTimeout(() => {
+          throw err;  
+        }, 10);
+        this.cdr.detectChanges();
+      }))
+      .subscribe(response => {
+        // console.log('response', response)
+        // this.hiringManager = response;
+
+        this.hiringManagerSearchResult = this.hiringManagerCntrl.valueChanges.pipe(
+          startWith(''),
+          map(value => response)
+        )
+        // this.getFilteredValuesForHm();
+        this.cdr.detectChanges();
+      })
+    }
+    else{
+      this.hiringManagerSearchResult = this.hiringManagerCntrl.valueChanges.pipe(
+        startWith(''),
+        map(value => [])
+      )
+    }
   }
 
   getFilteredValues(key: string, reset?: string){
