@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DrawerComponent } from 'src/app/_metronic/kt/components';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-invoices-details',
@@ -33,7 +34,8 @@ export class InvoicesDetailsComponent implements OnInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -68,10 +70,7 @@ export class InvoicesDetailsComponent implements OnInit {
       })
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the invoices'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           this.isLoading = false;
           this.invoiceDetails = null;
           this.cdr.detectChanges();

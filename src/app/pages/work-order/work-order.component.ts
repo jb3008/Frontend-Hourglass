@@ -9,6 +9,7 @@ import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
 import {MatSort, SortDirection} from '@angular/material/sort';
 import {Sort} from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-work-order',
@@ -18,7 +19,7 @@ import {Sort} from '@angular/material/sort';
 export class WorkOrderComponent implements OnInit {
 
   constructor(private apiCalls: ApiCallsService,private utils: Utils, private snackBar: MatSnackBar, private cdr: ChangeDetectorRef,
-    private router: Router, private route: ActivatedRoute) { }
+    private router: Router,private dialog: MatDialog, private route: ActivatedRoute) { }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -37,7 +38,7 @@ export class WorkOrderComponent implements OnInit {
     pageNo: 1,
     pageSize: 10
   }
-
+  queryParamData: any;
   pageSize = 10;
   currentPage = 0;
   totalWorkOrderCount = 0;
@@ -102,8 +103,7 @@ export class WorkOrderComponent implements OnInit {
     this.apiCalls.get(this.endPoints.JOB_TYPE)
     .pipe(
       catchError(async (err) => {
-        this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the job types');
-        throw err;
+        this.utils.showErrorDialog(this.dialog, err);
       })
     )
     .subscribe((response) => {
@@ -120,8 +120,7 @@ export class WorkOrderComponent implements OnInit {
     this.apiCalls.get(this.endPoints.WORK_ORDER_STATUS)
     .pipe(
       catchError(async (err) => {
-        this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the work order status');
-        throw err;
+        this.utils.showErrorDialog(this.dialog, err);
       })
     )
     .subscribe((response) => {
@@ -137,7 +136,7 @@ export class WorkOrderComponent implements OnInit {
     this.apiCalls.get(endPoint, filterObj)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the work orders');
+          this.utils.showErrorDialog(this.dialog, err);
           this.loading = false;
           this.apiLoad = true;
           this.cdr.detectChanges();
@@ -165,10 +164,7 @@ export class WorkOrderComponent implements OnInit {
       .get(this.endPoints.ALL_WORK_ORDERS_COUNT)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to get the job counts'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           // this.isLoading = false;
           this.cdr.detectChanges();
           throw err;

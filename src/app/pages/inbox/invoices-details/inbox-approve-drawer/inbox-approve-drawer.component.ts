@@ -15,6 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-inbox-invoice-approve-drawer',
@@ -36,7 +37,8 @@ export class InboxInvoiceApproveDrawerComponent implements OnInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -176,10 +178,7 @@ export class InboxInvoiceApproveDrawerComponent implements OnInit {
           setTimeout(() => {
             throw err;
           }, 10);
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            err?.error?.msg ? err?.error?.msg : 'Something went wrong'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           this.cdr.detectChanges();
         })
       )
@@ -202,10 +201,7 @@ export class InboxInvoiceApproveDrawerComponent implements OnInit {
                   setTimeout(() => {
                     throw err;
                   }, 10);
-                  this.utils.showSnackBarMessage(
-                    this.snackBar,
-                    'Something went wrong on upload invoice-document'
-                  );
+                  this.utils.showErrorDialog(this.dialog, err);
                   this.cdr.detectChanges();
                 })
               )

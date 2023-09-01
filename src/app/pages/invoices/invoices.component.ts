@@ -17,6 +17,7 @@ import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-invoices',
@@ -32,6 +33,7 @@ export class InvoicesComponent implements OnInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
+    private dialog: MatDialog,
     private route: ActivatedRoute
   ) {}
   isApiLoad: boolean = false;
@@ -229,10 +231,7 @@ export class InvoicesComponent implements OnInit {
       .get(this.endPoints.GET_INVOICE, filter)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the jobs'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           this.totalCount = 0;
           this.isApiLoad = true;
           this.invoiceList = [];
@@ -247,10 +246,7 @@ export class InvoicesComponent implements OnInit {
             .get(this.endPoints.GET_INVOICE_COUNT, filter)
             .pipe(
               catchError(async (err) => {
-                this.utils.showSnackBarMessage(
-                  this.snackBar,
-                  'failed to fetch the invoice'
-                );
+                this.utils.showErrorDialog(this.dialog, err);
                 this.totalCount = 0;
                 this.isApiLoad = true;
                 this.invoiceList = [];
@@ -305,11 +301,7 @@ export class InvoicesComponent implements OnInit {
       .get(this.endPoints.LIST_WORK_FORCE, {})
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the work-force'
-          );
-          throw err;
+          this.utils.showErrorDialog(this.dialog, err);
         })
       )
       .subscribe((response) => {

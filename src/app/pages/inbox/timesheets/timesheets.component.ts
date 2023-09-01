@@ -17,6 +17,7 @@ import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-timesheets',
@@ -32,7 +33,8 @@ export class TimesheetsComponent implements OnInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {}
   timeSheetList: any = [];
   isApiLoad: boolean = false;
@@ -256,10 +258,7 @@ export class TimesheetsComponent implements OnInit {
       .get(this.getEndpoint(this.flag), filter)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the GET_TIME_SHEET'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           this.totalCount = 0;
           this.isApiLoad = true;
           this.timeSheetList = [];
@@ -274,10 +273,7 @@ export class TimesheetsComponent implements OnInit {
             .get(this.getEndpointCount(this.flag), filter)
             .pipe(
               catchError(async (err) => {
-                this.utils.showSnackBarMessage(
-                  this.snackBar,
-                  'failed to fetch the time-sheet'
-                );
+                this.utils.showErrorDialog(this.dialog, err);
                 this.totalCount = 0;
                 this.isApiLoad = true;
                 this.timeSheetList = [];
@@ -355,11 +351,7 @@ export class TimesheetsComponent implements OnInit {
       .get(this.endPoints.GET_TIMESHEET_STATUS, {})
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the timesheet-status'
-          );
-          throw err;
+          this.utils.showErrorDialog(this.dialog, err);
         })
       )
       .subscribe((response) => {

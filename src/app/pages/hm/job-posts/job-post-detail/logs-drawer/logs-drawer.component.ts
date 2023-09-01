@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { catchError } from 'rxjs/internal/operators/catchError';
@@ -12,7 +13,7 @@ import { Utils } from 'src/app/services/utils';
 })
 export class LogsDrawerComponent implements OnInit, OnChanges {
 
-  constructor(private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef, private utils: Utils, private snackBar: MatSnackBar) {}
+  constructor(private dialog: MatDialog,private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef, private utils: Utils, private snackBar: MatSnackBar) {}
 
   @Input() clickedApplication: string;
   loading = false;
@@ -72,7 +73,7 @@ export class LogsDrawerComponent implements OnInit, OnChanges {
     this.apiCalls.get(this.endPoints.GET_APPL_LOGS, queryParam)
       .pipe(catchError(async (error) => {
         this.loading = false;
-        this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the logs');
+        this.utils.showErrorDialog(this.dialog, error);
         this.cdr.detectChanges();
     }))
     .subscribe((response) => {

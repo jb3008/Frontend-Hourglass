@@ -92,10 +92,7 @@ export class NewTaskDrawerDetailComponent implements OnInit {
       })
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to get the task list'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           this.isLoading = false;
           this.cdr.detectChanges();
           throw err;

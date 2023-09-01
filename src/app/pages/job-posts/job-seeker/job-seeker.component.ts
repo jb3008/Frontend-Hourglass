@@ -209,7 +209,7 @@ export class JobSeekerComponent implements OnInit {
         .pipe(catchError(async (err) => {
           this.loading = false;
           this.cdr.detectChanges();
-          alert(err.error.msg);
+          this.utils.showErrorDialog(this.dialog, err);
           throw err;
         }))
         .subscribe(response => {

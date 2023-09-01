@@ -117,6 +117,7 @@ export class SendOfferLetterDrawerComponent implements OnInit {
 
     this.apiCalls.post(this.endPoints.SEND_JOB_OFFER, formData, { "Content-Type": "multipart/form-data" })
     .pipe(catchError(async (err) => {
+      this.utils.showErrorDialog(this.dialog, err);
       this.isLoading = false;
       this.cdr.detectChanges();
       setTimeout(() => {

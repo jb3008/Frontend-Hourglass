@@ -377,7 +377,7 @@ export class WorkForceComponent implements OnInit {
           setTimeout(() => {
             throw err;
           }, 10);
-          this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
+          this.utils.showErrorDialog(this.dialog, err);
           this.cdr.detectChanges();
         })
       )
@@ -402,10 +402,7 @@ export class WorkForceComponent implements OnInit {
                   setTimeout(() => {
                     throw err;
                   }, 10);
-                  this.utils.showSnackBarMessage(
-                    this.snackBar,
-                    'Something went wrong on upload profile-pic'
-                  );
+                  this.utils.showErrorDialog(this.dialog, err);
                   this.cdr.detectChanges();
                 })
               )
@@ -459,10 +456,7 @@ export class WorkForceComponent implements OnInit {
       .get(this.endPoints.LIST_WORK_FORCE, q)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the work-force'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           this.isLoading = false;
           throw err;
         })
@@ -484,6 +478,7 @@ export class WorkForceComponent implements OnInit {
       })
       .pipe(
         catchError(async (err) => {
+          this.utils.showErrorDialog(this.dialog, err);
           console.log(workForceId, err);
         })
       )
@@ -757,7 +752,7 @@ export class WorkForceComponent implements OnInit {
           setTimeout(() => {
             throw err;
           }, 10);
-          this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
+          this.utils.showErrorDialog(this.dialog, err);
           this.cdr.detectChanges();
         })
       )
@@ -772,10 +767,7 @@ export class WorkForceComponent implements OnInit {
                   setTimeout(() => {
                     throw err;
                   }, 10);
-                  this.utils.showSnackBarMessage(
-                    this.snackBar,
-                    'Something went wrong upload document'
-                  );
+                  this.utils.showErrorDialog(this.dialog, err);
                   this.cdr.detectChanges();
                 })
               )
@@ -800,10 +792,7 @@ export class WorkForceComponent implements OnInit {
                           setTimeout(() => {
                             throw err;
                           }, 10);
-                          this.utils.showSnackBarMessage(
-                            this.snackBar,
-                            'Something went wrong on upload profile-pic'
-                          );
+                          this.utils.showErrorDialog(this.dialog, err);
                           this.cdr.detectChanges();
                         })
                       )
@@ -847,10 +836,7 @@ export class WorkForceComponent implements OnInit {
                     setTimeout(() => {
                       throw err;
                     }, 10);
-                    this.utils.showSnackBarMessage(
-                      this.snackBar,
-                      'Something went wrong on upload profile-pic'
-                    );
+                    this.utils.showErrorDialog(this.dialog, err);
                     this.cdr.detectChanges();
                   })
                 )
@@ -886,10 +872,7 @@ export class WorkForceComponent implements OnInit {
       .deleteWithTextResponse(this.endPoints.DELETE_WORK_FORCE, queryObj)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to delete the work force'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           this.isLoading = false;
           this.cdr.detectChanges();
           throw err;

@@ -112,7 +112,7 @@ export class WorkOrderDetailComponent implements OnInit {
     this.apiCalls.get(this.endpoints.ALL_WORK_ORDERS, queryObj)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the work order details');
+          this.utils.showErrorDialog(this.dialog, err);
           this.loading = false;
           throw err;
         })
@@ -130,8 +130,7 @@ export class WorkOrderDetailComponent implements OnInit {
     this.apiCalls.get(this.endpoints.WORK_ORDER_STATUS)
     .pipe(
       catchError(async (err) => {
-        this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the work order status');
-        throw err;
+        this.utils.showErrorDialog(this.dialog, err);
       })
     )
     .subscribe((response) => {
@@ -146,7 +145,7 @@ export class WorkOrderDetailComponent implements OnInit {
     this.apiCalls.get(this.endpoints.TASK_LIST_HM, obj)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to get the task list');
+          this.utils.showErrorDialog(this.dialog, err);
           this.loading = false;
           this.apiLoad = true;
           this.cdr.detectChanges();
@@ -170,7 +169,7 @@ export class WorkOrderDetailComponent implements OnInit {
     this.apiCalls.get(this.endpoints.TASK_LIST_HM, queryObj)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to get the task details');
+          this.utils.showErrorDialog(this.dialog, err);
           this.loading = false;
           this.cdr.detectChanges();
           throw err;
@@ -202,7 +201,7 @@ export class WorkOrderDetailComponent implements OnInit {
     this.apiCalls.delete(this.endpoints.DELETE_TASK, queryObj)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to delete the task');
+          this.utils.showErrorDialog(this.dialog, err);
           this.loading = false;
           this.cdr.detectChanges();
           throw err;
@@ -244,7 +243,7 @@ export class WorkOrderDetailComponent implements OnInit {
     this.apiCalls.get(this.endpoints.GET_DOCUMENTS, queryObj)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the documents');
+          this.utils.showErrorDialog(this.dialog, err);
           this.loading = false;
           this.apiLoad = true;
           throw err;

@@ -154,6 +154,7 @@ export class JobPostDetailComponent implements OnInit {
       })
       .pipe(
         catchError(async (err) => {
+          this.utils.showErrorDialog(this.dialog, err);
           this.loading = false;
           console.log(id, err);
         })

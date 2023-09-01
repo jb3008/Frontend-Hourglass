@@ -208,6 +208,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     this.apiCalls.get(this.endpoints.HIRING_MANGER_BY_KEY,queryParams)
       .pipe(catchError(async (err) => {
         // this.isLoading = false;
+        this.utils.showErrorDialog(this.dialog, err);
         setTimeout(() => {
           throw err;  
         }, 10);
@@ -265,6 +266,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
 
     this.apiCalls.get(this.endpoints.COST_CENTER_BY_KEY,queryParams)
       .pipe(catchError(async (err) => {
+        this.utils.showErrorDialog(this.dialog, err);
         setTimeout(() => {
           throw err;  
         }, 10);
@@ -297,6 +299,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
 
     this.apiCalls.get(this.endpoints.PAY_TERMS_BY_KEY,queryParams)
       .pipe(catchError(async (err) => {
+        this.utils.showErrorDialog(this.dialog, err);
         setTimeout(() => {
           throw err;  
         }, 10);
@@ -418,6 +421,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.apiCalls.get(this.endpoints.GET_CURRENCY)
       .pipe(catchError(async (err) => {
+        this.utils.showErrorDialog(this.dialog, err);
         this.isLoading = false;
         setTimeout(() => {
           throw err;  
@@ -438,8 +442,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     this.apiCalls.get(this.endpoints.GET_USER, queryParam)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the user');
-          throw err;
+          this.utils.showErrorDialog(this.dialog, err);
         })
       )
       .subscribe((response) => {
@@ -451,8 +454,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     this.apiCalls.get(this.endpoints.GET_VENDORS_LIST)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the vendors');
-          throw err;
+          this.utils.showErrorDialog(this.dialog, err);
         })
       )
       .subscribe((response) => {
@@ -468,8 +470,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     this.apiCalls.get(this.endpoints.LIST_JOBS, queryParam)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the jobs');
-          throw err;
+          this.utils.showErrorDialog(this.dialog, err);
         })
       )
       .subscribe((response) => {
@@ -650,6 +651,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
 
       this.apiCalls.post(this.endpoints.CREATE_WORK_ORDER,formData)
       .pipe(catchError(async (err) => {
+        this.utils.showErrorDialog(this.dialog, err);
         this.isLoading = false;
         setTimeout(() => {
           throw err;  
@@ -689,7 +691,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     this.apiCalls.get(this.endpoints.TASK_LIST_HM, obj)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to get the task list');
+          this.utils.showErrorDialog(this.dialog, err);
           this.isLoading = false;
           this.cdr.detectChanges();
           throw err;

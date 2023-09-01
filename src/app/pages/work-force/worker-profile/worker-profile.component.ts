@@ -9,6 +9,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth';
 import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 import { environment } from 'src/environments/environment';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-worker-profile',
@@ -40,7 +41,8 @@ export class WorkerProfileComponent implements OnInit {
     private apiCalls: ApiCallsService,
     private utils: Utils,
     private cdr: ChangeDetectorRef,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog,
   ) {}
 
   async openModal(documentId: string) {
@@ -103,10 +105,7 @@ export class WorkerProfileComponent implements OnInit {
       })
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the work-force-detail'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           this.isLoading = false;
           throw err;
         })
@@ -183,7 +182,9 @@ export class WorkerProfileComponent implements OnInit {
       .getDocument(this.endPoints.GET_WORK_FORCE_PIC, {
         workForceId: workForceId,
       })
-      .pipe(catchError(async (err) => {}))
+      .pipe(catchError(async (err) => {
+        this.utils.showErrorDialog(this.dialog, err);
+      }))
       .subscribe(async (response: any) => {
         this.workForceDetails.profile =
           response.size > 0 ? await this.blobToBase64(response) : undefined;
@@ -322,7 +323,7 @@ export class WorkerProfileComponent implements OnInit {
           setTimeout(() => {
             throw err;
           }, 10);
-          this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
+          this.utils.showErrorDialog(this.dialog, err);
           this.cdr.detectChanges();
         })
       )

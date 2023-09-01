@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { catchError } from 'rxjs';
@@ -13,7 +14,7 @@ import { Utils } from 'src/app/services/utils';
 export class InboxLogsDrawerComponent implements OnInit, OnChanges {
 
   constructor(private apiCalls: ApiCallsService, private utils: Utils, private snackBar: MatSnackBar,
-      private cdr: ChangeDetectorRef) {}
+      private cdr: ChangeDetectorRef, private dialog: MatDialog) {}
 
   @Input() workOrderId: any;
   endPoints = EndPoints;
@@ -35,8 +36,7 @@ export class InboxLogsDrawerComponent implements OnInit, OnChanges {
     this.apiCalls.get(this.endPoints.GET_WORKORDER_LOGS, queryParam)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the work order logs');
-          throw err;
+          this.utils.showErrorDialog(this.dialog, err);
         })
       )
       .subscribe((response) => {

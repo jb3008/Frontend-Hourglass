@@ -17,6 +17,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheets-details.component.html',
@@ -32,7 +33,8 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private dialog: MatDialog
   ) {}
 
   endPoints = EndPoints;
@@ -89,11 +91,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
       .get(this.endPoints.GET_TIMESHEET_STATUS, {})
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the timesheet-status'
-          );
-          throw err;
+          this.utils.showErrorDialog(this.dialog, err);
         })
       )
       .subscribe((response) => {
@@ -111,10 +109,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
       })
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the time-sheet-details'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           this.isLoading = false;
           this.cdr.detectChanges();
           throw err;
@@ -357,7 +352,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
           setTimeout(() => {
             throw err;
           }, 10);
-          this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
+          this.utils.showErrorDialog(this.dialog, err);
           this.cdr.detectChanges();
         })
       )
@@ -386,10 +381,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
             setTimeout(() => {
               throw err;
             }, 10);
-            this.utils.showSnackBarMessage(
-              this.snackBar,
-              'Something went wrong'
-            );
+            this.utils.showErrorDialog(this.dialog, err);
             this.cdr.detectChanges();
           })
         )

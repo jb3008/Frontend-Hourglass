@@ -15,6 +15,7 @@ import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-inbox-invoice-logs-drawer',
@@ -29,7 +30,8 @@ export class InboxInvoiceLogsDrawerComponent implements OnInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private dialog: MatDialog,
   ) {}
   endPoints = EndPoints;
   logs: any;
@@ -48,10 +50,7 @@ export class InboxInvoiceLogsDrawerComponent implements OnInit {
       })
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the invoice logs'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           throw err;
         })
       )

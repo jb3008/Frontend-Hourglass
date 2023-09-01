@@ -17,6 +17,7 @@ import { AuthService } from 'src/app/modules/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-invoices',
@@ -32,7 +33,8 @@ export class InvoicesComponent implements OnInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {}
   isApiLoad: boolean = false;
   displayedColumns: string[] = [
@@ -198,10 +200,7 @@ export class InvoicesComponent implements OnInit {
       .get(this.getEndpoint(), filter)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the jobs'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           this.totalCount = 0;
           this.isApiLoad = true;
           this.invoiceList = [];
@@ -216,10 +215,7 @@ export class InvoicesComponent implements OnInit {
             .get(this.getEndpointCount(), filter)
             .pipe(
               catchError(async (err) => {
-                this.utils.showSnackBarMessage(
-                  this.snackBar,
-                  'failed to fetch the invoice'
-                );
+                this.utils.showErrorDialog(this.dialog, err);
                 this.totalCount = 0;
                 this.isApiLoad = true;
                 this.invoiceList = [];
@@ -275,6 +271,7 @@ export class InvoicesComponent implements OnInit {
         .post(this.endPoints.READ_NOTIFICATION, formData)
         .pipe(
           catchError(async (err) => {
+            this.utils.showErrorDialog(this.dialog, err);
             this.isLoading = false;
             setTimeout(() => {
               throw err;

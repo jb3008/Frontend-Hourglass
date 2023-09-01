@@ -186,6 +186,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     this.apiCalls.get(this.endPoints.GET_JOB_DETAILS, queryParams)
       .pipe(catchError(async (err) => {
         console.log(err);
+        this.utils.showErrorDialog(this.dialog, err);
         this.isLoading = false;
         this.cdr.detectChanges();
         throw err;
@@ -330,6 +331,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
 
     this.apiCalls.get(this.endPoints.HIRING_MANGER_BY_KEY,queryParams)
       .pipe(catchError(async (err) => {
+        this.utils.showErrorDialog(this.dialog, err);
         // this.isLoading = false;
         setTimeout(() => {
           throw err;  
@@ -371,6 +373,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     this.apiCalls.get(this.endPoints.COST_CENTER_BY_KEY,queryParams)
       .pipe(catchError(async (err) => {
         // this.isLoading = false;
+        this.utils.showErrorDialog(this.dialog, err);
         setTimeout(() => {
           throw err;  
         }, 10);
@@ -408,6 +411,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     this.apiCalls.get(this.endPoints.PAY_TERMS_BY_KEY,queryParams)
       .pipe(catchError(async (err) => {
         // this.isLoading = false;
+        this.utils.showErrorDialog(this.dialog, err);
         setTimeout(() => {
           throw err;  
         }, 10);
@@ -445,6 +449,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     this.apiCalls.get(this.endPoints.BUSINESS_UNIT_BY_KEY,queryParams)
       .pipe(catchError(async (err) => {
         // this.isLoading = false;
+        this.utils.showErrorDialog(this.dialog, err);
         setTimeout(() => {
           throw err;  
         }, 10);
@@ -565,6 +570,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     this.apiCalls.get(this.endPoints.GET_CURRENCY)
       .pipe(catchError(async (err) => {
         this.isLoading = false;
+        this.utils.showErrorDialog(this.dialog, err);
         setTimeout(() => {
           throw err;  
         }, 10);
@@ -777,6 +783,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       this.apiCalls.post(status == 'draft' ? this.endPoints.DRAFT_JOB : this.endPoints.CREATE_JOB, formData)
       .pipe(catchError(async (err) => {
         this.isLoading = false;
+        this.utils.showErrorDialog(this.dialog, err);
         setTimeout(() => {
           throw err;  
         }, 10);

@@ -51,6 +51,22 @@ export class Utils {
 
     return dialogRef;
   }
+  showErrorDialog(dialog: any, msg: any, callback: any = null) {
+    let dialogRef = dialog.open(DialogComponent, {
+      data: {
+        message: msg,
+        disableClose: true,
+      },
+      width: '600px',
+      // height: '130px' //16-Jul-23 to solve dialog issue.
+    });
+
+    if (callback != null) {
+      dialogRef.afterClosed().subscribe(callback);
+    }
+
+    return dialogRef;
+  }
 
   showDialogWithCancelButton(dialog: any, msg: any, callback: any = null) {
     let dialogRef = dialog.open(DialogComponent, {
@@ -100,22 +116,27 @@ export class Utils {
   }
 
   numberOnly(event: any) {
-    const charCode = (event.which) ? event.which : event.keyCode;
+    const charCode = event.which ? event.which : event.keyCode;
     return !(charCode > 31 && (charCode < 48 || charCode > 57));
   }
 
-  numbersAndDecimal(event: any){
-    const charCode = (event.which) ? event.which : event.keyCode;
+  numbersAndDecimal(event: any) {
+    const charCode = event.which ? event.which : event.keyCode;
     const inputValue = event.target.value;
 
-    if (charCode === 8 || charCode === 46 || charCode === 44 || (charCode >= 48 && charCode <= 57)) {
-        const hasDecimalPoint = inputValue.indexOf('.') !== -1;
+    if (
+      charCode === 8 ||
+      charCode === 46 ||
+      charCode === 44 ||
+      (charCode >= 48 && charCode <= 57)
+    ) {
+      const hasDecimalPoint = inputValue.indexOf('.') !== -1;
 
-        if ((charCode === 46 || charCode == 44) && hasDecimalPoint) {
-            return false;
-        }
+      if ((charCode === 46 || charCode == 44) && hasDecimalPoint) {
+        return false;
+      }
 
-        return true;
+      return true;
     }
 
     return false;

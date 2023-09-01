@@ -5,7 +5,7 @@ import {
 } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TranslateModule } from '@ngx-translate/core';
@@ -28,6 +28,7 @@ import {
   MAT_AUTOCOMPLETE_SCROLL_STRATEGY,
   MatAutocompleteModule,
 } from '@angular/material/autocomplete';
+import { ErrorCatchingInterceptor } from './services/error-catching.interceptor';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -81,6 +82,11 @@ function scrollFactory(overlay: Overlay): () => CloseScrollStrategy {
       useFactory: scrollFactory,
       deps: [Overlay],
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorCatchingInterceptor,
+      multi: true
+   }
   ],
   bootstrap: [AppComponent],
 })

@@ -29,6 +29,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-new-invoice',
   templateUrl: './new-invoice.component.html',
@@ -42,7 +43,8 @@ export class NewInvoiceComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
   ) {}
   submitted: boolean = false;
   workOrderList: any[];
@@ -140,9 +142,9 @@ export class NewInvoiceComponent implements OnInit {
     const workOrder: any = this.workOrderList.find(
       (r: any) => r.workOrderId === value
     );
-    // console.log(this.paymentTerms, workOrder.payRate);
+
     const paymentTerms = this.paymentTerms.find(
-      (r: any) => r.id == workOrder.payRate
+      (r: any) => r.code == workOrder.paymentTerm
     );
     this.invoiceData.controls['paymentTerms'].setValue(
       `(${workOrder.payRate}) ` + paymentTerms?.name
@@ -210,10 +212,7 @@ export class NewInvoiceComponent implements OnInit {
       .get(this.endPoints.ALL_WORK_ORDERS, {})
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the work orders'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
 
           this.cdr.detectChanges();
           throw err;
@@ -231,10 +230,7 @@ export class NewInvoiceComponent implements OnInit {
       .get(this.endPoints.GET_PAYMENT_TERM, {})
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the payment terms'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
 
           this.cdr.detectChanges();
           throw err;
@@ -255,6 +251,7 @@ export class NewInvoiceComponent implements OnInit {
     const paymentTerms = this.paymentTerms.find(
       (r: any) => r.id == workOrder.payRate
     );
+    console.log(paymentTerms, workOrder.payRate);
     this.invoiceData.controls['paymentTerms'].setValue(
       `(${workOrder.payRate}) ` + paymentTerms?.name
     );
@@ -396,7 +393,10 @@ export class NewInvoiceComponent implements OnInit {
           timeSheetId: element.timeSheetId,
           timeSpent: element.timeSpent,
           unitPrice: parseFloat(rate),
-          amount: element.timeSpent * rate,
+          amount:
+            this.selectedWorkOrder.kind?.toLowerCase() === 'hourly'
+              ? element.timeSpent * rate
+              : rate,
         });
       }
       for (let index = 0; index < this.selectedTask.length; index++) {
@@ -404,7 +404,11 @@ export class NewInvoiceComponent implements OnInit {
         const rate = this.selectedWorkOrder.rate
           ? this.selectedWorkOrder.rate
           : 0;
-        subTotal += element.timeSpent * rate;
+        if (this.selectedWorkOrder.kind?.toLowerCase() === 'hourly') {
+          subTotal += element.timeSpent * rate;
+        } else {
+          subTotal += rate;
+        }
       }
       this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
       const totalTax = this.percentage(
@@ -430,14 +434,16 @@ export class NewInvoiceComponent implements OnInit {
           ? this.selectedWorkOrder.rate
           : 0;
 
-        subTotal = element.timeSpent * rate;
+        subTotal =
+          this.selectedWorkOrder.kind?.toLowerCase() === 'hourly'
+            ? element.timeSpent * rate
+            : rate;
       }
       this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
       const totalTax = this.percentage(
         parseInt(this.invoiceData.controls['taxPercentage'].value),
         subTotal
       );
-      console.log(totalTax);
 
       this.invoiceData.controls['totalAmount'].setValue(
         parseFloat(totalTax) + subTotal
@@ -450,7 +456,10 @@ export class NewInvoiceComponent implements OnInit {
           ? this.selectedWorkOrder.rate
           : 0;
 
-        subTotal = element.timeSpent * rate;
+        subTotal =
+          this.selectedWorkOrder.kind?.toLowerCase() === 'hourly'
+            ? element.timeSpent * rate
+            : rate;
       }
       this.invoiceData.controls['taxPercentage'].setValue(0);
       this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
@@ -511,7 +520,7 @@ export class NewInvoiceComponent implements OnInit {
           setTimeout(() => {
             throw err;
           }, 10);
-          this.utils.showSnackBarMessage(this.snackBar, 'Something went wrong');
+          this.utils.showErrorDialog(this.dialog, err);
           this.cdr.detectChanges();
         })
       )
@@ -534,10 +543,7 @@ export class NewInvoiceComponent implements OnInit {
                   setTimeout(() => {
                     throw err;
                   }, 10);
-                  this.utils.showSnackBarMessage(
-                    this.snackBar,
-                    'Something went wrong on upload invoice-document'
-                  );
+                  this.utils.showErrorDialog(this.dialog, err);
                   this.cdr.detectChanges();
                 })
               )

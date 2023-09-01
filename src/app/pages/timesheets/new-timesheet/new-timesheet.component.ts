@@ -34,6 +34,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-new-timesheet',
   templateUrl: './new-timesheet.component.html',
@@ -47,7 +48,8 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
   ) {}
   submitted = false;
   workForceList: any[];
@@ -192,11 +194,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       .get(this.endPoints.LIST_WORK_FORCE, {})
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the work-force'
-          );
-          throw err;
+          this.utils.showErrorDialog(this.dialog, err);
         })
       )
       .subscribe((response) => {
@@ -214,11 +212,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       })
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the work orders'
-          );
-
+          this.utils.showErrorDialog(this.dialog, err);
           this.cdr.detectChanges();
           throw err;
         })
@@ -478,10 +472,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       .pipe(
         catchError(async (err) => {
           this.isLoading = false;
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            err.error || 'Something went wrong'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           this.cdr.detectChanges();
         })
       )
@@ -504,10 +495,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
                   setTimeout(() => {
                     throw err;
                   }, 10);
-                  this.utils.showSnackBarMessage(
-                    this.snackBar,
-                    'Something went wrong on upload timesheet-document'
-                  );
+                  this.utils.showErrorDialog(this.dialog, err);
                   this.cdr.detectChanges();
                 })
               )

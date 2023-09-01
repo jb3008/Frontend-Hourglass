@@ -15,6 +15,7 @@ import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-job-posts',
@@ -73,7 +74,8 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private utils: Utils,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -157,10 +159,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         .get(this.endpoints.LIST_JOBS, this.queryParam)
         .pipe(
           catchError(async (err) => {
-            this.utils.showSnackBarMessage(
-              this.snackBar,
-              'failed to fetch the jobs'
-            );
+            this.utils.showErrorDialog(this.dialog, err);
             this.isLoading = false;
             this.apiLoad = true;
             throw err;
@@ -198,6 +197,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         })
         .pipe(
           catchError(async (err) => {
+            this.utils.showErrorDialog(this.dialog, err);
             this.isLoading = false;
           })
         )
@@ -251,11 +251,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       .get(this.endpoints.BUSINESS_UNIT_BY_KEY /*, queryParam*/)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the business units'
-          );
-          throw err;
+          this.utils.showErrorDialog(this.dialog, err);
         })
       )
       .subscribe((response) => {
@@ -272,10 +268,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       .get(this.endpoints.PLANT_LIST /*, queryParam*/)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the sites list'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           throw err;
         })
       )
@@ -290,11 +283,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       .get(this.endpoints.JOB_TYPE)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to fetch the job types'
-          );
-          throw err;
+          this.utils.showErrorDialog(this.dialog, err);
         })
       )
       .subscribe((response) => {
@@ -312,10 +301,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       .get(this.endpoints.GET_JOBAPPL_COUNTS, queryParam)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(
-            this.snackBar,
-            'failed to get the job counts'
-          );
+          this.utils.showErrorDialog(this.dialog, err);
           this.isLoading = false;
           this.cdr.detectChanges();
           throw err;

@@ -7,7 +7,7 @@ const EndPoints = {
   HIRING_MANGER_BY_KEY: '/hourglass/user/hm/search.api',
   JOB_TYPE: '/hourglass/common/rest/job-type.api',
   TIMESHEET_FREQ: '/hourglass/common/rest/getTimeFrequencyList.api',
-  PAY_TERMS: '/hourglass/common/rest/list-pay-terms.api',
+  PAY_TERMS: '/hourglass/common/pay-term/search.api',
   PAY_TERMS_BY_KEY: '/hourglass/common/pay-term/search.api',
   LEGAL_ENTITY: '/hourglass/common/rest/getCompanyList.api',
   PLANT_LIST: '/hourglass/plant/plant/listPlantsForCompnay', // Lokesh 11-Jul-23 -> Changed API as per Backend team request.
@@ -94,7 +94,7 @@ const EndPoints = {
   GET_TIME_SHEET_OUTBOX: '/hourglass/timesheet/notification/listOutbox.api',
   GET_TIME_SHEET_OUTBOX_COUNT:
     '/hourglass/timesheet/notification/listOutboxCount.api',
-  GET_PAYMENT_TERM: '/hourglass/common/rest/list-pay-terms.api',
+  GET_PAYMENT_TERM: '/hourglass/common/pay-term/search.api',
   TASK_STATUS: '/hourglass/common/listAllTaskStaus.api',
   GET_CURRENCY: '/hourglass/common/listAllcurrencies.api',
   INVOICE_INBOX_NOTIFICATION: '/hourglass/invoice/notification/listInbox.api',

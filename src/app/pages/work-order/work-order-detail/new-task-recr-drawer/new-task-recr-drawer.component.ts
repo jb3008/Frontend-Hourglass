@@ -114,8 +114,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
     this.apiCalls.get(this.endpoints.GET_VENDOR_STAFF_DETAILS, queryParam)
       .pipe(
         catchError(async (err) => {
-          this.utils.showSnackBarMessage(this.snackBar, 'failed to fetch the assignee list');
-          throw err;
+          this.utils.showErrorDialog(this.dialog, err);
         })
       )
       .subscribe((response) => {
@@ -198,6 +197,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
 
       this.apiCalls.post(this.taskDetails == '' ? this.endpoints.CREATE_TASK: this.endpoints.UPDATE_TASK,formData)
       .pipe(catchError(async (err) => {
+        this.utils.showErrorDialog(this.dialog, err);
         this.isLoading = false;
         setTimeout(() => {
           throw err;  
