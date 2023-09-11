@@ -35,7 +35,7 @@ export class ErrorCatchingInterceptor implements HttpInterceptor {
           errorMsg = `${error.error.message}`;
         } else {
           // console.log('This is server side error');
-          errorMsg = `jayesh${error.message}`;
+          errorMsg = `${error.message}`;
         }
         console.log(errorMsg);
         // this.showErrorPopup(errorMsg);

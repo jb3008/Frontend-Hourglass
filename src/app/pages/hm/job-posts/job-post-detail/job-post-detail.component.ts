@@ -1,28 +1,33 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { Observable, throwError } from 'rxjs';
 
 import {
   DrawerComponent,
   ToggleComponent,
-
 } from '../../../../_metronic/kt/components';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import EndPoints from 'src/app/common/endpoints';
 import { catchError } from 'rxjs';
-import { Utils } from  'src/app/services/utils';
+import { Utils } from 'src/app/services/utils';
 import { ModalComponent, ModalConfig } from 'src/app/_metronic/partials';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-job-post-detail',
   templateUrl: './job-post-detail.component.html',
-  styleUrls: ['./job-post-detail.component.scss']
+  styleUrls: ['./job-post-detail.component.scss'],
 })
-export class JobPostDetailComponent implements OnInit,AfterViewInit {
+export class JobPostDetailComponent implements OnInit, AfterViewInit {
   jobID: any;
   loading = false;
   endPoints = EndPoints;
@@ -37,7 +42,11 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
   paymentTermsList: any[] = [];
   applicationAttachement: any[] = [];
   profilePic: any;
-  timeSheetFrequencyList: any = {'W': 'Weekly', '2W': 'Bi-Weekly', 'M': 'Monthly'};
+  timeSheetFrequencyList: any = {
+    W: 'Weekly',
+    '2W': 'Bi-Weekly',
+    M: 'Monthly',
+  };
   selectedJobSeeker: any = null;
   clickedApplication: string;
   apiLoad = false;
@@ -53,23 +62,37 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
   @ViewChild('modal') private modalComponent: ModalComponent;
 
   // displayedColumns: string[] = ['firstName', 'id', 'worker', 'appliedBy','lastUpdate', 'costing', 'action'];
-  displayedColumns: string[] = ['title', 'id', 'worker', 'appliedBy', 'modifierDate', 'workRate', 'status'];
-  dataSource = new MatTableDataSource<any>;
-  
-  constructor(private router: Router, private route: ActivatedRoute, private apiCalls: ApiCallsService, 
-    private cdr: ChangeDetectorRef, private utils: Utils, private dialog: MatDialog) {
+  displayedColumns: string[] = [
+    'title',
+    'id',
+    'worker',
+    'appliedBy',
+    'modifierDate',
+    'workRate',
+    'status',
+  ];
+  dataSource = new MatTableDataSource<any>();
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private apiCalls: ApiCallsService,
+    private cdr: ChangeDetectorRef,
+    private utils: Utils,
+    private dialog: MatDialog
+  ) {
     // let data = router.getCurrentNavigation()?.extras.state?.data;
     // if(data){
     //   sessionStorage.setItem('jobDetails', JSON.stringify(data));
     // }
     // this.jobID = JSON.parse(sessionStorage.getItem('jobDetails')!);
-   }
+  }
 
   ngOnInit(): void {
     // DropdownMenusModule.reinitialization();
     DrawerComponent.reinitialization();
     ToggleComponent.reinitialization();
-    this.route.queryParams.subscribe(param => {
+    this.route.queryParams.subscribe((param) => {
       this.jobID = param['data'];
       this.selectedTab = param['tab'];
       this.pageNo = param['pageNo'];
@@ -87,14 +110,13 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-
   }
   // JobSeekers
   // Details
-  isSelectedTab:string ='Details';
-  
-  getSelectedTab(tab:string): void {
-    console.log(tab)
+  isSelectedTab: string = 'Details';
+
+  getSelectedTab(tab: string): void {
+    console.log(tab);
     this.isSelectedTab = tab;
     setTimeout(() => {
       // console.log(   DrawerComponent.getInstance('kt_logs_drawer_toggle'))
@@ -111,47 +133,51 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
     return true;
   }
 
-  getJobDetails(){
+  getJobDetails() {
     this.loading = true;
     let queryParam = {
-      id: this.jobID
-    }
-    this.apiCalls.get(this.endPoints.GET_JOB_DETAILS, queryParam)
-      .pipe(catchError(async (error) => {
-        this.loading = false;
-        this.cdr.detectChanges();
-        console.log(error);
-        throw error;
-      }))
+      id: this.jobID,
+    };
+    this.apiCalls
+      .get(this.endPoints.GET_JOB_DETAILS, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.loading = false;
+          this.cdr.detectChanges();
+          console.log(error);
+          throw error;
+        })
+      )
       .subscribe((response) => {
         this.loading = false;
         this.jobDetails = response;
         console.log(this.jobDetails);
-        
+
         this.cdr.detectChanges();
-      })
+      });
   }
 
-  getCostCenterList(){
+  getCostCenterList() {
     this.getDropDownValues(this.endPoints.COST_CENTER).subscribe({
       next: (response: any) => {
         this.costCenterList = response;
       },
       error: (error: any) => {
+        this.utils.showErrorDialog(this.dialog, error);
         console.log(error);
-      }
-    })
+      },
+    });
   }
 
-  getPaymentTermsList(){
+  getPaymentTermsList() {
     this.getDropDownValues(this.endPoints.PAY_TERMS).subscribe({
       next: (response: any) => {
         this.paymentTermsList = response;
       },
       error: (error: any) => {
         console.log(error);
-      }
-    })
+      },
+    });
   }
 
   // getTimeSheetFrequencyList() {
@@ -167,52 +193,59 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
 
   getDropDownValues(endpoint: any, companyCode?: string): Observable<any> {
     let queryParams;
-    if(companyCode){
-      queryParams = {'companyCode': companyCode};
+    if (companyCode) {
+      queryParams = { companyCode: companyCode };
     }
-    return this.apiCalls.get(endpoint, queryParams)
-      .pipe(catchError((err) => {
+    return this.apiCalls.get(endpoint, queryParams).pipe(
+      catchError((err) => {
         return throwError(() => err);
-      }));
+      })
+    );
   }
 
-  getJobDocuments(id: string){
+  getJobDocuments(id: string) {
     this.apiLoad = false;
     this.loading = true;
     let queryParam = {
       id: id,
-      attachmentType: 'JOB_POST'
-    }
-    this.apiCalls.get(this.endPoints.GET_DOCUMENTS, queryParam)
-      .pipe(catchError(async (error) => {
-        this.loading = false;
-        this.apiLoad = true;
-        this.cdr.detectChanges();
-        console.log(error);
-        throw error;
-      }))
+      attachmentType: 'JOB_POST',
+    };
+    this.apiCalls
+      .get(this.endPoints.GET_DOCUMENTS, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.loading = false;
+          this.apiLoad = true;
+          this.cdr.detectChanges();
+          console.log(error);
+          throw error;
+        })
+      )
       .subscribe((response) => {
         this.loading = false;
         this.apiLoad = true;
         this.documentsList = response;
         this.cdr.detectChanges();
-      })
+      });
   }
 
-  getJobSeekersList(id: string){
+  getJobSeekersList(id: string) {
     this.loading = true;
     this.apiLoad = false;
     let queryParam = {
-      jobPostId: id
-    }
-    this.apiCalls.get(this.endPoints.JOB_SEEKERS_LIST, queryParam)
-      .pipe(catchError(async (error) => {
-        this.loading = false;
-        this.apiLoad = true;
-        console.log(error);
-        this.cdr.detectChanges();
-        throw error;
-      }))
+      jobPostId: id,
+    };
+    this.apiCalls
+      .get(this.endPoints.JOB_SEEKERS_LIST, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.loading = false;
+          this.apiLoad = true;
+          console.log(error);
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
       .subscribe((response) => {
         // response = response.filter((list: any) => list.status == 'ACTIVE')
         this.dataSource = new MatTableDataSource<any>(response);
@@ -221,23 +254,26 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
         this.apiLoad = true;
         this.loading = false;
         this.cdr.detectChanges();
-      })
+      });
   }
 
-  getInterviewedList(id: string){
+  getInterviewedList(id: string) {
     this.loading = true;
     this.apiLoad = false;
     let queryParam = {
-      jobPostId: id
-    }
-    this.apiCalls.get(this.endPoints.INTERVIEWED_LIST, queryParam)
-      .pipe(catchError(async (error) => {
-        this.loading = false;
-        this.apiLoad = true;
-        console.log(error);
-        this.cdr.detectChanges();
-        throw error;
-      }))
+      jobPostId: id,
+    };
+    this.apiCalls
+      .get(this.endPoints.INTERVIEWED_LIST, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.loading = false;
+          this.apiLoad = true;
+          console.log(error);
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
       .subscribe((response) => {
         this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;
@@ -245,50 +281,56 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
         this.loading = false;
         this.apiLoad = true;
         this.cdr.detectChanges();
-      })
+      });
   }
 
-  getApplicationDetails(id: string){
+  getApplicationDetails(id: string) {
     this.loading = true;
     let queryParam = {
-      jobApplicationId : id
-    }
-    this.apiCalls.get(this.endPoints.APPLICATION_DETAILS, queryParam)
-      .pipe(catchError(async (error) => {
-        this.loading = false;
-        this.cdr.detectChanges();
-        console.log(error);
-        throw error;
-      }))
+      jobApplicationId: id,
+    };
+    this.apiCalls
+      .get(this.endPoints.APPLICATION_DETAILS, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.loading = false;
+          this.cdr.detectChanges();
+          console.log(error);
+          throw error;
+        })
+      )
       .subscribe((response) => {
         this.applicationDetails = response;
         this.loading = false;
         this.cdr.detectChanges();
         this.getApplicantsDetails(this.applicationDetails.workerId, id);
-      })
+      });
   }
 
-  getApplicantsDetails(id: string, applicationId: string){
+  getApplicantsDetails(id: string, applicationId: string) {
     this.loading = true;
     let queryParam = {
-      workForceId  : id
-    }
-    this.apiCalls.get(this.endPoints.GET_FULL_APPL_DETAILS, queryParam)
-      .pipe(catchError(async (error) => {
-        this.loading = false;
-        this.cdr.detectChanges();
-        throw error;
-      }))
+      workForceId: id,
+    };
+    this.apiCalls
+      .get(this.endPoints.GET_FULL_APPL_DETAILS, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.loading = false;
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
       .subscribe((response) => {
         this.loading = false;
-        this.applicantsDetails = response;   
-        this.getWorkForceProfilePic(applicationId);  
-        this.getApplicationAttachment(applicationId);  
+        this.applicantsDetails = response;
+        this.getWorkForceProfilePic(applicationId);
+        this.getApplicationAttachment(applicationId);
         this.cdr.detectChanges();
-      })
+      });
   }
 
-  getApplicationAttachment(id: string){
+  getApplicationAttachment(id: string) {
     this.loading = true;
     let queryParam = {
       id: id,
@@ -309,11 +351,12 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
         this.cdr.detectChanges();
       });
   }
-  
-  getWorkForceProfilePic(id: string){
+
+  getWorkForceProfilePic(id: string) {
     this.loading = false;
-    this.apiCalls.getDocument(this.endPoints.GET_JOB_APPL_PIC, {
-      jobApplicationId : id,
+    this.apiCalls
+      .getDocument(this.endPoints.GET_JOB_APPL_PIC, {
+        jobApplicationId: id,
       })
       .pipe(
         catchError(async (err) => {
@@ -323,7 +366,8 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
         })
       )
       .subscribe(async (response: any) => {
-        this.profilePic = response.size > 0 ? await this.blobToBase64(response) : undefined;
+        this.profilePic =
+          response.size > 0 ? await this.blobToBase64(response) : undefined;
         this.loading = false;
         this.cdr.detectChanges();
       });
@@ -331,17 +375,17 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
 
   blobToBase64(blob: any) {
     return new Promise((resolve, _) => {
-      const reader:any = new FileReader();
+      const reader: any = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader?.result?.split(",")[1];
+        const base64String = reader?.result?.split(',')[1];
         const base64WithHeader = `data:image/jpeg;base64,${base64String}`;
         resolve(base64WithHeader);
       };
-        reader.readAsDataURL(blob);
+      reader.readAsDataURL(blob);
     });
   }
 
-  getAttachment(id: string, name: string){
+  getAttachment(id: string, name: string) {
     this.loading = true;
     let queryParam = {
       documentId: id,
@@ -389,39 +433,44 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
   }
 
   takeAction(seekerId: string, action: string) {
-    let msg = `Do you want to ${action == 'REJECTED' ? 'REJECT' : action} the offer ?`;
+    let msg = `Do you want to ${
+      action == 'REJECTED' ? 'REJECT' : action
+    } the offer ?`;
     this.utils.showDialogWithCancelButton(this.dialog, msg, (res: any) => {
-      if(res){
-        this.actionOnOfferLetter(seekerId, action)
+      if (res) {
+        this.actionOnOfferLetter(seekerId, action);
       }
       this.cdr.detectChanges();
     });
   }
 
-  actionOnOfferLetter(id: string, status: string){
+  actionOnOfferLetter(id: string, status: string) {
     this.loading = true;
     let queryParam = {
-      jobApplicationId : id,
-      newStatus: status
-    }
-    this.apiCalls.post(this.endPoints.UPDATE_APPL_STATUS, '', queryParam)
-      .pipe(catchError(async (error) => {
-        this.loading = false;
-        this.cdr.detectChanges();
-        console.log(error);
-        throw error;
-      }))
+      jobApplicationId: id,
+      newStatus: status,
+    };
+    this.apiCalls
+      .post(this.endPoints.UPDATE_APPL_STATUS, '', queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.loading = false;
+          this.cdr.detectChanges();
+          console.log(error);
+          throw error;
+        })
+      )
       .subscribe((response) => {
         this.loading = false;
         setTimeout(() => {
           this.openSuccessPopup(status);
         }, 100);
         this.cdr.detectChanges();
-      })
+      });
   }
 
-  openSuccessPopup(status: any){
-    let msg = `Offer letter ${status} successfully`
+  openSuccessPopup(status: any) {
+    let msg = `Offer letter ${status} successfully`;
     this.utils.showDialog(this.dialog, msg, () => {
       this.loading = false;
       this.getJobSeekersList(this.jobID);
@@ -431,7 +480,7 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
 
   getInterviewStatus(statusCode: string) {
     let statusString: string;
-    switch(statusCode) {
+    switch (statusCode) {
       case 'REJECTED':
         statusString = 'Rejected';
         break;
@@ -456,7 +505,7 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
 
   getInterviewStatusClass(statusCode: string) {
     let statusClass: string;
-    switch(statusCode) {
+    switch (statusCode) {
       case 'REJECTED':
         statusClass = 'badge-light-danger';
         break;
@@ -479,11 +528,11 @@ export class JobPostDetailComponent implements OnInit,AfterViewInit {
     return statusClass;
   }
 
-  setApplicationId(id: string){
+  setApplicationId(id: string) {
     this.clickedApplication = id;
   }
 
   getDocIcon(fileName: string) {
-    return this.utils.getDocIcon(fileName)
-  }  
+    return this.utils.getDocIcon(fileName);
+  }
 }

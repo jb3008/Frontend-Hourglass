@@ -46,7 +46,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     status: 'ACTIVE',
     types: [],
     pageNo: 1,
-    pageSize: 10
+    pageSize: 10,
   };
   pageSize = 10;
   selectedJobTypes: boolean[] = [];
@@ -93,7 +93,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.getJobTypes();
     this.getJobCount();
     this.route.queryParams.subscribe((param) => {
-      if(param?.pageNo){
+      if (param?.pageNo) {
         this.queryParam.pageNo = param['pageNo'];
         this.queryParam.pageSize = param['pageSize'];
       }
@@ -197,7 +197,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       });
   }
 
-  onPaginatorPageChange(event: any){
+  onPaginatorPageChange(event: any) {
     this.queryParam.pageNo = event.pageIndex + 1;
     this.queryParam.pageSize = event.pageSize;
     this.getAllJobs();
@@ -220,7 +220,6 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
           this.utils.showErrorDialog(this.dialog, err);
           this.isLoading = false;
           this.apiLoad = true;
-         
         })
       )
       .subscribe((response) => {
@@ -238,25 +237,35 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   goToDetails(element: any) {
     if (this.selectedTab == 'Active' || this.selectedTab == 'Close')
       this.router.navigate(['/hm/job-posts/details'], {
-        queryParams: { data: element.id, tab: this.selectedTab, pageNo: this.queryParam.pageNo, pageSize: this.queryParam.pageSize },
+        queryParams: {
+          data: element.id,
+          tab: this.selectedTab,
+          pageNo: this.queryParam.pageNo,
+          pageSize: this.queryParam.pageSize,
+        },
       });
     else if (this.selectedTab == 'Draft')
       this.router.navigate(['/hm/job-posts/creat-job-post'], {
-        queryParams: { data: element.id, tab: this.selectedTab, pageNo: this.queryParam.pageNo, pageSize: this.queryParam.pageSize },
+        queryParams: {
+          data: element.id,
+          tab: this.selectedTab,
+          pageNo: this.queryParam.pageNo,
+          pageSize: this.queryParam.pageSize,
+        },
       });
   }
 
   getSelectedTab(tab: string, from?: string) {
-    if(!from){
+    if (!from) {
       this.queryParam.pageNo = 1;
       this.queryParam.pageSize = 10;
       this.paginator.pageSize = 10;
-    }else{
+    } else {
       this.paginator.pageSize = this.queryParam.pageSize;
     }
-    if(tab == 'Active') this.totalJobsCount = this.jobCount?.activeCount;
-    else if(tab == 'Draft') this.totalJobsCount = this.jobCount?.draftCount;
-    else if(tab == 'Close') this.totalJobsCount = this.jobCount?.closeCount;
+    if (tab == 'Active') this.totalJobsCount = this.jobCount?.activeCount;
+    else if (tab == 'Draft') this.totalJobsCount = this.jobCount?.draftCount;
+    else if (tab == 'Close') this.totalJobsCount = this.jobCount?.closeCount;
 
     if (!from) this.resetFilter('tab');
     this.selectedTab = tab;
@@ -387,8 +396,8 @@ type QueryParam = {
   site?: string;
   businessUnit?: string;
   types?: string[];
-  pageNo:number;
-  pageSize:number;
+  pageNo: number;
+  pageSize: number;
 };
 
 type JobPostCount = {

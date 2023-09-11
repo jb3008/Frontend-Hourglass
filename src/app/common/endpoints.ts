@@ -13,7 +13,7 @@ const EndPoints = {
   PLANT_LIST: '/hourglass/plant/plant/listPlantsForCompnay', // Lokesh 11-Jul-23 -> Changed API as per Backend team request.
   BUSINESS_UNIT: '/hourglass/job-post/business-unit/list.api',
   BUSINESS_UNIT_BY_KEY: '/hourglass/business-unit/search.api',
-  COST_CENTER: '/hourglass/job-post/cost-center/list.api',
+  COST_CENTER: '/hourglass/common/cost-center/search.api',
   COST_CENTER_BY_KEY: '/hourglass/common/cost-center/search.api',
   CREATE_JOB: '/hourglass/job-post/create.api',
   DRAFT_JOB: '/hourglass/job-post/saveDraftJobPost.api',
@@ -35,7 +35,7 @@ const EndPoints = {
   CREATE_WORK_ORDER: '/hourglass/work-order/create.api',
   // WORK_ORDER_STATUS: '/hourglass/work-order/listWorkOrderStatus',
   WORK_ORDER_STATUS: '/hourglass/work-order/listWorkOrderStatusWithCode',
-  GET_VENDORS_LIST: '/hourglass/common/rest/listAllVendors',
+  GET_VENDORS_LIST: '/hourglass/common/rest/vendor/search.api',
   SEND_JOB_OFFER: '/hourglass/job-offer/create.api',
   GET_DOCUMENTS: '/hourglass/document/list',
   GET_APPL_DETAILS:
