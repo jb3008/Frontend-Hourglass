@@ -16,6 +16,7 @@ const EndPoints = {
   COST_CENTER: '/hourglass/common/cost-center/search.api',
   COST_CENTER_BY_KEY: '/hourglass/common/cost-center/search.api',
   CREATE_JOB: '/hourglass/job-post/create.api',
+  CREATE_JOB_DOCUMENT: '/hourglass/job-post/uploadFilesForJobPost.api',
   DRAFT_JOB: '/hourglass/job-post/saveDraftJobPost.api',
   LIST_JOBS: '/hourglass/job-post/list.api',
   LIST_JOBS_PAGINATION: '/job-post/listJobPostPagination.api',
@@ -40,6 +41,7 @@ const EndPoints = {
   WORK_ORDER_STATUS: '/hourglass/work-order/listWorkOrderStatusWithCode',
   GET_VENDORS_LIST: '/hourglass/common/rest/vendor/search.api',
   SEND_JOB_OFFER: '/hourglass/job-offer/create.api',
+  SEND_JOB_OFFER_DOCUMENT: '/hourglass/job-offer/uploadFilesForJobOffer.api',
   GET_DOCUMENTS: '/hourglass/document/list',
   GET_APPL_DETAILS:
     '/hourglass/job-application/getJobApplicationDetailsForJobPostId',
@@ -55,6 +57,7 @@ const EndPoints = {
   GET_WORK_FORCE: '/hourglass/work-force/getWorkForceDetails.api',
   TASK_LIST_HM: '/hourglass/task/listTasks.api',
   CREATE_TASK: '/hourglass/task/create.api',
+  CREATE_TASK_DOCUMENT: 'hourglass/task/uploadFilesForTasks.api',
   UPDATE_TASK: '/hourglass/task/updateTask.api',
   DELETE_TASK: '/hourglass/task/delete.api',
   GET_VENDOR_DETAILS: '/hourglass/vendor/getVendorDetails.api',

@@ -787,6 +787,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
 
   saveJob(status: string) {
     const formData = new FormData();
+    const imageFormData = new FormData();
     let workRateValue = this.jobPostData.controls['workRate'].value;
     if (workRateValue)
       this.jobPostData.controls['workRate'].setValue(
@@ -844,13 +845,13 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
               if (file && file.length != 0) {
                 file.forEach((fileObj: File) => {
                   const blob = new Blob([fileObj], { type: fileObj.type });
-                  formData.append(key, blob, fileObj.name);
+                  imageFormData.append(key, blob, fileObj.name);
                 });
               }
             } else {
               const file = this.jobPostData.get(key)?.value;
               const blob = new Blob([file], { type: file.type });
-              formData.append(key, blob, file.name);
+              imageFormData.append(key, blob, file.name);
             }
           }
         }
@@ -872,14 +873,15 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       // } else {
       // formData.append('id', '0');
       // }
-      console.log(formData);
 
+      const formDataObj: any = {};
+      formData.forEach((value, key) => (formDataObj[key] = value));
       this.apiCalls
         .post(
           status == 'draft'
             ? this.endPoints.DRAFT_JOB
             : this.endPoints.CREATE_JOB,
-          formData
+          formDataObj
         )
         .pipe(
           catchError(async (err) => {
@@ -894,10 +896,34 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
         .subscribe((response) => {
           if (this.isLoading) {
             // isLoading = true indicates no error.
-            this.openSuccessPopup(
-              status,
-              status == 'draft' ? this.jobId : response
-            );
+            if (status != 'draft') {
+              imageFormData.append('jobPostId', response);
+              this.apiCalls
+                .post(this.endPoints.CREATE_JOB_DOCUMENT, imageFormData)
+                .pipe(
+                  catchError(async (err) => {
+                    this.isLoading = false;
+                    this.utils.showErrorDialog(this.dialog, err);
+                    setTimeout(() => {
+                      throw err;
+                    }, 10);
+                    this.cdr.detectChanges();
+                  })
+                )
+                .subscribe(async () => {
+                  if (this.isLoading) {
+                    this.openSuccessPopup(
+                      status,
+                      status == 'draft' ? this.jobId : response
+                    );
+                  }
+                });
+            } else {
+              this.openSuccessPopup(
+                status,
+                status == 'draft' ? this.jobId : response
+              );
+            }
           }
         });
     } else {

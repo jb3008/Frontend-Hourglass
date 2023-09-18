@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef,
+} from '@angular/core';
 import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { Utils } from 'src/app/services/utils';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,13 +20,12 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './send-offer-letter-drawer.component.html',
 })
 export class SendOfferLetterDrawerComponent implements OnInit {
-
-  @Input()jobDetails: any;
-  @Input()jobSeeker: any;
+  @Input() jobDetails: any;
+  @Input() jobSeeker: any;
 
   @ViewChild('cancel') cancelBtn: ElementRef;
 
-  endPoints  = EndPoints;
+  endPoints = EndPoints;
 
   isLoading = false;
   editor = InlineEditor;
@@ -27,20 +33,26 @@ export class SendOfferLetterDrawerComponent implements OnInit {
   jobPostData: FormGroup;
   allFiles: File[] = [];
   rate: string;
-  
-  constructor(private utils: Utils, private snackBar: MatSnackBar, private formBuilder: FormBuilder,
-    private apiCalls: ApiCallsService, private dialog: MatDialog, private cdr: ChangeDetectorRef) {}
 
-  ngOnInit(): void { 
+  constructor(
+    private utils: Utils,
+    private snackBar: MatSnackBar,
+    private formBuilder: FormBuilder,
+    private apiCalls: ApiCallsService,
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
     this.jobPostData = this.formBuilder.group({
       offerLetter: ['', Validators.required],
       offerMsg: ['', Validators.required],
-      workRate: ['', Validators.required]
+      workRate: ['', Validators.required],
     });
   }
-  
+
   ngOnChanges() {
-    this.data  = `Dear ${this.jobSeeker?.firstName} ${this.jobSeeker?.lastName},</br></br>
+    this.data = `Dear ${this.jobSeeker?.firstName} ${this.jobSeeker?.lastName},</br></br>
     We are delighted to extend our official offer for the job ${this.jobDetails?.title} at ${this.jobDetails?.companyDetails?.title}. After thorough evaluation of your application details, we believe that you are an excellent fit for our organization. 
     </br>
     </br>
@@ -53,23 +65,33 @@ export class SendOfferLetterDrawerComponent implements OnInit {
     Once again, congratulations on your selection for this role. We eagerly anticipate your positive response.
     `;
 
-    this.rate = this.jobDetails?.jobKind == 'Hourly' ? this.jobDetails?.rate : this.jobDetails?.minBudget;
+    this.rate =
+      this.jobDetails?.jobKind == 'Hourly'
+        ? this.jobDetails?.rate
+        : this.jobDetails?.minBudget;
     this.jobPostData?.controls['workRate'].setValue(this.rate);
     this.jobPostData?.controls['offerMsg'].setValue(this.data);
   }
 
-  selectFile(event: any, name: any){
+  selectFile(event: any, name: any) {
     const file = event.target.files[0];
-    if(file.type.indexOf('image') == 0){
-      this.utils.showSnackBarMessage(this.snackBar, 'Please upload documents only');
-    } else if (file.size > 2 * 1024 * 1024) { // check if file size is > 2 MB
-      this.utils.showSnackBarMessage(this.snackBar, 'Maximum allowed file size is 2 MB. Please choose another file.');
+    if (file.type.indexOf('image') == 0) {
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Please upload documents only'
+      );
+    } else if (file.size > 2 * 1024 * 1024) {
+      // check if file size is > 2 MB
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Maximum allowed file size is 2 MB. Please choose another file.'
+      );
     } else {
       this.jobPostData.controls[name].setValue(file);
       console.log(this.jobPostData.value);
     }
   }
-  
+
   clearFileInput(element: any) {
     this.utils.clearFileInput(element);
   }
@@ -79,33 +101,41 @@ export class SendOfferLetterDrawerComponent implements OnInit {
   }
 
   droppedFiles(allFiles: File[]): void {
-    console.log('this.allFiles')
+    console.log('this.allFiles');
     const filesAmount = allFiles.length;
     for (let i = 0; i < filesAmount; i++) {
       const file = allFiles[i];
       this.allFiles.push(file);
     }
-    console.log(this.allFiles)
+    console.log(this.allFiles);
   }
 
-  numbersOnly(event: any){
+  numbersOnly(event: any) {
     return this.utils.numbersAndDecimal(event);
   }
 
   sendOfferLetter() {
     const formData = new FormData();
-    
+    const imageFormData = new FormData();
     if (!!!this.jobPostData.valid) {
-      this.utils.showSnackBarMessage(this.snackBar, 'Please enter all required data');
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Please enter all required data'
+      );
       return;
     }
 
     this.isLoading = true;
-    let workRate = document.getElementById('revisedWorkRate') as HTMLInputElement;
-    this.rate = workRate.value.replace(/,/g, '')
-    if(this.rate && this.rate == '0'){
-      this.utils.showSnackBarMessage(this.snackBar, 'Please enter an amount greater than 0');
-        return;
+    let workRate = document.getElementById(
+      'revisedWorkRate'
+    ) as HTMLInputElement;
+    this.rate = workRate.value.replace(/,/g, '');
+    if (this.rate && this.rate == '0') {
+      this.utils.showSnackBarMessage(
+        this.snackBar,
+        'Please enter an amount greater than 0'
+      );
+      return;
     }
     formData.append('status', 'OFFER_SENT');
     formData.append('jobPostId', this.jobDetails.id);
@@ -113,27 +143,53 @@ export class SendOfferLetterDrawerComponent implements OnInit {
     formData.append('offerMsg', this.jobPostData.controls['offerMsg'].value);
     formData.append('rate', this.rate);
     // formData.append('budget', this.jobDetails.jobKind == 'Fixed' ? this.rate: '0');
-    formData.append('otherDocList', this.jobPostData.value['offerLetter']);
+    imageFormData.append('otherDocList', this.jobPostData.value['offerLetter']);
+    const formDataObj: any = {};
+    formData.forEach((value, key) => (formDataObj[key] = value));
+    this.apiCalls
+      .post(this.endPoints.SEND_JOB_OFFER, formDataObj)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showErrorDialog(this.dialog, err);
+          this.isLoading = false;
+          this.cdr.detectChanges();
+          setTimeout(() => {
+            throw err;
+          }, 10);
+        })
+      )
+      .subscribe((response) => {
+        if (this.isLoading) {
+          // isLoading = true indicates no error.
 
-    this.apiCalls.post(this.endPoints.SEND_JOB_OFFER, formData, { "Content-Type": "multipart/form-data" })
-    .pipe(catchError(async (err) => {
-      this.utils.showErrorDialog(this.dialog, err);
-      this.isLoading = false;
-      this.cdr.detectChanges();
-      setTimeout(() => {
-        throw err;  
-      }, 10);
-      
-    }))
-    .subscribe(() => {
-      if (this.isLoading) { // isLoading = true indicates no error.
-        this.isLoading = false;
-        this.cdr.detectChanges();
-        this.utils.showDialog(this.dialog, 'offer sent successfully', () => {
-          //close drawer
-          this.cancelBtn.nativeElement.click();
-        });
-      }
-    });
+          imageFormData.append('jobOfferId', response.jobOfferId);
+          this.apiCalls
+            .post(this.endPoints.SEND_JOB_OFFER_DOCUMENT, imageFormData)
+            .pipe(
+              catchError(async (err) => {
+                this.utils.showErrorDialog(this.dialog, err);
+                this.isLoading = false;
+                this.cdr.detectChanges();
+                setTimeout(() => {
+                  throw err;
+                }, 10);
+              })
+            )
+            .subscribe(async () => {
+              if (this.isLoading) {
+                this.isLoading = false;
+                this.cdr.detectChanges();
+                this.utils.showDialog(
+                  this.dialog,
+                  'offer sent successfully',
+                  () => {
+                    //close drawer
+                    this.cancelBtn.nativeElement.click();
+                  }
+                );
+              }
+            });
+        }
+      });
   }
 }
