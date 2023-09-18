@@ -227,68 +227,53 @@ export class TimesheetsComponent implements OnInit {
       )
       .subscribe((response) => {
         if (this.isLoading) {
-          this.apiCalls
-            .get(this.endPoints.GET_TIME_SHEET_COUNT, filter)
-            .pipe(
-              catchError(async (err) => {
-                this.utils.showErrorDialog(this.dialog, err);
-                this.totalCount = 0;
-                this.isApiLoad = true;
-                this.timeSheetList = [];
-                this.isLoading = false;
-                this.cdr.detectChanges();
-                throw err;
-              })
-            )
-            .subscribe((responseCount) => {
-              this.totalCount = responseCount;
+          this.totalCount = response.TotalCount;
 
-              for (let index = 0; index < response.length; index++) {
-                const element = response[index];
+          for (let index = 0; index < response.list.length; index++) {
+            const element = response.list[index];
 
-                element.timeSpent = 0;
+            element.timeSpent = 0;
 
-                if (element.taskListDetails?.length) {
-                  for (let i = 0; i < element.taskListDetails.length; i++) {
-                    element.timeSpent += element.taskListDetails[i].timeSpent
-                      ? parseInt(element.taskListDetails[i].timeSpent)
-                      : 0;
-                  }
-                }
-                element.status = element.displayStatus;
+            if (element.taskListDetails?.length) {
+              for (let i = 0; i < element.taskListDetails.length; i++) {
+                element.timeSpent += element.taskListDetails[i].timeSpent
+                  ? parseInt(element.taskListDetails[i].timeSpent)
+                  : 0;
               }
-              this.timeSheetList = response;
+            }
+            element.status = element.displayStatus;
+          }
+          this.timeSheetList = response.list;
 
-              this.isLoading = false;
-              this.isApiLoad = true;
-              const queryParamObj: any = {
-                pageNo: this.paginator.pageIndex.toString(),
-                pageSize: this.paginator.pageSize.toString(),
-                sortBy: this.sort.active,
-                sortOrder: this.sort.direction,
-              };
-              for (var i in this.timeSheetFilter.controls) {
-                queryParamObj[i] = this.timeSheetFilter.controls[i].value;
-              }
+          this.isLoading = false;
+          this.isApiLoad = true;
+          const queryParamObj: any = {
+            pageNo: this.paginator.pageIndex.toString(),
+            pageSize: this.paginator.pageSize.toString(),
+            sortBy: this.sort.active,
+            sortOrder: this.sort.direction,
+          };
+          for (var i in this.timeSheetFilter.controls) {
+            queryParamObj[i] = this.timeSheetFilter.controls[i].value;
+          }
 
-              var queryParams = new URLSearchParams();
+          var queryParams = new URLSearchParams();
 
-              // // Set new or modify existing parameter value.
-              for (var i in queryParamObj) {
-                if (queryParamObj[i]) {
-                  queryParams.set(i, queryParamObj[i]);
-                }
-              }
-              console.log(queryParamObj);
-              var newURL = location.href.split('?')[0];
-              window.history.pushState(
-                'object',
-                document.title,
-                newURL + '?' + queryParams.toString()
-              );
+          // // Set new or modify existing parameter value.
+          for (var i in queryParamObj) {
+            if (queryParamObj[i]) {
+              queryParams.set(i, queryParamObj[i]);
+            }
+          }
+          console.log(queryParamObj);
+          var newURL = location.href.split('?')[0];
+          window.history.pushState(
+            'object',
+            document.title,
+            newURL + '?' + queryParams.toString()
+          );
 
-              this.cdr.detectChanges();
-            });
+          this.cdr.detectChanges();
         }
       });
   }

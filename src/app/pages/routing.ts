@@ -19,10 +19,12 @@ const Routing: Routes = [
 
   {
     path: 'hm/work-order',
+    // loadChildren: () =>
+    //   import('./hm/work-order/work-order.module').then(
+    //     (m) => m.WorkOrderModule
+    //   ),
     loadChildren: () =>
-      import('./hm/work-order/work-order.module').then(
-        (m) => m.WorkOrderModule
-      ),
+      import('./work-order/work-order.module').then((m) => m.WorkOrderModule),
   },
 
   {

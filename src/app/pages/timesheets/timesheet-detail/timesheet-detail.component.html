@@ -1,11 +1,4 @@
 <div class="content flex-column-fluid auto container-lg mb-4">
-  <!-- <div class="py-5 fw-bold">
-        <a class="cursor-pointer " routerLink="/job-posts"> <i class="fas fa-arrow-left me-3"></i>
-            Create Job Posting for Worker <span class="badge badge-light-success fw-normal ms-3"><i
-                    class="fas fa-yin-yangfas fa-circle px-1 text-success  fs-10"></i> New Job</span></a>
-    </div> -->
-  <!--begin:: Top Card-->
-
   <div class="card mb-5 mb-xl-10 text-gray-600">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
@@ -192,7 +185,7 @@
               <table
                 mat-table
                 [dataSource]="dataSource[d.date]"
-                class="table table-row-bordered text-gray-600 qborder-table qfs-13 "
+                class="table table-row-bordered text-gray-600 qborder-table qfs-13"
               >
                 <!-- taskId Column -->
                 <ng-container matColumnDef="taskId">
@@ -216,7 +209,8 @@
                       src="./assets/images/icons/text.svg"
                       alt=""
                       class="align-text-bottom me-1"
-                    /> Task Name
+                    />
+                    Task Name
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     {{ element.title }}
@@ -230,7 +224,7 @@
                       src="./assets/images/icons/tag.svg"
                       alt=""
                       class="align-middle me-1"
-                    /> 
+                    />
                     Priority
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
@@ -266,7 +260,7 @@
                       src="./assets/images/icons/tclock.svg"
                       alt=""
                       class="align-text-bottom me-1"
-                    /> 
+                    />
                     Time Spent
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
@@ -276,7 +270,7 @@
                       [(ngModel)]="element.timeSpent"
                       class="form-control py-2 px-3 fs- fw-normal ps-4 pe-10"
                       placeholder="hrs"
-                    /> 
+                    />
                   </td>
                 </ng-container>
                 <!-- eta Column -->
@@ -286,7 +280,7 @@
                       src="./assets/images/icons/tcal.svg"
                       alt=""
                       class="align-text-bottom me-1"
-                    /> 
+                    />
                     Start Date
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
@@ -319,7 +313,7 @@
                       src="./assets/images/icons/tcal.svg"
                       alt=""
                       class="align-text-bottom me-1"
-                    /> 
+                    />
                     Due Date
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
@@ -352,15 +346,14 @@
                       src="./assets/images/icons/status.svg"
                       class="align-text-bottom me-1"
                       alt=""
-                    /> 
+                    />
                     Status
                   </th>
                   <td mat-cell *matCellDef="let element" class="align-middle">
                     <span
                       class="fw-semibold"
                       [ngClass]="{
-                        ' text-warning':
-                          element.status === 'IN_PROGRESS',
+                        ' text-warning': element.status === 'IN_PROGRESS',
                         'text-success':
                           element.status === 'APPROVED' ||
                           element.status === 'COMPLETED',

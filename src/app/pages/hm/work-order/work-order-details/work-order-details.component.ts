@@ -1,8 +1,14 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { DrawerComponent } from 'src/app/_metronic/kt/components/_DrawerComponent';
@@ -18,12 +24,19 @@ import { NewTaskDrawerComponent } from './new-task-drawer/new-task-drawer.compon
 @Component({
   selector: 'app-work-order-details',
   templateUrl: './work-order-details.component.html',
-  styleUrls: ['./work-order-details.component.scss']
+  styleUrls: ['./work-order-details.component.scss'],
 })
-export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
-
-  constructor(private route: ActivatedRoute,private utils: Utils, private snackBar: MatSnackBar, private dialog: MatDialog, private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef,
-              private location: Location, private sanitizer: DomSanitizer) { }
+export class WorkOrderDetailsComponent implements OnInit, AfterViewInit {
+  constructor(
+    private route: ActivatedRoute,
+    private utils: Utils,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private apiCalls: ApiCallsService,
+    private cdr: ChangeDetectorRef,
+    private location: Location,
+    private sanitizer: DomSanitizer
+  ) {}
 
   endpoints = EndPoints;
   workOrderID: any;
@@ -34,9 +47,10 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
   taskDetails: any;
   isFromInbox = false;
   apiLoad = false;
-  dataSource = new MatTableDataSource<any>;
+  dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild('taskdrawer', { static: false }) taskdrawer: NewTaskDrawerComponent;
+  @ViewChild('taskdrawer', { static: false })
+  taskdrawer: NewTaskDrawerComponent;
   modalConfig: ModalConfig = {
     modalTitle: 'View Document',
     dismissButtonLabel: 'Cancel',
@@ -44,25 +58,29 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
     hideFooter: this.hideFooter,
   };
   @ViewChild('modal') private modalComponent: ModalComponent;
-  timeSheetFrequencyList: any = {'W': 'Weekly', '2W': 'Bi-Weekly', 'M': 'Monthly'};
+  timeSheetFrequencyList: any = {
+    W: 'Weekly',
+    '2W': 'Bi-Weekly',
+    M: 'Monthly',
+  };
 
-  filterObj: FilterObj = {}
+  filterObj: FilterObj = {};
 
   filterValue: FilterValue = {
     priority: 'All Priorities',
-    status: 'All Status'
+    status: 'All Status',
   } as FilterValue;
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(param => {
+    this.route.queryParams.subscribe((param) => {
       this.workOrderID = param['workOrderId'];
-      if(param['from'] == 'inbox'){
+      if (param['from'] == 'inbox') {
         this.isFromInbox = true;
         setTimeout(() => {
           DrawerComponent.reinitialization();
           ToggleComponent.reinitialization();
         }, 0);
-      }else{
+      } else {
         this.isFromInbox = false;
       }
     });
@@ -77,26 +95,22 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
     }, 0);
   }
 
-
-  
-  isSelectedTab:string ='Details';
-  getSelectedTab(tab:string): void {
-    console.log(tab)
-    this.isSelectedTab = tab
-    
+  isSelectedTab: string = 'Details';
+  getSelectedTab(tab: string): void {
+    console.log(tab);
+    this.isSelectedTab = tab;
 
     setTimeout(() => {
       DrawerComponent.reinitialization();
       ToggleComponent.reinitialization();
     }, 0);
-
   }
 
-  goBack(){
+  goBack() {
     this.location.back();
   }
 
-  numbersOnly(event: any){
+  numbersOnly(event: any) {
     return this.utils.numberOnly(event);
   }
 
@@ -104,11 +118,11 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
     return true;
   }
 
-  showTaskDrawer(){
+  showTaskDrawer() {
     this.taskdrawer.ngOnInit();
   }
 
-  processContent(data: string){
+  processContent(data: string) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(data, 'text/html');
     return doc.documentElement.textContent;
@@ -118,12 +132,13 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
     return this.utils.getDocIcon(fileName);
   }
 
-  getWorkOrderDetails(){
+  getWorkOrderDetails() {
     this.loading = true;
     let queryObj = {
-      workOrderId: this.workOrderID
-    }
-    this.apiCalls.get(this.endpoints.ALL_WORK_ORDERS, queryObj)
+      workOrderId: this.workOrderID,
+    };
+    this.apiCalls
+      .get(this.endpoints.ALL_WORK_ORDERS, queryObj)
       .pipe(
         catchError(async (err) => {
           this.utils.showErrorDialog(this.dialog, err);
@@ -132,21 +147,22 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
         })
       )
       .subscribe((response) => {
-        this.workOrderDetails = response[0];
-        this.filterObj.workOrderId = this.workOrderDetails.workOrderId
+        this.workOrderDetails = response ? response.list[0] : null;
+        this.filterObj.workOrderId = this.workOrderDetails.workOrderId;
         this.loading = false;
         this.cdr.detectChanges();
       });
   }
 
-  getDocuments(){
+  getDocuments() {
     this.loading = true;
     this.apiLoad = false;
     let queryObj = {
-      id : this.workOrderID,
-      attachmentType : 'WORK_ORDER'
-    }
-    this.apiCalls.get(this.endpoints.GET_DOCUMENTS, queryObj)
+      id: this.workOrderID,
+      attachmentType: 'WORK_ORDER',
+    };
+    this.apiCalls
+      .get(this.endpoints.GET_DOCUMENTS, queryObj)
       .pipe(
         catchError(async (err) => {
           this.utils.showErrorDialog(this.dialog, err);
@@ -162,8 +178,8 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
         this.cdr.detectChanges();
       });
   }
-  
-  getAttachment(id: string, name: string){
+
+  getAttachment(id: string, name: string) {
     this.loading = true;
     let queryParam = {
       documentId: id,
@@ -210,10 +226,11 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
       });
   }
 
-  getTaskList(obj: any){
+  getTaskList(obj: any) {
     this.loading = true;
     this.apiLoad = false;
-    this.apiCalls.get(this.endpoints.TASK_LIST_HM, obj)
+    this.apiCalls
+      .get(this.endpoints.TASK_LIST_HM, obj)
       .pipe(
         catchError(async (err) => {
           this.utils.showErrorDialog(this.dialog, err);
@@ -224,7 +241,7 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
         })
       )
       .subscribe((response) => {
-        this.dataSource = new MatTableDataSource<any>(response);
+        this.dataSource = new MatTableDataSource<any>(response.list);
         this.dataSource.paginator = this.paginator;
         this.loading = false;
         this.apiLoad = true;
@@ -232,24 +249,25 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
       });
   }
 
-  getAllStatus(){
-    this.apiCalls.get(this.endpoints.TASK_STATUS)
-    .pipe(
-      catchError(async (err) => {
-        this.utils.showErrorDialog(this.dialog, err);
-      })
-    )
-    .subscribe((response) => {
-      this.statusLists = response;
-      this.cdr.detectChanges();
-    });
+  getAllStatus() {
+    this.apiCalls
+      .get(this.endpoints.TASK_STATUS)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showErrorDialog(this.dialog, err);
+        })
+      )
+      .subscribe((response) => {
+        this.statusLists = response;
+        this.cdr.detectChanges();
+      });
   }
 
-  applySearchFilter(event: any){
-    if(event.target.value){
+  applySearchFilter(event: any) {
+    if (event.target.value) {
       this.filterObj.taskId = event.target.value;
       this.getTaskList(this.filterObj);
-    }else{
+    } else {
       if (Object.keys(this.filterObj).length > 0) {
         delete this.filterObj.taskId;
         this.getTaskList(this.filterObj);
@@ -259,21 +277,21 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
     }
   }
 
-  filterByPriority(event: any){
-    if(event.value == 'All Priorities'){
+  filterByPriority(event: any) {
+    if (event.value == 'All Priorities') {
       this.filterObj.priority = [];
-    }else{
+    } else {
       this.filterObj.priority = event.value;
     }
     this.getTaskList(this.filterObj);
   }
 
-  filterByAssignee(event: any){
+  filterByAssignee(event: any) {
     console.log(this.filterObj);
-    if(event.target.value && event.target.value.length >= 3){
+    if (event.target.value && event.target.value.length >= 3) {
       this.filterObj.assigneeId = event.target.value;
       this.getTaskList(this.filterObj);
-    }else{
+    } else {
       if (Object.keys(this.filterObj).length > 0) {
         delete this.filterObj.assigneeId;
         this.getTaskList(this.filterObj);
@@ -283,22 +301,22 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
     }
   }
 
-  filterByStatus(event: any){
-    if(event.value == 'All Status'){
+  filterByStatus(event: any) {
+    if (event.value == 'All Status') {
       this.filterObj.status = [];
-    }else{
+    } else {
       this.filterObj.status = event.value;
     }
     this.getTaskList(this.filterObj);
   }
 
-  filterByDate(event: any, dateType: 'finishDate'){
+  filterByDate(event: any, dateType: 'finishDate') {
     let date = this.changeDateToUtc(event);
     this.filterObj[dateType] = date;
     this.getTaskList(this.filterObj);
   }
 
-  changeDateToUtc(dateObj: any){
+  changeDateToUtc(dateObj: any) {
     const date = new Date(dateObj);
     const utcDate = date.toISOString();
     return utcDate;
@@ -306,10 +324,12 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
 
   truncateText(text: string, maxLength: number): string {
     if (!text) return '';
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    return text.length > maxLength
+      ? text.substring(0, maxLength) + '...'
+      : text;
   }
-  
-  clearFilters(){
+
+  clearFilters() {
     delete this.filterObj.taskId;
     delete this.filterObj.assigneeId;
     delete this.filterObj.priority;
@@ -329,12 +349,13 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
     this.getTaskList(this.filterObj);
   }
 
-  editTask(id: string){
+  editTask(id: string) {
     this.loading = true;
     let queryObj = {
-      taskId: id
-    }
-    this.apiCalls.get(this.endpoints.TASK_LIST_HM, queryObj)
+      taskId: id,
+    };
+    this.apiCalls
+      .get(this.endpoints.TASK_LIST_HM, queryObj)
       .pipe(
         catchError(async (err) => {
           this.utils.showErrorDialog(this.dialog, err);
@@ -350,23 +371,24 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
       });
   }
 
-  deleteTask(id: string){
+  deleteTask(id: string) {
     let msg = 'Do you want to delete this task?';
     this.utils.showDialogWithCancelButton(this.dialog, msg, (res: any) => {
       this.loading = false;
-      if(res){
-        this.deleteTheTask(id)
+      if (res) {
+        this.deleteTheTask(id);
       }
       this.cdr.detectChanges();
     });
   }
 
-  deleteTheTask(id: string){
+  deleteTheTask(id: string) {
     this.loading = true;
     let queryObj = {
-      id : id
-    }
-    this.apiCalls.delete(this.endpoints.DELETE_TASK, queryObj)
+      id: id,
+    };
+    this.apiCalls
+      .delete(this.endpoints.DELETE_TASK, queryObj)
       .pipe(
         catchError(async (err) => {
           this.utils.showErrorDialog(this.dialog, err);
@@ -384,7 +406,7 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
       });
   }
 
-  openSuccessPopup(){
+  openSuccessPopup() {
     let msg = 'Your Task is successfully deleted';
     this.utils.showDialog(this.dialog, msg, () => {
       this.loading = false;
@@ -393,27 +415,35 @@ export class WorkOrderDetailsComponent implements OnInit,AfterViewInit {
     });
   }
 
-  displayedColumns: string[] = ['taskId', 'title', 'priority', 'assigneeId','timeSpent',  'finishDate', 'lastUpdate', 'status', 'action'];
+  displayedColumns: string[] = [
+    'taskId',
+    'title',
+    'priority',
+    'assigneeId',
+    'timeSpent',
+    'finishDate',
+    'lastUpdate',
+    'status',
+    'action',
+  ];
   // dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-
-
 }
 
 type FilterValue = {
-  taskId?: string,
-  priority?: string,
-  assigneeId?: string,
-  status?: string,
-  finishDate?: string
+  taskId?: string;
+  priority?: string;
+  assigneeId?: string;
+  status?: string;
+  finishDate?: string;
 };
 
 type FilterObj = {
-  workOrderId?: string,
-  taskId?: string,
-  priority?: string[],
-  assigneeId?: string,
-  status?: string[],
-  finishDate?: string
+  workOrderId?: string;
+  taskId?: string;
+  priority?: string[];
+  assigneeId?: string;
+  status?: string[];
+  finishDate?: string;
 };
 
 export interface PeriodicElement {
@@ -425,18 +455,97 @@ export interface PeriodicElement {
   eta: string;
   lastUpdate: string;
   status: string;
-
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'High', assignTo:'Shirley Lopez', timeSpent: '38 hrs', eta: 'Jun 23, 2023', lastUpdate: 'Jun 23, 2023', status: 'In-progress'},
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'Medium', assignTo:'Shirley Lopez', timeSpent: '38 hrs', eta: 'Jun 23, 2023', lastUpdate: 'Jun 23, 2023', status: 'In-progress'},
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'Low', assignTo:'Shirley Lopez', timeSpent: '38 hrs', eta: 'Jun 23, 2023', lastUpdate: 'Jun 23, 2023', status: 'In-progress'},
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'Medium', assignTo:'Shirley Lopez', timeSpent: '38 hrs', eta: 'Jun 23, 2023', lastUpdate: 'Jun 23, 2023', status: 'In-progress'},
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'High', assignTo:'Shirley Lopez', timeSpent: '38 hrs', eta: 'Jun 23, 2023', lastUpdate: 'Jun 23, 2023', status: 'In-progress'},
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'Medium', assignTo:'Shirley Lopez', timeSpent: '38 hrs', eta: 'Jun 23, 2023', lastUpdate: 'Jun 23, 2023', status: 'In-progress'},
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'Low', assignTo:'Shirley Lopez', timeSpent: '38 hrs', eta: 'Jun 23, 2023', lastUpdate: 'Jun 23, 2023', status: 'In-progress'},
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'High', assignTo:'Shirley Lopez', timeSpent: '38 hrs', eta: 'Jun 23, 2023', lastUpdate: 'Jun 23, 2023', status: 'In-progress'},
-  {taskId: 8865, taskName: 'Some task name that has lengthy characters', priority:'Low', assignTo:'Shirley Lopez', timeSpent: '38 hrs', eta: 'Jun 23, 2023', lastUpdate: 'Jun 23, 2023', status: 'In-progress'},
-
+  {
+    taskId: 8865,
+    taskName: 'Some task name that has lengthy characters',
+    priority: 'High',
+    assignTo: 'Shirley Lopez',
+    timeSpent: '38 hrs',
+    eta: 'Jun 23, 2023',
+    lastUpdate: 'Jun 23, 2023',
+    status: 'In-progress',
+  },
+  {
+    taskId: 8865,
+    taskName: 'Some task name that has lengthy characters',
+    priority: 'Medium',
+    assignTo: 'Shirley Lopez',
+    timeSpent: '38 hrs',
+    eta: 'Jun 23, 2023',
+    lastUpdate: 'Jun 23, 2023',
+    status: 'In-progress',
+  },
+  {
+    taskId: 8865,
+    taskName: 'Some task name that has lengthy characters',
+    priority: 'Low',
+    assignTo: 'Shirley Lopez',
+    timeSpent: '38 hrs',
+    eta: 'Jun 23, 2023',
+    lastUpdate: 'Jun 23, 2023',
+    status: 'In-progress',
+  },
+  {
+    taskId: 8865,
+    taskName: 'Some task name that has lengthy characters',
+    priority: 'Medium',
+    assignTo: 'Shirley Lopez',
+    timeSpent: '38 hrs',
+    eta: 'Jun 23, 2023',
+    lastUpdate: 'Jun 23, 2023',
+    status: 'In-progress',
+  },
+  {
+    taskId: 8865,
+    taskName: 'Some task name that has lengthy characters',
+    priority: 'High',
+    assignTo: 'Shirley Lopez',
+    timeSpent: '38 hrs',
+    eta: 'Jun 23, 2023',
+    lastUpdate: 'Jun 23, 2023',
+    status: 'In-progress',
+  },
+  {
+    taskId: 8865,
+    taskName: 'Some task name that has lengthy characters',
+    priority: 'Medium',
+    assignTo: 'Shirley Lopez',
+    timeSpent: '38 hrs',
+    eta: 'Jun 23, 2023',
+    lastUpdate: 'Jun 23, 2023',
+    status: 'In-progress',
+  },
+  {
+    taskId: 8865,
+    taskName: 'Some task name that has lengthy characters',
+    priority: 'Low',
+    assignTo: 'Shirley Lopez',
+    timeSpent: '38 hrs',
+    eta: 'Jun 23, 2023',
+    lastUpdate: 'Jun 23, 2023',
+    status: 'In-progress',
+  },
+  {
+    taskId: 8865,
+    taskName: 'Some task name that has lengthy characters',
+    priority: 'High',
+    assignTo: 'Shirley Lopez',
+    timeSpent: '38 hrs',
+    eta: 'Jun 23, 2023',
+    lastUpdate: 'Jun 23, 2023',
+    status: 'In-progress',
+  },
+  {
+    taskId: 8865,
+    taskName: 'Some task name that has lengthy characters',
+    priority: 'Low',
+    assignTo: 'Shirley Lopez',
+    timeSpent: '38 hrs',
+    eta: 'Jun 23, 2023',
+    lastUpdate: 'Jun 23, 2023',
+    status: 'In-progress',
+  },
 ];

@@ -49,7 +49,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private dialog: MatDialog,
+    private dialog: MatDialog
   ) {}
   submitted = false;
   workForceList: any[];
@@ -199,7 +199,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         const auth = this.utils.getAuth();
-        this.workForceList = response;
+        this.workForceList = response.list;
         this.getFilteredValuesForWorkForce();
         this.cdr.detectChanges();
       });
@@ -218,7 +218,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((response) => {
-        this.workOrderList = response;
+        this.workOrderList = response.list;
         this.getFilteredValuesForWorkOrder();
         this.cdr.detectChanges();
       });

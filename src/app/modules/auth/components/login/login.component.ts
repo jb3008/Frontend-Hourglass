@@ -83,15 +83,41 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (auth) {
           if (auth.isAdmin) {
             if (auth.vendorId) {
-              this.router.navigate(['/job-posts']);
+              this.router.navigate(['/job-posts'], {
+                queryParams: {
+                  pageNo: 1,
+                  pageSize: 10,
+                  status: 'ACTIVE',
+                },
+              });
             } else {
-              this.router.navigate(['/hm/job-posts']);
+              this.router.navigate(['/hm/job-posts'], {
+                queryParams: {
+                  pageNo: 1,
+                  pageSize: 10,
+                  status: 'ACTIVE',
+                },
+              });
             }
           } else {
             if (auth.vendorId) {
-              this.router.navigate(['/timesheets']);
+              this.router.navigate(['/timesheets'], {
+                queryParams: {
+                  pageNo: 0,
+                  pageSize: 10,
+                  sortBy: 'timeSheetId',
+                  sortOrder: 'desc',
+                },
+              });
             } else {
-              this.router.navigate(['/timesheets']);
+              this.router.navigate(['/timesheets'], {
+                queryParams: {
+                  pageNo: 0,
+                  pageSize: 10,
+                  sortBy: 'timeSheetId',
+                  sortOrder: 'desc',
+                },
+              });
             }
           }
         } else {

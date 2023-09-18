@@ -462,7 +462,7 @@ export class WorkForceComponent implements OnInit {
         })
       )
       .subscribe((response) => {
-        this.workForceList = response;
+        this.workForceList = response.list;
         for (let index = 0; index < this.workForceList.length; index++) {
           const element = this.workForceList[index];
           this.getAllWorkForceProfilePic(element.workForceId, element);

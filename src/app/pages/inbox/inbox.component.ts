@@ -13,8 +13,4 @@ export class InboxComponent implements OnInit {
   ngOnInit(): void {
     this.auth = this.utils.getAuth();
   }
-
-  goToWorkOrders() {
-    this.router.navigate(['/work-order'], { queryParams: { from: 'inbox' } });
-  }
 }

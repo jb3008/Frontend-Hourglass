@@ -8,267 +8,435 @@
     <a href="#" class="btn btn-active-light-primary ">Primary</a>
     <a href="#" class="btn btn-active-light-primary ">Primary</a>
   </div> -->
-  <div *ngIf="isLoading" class="pause d-flex align-items-center justify-content-center">
-    <div class="spinner"></div>
-    </div>
-  <div class="border-bottom tolbar mb-5 px-4   d-flex align-items-stretch justify-content-between">
-    <ul class="nav nav-line-tabs nav-line-tabs-1x nav-stretch qt-nav">
-        <li class="nav-item">
-            <a data-bs-toggle="tab" class="nav-link px-4 cursor-pointer fw-semibold"
-            (click)="getSelectedTab('Active')" [ngClass]="{'active': selectedTab=='Active'}"> Active Jobs<span class="badge badge-light-primary ms-3">
-			<i class="fas fa-yin-yangfas fa-circle px-1 text-primary fs-10"></i> {{jobCount?.activeCount}}</span></a>
-        </li>
-        <li class="nav-item">
-            <a data-bs-toggle="tab" class="nav-link  px-4 cursor-pointer fw-semibold"
-            (click)="getSelectedTab('Draft')" [ngClass]="{'active': selectedTab=='Draft'}"> Draft Jobs <span 
-			class="badge badge-light-warning ms-3"><i class="fas fa-yin-yangfas fa-circle px-1 text-danger fs-10"></i> {{jobCount?.draftCount}}</span></a>
-        </li>
-        <li class="nav-item">
-            <a data-bs-toggle="tab" class="nav-link  px-4 cursor-pointer fw-semibold" (click)="getSelectedTab('Close')" 
-			[ngClass]="{'active': selectedTab=='Close'}"> Closed Jobs <span class="badge badge-light-danger ms-3">
-			<i class="fas fa-yin-yangfas fa-circle px-1 text-danger fs-10"></i> {{jobCount?.closeCount}}</span> </a>
-        </li>
-    </ul>
-    <a href="" class="btn btn-primary btn-sm cursor-pointer my-2" routerLink="creat-job-post" > Create Job Post</a>
-    </div>
-    <div class="row g-xl-12 mb-5 mb-xl-12">
-        <div class="w-250px text-gray-600">
-            <div class="card p-4 fs-6">
-                <div class="position-relative input-icon  ">
-                    <input type="text" class="form-control py-2 fs- fw-normal px-11" [(ngModel)]="filter.searchText"  placeholder="Search for a Job"  (keyup)="searchFilter($event)"/>
-                    <span><i class="fa fa-search "></i></span>
-                    <span class="cursor-pointer text-active-primary pspinpClose" 
-                    (click) = "filter.searchText = '';clearSearch();" *ngIf="filter.searchText && filter.searchText != ''">
-                    <i class="bi bi-x-lg text-active-primary"></i></span>
-                </div>
+<div
+  *ngIf="isLoading"
+  class="pause d-flex align-items-center justify-content-center"
+>
+  <div class="spinner"></div>
+</div>
+<div
+  class="border-bottom tolbar mb-5 px-4 d-flex align-items-stretch justify-content-between"
+>
+  <ul class="nav nav-line-tabs nav-line-tabs-1x nav-stretch qt-nav">
+    <li class="nav-item">
+      <a
+        data-bs-toggle="tab"
+        class="nav-link px-4 cursor-pointer fw-semibold"
+        (click)="getSelectedTab('Active')"
+        [ngClass]="{ active: selectedTab == 'Active' }"
+      >
+        Active Jobs<span class="badge badge-light-primary ms-3">
+          <i class="fas fa-yin-yangfas fa-circle px-1 text-primary fs-10"></i>
+          {{ jobCount?.activeCount }}</span
+        ></a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        data-bs-toggle="tab"
+        class="nav-link px-4 cursor-pointer fw-semibold"
+        (click)="getSelectedTab('Draft')"
+        [ngClass]="{ active: selectedTab == 'Draft' }"
+      >
+        Draft Jobs
+        <span class="badge badge-light-warning ms-3"
+          ><i class="fas fa-yin-yangfas fa-circle px-1 text-danger fs-10"></i>
+          {{ jobCount?.draftCount }}</span
+        ></a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        data-bs-toggle="tab"
+        class="nav-link px-4 cursor-pointer fw-semibold"
+        (click)="getSelectedTab('Close')"
+        [ngClass]="{ active: selectedTab == 'Close' }"
+      >
+        Closed Jobs
+        <span class="badge badge-light-danger ms-3">
+          <i class="fas fa-yin-yangfas fa-circle px-1 text-danger fs-10"></i>
+          {{ jobCount?.closeCount }}</span
+        >
+      </a>
+    </li>
+  </ul>
+  <a
+    href=""
+    class="btn btn-primary btn-sm cursor-pointer my-2"
+    routerLink="creat-job-post"
+  >
+    Create Job Post</a
+  >
+</div>
+<div class="row g-xl-12 mb-5 mb-xl-12">
+  <div class="w-250px text-gray-600">
+    <div class="card p-4 fs-6">
+      <div class="position-relative input-icon">
+        <input
+          type="text"
+          class="form-control py-2 fs- fw-normal px-11"
+          [(ngModel)]="filter.searchText"
+          placeholder="Search for a Job"
+          (keyup)="searchFilter($event)"
+        />
+        <span><i class="fa fa-search"></i></span>
+        <span
+          class="cursor-pointer text-active-primary pspinpClose"
+          (click)="filter.searchText = ''; clearSearch()"
+          *ngIf="filter.searchText && filter.searchText != ''"
+        >
+          <i class="bi bi-x-lg text-active-primary"></i
+        ></span>
+      </div>
 
-                <div class="py-4">
-                    Filter by <a class="px-4 cursor-pointer" (click)="resetFilter()">Reset Filters</a>
-                </div>
-                <div class="separator mb-5"></div>
-                <div class="fs-7 text-muted mb-5">Period</div>
-    
-                <!--begin::Input group-->
-                <div class="fv-row ">
-                    <!--begin::Label-->
-                    <!--end::Label-->
-                    <div class="mb-1 ">Start Date</div>
-                    <!--begin::Input-->
-                    <div class="input-icon position-relative input-icon-right">
-                        <input class="form-control py-2 px-3 fs- fw-normal cursor-pointer" (click)="picker.open()" [matDatepicker]="picker" 
-                            placeholder="Select Date" [(ngModel)]="filter.startDate" (dateChange)="getDate($event.value,'startDate')"
-                            [max]="queryParam.endDate">
-                        <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
-                        <mat-datepicker #picker></mat-datepicker>
-                            </div>      
-                        <div class="mb-1 mt-3">End Date</div>
-                    <!--begin::Input-->
-                    <div class="input-icon position-relative input-icon-right">
-                        <input class="form-control py-2 px-3 fs- fw-normal cursor-pointer" (click)="picker1.open()" [matDatepicker]="picker1" 
-                            placeholder="Select Date" [(ngModel)]="filter.endDate" (dateChange)="getDate($event.value,'endDate')"
-                            [matDatepickerFilter]="endDateFilter">
-                        <span class="cursor-pointer" (click)="picker1.open()"><i class="far fa-calendar"></i></span>
-                        <mat-datepicker #picker1></mat-datepicker>
-                    </div>
-                </div>
-                <!--end::Input group-->
-                <div class="separator separator-dashed my-5"></div>
+      <div class="py-4">
+        Filter by
+        <a class="px-4 cursor-pointer" (click)="resetFilter()">Reset Filters</a>
+      </div>
+      <div class="separator mb-5"></div>
+      <div class="fs-7 text-muted mb-5">Period</div>
 
-                <div class="fs-7 text-muted mb-3">Work Area</div>
-                <div class="mb-5">
-                    <mat-select class="hide-arrow form-select fs- py-2"  placeholder="Select Site" [(value)] = "filter.site" (selectionChange)="filterSite($event)">
-                        <mat-option *ngFor="let sites of sitesList" [value]="sites.code">
-                            {{sites.name}} ({{sites.code}})
-                        </mat-option>
-                    </mat-select>
-                </div>
-                <div class="mb-5">
-                    <mat-select class="hide-arrow form-select fs- py-2"  placeholder="Select Business Unit" [(value)] = "filter.businessUnit" (selectionChange)="filterBusinessUnit($event)">
-                        <mat-option *ngFor="let units of businessUnits" [value]="units.code">
-                            {{units.name}} ({{units.code}})
-                        </mat-option>
-                    </mat-select>
-                </div>
-                <div class="separator separator-dashed mb-5"></div>
+      <!--begin::Input group-->
+      <div class="fv-row">
+        <!--begin::Label-->
+        <!--end::Label-->
+        <div class="mb-1">Start Date</div>
+        <!--begin::Input-->
+        <div class="input-icon position-relative input-icon-right">
+          <input
+            class="form-control py-2 px-3 fs- fw-normal cursor-pointer"
+            (click)="picker.open()"
+            [matDatepicker]="picker"
+            placeholder="Select Date"
+            [(ngModel)]="filter.startDate"
+            (dateChange)="getDate($event.value, 'startDate')"
+            [max]="queryParam.endDate"
+          />
+          <span class="cursor-pointer" (click)="picker.open()"
+            ><i class="far fa-calendar"></i
+          ></span>
+          <mat-datepicker #picker></mat-datepicker>
+        </div>
+        <div class="mb-1 mt-3">End Date</div>
+        <!--begin::Input-->
+        <div class="input-icon position-relative input-icon-right">
+          <input
+            class="form-control py-2 px-3 fs- fw-normal cursor-pointer"
+            (click)="picker1.open()"
+            [matDatepicker]="picker1"
+            placeholder="Select Date"
+            [(ngModel)]="filter.endDate"
+            (dateChange)="getDate($event.value, 'endDate')"
+            [matDatepickerFilter]="endDateFilter"
+          />
+          <span class="cursor-pointer" (click)="picker1.open()"
+            ><i class="far fa-calendar"></i
+          ></span>
+          <mat-datepicker #picker1></mat-datepicker>
+        </div>
+      </div>
+      <!--end::Input group-->
+      <div class="separator separator-dashed my-5"></div>
 
-    
-                <div class="fs-7 text-muted mb-5">Job Type </div>
-                <!-- <label class="checkbox ">
+      <div class="fs-7 text-muted mb-3">Work Area</div>
+      <div class="mb-5">
+        <mat-select
+          class="hide-arrow form-select fs- py-2"
+          placeholder="Select Site"
+          [(value)]="filter.site"
+          (selectionChange)="filterSite($event)"
+        >
+          <mat-option *ngFor="let sites of sitesList" [value]="sites.code">
+            {{ sites.name }} ({{ sites.code }})
+          </mat-option>
+        </mat-select>
+      </div>
+      <div class="mb-5">
+        <mat-select
+          class="hide-arrow form-select fs- py-2"
+          placeholder="Select Business Unit"
+          [(value)]="filter.businessUnit"
+          (selectionChange)="filterBusinessUnit($event)"
+        >
+          <mat-option *ngFor="let units of businessUnits" [value]="units.code">
+            {{ units.name }} ({{ units.code }})
+          </mat-option>
+        </mat-select>
+      </div>
+      <div class="separator separator-dashed mb-5"></div>
+
+      <div class="fs-7 text-muted mb-5">Job Type</div>
+      <!-- <label class="checkbox ">
                     <input type="checkbox" [checked]="selected" value="All" (change)="filterJobType($event, -1)"/>
                     <span></span>
                     All
                 </label> -->
-                <mat-checkbox color="primary"
-                [checked]="selected" value="All" (change)="filterJobType($event, -1)">
-                   All
-               </mat-checkbox>
+      <mat-checkbox
+        color="primary"
+        [checked]="selected"
+        value="All"
+        [(ngModel)]="selected"
+        (change)="filterJobType($event, -1)"
+      >
+        All
+      </mat-checkbox>
 
-                <label *ngFor="let types of jobTypes;let index = index;">
-                    <mat-checkbox color="primary" [checked]="selectedJobTypes[index]" [value]="types.code" (change)="filterJobType($event, index)">
-                    <!-- <span></span> -->
-                    {{types.name}}
-                </mat-checkbox>
-                </label>
-                <div class="separator separator-dashed my-5"></div>
-            </div>
-
-        </div>
-    
-        <div class="col ">
-            <ng-container *ngIf="isMat">
-            <div class="card overflow-hidden">
-                               
-                <table mat-table [dataSource]="dataSource" class="table table-row-bordered gy-2 text-gray-600  qfs-13 ">
-                    <!-- jobPost Column -->
-                    <ng-container matColumnDef="id">
-                        <th mat-header-cell *matHeaderCellDef class="align-middle"> Job Post ID/ Title </th>
-                        <td mat-cell *matCellDef="let element">
-                            <div class="w-250/px">
-                                <!-- <a routerLink="details" class="cursor-pointer fw-semibold"> {{element.id}} </a> -->
-                                <div class="cursor-pointer fw-semibold text-primary" (click)="goToDetails(element)">{{element.id}}</div>
-                                <div class="text-muted   text-truncate mw-325px">{{element.title}}  </div>
-                            </div>
-                        </td>
-                    </ng-container>
-    
-                    <!-- jobType Column -->
-                    <ng-container matColumnDef="type">
-                        <th mat-header-cell *matHeaderCellDef class="align-middle"> Job Type </th>
-                        <td mat-cell *matCellDef="let element" class="align-middle"> {{getJobNameFromType(element.type)}} </td>
-                    </ng-container>
-    
-                    <!-- unit Column -->
-                    <ng-container matColumnDef="businessUnit">
-                        <th mat-header-cell *matHeaderCellDef class="align-middle"> Business Unit </th>
-                        <td mat-cell *matCellDef="let element" class="align-middle"> 
-                            <!-- <i class="far fa-building"></i> -->
-                            <img src="./assets/images/icons/building.svg" alt="" class="me-1">
-                             {{element.businessUnitDetails?.name}} ({{element.businessUnitDetails?.code}}) </td>
-                    </ng-container>
-    
-                    <!-- site Column -->
-                    <ng-container matColumnDef="site">
-                        <th mat-header-cell *matHeaderCellDef class="align-middle"> Site </th>
-                        <td mat-cell *matCellDef="let element" class="align-middle"> {{element.siteDetails?.name}} ({{element?.siteDetails?.code}})</td>
-                    </ng-container>
-
-                    <!-- sDate Column -->
-                    <ng-container matColumnDef="startDate">
-                        <th mat-header-cell *matHeaderCellDef class="align-middle"> Start Date </th>
-                        <td mat-cell *matCellDef="let element" class="align-middle"> {{element.startDate |  date: 'MM/dd/yyyy'}} </td>
-                    </ng-container>
-    
-                    <!-- eDate Column -->
-                    <ng-container matColumnDef="endDate">
-                        <th mat-header-cell *matHeaderCellDef class="align-middle"> End Date </th>
-                        <td mat-cell *matCellDef="let element" class="align-middle"> {{element.endDate |  date: 'MM/dd/yyyy'}} </td>
-                    </ng-container>
-    
-                    <!-- msg Column -->
-                    <ng-container matColumnDef="message">
-                        <th mat-header-cell *matHeaderCellDef class="align-middle"> Messages </th>
-                        <td mat-cell *matCellDef="let element" class="align-middle text-danger"> 
-                         <img src="./assets/images/icons/jobpost-msg.svg" alt="">
-                            {{element.message}}
-                         </td>
-                    </ng-container>
-    
-                    <!-- position Column -->
-                    <ng-container matColumnDef="position">
-                        <th mat-header-cell *matHeaderCellDef class="align-middle"> Positions </th>
-                        <td mat-cell *matCellDef="let element" class="align-middle">
-                            <span class="badge badge-light-warning">{{element.openPosition}}</span>
-                        </td>
-                    </ng-container>
-    
-                    <!-- jobSeekers Column -->
-                    <ng-container matColumnDef="seekers">
-                        <th mat-header-cell *matHeaderCellDef class="align-middle"> 
-                           <span *ngIf="selectedTab != 'Draft'">Job Seekers</span> 
-                         </th>
-                        <td mat-cell *matCellDef="let element" class="align-middle">
-                            <!-- {{element.jobSeekers}}  -->
-    
-                            <span *ngIf="selectedTab != 'Draft'" class="badge badge-light-primary">{{element.jobSeekers == null ?  0: element.jobSeekers}}</span>
-                        </td>
-                    </ng-container>
-    
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-
-                <div *ngIf="apiLoad && dataSource.data.length == 0" class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center">
-                    No Records Found
-                </div>
-    
-                <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" 
-                [length]="totalJobsCount" showFirstLastButtons 
-                 [pageSize]="pageSize"
-                    (page)="onPaginatorPageChange($event)" aria-label="Select page of periodic elements">
-                </mat-paginator>
-            </div>
-        </ng-container>
-        <ng-container *ngIf="!isMat">
-          <ng-container *ngFor="let number of [0,1,2,3,4]">
-            <div class="card mb-2 cursor-pointer" routerLink="details">
-                <div class="card-body pb-0 ">
-        
-                    <div class="d-flex justify-content-between align-items-start flex-wrap mb-6">
-                        <div class="d-flex flex-column w-75">
-        
-                            <h6 class="text-dark  text-gray-800 fs-2  me-1">Job title some lengthy text goes here</h6>
-                            <div class="mt-2 mb-5 text-muted block"> Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nam quod architecto saepe necessitatibus dolore, nesciunt suscipit sunt molestias eos,
-                                reprehenderit dolor quos, repellendus molestiae magni debitis accusamus temporibus
-                                exercitationem eius.
-                                </div>
-        
-                            <div class="d-flex flex-wrap flex-stack">
-                                <div class="d-flex flex-column flex-grow-1 pe-8">
-                                    <div class="d-flex flex-wrap lign-items-center">
-                                        <div class=" me-10 my-1">
-                                            <span class="d-flex text-muted fs-8">Job Position ID</span>
-                                            <span class="fw-bold d-flex s-">Command+R</span>
-                                        </div>
-                                        <div class="vr me-5 mt-4 h-20px "></div>
-                                        <div class=" me-10 my-1 d-flex">
-                                            <div class="symbol symbol-35px symbol-circle me-3">
-                                                  <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">YK </span>  
-                                  </div>
-                                          
-                                           <div>
-                                            <span class="d-flex text-muted fs-8">Manager</span>
-                                            <span class="fw-bold d-flex s-">New York</span>
-                                           </div>
-                                        </div>
-                                        <div class="vr me-5 mt-4 h-20px "></div>
-                                        <div class=" me-10 my-1">
-                                            <span class="d-flex text-muted fs-8">Work Order Type</span>
-                                            <span class="fw-bold d-flex s-"> Order Type 1</span>
-                                        </div>
-                                        <div class="vr me-5 mt-4 h-20px "></div>
-                                        <div class=" me-10 my-1">
-                                            <span class="d-flex text-muted fs-8">Stats</span>
-                                            <span class="fw-bold d-flex s-"><span class="badge badge-light-success"><i
-                                                        class="fas fa-yin-yangfas fa-circle py-0 pe-2 text-success fs-10"></i>
-                                                    Open</span> </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-        
-                        <div class=" my-4">
-                            <div> <i class="far fa-calendar my-2 me-4"></i> <span class="badge badge-light-warning"> Nov 12 -
-                                    Mar 28, 2023</span></div>
-                            <div><div class="w-20px  display-inline my-1 me-1"><img class="" src="./assets/images/icons/coin.svg" alt=""></div> Hourly</div>
-                            <div><div class="w-20px  display-inline my-1 me-1"><img class="" src="./assets/images/icons/case.svg" alt=""></div> Job type here</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        
-        </ng-container>
-        </ng-container>
-        </div>
+      <label *ngFor="let types of jobTypes; let index = index">
+        <mat-checkbox
+          color="primary"
+          [checked]="selectedJobTypes[index]"
+          [(ngModel)]="types.code"
+          [value]="types.code"
+          (change)="filterJobType($event, index)"
+        >
+          <!-- <span></span> -->
+          {{ types.name }}
+        </mat-checkbox>
+      </label>
+      <div class="separator separator-dashed my-5"></div>
     </div>
+  </div>
+
+  <div class="col">
+    <ng-container *ngIf="isMat">
+      <div class="card overflow-hidden">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          class="table table-row-bordered gy-2 text-gray-600 qfs-13"
+        >
+          <!-- jobPost Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef class="align-middle">
+              Job Post ID/ Title
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="w-250/px">
+                <!-- <a routerLink="details" class="cursor-pointer fw-semibold"> {{element.id}} </a> -->
+                <div
+                  class="cursor-pointer fw-semibold text-primary"
+                  (click)="goToDetails(element)"
+                >
+                  {{ element.id }}
+                </div>
+                <div class="text-muted text-truncate mw-325px">
+                  {{ element.title }}
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- jobType Column -->
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef class="align-middle">
+              Job Type
+            </th>
+            <td mat-cell *matCellDef="let element" class="align-middle">
+              {{ getJobNameFromType(element.type) }}
+            </td>
+          </ng-container>
+
+          <!-- unit Column -->
+          <ng-container matColumnDef="businessUnit">
+            <th mat-header-cell *matHeaderCellDef class="align-middle">
+              Business Unit
+            </th>
+            <td mat-cell *matCellDef="let element" class="align-middle">
+              <!-- <i class="far fa-building"></i> -->
+              <img
+                src="./assets/images/icons/building.svg"
+                alt=""
+                class="me-1"
+              />
+              {{ element.businessUnitDetails?.name }} ({{
+                element.businessUnitDetails?.code
+              }})
+            </td>
+          </ng-container>
+
+          <!-- site Column -->
+          <ng-container matColumnDef="site">
+            <th mat-header-cell *matHeaderCellDef class="align-middle">Site</th>
+            <td mat-cell *matCellDef="let element" class="align-middle">
+              {{ element.siteDetails?.name }} ({{ element?.siteDetails?.code }})
+            </td>
+          </ng-container>
+
+          <!-- sDate Column -->
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef class="align-middle">
+              Start Date
+            </th>
+            <td mat-cell *matCellDef="let element" class="align-middle">
+              {{ element.startDate | date : "MM/dd/yyyy" }}
+            </td>
+          </ng-container>
+
+          <!-- eDate Column -->
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef class="align-middle">
+              End Date
+            </th>
+            <td mat-cell *matCellDef="let element" class="align-middle">
+              {{ element.endDate | date : "MM/dd/yyyy" }}
+            </td>
+          </ng-container>
+
+          <!-- msg Column -->
+          <ng-container matColumnDef="message">
+            <th mat-header-cell *matHeaderCellDef class="align-middle">
+              Messages
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              class="align-middle text-danger"
+            >
+              <img src="./assets/images/icons/jobpost-msg.svg" alt="" />
+              {{ element.message }}
+            </td>
+          </ng-container>
+
+          <!-- position Column -->
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef class="align-middle">
+              Positions
+            </th>
+            <td mat-cell *matCellDef="let element" class="align-middle">
+              <span class="badge badge-light-warning">{{
+                element.openPosition
+              }}</span>
+            </td>
+          </ng-container>
+
+          <!-- jobSeekers Column -->
+          <ng-container matColumnDef="seekers">
+            <th mat-header-cell *matHeaderCellDef class="align-middle">
+              <span *ngIf="selectedTab != 'Draft'">Job Seekers</span>
+            </th>
+            <td mat-cell *matCellDef="let element" class="align-middle">
+              <!-- {{element.jobSeekers}}  -->
+
+              <span
+                *ngIf="selectedTab != 'Draft'"
+                class="badge badge-light-primary"
+                >{{ element.jobSeekers == null ? 0 : element.jobSeekers }}</span
+              >
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <div
+          *ngIf="apiLoad && dataSource.data.length == 0"
+          class="fw-semibold fs-3 min-h-sm-350px d-flex align-items-center justify-content-center"
+        >
+          No Records Found
+        </div>
+
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20, 30]"
+          [length]="totalJobsCount"
+          showFirstLastButtons
+          [pageSize]="pageSize"
+          (page)="onPaginatorPageChange($event)"
+          aria-label="Select page of periodic elements"
+        >
+        </mat-paginator>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!isMat">
+      <ng-container *ngFor="let number of [0, 1, 2, 3, 4]">
+        <div class="card mb-2 cursor-pointer" routerLink="details">
+          <div class="card-body pb-0">
+            <div
+              class="d-flex justify-content-between align-items-start flex-wrap mb-6"
+            >
+              <div class="d-flex flex-column w-75">
+                <h6 class="text-dark text-gray-800 fs-2 me-1">
+                  Job title some lengthy text goes here
+                </h6>
+                <div class="mt-2 mb-5 text-muted block">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam
+                  quod architecto saepe necessitatibus dolore, nesciunt suscipit
+                  sunt molestias eos, reprehenderit dolor quos, repellendus
+                  molestiae magni debitis accusamus temporibus exercitationem
+                  eius.
+                </div>
+
+                <div class="d-flex flex-wrap flex-stack">
+                  <div class="d-flex flex-column flex-grow-1 pe-8">
+                    <div class="d-flex flex-wrap lign-items-center">
+                      <div class="me-10 my-1">
+                        <span class="d-flex text-muted fs-8"
+                          >Job Position ID</span
+                        >
+                        <span class="fw-bold d-flex s-">Command+R</span>
+                      </div>
+                      <div class="vr me-5 mt-4 h-20px"></div>
+                      <div class="me-10 my-1 d-flex">
+                        <div class="symbol symbol-35px symbol-circle me-3">
+                          <span
+                            class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
+                            >YK
+                          </span>
+                        </div>
+
+                        <div>
+                          <span class="d-flex text-muted fs-8">Manager</span>
+                          <span class="fw-bold d-flex s-">New York</span>
+                        </div>
+                      </div>
+                      <div class="vr me-5 mt-4 h-20px"></div>
+                      <div class="me-10 my-1">
+                        <span class="d-flex text-muted fs-8"
+                          >Work Order Type</span
+                        >
+                        <span class="fw-bold d-flex s-"> Order Type 1</span>
+                      </div>
+                      <div class="vr me-5 mt-4 h-20px"></div>
+                      <div class="me-10 my-1">
+                        <span class="d-flex text-muted fs-8">Stats</span>
+                        <span class="fw-bold d-flex s-"
+                          ><span class="badge badge-light-success"
+                            ><i
+                              class="fas fa-yin-yangfas fa-circle py-0 pe-2 text-success fs-10"
+                            ></i>
+                            Open</span
+                          >
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="my-4">
+                <div>
+                  <i class="far fa-calendar my-2 me-4"></i>
+                  <span class="badge badge-light-warning">
+                    Nov 12 - Mar 28, 2023</span
+                  >
+                </div>
+                <div>
+                  <div class="w-20px display-inline my-1 me-1">
+                    <img class="" src="./assets/images/icons/coin.svg" alt="" />
+                  </div>
+                  Hourly
+                </div>
+                <div>
+                  <div class="w-20px display-inline my-1 me-1">
+                    <img class="" src="./assets/images/icons/case.svg" alt="" />
+                  </div>
+                  Job type here
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

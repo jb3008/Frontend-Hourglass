@@ -146,7 +146,13 @@ export class HeaderMenuComponent implements OnInit {
       this.jobPostsUrl = '/job-posts';
       this.workOrderUrl = '/work-order';
       this.utils.setHiringManager('false');
-      this.router.navigate(['/job-posts']);
+      this.router.navigate(['/job-posts'], {
+        queryParams: {
+          pageNo: 1,
+          pageSize: 10,
+          status: 'ACTIVE',
+        },
+      });
       // this.setHiringManager = true;
       this.setHiringManager = false;
       this.utils.setVendorId('V101');
@@ -156,7 +162,13 @@ export class HeaderMenuComponent implements OnInit {
       this.workOrderUrl = '/hm/work-order';
       this.utils.setUser('user-11');
       this.utils.setHiringManager('true');
-      this.router.navigate(['/hm/job-posts']);
+      this.router.navigate(['/hm/job-posts'], {
+        queryParams: {
+          pageNo: 1,
+          pageSize: 10,
+          status: 'ACTIVE',
+        },
+      });
       // this.setHiringManager = false;
       this.setHiringManager = true;
     }

@@ -70,20 +70,20 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.apiLoad = false;
-    const searchParams = JSON.parse(sessionStorage.getItem('searchFilters')!);
-    if (searchParams)
-      this.queryParam = JSON.parse(JSON.stringify(searchParams));
+    // const searchParams = JSON.parse(sessionStorage.getItem('searchFilters')!);
+    // if (searchParams)
+    //   this.queryParam = JSON.parse(JSON.stringify(searchParams));
 
-    this.queryParam.status = 'ACTIVE';
-    const filterData = JSON.parse(sessionStorage.getItem('filterData')!);
-    if (filterData) {
-      this.selected = filterData.selected;
-      this.selectedJobTypes = filterData.selectedJobTypes;
-      this.filter = filterData.filter;
-    }
-
-    this.queryParam.pageNo = 1;
-    this.queryParam.pageSize = 10;
+    // this.queryParam.status = 'ACTIVE';
+    // const filterData = JSON.parse(sessionStorage.getItem('filterData')!);
+    // if (filterData) {
+    //   this.selected = filterData.selected;
+    //   this.selectedJobTypes = filterData.selectedJobTypes;
+    //   this.filter = filterData.filter;
+    // }
+    // this.queryParam.status = 'ACTIVE';
+    // this.queryParam.pageNo = 1;
+    // this.queryParam.pageSize = 10;
 
     window.scroll({
       top: 0,
@@ -92,20 +92,65 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.getUserByUserId(userId);
     this.getJobTypes();
     this.getJobCount();
-    this.route.queryParams.subscribe((param) => {
-      if (param?.pageNo) {
-        this.queryParam.pageNo = param['pageNo'];
-        this.queryParam.pageSize = param['pageSize'];
-      }
-      if (param?.tab) {
-        this.selectedTab = param.tab;
-        setTimeout(() => {
-          this.getSelectedTab(this.selectedTab, 'fromDetails');
-        }, 100);
-      } else {
+    setTimeout(() => {
+      this.route.queryParams.subscribe((param) => {
+        // if (param?.pageNo) {
+        //   this.queryParam.pageNo = param['pageNo'];
+        //   this.queryParam.pageSize = param['pageSize'];
+        // }
+        // if (param?.tab) {
+        //   this.selectedTab = param.tab;
+        //   setTimeout(() => {
+        //     this.getSelectedTab(this.selectedTab, 'fromDetails');
+        //   }, 100);
+        // } else {
+        //   this.getAllJobs();
+        // }
+        this.queryParam.status = param['status'] ? param['status'] : 'ACTIVE';
+        this.selectedTab =
+          this.queryParam.status.charAt(0).toUpperCase() +
+          this.queryParam.status.slice(1).toLowerCase();
+        this.queryParam.pageNo = param['pageNo']
+          ? parseInt(param['pageNo'])
+          : 1;
+        this.queryParam.pageSize = param['pageSize']
+          ? parseInt(param['pageSize'])
+          : 10;
+        this.queryParam.searchText = param['searchText']
+          ? param['searchText']
+          : '';
+        this.queryParam.startDate = param['startDate']
+          ? this.changeDateToUtc(new Date(param['startDate']))
+          : '';
+        this.queryParam.endDate = param['endDate']
+          ? this.changeDateToUtc(new Date(param['endDate']))
+          : '';
+        this.queryParam.site = param['site'] ? param['site'] : '';
+        this.queryParam.businessUnit = param['businessUnit']
+          ? param['businessUnit']
+          : '';
+        this.filter.startDate = this.queryParam.startDate;
+        this.filter.endDate = this.queryParam.endDate;
+        this.filter.searchText = this.queryParam.searchText;
+        this.filter.site = this.queryParam.site;
+        this.filter.businessUnit = this.queryParam.businessUnit;
+
+        this.queryParam.types = param['types'] ? param['types'].split(',') : [];
+
+        if (this.queryParam.types) {
+          this.jobTypes.forEach((type, index) => {
+            if (this.queryParam?.types?.indexOf(type.code) !== -1) {
+              this.selectedJobTypes[index] = true;
+            }
+          });
+        }
+
+        if (this.jobTypes.length === this.queryParam?.types?.length) {
+          this.selected = true;
+        }
         this.getAllJobs();
-      }
-    });
+      });
+    }, 100);
   }
 
   ngAfterViewInit() {
@@ -175,6 +220,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((response) => {
+        console.log('??????', response);
         this.jobTypes = response;
         this.cdr.detectChanges();
       });
@@ -191,7 +237,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.jobCount = response;
-        this.totalJobsCount = this.jobCount.activeCount;
+        // this.totalJobsCount = this.jobCount.activeCount;
         this.isLoading = false;
         this.cdr.detectChanges();
       });
@@ -205,13 +251,13 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
 
   getAllJobs() {
     this.apiLoad = false;
-    const filterData = {
-      selected: this.selected,
-      selectedJobTypes: this.selectedJobTypes,
-      filter: this.filter,
-    };
-    sessionStorage.setItem('searchFilters', JSON.stringify(this.queryParam));
-    sessionStorage.setItem('filterData', JSON.stringify(filterData));
+    // const filterData = {
+    //   selected: this.selected,
+    //   selectedJobTypes: this.selectedJobTypes,
+    //   filter: this.filter,
+    // };
+    // sessionStorage.setItem('searchFilters', JSON.stringify(this.queryParam));
+    // sessionStorage.setItem('filterData', JSON.stringify(filterData));
     this.isLoading = true;
     this.apiCalls
       .get(this.endpoints.LIST_JOBS, this.queryParam)
@@ -223,12 +269,34 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((response) => {
-        this.dataSource = new MatTableDataSource<any>(response);
+        this.dataSource = new MatTableDataSource<any>(response.list);
+        this.totalJobsCount = response.TotalCount;
+        console.log(this.selectedTab);
+        if (this.selectedTab == 'Active')
+          this.totalJobsCount = this.jobCount?.activeCount;
+        else if (this.selectedTab == 'Draft')
+          this.totalJobsCount = this.jobCount?.draftCount;
+        else if (this.selectedTab == 'Close')
+          this.totalJobsCount = this.jobCount?.closeCount;
+
         this.dataSource.paginator = this.paginator;
         setTimeout(() => {
           this.paginator.pageIndex = this.queryParam.pageNo - 1;
           this.paginator.length = this.totalJobsCount;
         });
+        var queryParams = new URLSearchParams();
+        for (var i in this.queryParam) {
+          if (this.queryParam[i]) {
+            queryParams.set(i, this.queryParam[i]);
+          }
+        }
+        var newURL = location.href.split('?')[0];
+        window.history.pushState(
+          'object',
+          document.title,
+          newURL + '?' + queryParams.toString()
+        );
+
         this.isLoading = false;
         this.apiLoad = true;
       });
@@ -256,22 +324,29 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedTab(tab: string, from?: string) {
-    if (!from) {
-      this.queryParam.pageNo = 1;
-      this.queryParam.pageSize = 10;
-      this.paginator.pageSize = 10;
-    } else {
-      this.paginator.pageSize = this.queryParam.pageSize;
-    }
-    if (tab == 'Active') this.totalJobsCount = this.jobCount?.activeCount;
-    else if (tab == 'Draft') this.totalJobsCount = this.jobCount?.draftCount;
-    else if (tab == 'Close') this.totalJobsCount = this.jobCount?.closeCount;
+    // if (!from) {
+    //   this.queryParam.pageNo = 1;
+    //   this.queryParam.pageSize = 10;
+    //   this.paginator.pageSize = 10;
+    // } else {
+    //   this.paginator.pageSize = this.queryParam.pageSize;
+    // }
+    // if (tab == 'Active') this.totalJobsCount = this.jobCount?.activeCount;
+    // else if (tab == 'Draft') this.totalJobsCount = this.jobCount?.draftCount;
+    // else if (tab == 'Close') this.totalJobsCount = this.jobCount?.closeCount;
 
-    if (!from) this.resetFilter('tab');
+    // if (!from) this.resetFilter('tab');
+    // this.selectedTab = tab;
+    // this.queryParam.status = this.selectedTab.toUpperCase();
+    // this.getAllJobs();
+    // this.router.navigate([], { queryParams: {} });
+
+    this.queryParam.pageNo = 1;
+    this.queryParam.pageSize = 10;
+    this.paginator.pageSize = 10;
     this.selectedTab = tab;
     this.queryParam.status = this.selectedTab.toUpperCase();
     this.getAllJobs();
-    this.router.navigate([], { queryParams: {} });
   }
 
   searchFilter(event: any) {
@@ -356,6 +431,8 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.filter.businessUnit = '';
     this.selectedJobTypes = [];
     this.selected = false;
+    this.queryParam.pageNo = 1;
+    this.queryParam.pageSize = 10;
     if (!tab) this.getAllJobs();
   }
 
@@ -391,8 +468,8 @@ type QueryParam = {
   [propName: string]: any;
   status: string;
   searchText?: string;
-  startDate?: string;
-  endDate?: string;
+  startDate?: any;
+  endDate?: any;
   site?: string;
   businessUnit?: string;
   types?: string[];
@@ -405,35 +482,3 @@ type JobPostCount = {
   closeCount?: string;
   draftCount?: string;
 };
-
-// export interface PeriodicElement {
-//   jobPost: string;
-//   jobType: string;
-//   unit: string;
-//   site: string;
-//   sDate: string;
-//   eDate: string;
-//   msg: number;
-//   position: number;
-//   jobSeekers: number;
-// }
-
-// const ELEMENT_DATA: PeriodicElement[] = [
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-//   {jobPost: '410008656', jobType: 'Job Type 12', unit: 'Business Unit na', site:'Los Angeles US', sDate: 'Jan 08, 2022', eDate: 'Jan 08, 2022', msg:4, position: 1, jobSeekers: 5},
-
-// ];

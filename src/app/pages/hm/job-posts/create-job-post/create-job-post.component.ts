@@ -684,7 +684,13 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   }
 
   cancelJobPost() {
-    this.router.navigate(['/hm/job-posts']);
+    this.router.navigate(['/hm/job-posts'], {
+      queryParams: {
+        pageNo: 1,
+        pageSize: 10,
+        status: 'ACTIVE',
+      },
+    });
   }
 
   calculateEndDate() {
@@ -911,8 +917,15 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     }
     this.utils.showDialog(this.dialog, msg, () => {
       this.isLoading = false;
+      // this.router.navigate(['/hm/job-posts'], {
+      //   queryParams: { tab: status == 'draft' ? 'Draft' : 'Active' },
+      // }) ;
       this.router.navigate(['/hm/job-posts'], {
-        queryParams: { tab: status == 'draft' ? 'Draft' : 'Active' },
+        queryParams: {
+          pageNo: 1,
+          pageSize: 10,
+          status: status == 'draft' ? 'DRAFT' : 'ACTIVE',
+        },
       });
     });
   }

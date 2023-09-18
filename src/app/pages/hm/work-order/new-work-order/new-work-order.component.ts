@@ -514,7 +514,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((response) => {
-        this.jobLists = response;
+        this.jobLists = response.list;
         this.getFilteredValues('jobPostId');
       });
   }
@@ -779,7 +779,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((response) => {
-        this.dataSource = new MatTableDataSource<any>(response);
+        this.dataSource = new MatTableDataSource<any>(response.list);
         this.dataSource.paginator = this.paginator;
         this.isLoading = false;
         this.cdr.detectChanges();

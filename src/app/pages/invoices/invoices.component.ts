@@ -242,54 +242,37 @@ export class InvoicesComponent implements OnInit {
       )
       .subscribe((response) => {
         if (this.isLoading) {
-          this.apiCalls
-            .get(this.endPoints.GET_INVOICE_COUNT, filter)
-            .pipe(
-              catchError(async (err) => {
-                this.utils.showErrorDialog(this.dialog, err);
-                this.totalCount = 0;
-                this.isApiLoad = true;
-                this.invoiceList = [];
-                this.isLoading = false;
-                this.cdr.detectChanges();
-                throw err;
-              })
-            )
-            .subscribe((responseCount) => {
-              if (this.isLoading) {
-                this.totalCount = responseCount;
-                this.invoiceList = response;
-                this.isLoading = false;
-                this.isApiLoad = true;
-                const queryParamObj: any = {
-                  pageNo: this.paginator.pageIndex.toString(),
-                  pageSize: this.paginator.pageSize.toString(),
-                  sortBy: this.sort.active,
-                  sortOrder: this.sort.direction,
-                };
-                for (var i in this.invoiceFilter.controls) {
-                  queryParamObj[i] = this.invoiceFilter.controls[i].value;
-                }
+          this.totalCount = response.TotalCount;
+          this.invoiceList = response.list;
+          this.isLoading = false;
+          this.isApiLoad = true;
+          const queryParamObj: any = {
+            pageNo: this.paginator.pageIndex.toString(),
+            pageSize: this.paginator.pageSize.toString(),
+            sortBy: this.sort.active,
+            sortOrder: this.sort.direction,
+          };
+          for (var i in this.invoiceFilter.controls) {
+            queryParamObj[i] = this.invoiceFilter.controls[i].value;
+          }
 
-                var queryParams = new URLSearchParams();
+          var queryParams = new URLSearchParams();
 
-                // // Set new or modify existing parameter value.
-                for (var i in queryParamObj) {
-                  if (queryParamObj[i]) {
-                    queryParams.set(i, queryParamObj[i]);
-                  }
-                }
+          // // Set new or modify existing parameter value.
+          for (var i in queryParamObj) {
+            if (queryParamObj[i]) {
+              queryParams.set(i, queryParamObj[i]);
+            }
+          }
 
-                var newURL = location.href.split('?')[0];
-                window.history.pushState(
-                  'object',
-                  document.title,
-                  newURL + '?' + queryParams.toString()
-                );
+          var newURL = location.href.split('?')[0];
+          window.history.pushState(
+            'object',
+            document.title,
+            newURL + '?' + queryParams.toString()
+          );
 
-                this.cdr.detectChanges();
-              }
-            });
+          this.cdr.detectChanges();
         }
       });
   }
@@ -305,7 +288,7 @@ export class InvoicesComponent implements OnInit {
         })
       )
       .subscribe((response) => {
-        this.workForceList = response;
+        this.workForceList = response.list;
         this.getAllInvoice();
         this.cdr.detectChanges();
       });

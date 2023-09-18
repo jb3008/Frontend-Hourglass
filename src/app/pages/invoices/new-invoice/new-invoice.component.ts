@@ -44,7 +44,7 @@ export class NewInvoiceComponent implements OnInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private dialog: MatDialog,
+    private dialog: MatDialog
   ) {}
   submitted: boolean = false;
   workOrderList: any[];
@@ -219,7 +219,7 @@ export class NewInvoiceComponent implements OnInit {
         })
       )
       .subscribe((response) => {
-        this.workOrderList = response;
+        this.workOrderList = response.list;
         this.getFilteredValuesForWorkOrder();
         this.cdr.detectChanges();
       });

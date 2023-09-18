@@ -1,357 +1,650 @@
-<div *ngIf="isLoading" class="pause d-flex align-items-center justify-content-center">
-    <div class="spinner"></div>
+<div
+  *ngIf="isLoading"
+  class="pause d-flex align-items-center justify-content-center"
+>
+  <div class="spinner"></div>
 </div>
 <form [formGroup]="jobPostData">
-<div class="content flex-column-fluid auto container-lg mb-4">
-    <!-- <div class="py-5 fw-bold">
-        <a class="cursor-pointer " routerLink="/job-posts"> <i class="fas fa-arrow-left me-3"></i>
-            Create Job Posting for Worker <span class="badge badge-light-success fw-normal ms-3"><i
-                    class="fas fa-yin-yangfas fa-circle px-1 text-success  fs-10"></i> New Job</span></a>
-    </div> -->
-    <!--begin:: Top Card-->
-
+  <div class="content flex-column-fluid auto container-lg mb-4">
     <div class="card mb-5 mb-xl-10 text-gray-600">
-        <div class="card-body">
-            <h3 class="card-title fs-4"> 
-                <a class="cursor-pointer " routerLink="/hm/job-posts" [queryParams]="{ tab: selectedTab }"> <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i> </a>
-                 Job Post Creation </h3>
-            <span class="text-muted">
-                Work orders are detailed instruction or request that outline specific task repairs or service to be performed in a structured or organized manner.
-            </span>
+      <div class="card-body">
+        <h3 class="card-title fs-4">
+          <a
+            class="cursor-pointer"
+            routerLink="/hm/job-posts"
+            [queryParams]="{
+              pageNo: 1,
+              pageSize: 10,
+              status: selectedTab?.toUpperCase()
+            }"
+          >
+            <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i>
+          </a>
+          Job Post Creation
+        </h3>
+        <span class="text-muted">
+          Work orders are detailed instruction or request that outline specific
+          task repairs or service to be performed in a structured or organized
+          manner.
+        </span>
 
-            <!-- <div class="separator my-5"></div> -->
-            <div class="fw-bold mb-5 mt-9">Post Details</div>
+        <!-- <div class="separator my-5"></div> -->
+        <div class="fw-bold mb-5 mt-9">Post Details</div>
 
-            <div class="form-group pspw60 mb-5">
-                <label class="mb-1">Job Title <span class="text-danger">*</span></label>
-                <input type="input" formControlName="jobTitle" class="form-control py-2 fs- fw-normal" placeholder="Job Title">
+        <div class="form-group pspw60 mb-5">
+          <label class="mb-1"
+            >Job Title <span class="text-danger">*</span></label
+          >
+          <input
+            type="input"
+            formControlName="jobTitle"
+            class="form-control py-2 fs- fw-normal"
+            placeholder="Job Title"
+          />
+        </div>
+        <div class="form-group mb-5">
+          <label class="mb-1"
+            >Job Description <span class="text-danger">*</span></label
+          >
+          <!-- <input type="input" class="form-control py-2 fs- fw-normal" placeholder="Enter email"> -->
+
+          <ckeditor
+            [editor]="editor"
+            formControlName="jobDescription"
+            [data]="data"
+            (ready)="onReady($event)"
+            class="form-control p-0 fs- fw-normal"
+            [config]="{ placeholder: 'Provide work order description here...' }"
+          ></ckeditor>
+
+          <!-- <textarea name="" id="" cols="30" rows="7" class="form-control py-2 fs- fw-normal" placeholder="Provide work order description here..."></textarea> -->
+          <!-- <ckeditor data="<p>Hello, world!</p>" ty></ckeditor> -->
+        </div>
+
+        <div class="pspw60">
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >Hiring Manager <span class="text-danger">*</span></label
+            >
+            <div class="col-8 d-flex align-items-center position-relative">
+              <div class="position-relative w-100">
+                <input
+                  type="text"
+                  class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
+                  placeholder="Type and select hiring manager"
+                  [formControl]="hiringManagerCntrl"
+                  [matAutocomplete]="auto"
+                  (input)="
+                    hiringManagerSearch.value
+                      ? ''
+                      : jobPostData.controls['hiringManager'].setValue('')
+                  "
+                  #hiringManagerSearch
+                  (keyup)="getHiringManagersByKey(hiringManagerSearch.value)"
+                />
+                <i
+                  class="bi bi-x-lg text-active-primary inp-x cursor-pointer"
+                  *ngIf="hiringManagerSearch.value"
+                  (click)="
+                    hiringManagerSearch.value = '';
+                    getFilteredValuesForHm('reset');
+                    getHiringManagersByKey('')
+                  "
+                ></i>
+              </div>
+              <a
+                class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"
+                ><i class="bi bi-search"></i
+              ></a>
+              <i
+                class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer dd-info-btn"
+                ngbTooltip="You can type or search or pick the record from search button"
+              ></i>
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                [displayWith]="displayFn"
+                (optionSelected)="setHiringManagerValue($event)"
+              >
+                <mat-option
+                  *ngFor="let hm of hiringManagerSearchResult | async"
+                  [value]="hm"
+                >
+                  {{ hm.firstName }} {{ hm.lastName }}
+                </mat-option>
+              </mat-autocomplete>
             </div>
-            <div class="form-group  mb-5">
-                <label class="mb-1">Job Description <span class="text-danger">*</span></label>
-                <!-- <input type="input" class="form-control py-2 fs- fw-normal" placeholder="Enter email"> -->
-              
-                <ckeditor [editor]="editor" formControlName="jobDescription" [data]="data" (ready)="onReady($event)" class="form-control p-0 fs- fw-normal"  
-                [config]="{ placeholder:'Provide work order description here...'}"></ckeditor>
+          </div>
 
-             <!-- <textarea name="" id="" cols="30" rows="7" class="form-control py-2 fs- fw-normal" placeholder="Provide work order description here..."></textarea> -->
-                <!-- <ckeditor data="<p>Hello, world!</p>" ty></ckeditor> -->
-
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4">Priority</label>
+            <div class="col-8">
+              <mat-select
+                formControlName="priority"
+                class="form-select fs- py-2"
+                placeholder="Select"
+              >
+                <mat-option value="Low">Low</mat-option>
+                <mat-option value="Medium">Medium</mat-option>
+                <mat-option value="High">High</mat-option>
+              </mat-select>
             </div>
+          </div>
 
-            <div class="pspw60 ">
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">Hiring Manager <span class="text-danger">*</span></label>
-                    <div class="col-8  d-flex align-items-center position-relative">
-                        <div class="position-relative w-100">
-                            <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
-                        placeholder="Type and select hiring manager"
-                        [formControl]="hiringManagerCntrl"
-                        [matAutocomplete]="auto"
-                        (input)="hiringManagerSearch.value ? '' : jobPostData.controls['hiringManager'].setValue('')"
-                        #hiringManagerSearch
-                        (keyup)="getHiringManagersByKey(hiringManagerSearch.value)">
-                        <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="hiringManagerSearch.value"
-                            (click)="hiringManagerSearch.value = '';getFilteredValuesForHm('reset');getHiringManagersByKey('')"></i>
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >Job Type <span class="text-danger">*</span></label
+            >
+            <div class="col-8">
+              <mat-select
+                formControlName="jobType"
+                placeholder="Select"
+                class="form-select fs- py-2"
+              >
+                <mat-option *ngFor="let type of jobTypes" [value]="type.code">
+                  {{ type.name }}
+                </mat-option>
+              </mat-select>
+            </div>
+          </div>
 
-                        </div>
-                         <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
-                 <i class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer dd-info-btn" ngbTooltip="You can type or search or pick the record from search button"></i>
-                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="setHiringManagerValue($event)">
-                    <mat-option *ngFor="let hm of hiringManagerSearchResult | async" [value]="hm">
-                                 {{hm.firstName}} {{hm.lastName}}
-                    </mat-option>
-                  </mat-autocomplete>
-                    </div>
-                </div>
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >No of Position <span class="text-danger">*</span></label
+            >
+            <div class="col-8 d-flex gap-sm-2">
+              <a
+                class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary"
+              >
+                <i
+                  class="bi bi-slash-circle minus-icon"
+                  (click)="changeInputValue(openPosition, '-')"
+                ></i>
+              </a>
+              <input
+                type="input"
+                formControlName="openPosition"
+                (keypress)="numberOnly($event)"
+                #openPosition
+                class="form-control w-70px py-2 fs- fw-normal"
+                placeholder="Number"
+              />
+              <a
+                class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary"
+              >
+                <i
+                  class="bi bi-plus-circle"
+                  (click)="changeInputValue(openPosition, '+')"
+                ></i>
+              </a>
+            </div>
+          </div>
 
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">Priority</label>
-                    <div class="col-8">
-                        <mat-select formControlName="priority" class="form-select fs- py-2" placeholder="Select">
-                            <mat-option value="Low">Low</mat-option>
-                            <mat-option value="Medium">Medium</mat-option>
-                            <mat-option value="High">High</mat-option>
-                        </mat-select>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">Job Type <span class="text-danger">*</span></label>
-                    <div class="col-8">
-                        <mat-select formControlName="jobType" placeholder="Select" class="form-select fs- py-2">
-                            <mat-option *ngFor="let type of jobTypes" [value]="type.code">
-                                {{type.name}}
-                            </mat-option>
-                        </mat-select>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">No of Position <span class="text-danger">*</span></label>
-                    <div class="col-8 d-flex gap-sm-2">
-                     <a  class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary">
-                      <i class="bi bi-slash-circle minus-icon" (click)="changeInputValue(openPosition, '-')"></i>
-
-                      </a>
-                        <input type="input" formControlName="openPosition" (keypress)="numberOnly($event)" #openPosition class="form-control w-70px py-2 fs- fw-normal" 
-                        placeholder="Number">
-                        <a  class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary">
-                      <i class="bi bi-plus-circle" (click)="changeInputValue(openPosition, '+')"></i>
-                      </a>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">What kind of Job it is? <span class="text-danger">*</span></label>
-                    <div class="col-8">
-                        <div class="radio-inline ">
-                            <label class="radio radio-outline radio-outline-2x cursor-pointer radio-primary me-5">
-                                <input formControlName="jobKind" class="cursor-pointer" type="radio" value="Fixed" (click)="jobKind='Fixed'; changeRateValue()">
-                                <span></span>
-                                Fixed
-                            </label>
-                            <label class="radio radio-outline radio-outline-2x cursor-pointer radio-primary">
-                                <input formControlName="jobKind" class="cursor-pointer" type="radio" value="Hourly" (click)="jobKind='Hourly'; changeRateValue()">
-                                <span></span>
-                                Hour based
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">{{jobKind == 'Fixed' ? 'Budget' : 'Working Rate'}} <span class="text-danger">*</span></label>
-                    <div class="col-8 d-flex align-items-center">
-                  
-                        <input *ngIf="jobKind == 'Hourly'" type="input" formControlName="workRate" class="form-control w-150px py-2 rounded-end-0 fw-normal" 
-                        placeholder="Enter Amount" (keypress)="numberAndDecimalOnly($event)">
-                        
-                        <ng-container *ngIf="jobKind == 'Fixed'">
-                            <label class="me-2">Min</label>
-                            <input type="input" formControlName="minBudget" class="form-control w-100px py-2 rounded-end-0 fw-normal" 
-                        placeholder="Enter amount" [value]="budgetMin" (keypress)="numberAndDecimalOnly($event)" (focusout)="checkMaxBudget($event, 'min')">
-
-                        <mat-select class="form-select fs- py-2 w-100px rounded-start-0 me-2" formControlName="workRateCurrency" placeholder="Select">
-                            <mat-option *ngFor="let currency of currencies" [value]="currency">
-                                {{currency}}
-                            </mat-option>
-                        </mat-select>
-
-                        <label class="me-2">Max</label>
-                        <input type="input" formControlName="maxBudget" class="form-control w-100px py-2 rounded-end-0 fw-normal" 
-                        placeholder="Enter amount" [value]="budgetMax" (keypress)="numberAndDecimalOnly($event)" (focusout)="checkMaxBudget($event, 'max')">
-                        <input type="input" class="form-control w-50px py-2 rounded-start-0 fw-normal" [value]="jobPostData.controls['workRateCurrency'].value" readonly>
-                        </ng-container>
-
-                        <mat-select *ngIf="jobKind == 'Hourly'" class="form-select fs- py-2 w-100px rounded-start-0" formControlName="workRateCurrency" placeholder="Select">
-                            <mat-option *ngFor="let currency of currencies" [value]="currency">
-                                {{currency}}
-                            </mat-option>
-                        </mat-select>
-                        <span *ngIf="jobKind == 'Hourly'" class="text-muted ps-2">Per Hour</span>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-5  d-flex align-items-center">
-                    <label class="col-4">Start Date <span class="text-danger">*</span></label>
-                    <div class="col-8 d-flex align-items-center">
-                        <div class="input-icon position-relative min-w-150px input-icon-right">
-
-                            <input type="text" formControlName="startDate" class="form-control cursor-pointer  py-2 fs- fw-normal" (click)="picker.open()"
-                        [matDatepicker]="picker" placeholder="Select Date" readonly [min]="selectedTab != 'Draft' ? today : null">
-                    <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
-                    <mat-datepicker #picker></mat-datepicker>
-                    </div>
-
-                    <label class="mb-1 ps-6 pe-4 min-w-100px ">End Date <span class="text-danger">*</span></label>
-                    <input type="text" formControlName="endDateNumber" class="form-control w-125px py-2 fs- fw-normal" placeholder="Select Date" (input)="changeValidTill($event)" (keypress)="numberOnly($event)">
-    
-                    <select name="" id="" class="form-select min-w-90px fs- py-2 ms-2">
-                        <option value="">Days</option>
-                    </select>
-                    <a class="btn btn-light-primary btn-sm cursor-pointer min-w-150px ms-5" (click)="calculateEndDate()">Calculate End Date</a>
-                   </div>
-                </div>
-
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">Valid Till <span class="text-danger">*</span></label>
-                    <div class="col-8">
-                        <div class="input-icon position-relative w-150px input-icon-right">
-
-                            <input type="text" formControlName="endDate" class="form-control cursor-pointer py-2 fs- fw-normal" (click)="pickerValid.open()"
-                                [matDatepicker]="pickerValid" placeholder="Valid Till" [disabled]="true">
-                            <span class="cursor-pointer" (click)="pickerValid.open()"><i class="far fa-calendar"></i></span>
-                            <mat-datepicker #pickerValid></mat-datepicker>
-                    </div>
-                    </div>
-                </div>
-                
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">Reporting Date <span class="text-danger">*</span></label>
-                    <div class="col-8">
-                        <div class="input-icon position-relative w-150px input-icon-right">
-
-                            <input  formControlName="reportDate" type="text" class="form-control cursor-pointer  py-2 fs- fw-normal" (click)="pickerrd.open()"
-                                [matDatepicker]="pickerrd" placeholder="Reporting Date" readonly [min]="selectedTab != 'Draft' ? today : null">
-                            <span class="cursor-pointer" (click)="pickerrd.open()"><i class="far fa-calendar"></i></span>
-                            <mat-datepicker #pickerrd></mat-datepicker>
-                    </div>
-                    </div>
-                </div>
-
-
-                <div class="fw-bold mb-5 mt-9">WORK POLICY & ACCOUNTING DETAILS</div>
-
-
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">Timesheet Frequency <span class="text-danger">*</span></label>
-                    <div class="col-8">
-                        <mat-select class="form-select fs- py-2" formControlName="timesheetFreq" placeholder="Select">
-                            <mat-option *ngFor="let freq of timesheetFrequency" [value]="freq.freqCode">
-                                {{freq.title}} ({{freq.freqCode}})
-                            </mat-option>
-                        </mat-select>
-                    </div>
-                </div>
-    
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4 d-flex align-items-center">Work hours <span class="text-danger">*</span>
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >What kind of Job it is? <span class="text-danger">*</span></label
+            >
+            <div class="col-8">
+              <div class="radio-inline">
+                <label
+                  class="radio radio-outline radio-outline-2x cursor-pointer radio-primary me-5"
+                >
+                  <input
+                    formControlName="jobKind"
+                    class="cursor-pointer"
+                    type="radio"
+                    value="Fixed"
+                    (click)="jobKind = 'Fixed'; changeRateValue()"
+                  />
+                  <span></span>
+                  Fixed
                 </label>
-                    <div class="col-8 d-flex gap-sm-2 align-items-center">
-                        Per
-                        <mat-select formControlName="workHourInterval" class="form-select fs- py-2 w-90px ms-2" placeholder="Select" (selectionChange)="checkValidHrs()">
-                            <mat-option value="Daily">
-                                Daily
-                            </mat-option>
-                            <mat-option value="Weekly">
-                                Weekly
-                            </mat-option>
-                            <mat-option value="Monthly">
-                                Monthly
-                            </mat-option>
-                        </mat-select>
-                     <a  class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary">
-                      <i class="bi bi-slash-circle minus-icon" (click)="changeInputValue(workHours, '-')"></i>
-    
-                      </a>
-                        <input type="input" formControlName="workHours" #workHours class="form-control w-70px py-2 fs- fw-normal" 
-                        placeholder="Number" (keypress)="numberOnly($event)" (focusout)="checkValidHrs()">
-                        <a  class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary">
-                      <i class="bi bi-plus-circle" (click)="changeInputValue(workHours, '+')"></i>
-                      </a>
-                      hours
-                    </div>
-                </div>
-    
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">Cost Center <span class="text-danger">*</span></label>
-                   <!-- <div class="col-8">
+                <label
+                  class="radio radio-outline radio-outline-2x cursor-pointer radio-primary"
+                >
+                  <input
+                    formControlName="jobKind"
+                    class="cursor-pointer"
+                    type="radio"
+                    value="Hourly"
+                    (click)="jobKind = 'Hourly'; changeRateValue()"
+                  />
+                  <span></span>
+                  Hour based
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >{{ jobKind == "Fixed" ? "Budget" : "Working Rate" }}
+              <span class="text-danger">*</span></label
+            >
+            <div class="col-8 d-flex align-items-center">
+              <input
+                *ngIf="jobKind == 'Hourly'"
+                type="input"
+                formControlName="workRate"
+                class="form-control w-150px py-2 rounded-end-0 fw-normal"
+                placeholder="Enter Amount"
+                (keypress)="numberAndDecimalOnly($event)"
+              />
+
+              <ng-container *ngIf="jobKind == 'Fixed'">
+                <label class="me-2">Min</label>
+                <input
+                  type="input"
+                  formControlName="minBudget"
+                  class="form-control w-100px py-2 rounded-end-0 fw-normal"
+                  placeholder="Enter amount"
+                  [value]="budgetMin"
+                  (keypress)="numberAndDecimalOnly($event)"
+                  (focusout)="checkMaxBudget($event, 'min')"
+                />
+
+                <mat-select
+                  class="form-select fs- py-2 w-100px rounded-start-0 me-2"
+                  formControlName="workRateCurrency"
+                  placeholder="Select"
+                >
+                  <mat-option
+                    *ngFor="let currency of currencies"
+                    [value]="currency"
+                  >
+                    {{ currency }}
+                  </mat-option>
+                </mat-select>
+
+                <label class="me-2">Max</label>
+                <input
+                  type="input"
+                  formControlName="maxBudget"
+                  class="form-control w-100px py-2 rounded-end-0 fw-normal"
+                  placeholder="Enter amount"
+                  [value]="budgetMax"
+                  (keypress)="numberAndDecimalOnly($event)"
+                  (focusout)="checkMaxBudget($event, 'max')"
+                />
+                <input
+                  type="input"
+                  class="form-control w-50px py-2 rounded-start-0 fw-normal"
+                  [value]="jobPostData.controls['workRateCurrency'].value"
+                  readonly
+                />
+              </ng-container>
+
+              <mat-select
+                *ngIf="jobKind == 'Hourly'"
+                class="form-select fs- py-2 w-100px rounded-start-0"
+                formControlName="workRateCurrency"
+                placeholder="Select"
+              >
+                <mat-option
+                  *ngFor="let currency of currencies"
+                  [value]="currency"
+                >
+                  {{ currency }}
+                </mat-option>
+              </mat-select>
+              <span *ngIf="jobKind == 'Hourly'" class="text-muted ps-2"
+                >Per Hour</span
+              >
+            </div>
+          </div>
+
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >Start Date <span class="text-danger">*</span></label
+            >
+            <div class="col-8 d-flex align-items-center">
+              <div
+                class="input-icon position-relative min-w-150px input-icon-right"
+              >
+                <input
+                  type="text"
+                  formControlName="startDate"
+                  class="form-control cursor-pointer py-2 fs- fw-normal"
+                  (click)="picker.open()"
+                  [matDatepicker]="picker"
+                  placeholder="Select Date"
+                  readonly
+                  [min]="selectedTab != 'Draft' ? today : null"
+                />
+                <span class="cursor-pointer" (click)="picker.open()"
+                  ><i class="far fa-calendar"></i
+                ></span>
+                <mat-datepicker #picker></mat-datepicker>
+              </div>
+
+              <label class="mb-1 ps-6 pe-4 min-w-100px"
+                >End Date <span class="text-danger">*</span></label
+              >
+              <input
+                type="text"
+                formControlName="endDateNumber"
+                class="form-control w-125px py-2 fs- fw-normal"
+                placeholder="Select Date"
+                (input)="changeValidTill($event)"
+                (keypress)="numberOnly($event)"
+              />
+
+              <select
+                name=""
+                id=""
+                class="form-select min-w-90px fs- py-2 ms-2"
+              >
+                <option value="">Days</option>
+              </select>
+              <a
+                class="btn btn-light-primary btn-sm cursor-pointer min-w-150px ms-5"
+                (click)="calculateEndDate()"
+                >Calculate End Date</a
+              >
+            </div>
+          </div>
+
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >Valid Till <span class="text-danger">*</span></label
+            >
+            <div class="col-8">
+              <div
+                class="input-icon position-relative w-150px input-icon-right"
+              >
+                <input
+                  type="text"
+                  formControlName="endDate"
+                  class="form-control cursor-pointer py-2 fs- fw-normal"
+                  (click)="pickerValid.open()"
+                  [matDatepicker]="pickerValid"
+                  placeholder="Valid Till"
+                  [disabled]="true"
+                />
+                <span class="cursor-pointer" (click)="pickerValid.open()"
+                  ><i class="far fa-calendar"></i
+                ></span>
+                <mat-datepicker #pickerValid></mat-datepicker>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >Reporting Date <span class="text-danger">*</span></label
+            >
+            <div class="col-8">
+              <div
+                class="input-icon position-relative w-150px input-icon-right"
+              >
+                <input
+                  formControlName="reportDate"
+                  type="text"
+                  class="form-control cursor-pointer py-2 fs- fw-normal"
+                  (click)="pickerrd.open()"
+                  [matDatepicker]="pickerrd"
+                  placeholder="Reporting Date"
+                  readonly
+                  [min]="selectedTab != 'Draft' ? today : null"
+                />
+                <span class="cursor-pointer" (click)="pickerrd.open()"
+                  ><i class="far fa-calendar"></i
+                ></span>
+                <mat-datepicker #pickerrd></mat-datepicker>
+              </div>
+            </div>
+          </div>
+
+          <div class="fw-bold mb-5 mt-9">WORK POLICY & ACCOUNTING DETAILS</div>
+
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >Timesheet Frequency <span class="text-danger">*</span></label
+            >
+            <div class="col-8">
+              <mat-select
+                class="form-select fs- py-2"
+                formControlName="timesheetFreq"
+                placeholder="Select"
+              >
+                <mat-option
+                  *ngFor="let freq of timesheetFrequency"
+                  [value]="freq.freqCode"
+                >
+                  {{ freq.title }} ({{ freq.freqCode }})
+                </mat-option>
+              </mat-select>
+            </div>
+          </div>
+
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4 d-flex align-items-center"
+              >Work hours <span class="text-danger">*</span>
+            </label>
+            <div class="col-8 d-flex gap-sm-2 align-items-center">
+              Per
+              <mat-select
+                formControlName="workHourInterval"
+                class="form-select fs- py-2 w-90px ms-2"
+                placeholder="Select"
+                (selectionChange)="checkValidHrs()"
+              >
+                <mat-option value="Daily"> Daily </mat-option>
+                <mat-option value="Weekly"> Weekly </mat-option>
+                <mat-option value="Monthly"> Monthly </mat-option>
+              </mat-select>
+              <a
+                class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary"
+              >
+                <i
+                  class="bi bi-slash-circle minus-icon"
+                  (click)="changeInputValue(workHours, '-')"
+                ></i>
+              </a>
+              <input
+                type="input"
+                formControlName="workHours"
+                #workHours
+                class="form-control w-70px py-2 fs- fw-normal"
+                placeholder="Number"
+                (keypress)="numberOnly($event)"
+                (focusout)="checkValidHrs()"
+              />
+              <a
+                class="btn btn-sm btn-icon border cursor-pointer btn-active-color-primary"
+              >
+                <i
+                  class="bi bi-plus-circle"
+                  (click)="changeInputValue(workHours, '+')"
+                ></i>
+              </a>
+              hours
+            </div>
+          </div>
+
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >Cost Center <span class="text-danger">*</span></label
+            >
+            <!-- <div class="col-8">
                          <mat-select formControlName="costCenter" class="form-select fs- py-2" placeholder="Select">
                             <mat-option *ngFor="let costCenter of costCenterList" [value]="costCenter.code">
                                 {{getDisplayText(costCenter.name, costCenter.code)}}
                             </mat-option>
                         </mat-select>
                     </div> -->
-                    <div class="col-8  d-flex align-items-center position-relative">
-                        <div class="position-relative w-100">
-                            <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
-                        placeholder="Type and select cost center"
-                        [formControl]="costCenterCntrl"
-                        [matAutocomplete]="autoCost"
-                        (input)="costCenterSearch.value ? '' : jobPostData.controls['costCenter'].setValue('')"
-                        #costCenterSearch
-                        (keyup)="getcostCenterByKey(costCenterSearch.value)">
-                        <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="costCenterSearch.value"
-                            (click)="costCenterSearch.value = '';getcostCenterByKey('')"></i>
+            <div class="col-8 d-flex align-items-center position-relative">
+              <div class="position-relative w-100">
+                <input
+                  type="text"
+                  class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
+                  placeholder="Type and select cost center"
+                  [formControl]="costCenterCntrl"
+                  [matAutocomplete]="autoCost"
+                  (input)="
+                    costCenterSearch.value
+                      ? ''
+                      : jobPostData.controls['costCenter'].setValue('')
+                  "
+                  #costCenterSearch
+                  (keyup)="getcostCenterByKey(costCenterSearch.value)"
+                />
+                <i
+                  class="bi bi-x-lg text-active-primary inp-x cursor-pointer"
+                  *ngIf="costCenterSearch.value"
+                  (click)="costCenterSearch.value = ''; getcostCenterByKey('')"
+                ></i>
+              </div>
+              <a
+                class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"
+                ><i class="bi bi-search"></i
+              ></a>
+              <i
+                class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer dd-info-btn"
+                ngbTooltip="You can type or search or pick the record from search button"
+              ></i>
+              <mat-autocomplete
+                #autoCost="matAutocomplete"
+                [displayWith]="displayFnCost"
+                (optionSelected)="setcostCenterValue($event)"
+              >
+                <mat-option
+                  *ngFor="let cost of costCenterSearchResult | async"
+                  [value]="cost"
+                >
+                  {{ getDisplayText(cost.name, cost.code) }}
+                </mat-option>
+              </mat-autocomplete>
+            </div>
+          </div>
 
-                        </div>
-                         <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
-                 <i class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer dd-info-btn" ngbTooltip="You can type or search or pick the record from search button"></i>
-                 <mat-autocomplete #autoCost="matAutocomplete" [displayWith]="displayFnCost" (optionSelected)="setcostCenterValue($event)">
-                    <mat-option *ngFor="let cost of costCenterSearchResult | async" [value]="cost">
-                        {{getDisplayText(cost.name, cost.code)}}
-
-                    </mat-option>
-                  </mat-autocomplete>
-                    </div>
-                </div>
-    
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">Payment Terms<span class="text-danger">*</span></label>
-                    <!-- <div class="col-8">
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >Payment Terms<span class="text-danger">*</span></label
+            >
+            <!-- <div class="col-8">
                         <mat-select class="form-select fs- py-2" formControlName="payTerms" placeholder="Select">
                             <mat-option *ngFor="let terms of payTermsList" [value]="terms.id">
                                 {{getDisplayText(terms.name, terms.id)}}
                             </mat-option>
                         </mat-select>
                     </div> -->
-                    <div class="col-8  d-flex align-items-center position-relative">
-                        <div class="position-relative w-100">
-                            <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
-                        placeholder="Type and select payment terms"
-                        [formControl]="payTermsCntrl"
-                        [matAutocomplete]="autoPay"
-                        (input)="payTermsSearch.value ? '' : jobPostData.controls['payTerms'].setValue('')"
-                        #payTermsSearch
-                        (keyup)="getpayTermsByKey(payTermsSearch.value)">
-                        <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="payTermsSearch.value"
-                            (click)="payTermsSearch.value = '';getpayTermsByKey('')"></i>
-
-                        </div>
-                         <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
-                 <i class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer dd-info-btn" ngbTooltip="You can type or search or pick the record from search button"></i>
-                 <mat-autocomplete #autoPay="matAutocomplete" [displayWith]="displayFnpayTerms" (optionSelected)="setpayTermsValue($event)">
-                    <mat-option *ngFor="let pay of payTermsSearchResult | async" [value]="pay">
-                        {{getDisplayPayText(pay.name, pay.id)}}
-
-                    </mat-option>
-                  </mat-autocomplete>
-                    </div>
-                </div>
+            <div class="col-8 d-flex align-items-center position-relative">
+              <div class="position-relative w-100">
+                <input
+                  type="text"
+                  class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
+                  placeholder="Type and select payment terms"
+                  [formControl]="payTermsCntrl"
+                  [matAutocomplete]="autoPay"
+                  (input)="
+                    payTermsSearch.value
+                      ? ''
+                      : jobPostData.controls['payTerms'].setValue('')
+                  "
+                  #payTermsSearch
+                  (keyup)="getpayTermsByKey(payTermsSearch.value)"
+                />
+                <i
+                  class="bi bi-x-lg text-active-primary inp-x cursor-pointer"
+                  *ngIf="payTermsSearch.value"
+                  (click)="payTermsSearch.value = ''; getpayTermsByKey('')"
+                ></i>
+              </div>
+              <a
+                class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"
+                ><i class="bi bi-search"></i
+              ></a>
+              <i
+                class="bi bi-info-circle-fill ms-3 fs-4 cursor-pointer dd-info-btn"
+                ngbTooltip="You can type or search or pick the record from search button"
+              ></i>
+              <mat-autocomplete
+                #autoPay="matAutocomplete"
+                [displayWith]="displayFnpayTerms"
+                (optionSelected)="setpayTermsValue($event)"
+              >
+                <mat-option
+                  *ngFor="let pay of payTermsSearchResult | async"
+                  [value]="pay"
+                >
+                  {{ getDisplayPayText(pay.name, pay.id) }}
+                </mat-option>
+              </mat-autocomplete>
             </div>
+          </div>
+        </div>
 
+        <div class="separator separator-dashed my-7"></div>
+        <div class="pspw60">
+          <div class="fw-bold mb-5 mt-9">ORGANIZATION DETAILS</div>
+          <div class="form-group mb-5">
+            <label class="mb-1"
+              >Legal Entity <span class="text-danger">*</span></label
+            >
+            <mat-select
+              class="form-select fs- py-2"
+              formControlName="legalEntity"
+              placeholder="Select"
+              (selectionChange)="getLegalEntityCode($event)"
+            >
+              <mat-option
+                *ngFor="let entities of legalEntities"
+                [value]="entities.companyCode"
+              >
+                {{ entities.title }}
+              </mat-option>
+            </mat-select>
+          </div>
 
-<div class="separator separator-dashed my-7 "></div>
-            <div class="pspw60 ">
-                <div class="fw-bold mb-5 mt-9">ORGANIZATION DETAILS</div>
-                <div class="form-group mb-5">
-                    <label class="mb-1">Legal Entity <span class="text-danger">*</span></label>
-                    <mat-select class="form-select fs- py-2" formControlName="legalEntity" placeholder="Select" (selectionChange)="getLegalEntityCode($event)">
-                        <mat-option *ngFor="let entities of legalEntities" [value]="entities.companyCode">
-                            {{entities.title}}
-                        </mat-option>
-                    </mat-select>
+          <div class="container mb-5">
+            <div class="row justify-content-between">
+              <div class="col-6 p-0 pe-4">
+                <div class="form-group">
+                  <label class="mb-1"
+                    >Site <span class="text-danger">*</span></label
+                  >
+                  <mat-select
+                    class="form-select fs- py-2"
+                    placeholder="Select"
+                    #siteSelect
+                    (selectionChange)="setLocationValue($event)"
+                  >
+                    <mat-option *ngFor="let site of siteList" [value]="site">
+                      {{ getDisplayText(site.name, site.code) }}
+                    </mat-option>
+                  </mat-select>
                 </div>
-
-                <div class="container  mb-5">
-                    <div class="row justify-content-between">
-                        <div class="col-6 p-0 pe-4">
-                            <div class="form-group">
-                                <label class="mb-1">Site <span class="text-danger">*</span></label>
-                                <mat-select class="form-select fs- py-2" placeholder="Select" #siteSelect (selectionChange)="setLocationValue($event)">
-                                    <mat-option *ngFor="let site of siteList" [value]="site">
-                                        {{getDisplayText(site.name, site.code)}}
-                                    </mat-option>
-                                </mat-select>
-                            </div>
-                        </div>
-                        <div class="col-6 p-0  ps-4">
-                            <div class="form-group">
-                                <label class="mb-1">Location</label>
-                                <input type="input" formControlName="location" class="form-control py-2 fs- fw-normal">
-                            </div>
-                        </div>
-                    </div>
+              </div>
+              <div class="col-6 p-0 ps-4">
+                <div class="form-group">
+                  <label class="mb-1">Location</label>
+                  <input
+                    type="input"
+                    formControlName="location"
+                    class="form-control py-2 fs- fw-normal"
+                  />
                 </div>
+              </div>
+            </div>
+          </div>
 
-                <div class="form-group mb-5">
-                    <label class="mb-1">Business Unit <span class="text-danger">*</span></label>
-                    <mat-select formControlName="businessUnit" class="form-select fs- py-2" placeholder="Select">
-                        <mat-option *ngFor="let units of businessUnits" [value]="units.code">
-                            {{getDisplayText(units.name, units.code)}}
-                        </mat-option>
-                    </mat-select>
-                    <!-- <div class="c/ol-8  d-flex align-items-center position-relative">
+          <div class="form-group mb-5">
+            <label class="mb-1"
+              >Business Unit <span class="text-danger">*</span></label
+            >
+            <mat-select
+              formControlName="businessUnit"
+              class="form-select fs- py-2"
+              placeholder="Select"
+            >
+              <mat-option
+                *ngFor="let units of businessUnits"
+                [value]="units.code"
+              >
+                {{ getDisplayText(units.name, units.code) }}
+              </mat-option>
+            </mat-select>
+            <!-- <div class="c/ol-8  d-flex align-items-center position-relative">
                         <div class="position-relative w-100 m/e-3">
                             <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 roun/ded-end-0 "
                      
@@ -374,9 +667,9 @@
                     </mat-option>
                   </mat-autocomplete>
                     </div> -->
-                </div>
+          </div>
 
-                <!-- <div class="form-group mb-5 d-flex align-items-center">
+          <!-- <div class="form-group mb-5 d-flex align-items-center">
                     <label class="checkbox checkbox-outline checkbox-success">
                         <input type="checkbox" name="Checkboxes15">
                         <span></span>
@@ -388,174 +681,303 @@
                         <option value="">Select</option>
                     </select>
                 </div> -->
-            </div>
+        </div>
 
-            <div class="fw-bold mt-10 ">Attachments</div>
-                 <div class="row mb-6">
-
-                  <div class="col-md-4 p-3">
-                    <div class="border w-100 rounded-1 p-2">
-                        <div class="d-flex justify-content-between align-items-center ">
-                            <label class="p-2">Work Policy Document <span class="text-danger">*</span></label>
-                            <img src="./assets/images/icons/attachment.svg" alt=""> 
-    
-                        </div>
-                        <div class="fv-row ">
-                    <!--begin::Dropzone-->
-                    <div class="dropzone dz-clickable bg-light-primary border border-dashed text-center mb-2"
-                      DropZone (onFileDropped)="droppedFiles($event)" (click)="fileInput.click()">
-                        <!--begin::Message-->
-                        <div class=" text-center w-100 text-muted">
-                            <!--begin::Icon-->
-                            <i class="fas fa-cloud-upload-alt  fs-2x"></i> <!--end::Icon-->
-                            <!--begin::Info-->
-                            <div class="ms-4">
-                                <input type="file" hidden #fileInput (change)="selectFile($event, 'workPolicyDoc')" 
-                                    accept=".pdf,.doc,.docx,.xls,.xlsx" (click)="clearFileInput($event)">
-                                <h3 class="fs-7 mb-1"> <a class=" text-primary ">Click to upload </a> or Drop files
-                                    here.</h3>
-                                <span class="fs-9 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size  less than 2mb)</span>
-                            </div>
-                            <!--end::Info-->
-                        </div>
-                    </div>
-                    <a *ngIf="jobPostData.controls['workPolicyDoc']?.value" 
-                    class=" border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between w-auto">
-                    <div class="text-truncate pspmw95" [ngbTooltip]="jobPostData.controls['workPolicyDoc'].value.name" [openDelay]="600">
-
-                        {{jobPostData.controls['workPolicyDoc'].value.name}}
-                    </div>
-                       <span class="cursor-pointer ms-3 ">
-                        <i class="bi bi-x-circle" (click)="clearFile('workPolicyDoc')"></i></span>
-                    </a>
-                    <!--end::Dropzone-->
-                </div>
-    
-                    </div>
-                  </div>
-
-                  <div class="col-md-4 p-3">
-                    <div class="border w-100 rounded-1 p-2">
-                        <div class="d-flex justify-content-between align-items-center ">
-                            <label class="p-2">About Organization Document <span class="text-danger">*</span></label>
-                            <img src="./assets/images/icons/attachment.svg" alt=""> 
-    
-                        </div>
-                        <div class="fv-row ">
-                    <!--begin::Dropzone-->
-                    <div class="dropzone dz-clickable bg-light-primary border border-dashed text-center mb-2" 
-                     DropZone (onFileDropped)="droppedFiles($event)"  (click)="fileInputOrg.click()">
-                        <!--begin::Message-->
-                        <div class=" text-center w-100 text-muted">
-                            <!--begin::Icon-->
-                            <i class="fas fa-cloud-upload-alt  fs-2x"></i> <!--end::Icon-->
-                            <!--begin::Info-->
-                            <div class="ms-4">
-                                <input type="file" hidden #fileInputOrg (change)="selectFile($event, 'aboutOrgDoc')" 
-                                    accept=".pdf,.doc,.docx,.xls,.xlsx" (click)="clearFileInput($event)">
-                                <h3 class="fs-7 mb-1"> <a class=" text-primary ">Click to upload </a> or Drop files
-                                    here.</h3>
-                                <span class="fs-9 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size  less than 2mb)</span>
-                            </div>
-                            <!--end::Info-->
-                        </div>
-                    </div>
-                    <a *ngIf="jobPostData.controls['aboutOrgDoc']?.value"
-                     class="border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between">
-                     <div class="text-truncate pspmw95"  [ngbTooltip]="jobPostData.controls['aboutOrgDoc'].value.name" [openDelay]="600">
-                        {{jobPostData.controls['aboutOrgDoc'].value.name}}
-                        </div>
-
-                        <span class="cursor-pointer ms-3 ">
-                            <i class="bi bi-x-circle" (click)="clearFile('aboutOrgDoc')"></i></span>
-                    </a>
-                    <!--end::Dropzone-->
-                </div>
-    
-                    </div>
-                  </div>
-
-                  <div class="col-md-4 p-3">
-                    <div class="border w-100 rounded-1 p-2">
-                        <div class="d-flex justify-content-between align-items-center ">
-                            <label class="p-2">Requirements Document <span class="text-danger">*</span></label>
-                            <img src="./assets/images/icons/attachment.svg" alt=""> 
-    
-                        </div>
-                        <div class="fv-row ">
-                    <!--begin::Dropzone-->
-                    <div class="dropzone dz-clickable bg-light-primary border border-dashed text-center mb-2" 
-                     DropZone (onFileDropped)="droppedFiles($event)" (click)="fileInputReq.click()">
-                        <!--begin::Message-->
-                        <div class=" text-center w-100 text-muted">
-                            <!--begin::Icon-->
-                            <i class="fas fa-cloud-upload-alt  fs-2x"></i> <!--end::Icon-->
-                            <!--begin::Info-->
-                            <div class="ms-4">
-                                <input type="file" hidden #fileInputReq (change)="selectFile($event, 'requirementDoc')" 
-                                accept=".pdf,.doc,.docx,.xls,.xlsx" (click)="clearFileInput($event)">
-                                <h3 class="fs-7 mb-1"> <a class=" text-primary ">Click to upload </a> or Drop files
-                                    here.</h3>
-                                <span class="fs-9 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size  less than 2mb)</span>
-                            </div>
-                            <!--end::Info-->
-                        </div>
-                    </div>
-                    <a *ngIf="jobPostData.controls['requirementDoc']?.value" 
-                    class="border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between">
-                    <div class="text-truncate pspmw95"  [ngbTooltip]="jobPostData.controls['requirementDoc'].value.name" [openDelay]="600">
-                        {{jobPostData.controls['requirementDoc'].value.name}}
-                        </div>
-                         <span class="cursor-pointer ms-3"><i class="bi bi-x-circle" (click)="clearFile('requirementDoc')"></i></span>
-                    </a>
-                    <!--end::Dropzone-->
-                </div>
-                    </div>
-                  </div>
-             
-                </div>
-     
-        
-            <div class="mb-1 ">Other Documents</div>
-            <div class="fv-row mb-5 ">
+        <div class="fw-bold mt-10">Attachments</div>
+        <div class="row mb-6">
+          <div class="col-md-4 p-3">
+            <div class="border w-100 rounded-1 p-2">
+              <div class="d-flex justify-content-between align-items-center">
+                <label class="p-2"
+                  >Work Policy Document
+                  <span class="text-danger">*</span></label
+                >
+                <img src="./assets/images/icons/attachment.svg" alt="" />
+              </div>
+              <div class="fv-row">
                 <!--begin::Dropzone-->
-                <div class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
-                  DropZone (onFileDropped)="droppedFiles($event)" (click)="fileInputOther.click()">
-                    <!--begin::Message-->
-                    <div class=" text-center w-100 text-muted">
-                        <!--begin::Icon-->
-                        <i class="fas fa-cloud-upload-alt  fs-2x"></i> <!--end::Icon-->
-                        <!--begin::Info-->
-                        <div class="ms-4">
-                            <input type="file" hidden #fileInputOther (change)="selectFile($event, 'otherDocList')" 
-                            (click)="clearFileInput($event)" accept=".pdf,.doc,.docx,.xls,.xlsx">
-                            <h3 class="fs-5 mb-1"> <a class=" text-primary ">Click to upload </a> or Drop files
-                                here.</h3>
-                            <span class="fs-7 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size  less than 2mb); maximum 6 files</span>
-                        </div>
-                        <!--end::Info-->
+                <div
+                  class="dropzone dz-clickable bg-light-primary border border-dashed text-center mb-2"
+                  DropZone
+                  (onFileDropped)="droppedFiles($event)"
+                  (click)="fileInput.click()"
+                >
+                  <!--begin::Message-->
+                  <div class="text-center w-100 text-muted">
+                    <!--begin::Icon-->
+                    <i class="fas fa-cloud-upload-alt fs-2x"></i>
+                    <!--end::Icon-->
+                    <!--begin::Info-->
+                    <div class="ms-4">
+                      <input
+                        type="file"
+                        hidden
+                        #fileInput
+                        (change)="selectFile($event, 'workPolicyDoc')"
+                        accept=".pdf,.doc,.docx,.xls,.xlsx"
+                        (click)="clearFileInput($event)"
+                      />
+                      <h3 class="fs-7 mb-1">
+                        <a class="text-primary">Click to upload </a> or Drop
+                        files here.
+                      </h3>
+                      <span class="fs-9 fw-semibold text-gray-400"
+                        >.pdf, .doc, .docx, .xls, .xlsx (size less than
+                        2mb)</span
+                      >
                     </div>
+                    <!--end::Info-->
+                  </div>
                 </div>
-                <div *ngIf="jobPostData.controls['otherDocList'].value" class="d-flex flex-wrap ">
-                    <a *ngFor="let doc of jobPostData.controls['otherDocList'].value; let index = index" class="me-3 mt-4 border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between mw-325px">
-                        <div class="text-truncate pspmw95"  [ngbTooltip]="doc.name" [openDelay]="600"> 
-                            {{doc.name}}</div>   
-                           <span class="cursor-pointer ms-3 ">
-                            <i class="bi bi-x-circle" (click)="clearFileOther('otherDocList', index)"></i></span>
-
-                    </a>
-                 </div>
+                <a
+                  *ngIf="jobPostData.controls['workPolicyDoc']?.value"
+                  class="border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between w-auto"
+                >
+                  <div
+                    class="text-truncate pspmw95"
+                    [ngbTooltip]="
+                      jobPostData.controls['workPolicyDoc'].value.name
+                    "
+                    [openDelay]="600"
+                  >
+                    {{ jobPostData.controls["workPolicyDoc"].value.name }}
+                  </div>
+                  <span class="cursor-pointer ms-3">
+                    <i
+                      class="bi bi-x-circle"
+                      (click)="clearFile('workPolicyDoc')"
+                    ></i
+                  ></span>
+                </a>
                 <!--end::Dropzone-->
+              </div>
             </div>
+          </div>
 
+          <div class="col-md-4 p-3">
+            <div class="border w-100 rounded-1 p-2">
+              <div class="d-flex justify-content-between align-items-center">
+                <label class="p-2"
+                  >About Organization Document
+                  <span class="text-danger">*</span></label
+                >
+                <img src="./assets/images/icons/attachment.svg" alt="" />
+              </div>
+              <div class="fv-row">
+                <!--begin::Dropzone-->
+                <div
+                  class="dropzone dz-clickable bg-light-primary border border-dashed text-center mb-2"
+                  DropZone
+                  (onFileDropped)="droppedFiles($event)"
+                  (click)="fileInputOrg.click()"
+                >
+                  <!--begin::Message-->
+                  <div class="text-center w-100 text-muted">
+                    <!--begin::Icon-->
+                    <i class="fas fa-cloud-upload-alt fs-2x"></i>
+                    <!--end::Icon-->
+                    <!--begin::Info-->
+                    <div class="ms-4">
+                      <input
+                        type="file"
+                        hidden
+                        #fileInputOrg
+                        (change)="selectFile($event, 'aboutOrgDoc')"
+                        accept=".pdf,.doc,.docx,.xls,.xlsx"
+                        (click)="clearFileInput($event)"
+                      />
+                      <h3 class="fs-7 mb-1">
+                        <a class="text-primary">Click to upload </a> or Drop
+                        files here.
+                      </h3>
+                      <span class="fs-9 fw-semibold text-gray-400"
+                        >.pdf, .doc, .docx, .xls, .xlsx (size less than
+                        2mb)</span
+                      >
+                    </div>
+                    <!--end::Info-->
+                  </div>
+                </div>
+                <a
+                  *ngIf="jobPostData.controls['aboutOrgDoc']?.value"
+                  class="border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between"
+                >
+                  <div
+                    class="text-truncate pspmw95"
+                    [ngbTooltip]="
+                      jobPostData.controls['aboutOrgDoc'].value.name
+                    "
+                    [openDelay]="600"
+                  >
+                    {{ jobPostData.controls["aboutOrgDoc"].value.name }}
+                  </div>
 
+                  <span class="cursor-pointer ms-3">
+                    <i
+                      class="bi bi-x-circle"
+                      (click)="clearFile('aboutOrgDoc')"
+                    ></i
+                  ></span>
+                </a>
+                <!--end::Dropzone-->
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 p-3">
+            <div class="border w-100 rounded-1 p-2">
+              <div class="d-flex justify-content-between align-items-center">
+                <label class="p-2"
+                  >Requirements Document
+                  <span class="text-danger">*</span></label
+                >
+                <img src="./assets/images/icons/attachment.svg" alt="" />
+              </div>
+              <div class="fv-row">
+                <!--begin::Dropzone-->
+                <div
+                  class="dropzone dz-clickable bg-light-primary border border-dashed text-center mb-2"
+                  DropZone
+                  (onFileDropped)="droppedFiles($event)"
+                  (click)="fileInputReq.click()"
+                >
+                  <!--begin::Message-->
+                  <div class="text-center w-100 text-muted">
+                    <!--begin::Icon-->
+                    <i class="fas fa-cloud-upload-alt fs-2x"></i>
+                    <!--end::Icon-->
+                    <!--begin::Info-->
+                    <div class="ms-4">
+                      <input
+                        type="file"
+                        hidden
+                        #fileInputReq
+                        (change)="selectFile($event, 'requirementDoc')"
+                        accept=".pdf,.doc,.docx,.xls,.xlsx"
+                        (click)="clearFileInput($event)"
+                      />
+                      <h3 class="fs-7 mb-1">
+                        <a class="text-primary">Click to upload </a> or Drop
+                        files here.
+                      </h3>
+                      <span class="fs-9 fw-semibold text-gray-400"
+                        >.pdf, .doc, .docx, .xls, .xlsx (size less than
+                        2mb)</span
+                      >
+                    </div>
+                    <!--end::Info-->
+                  </div>
+                </div>
+                <a
+                  *ngIf="jobPostData.controls['requirementDoc']?.value"
+                  class="border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between"
+                >
+                  <div
+                    class="text-truncate pspmw95"
+                    [ngbTooltip]="
+                      jobPostData.controls['requirementDoc'].value.name
+                    "
+                    [openDelay]="600"
+                  >
+                    {{ jobPostData.controls["requirementDoc"].value.name }}
+                  </div>
+                  <span class="cursor-pointer ms-3"
+                    ><i
+                      class="bi bi-x-circle"
+                      (click)="clearFile('requirementDoc')"
+                    ></i
+                  ></span>
+                </a>
+                <!--end::Dropzone-->
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
-            <button type="button" class="btn" (click)="cancelJobPost()">Cancel</button>
-            <button type="button" class="btn btn-light-primary" (click)="showConsent();">Save as Draft</button>
-            <button type="button" class="btn btn-primary" (click)="saveJob('active')">Submit</button>
-        </div>
 
+        <div class="mb-1">Other Documents</div>
+        <div class="fv-row mb-5">
+          <!--begin::Dropzone-->
+          <div
+            class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
+            DropZone
+            (onFileDropped)="droppedFiles($event)"
+            (click)="fileInputOther.click()"
+          >
+            <!--begin::Message-->
+            <div class="text-center w-100 text-muted">
+              <!--begin::Icon-->
+              <i class="fas fa-cloud-upload-alt fs-2x"></i>
+              <!--end::Icon-->
+              <!--begin::Info-->
+              <div class="ms-4">
+                <input
+                  type="file"
+                  hidden
+                  #fileInputOther
+                  (change)="selectFile($event, 'otherDocList')"
+                  (click)="clearFileInput($event)"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx"
+                />
+                <h3 class="fs-5 mb-1">
+                  <a class="text-primary">Click to upload </a> or Drop files
+                  here.
+                </h3>
+                <span class="fs-7 fw-semibold text-gray-400"
+                  >.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb); maximum
+                  6 files</span
+                >
+              </div>
+              <!--end::Info-->
+            </div>
+          </div>
+          <div
+            *ngIf="jobPostData.controls['otherDocList'].value"
+            class="d-flex flex-wrap"
+          >
+            <a
+              *ngFor="
+                let doc of jobPostData.controls['otherDocList'].value;
+                let index = index
+              "
+              class="me-3 mt-4 border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between mw-325px"
+            >
+              <div
+                class="text-truncate pspmw95"
+                [ngbTooltip]="doc.name"
+                [openDelay]="600"
+              >
+                {{ doc.name }}
+              </div>
+              <span class="cursor-pointer ms-3">
+                <i
+                  class="bi bi-x-circle"
+                  (click)="clearFileOther('otherDocList', index)"
+                ></i
+              ></span>
+            </a>
+          </div>
+          <!--end::Dropzone-->
+        </div>
+      </div>
+      <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
+        <button type="button" class="btn" (click)="cancelJobPost()">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-light-primary"
+          (click)="showConsent()"
+        >
+          Save as Draft
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="saveJob('active')"
+        >
+          Submit
+        </button>
+      </div>
     </div>
-</div>
+  </div>
 </form>

@@ -78,7 +78,7 @@ export class InvoicesDetailsComponent implements OnInit {
         })
       )
       .subscribe((response) => {
-        this.invoiceDetails = response.length ? response[0] : null;
+        this.invoiceDetails = response ? response.list[0] : null;
         if (this.invoiceDetails) {
           this.invoiceDetails.taxAmount = this.percentage(
             this.invoiceDetails?.totalAmount || 0,

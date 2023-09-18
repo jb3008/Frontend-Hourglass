@@ -74,8 +74,14 @@ export class AuthService implements OnDestroy {
 
   getUserByToken(): Observable<UserType> {
     const auth = this.getAuthFromLocalStorage();
+
     if (!auth || !auth.token) {
       return of(undefined);
+    }
+    if (!auth.vendorId) {
+      // if (window.location.href.indexOf('/hm/') === -1) {
+      //   return of(undefined);
+      // }
     }
 
     this.isLoadingSubject.next(true);

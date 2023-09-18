@@ -18,6 +18,7 @@ const EndPoints = {
   CREATE_JOB: '/hourglass/job-post/create.api',
   DRAFT_JOB: '/hourglass/job-post/saveDraftJobPost.api',
   LIST_JOBS: '/hourglass/job-post/list.api',
+  LIST_JOBS_PAGINATION: '/job-post/listJobPostPagination.api',
   GET_JOB_POST_COUNT: '/hourglass/job-post/getJobPostCounts.api',
   GET_JOB_DETAILS: '/hourglass/vendor/jobDetails.api',
   DOCUMENTS_LIST_JOB: '/hourglass/document/listJobPostDocuments',
@@ -31,6 +32,8 @@ const EndPoints = {
   APPLY_JOB_VENDOR: '/hourglass/vendor/createJobApplication.api',
   JOB_COUNTS: '/hourglass/job-post/getJobPostCounts.api',
   ALL_WORK_ORDERS: '/hourglass/work-order/listWorkOrders.api',
+  ALL_WORK_ORDERS_PAGINATION:
+    '/hourglass/work-order/listWorkOrdersWithPagination.api',
   ALL_WORK_ORDERS_COUNT: '/hourglass/work-order/getWorkOrdersCount.api',
   CREATE_WORK_ORDER: '/hourglass/work-order/create.api',
   // WORK_ORDER_STATUS: '/hourglass/work-order/listWorkOrderStatus',
@@ -83,6 +86,12 @@ const EndPoints = {
     '/hourglass/payment/invoice/uploadFilesForInvoice.api',
   REMOVE_TASK_FROM_TIMESHEET: '/hourglass/timesheet/removeTaskForTimeSheet.api',
   WORKORDER_NOTIFICATION: '/hourglass/work-order/notification/listInbox.api',
+  WORKORDER_NOTIFICATION_COUNT:
+    '/hourglass/work-order/notification/listInboxCount.api',
+  WORKORDER_NOTIFICATION_OUTBOX:
+    '/hourglass/work-order/notification/listOutbox.api',
+  WORKORDER_NOTIFICATION_OUTBOX_COUNT:
+    '/hourglass/work-order/notification/listOutboxCount.api',
   GET_TIMESHEET_STATUS: '/hourglass/common/listTimeSheetStatus.api',
   GET_TIMESHEET_LOGS: '/hourglass/audit-log/auditLogForTimeSheet.api',
   UPDATE_TIMESHEET_STATUS: '/hourglass/timesheet/updateTimeSheetStatus.api',
