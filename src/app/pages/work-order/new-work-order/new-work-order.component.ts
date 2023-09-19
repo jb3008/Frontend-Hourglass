@@ -85,7 +85,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       endDate: ['', Validators.required],
       timesheetFreq: ['Weekly (Default)', Validators.required],
       workHourInterval: ['', Validators.required],
-      workHours: ['', Validators.required],
+      workHours: ['1', Validators.required],
       costCenter: ['', Validators.required],
       payTerms: ['30', Validators.required],
       legalEntity: ['', Validators.required],

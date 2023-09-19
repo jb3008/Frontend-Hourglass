@@ -264,7 +264,7 @@ export class JobSeekerComponent implements OnInit {
         )
         .subscribe((response) => {
           if (this.loading) {
-            docData.append('jobApplicationId', response);
+            docData.append('jobApplicationId', response.jobAppId);
             this.apiCalls
               .post(this.endPoints.APPLY_JOB_VENDOR_DOCUMENT, docData)
               .pipe(

@@ -305,7 +305,7 @@
           />
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
-          {{ element.totalAmount }} {{ element.currency }}
+          {{ element.totalAmount | number : "1.2-2" }} {{ element.currency }}
         </td>
       </ng-container>
 

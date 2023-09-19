@@ -210,7 +210,9 @@
             <div class="align-middle">
               <span class="text-muted me-3 fw-semibold">Payable Amount</span>
               <span class="fs-1 fw-semibold text-body"
-                >{{ invoiceData.controls["totalAmount"].value }}
+                >{{
+                  invoiceData.controls["totalAmount"].value | number : "1.2-2"
+                }}
                 {{ invoiceData.controls["currency"].value }}</span
               >
             </div>
@@ -238,10 +240,7 @@
           <div
             class="mw-175px mh-45px border mt-3 d-flex align-items-center justify-content-center min-h-35px min-w-40px overflow-hidden"
           >
-            <img
-              src="./assets/images/smartdocs.jpeg"
-              class="mw-100 mh-100"
-            />
+            <img src="./assets/images/smartdocs.jpeg" class="mw-100 mh-100" />
           </div>
         </div>
 
@@ -274,7 +273,7 @@
                 <i class="bi"></i> Quantity
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
-                {{ element.timeSpent }}.0 Hr
+                {{ element.timeSpent | number : "1.1-2" }} Hr
               </td>
             </ng-container>
 
@@ -295,7 +294,7 @@
                 <i class="bi"></i> Amount
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
-                {{ element.amount }}
+                {{ element.amount | number : "1.2-2" }}
                 {{ invoiceData.controls["currency"].value }}
               </td>
             </ng-container>
@@ -324,7 +323,10 @@
             <div class="d-flex flex-stack mb-3 fs-7">
               <div class="fw-semibold pe-10 text-gray-600">SUB TOTAL</div>
               <div class="text-end fw-bo/ld text-gray-800">
-                {{ invoiceData.controls["subTotalAmount"].value }}
+                {{
+                  invoiceData.controls["subTotalAmount"].value
+                    | number : "1.2-2"
+                }}
                 {{ invoiceData.controls["currency"].value }}
               </div>
             </div>
@@ -355,7 +357,9 @@
             <div class="d-flex flex-stack mb-3 fs-6">
               <div class="fw-semibold pe-10 text-gray-600">TOTAL AMOUNT</div>
               <div class="text-end fw-bold text-gray-800">
-                {{ invoiceData.controls["totalAmount"].value }}
+                {{
+                  invoiceData.controls["totalAmount"].value | number : "1.2-2"
+                }}
                 {{ invoiceData.controls["currency"].value }}
               </div>
             </div>
@@ -451,7 +455,7 @@
         ></app-invoice-add-timesheet-drawer>
       </div>
       <div class="d-flex text-sm-end gap-md-5 justify-content-end p-10">
-        <button type="button" class="btn btn-sm" routerLink="/invoice">
+        <button type="button" class="btn btn-sm" routerLink="/invoices">
           Cancel
         </button>
 
