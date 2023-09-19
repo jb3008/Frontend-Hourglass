@@ -14,7 +14,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NewTaskDrawerComponent } from './work-order-details/new-task-drawer/new-task-drawer.component';
 import { SharedModule } from '../../shared.modules';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import {MatSortModule} from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 
 import { MatInputModule } from '@angular/material/input';
 
@@ -28,7 +28,6 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { EditWorkDrawerComponent } from './work-order-details/edit-work-drawer/edit-work-drawer.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
-
 @NgModule({
   declarations: [
     WorkOrderComponent,
@@ -37,8 +36,12 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     NewTaskDrawerComponent,
     WorkOrderNewTaskDrawerComponent,
     EditWorkDrawerComponent,
-
-
+  ],
+  exports: [
+    NewWorkOrderComponent,
+    NewTaskDrawerComponent,
+    WorkOrderNewTaskDrawerComponent,
+    EditWorkDrawerComponent,
   ],
   imports: [
     CommonModule,
@@ -62,11 +65,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatDialogModule,
     ModalsModule,
     NgxDocViewerModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
   ],
-  providers: [  
-    MatDatepickerModule,  
-    MatNativeDateModule
-  ],
+  providers: [MatDatepickerModule, MatNativeDateModule],
 })
-export class WorkOrderModule { }
+export class WorkOrderModule {}

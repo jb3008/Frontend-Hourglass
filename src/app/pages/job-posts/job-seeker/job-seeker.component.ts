@@ -108,7 +108,7 @@ export class JobSeekerComponent implements OnInit {
       )
       .subscribe((response) => {
         this.loading = false;
-        this.staffDetails = response;
+        this.staffDetails = response.list;
         this.cdr.detectChanges();
       });
   }
@@ -179,6 +179,7 @@ export class JobSeekerComponent implements OnInit {
 
   submitApplication() {
     const formData = new FormData();
+    const docData = new FormData();
     let workRateValue = this.applyJobData.controls['workRate'].value;
     this.applyJobData.controls['workRate'].setValue(
       workRateValue.replace(/,/g, '')
@@ -224,14 +225,14 @@ export class JobSeekerComponent implements OnInit {
               if (file && file?.length != 0) {
                 file.forEach((fileObj: File) => {
                   const blob = new Blob([fileObj], { type: fileObj.type });
-                  formData.append(key, blob, fileObj.name);
+                  docData.append(key, blob, fileObj.name);
                 });
               }
             } else {
               const file = this.applyJobData.get(key)?.value;
               if (file) {
                 const blob = new Blob([file], { type: file.type });
-                formData.append(key, blob, file.name);
+                docData.append(key, blob, file.name);
               }
             }
           }
@@ -249,8 +250,10 @@ export class JobSeekerComponent implements OnInit {
       formData.append('lastName', this.getWorkerDetails(workerId, 'lastName'));
       formData.append('workRateCurrency', this.jobDetails.currency);
 
+      const formDataObj: any = {};
+      formData.forEach((value, key) => (formDataObj[key] = value));
       this.apiCalls
-        .post(this.endPoints.APPLY_JOB_VENDOR, formData)
+        .post(this.endPoints.APPLY_JOB_VENDOR, formDataObj)
         .pipe(
           catchError(async (err) => {
             this.loading = false;
@@ -260,7 +263,26 @@ export class JobSeekerComponent implements OnInit {
           })
         )
         .subscribe((response) => {
-          this.openSuccessPopup();
+          if (this.loading) {
+            docData.append('jobApplicationId', response);
+            this.apiCalls
+              .post(this.endPoints.APPLY_JOB_VENDOR_DOCUMENT, docData)
+              .pipe(
+                catchError(async (err) => {
+                  this.loading = false;
+                  this.utils.showErrorDialog(this.dialog, err.msg);
+                  setTimeout(() => {
+                    throw err;
+                  }, 10);
+                  this.cdr.detectChanges();
+                })
+              )
+              .subscribe(async () => {
+                if (this.loading) {
+                  this.openSuccessPopup();
+                }
+              });
+          }
         });
     } else {
       this.utils.showSnackBarMessage(

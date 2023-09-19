@@ -330,6 +330,7 @@ export class WorkForceComponent implements OnInit {
     }
 
     const formData = new FormData();
+    const docData = new FormData();
     this.submitted = true;
 
     // stop here if form is invalid
@@ -361,16 +362,11 @@ export class WorkForceComponent implements OnInit {
         }
       }
     }
-    const file = this.workForceData.get('documentList')?.value;
-    if (file.length != 0) {
-      file.forEach((fileObj: File) => {
-        const blob = new Blob([fileObj], { type: fileObj.type });
-        formData.append('documentList', blob, fileObj.name);
-      });
-    }
 
+    const formDataObj: any = {};
+    formData.forEach((value, key) => (formDataObj[key] = value));
     this.apiCalls
-      .post(this.endPoints.CREATE_WORK_FORCE, formData)
+      .post(this.endPoints.CREATE_WORK_FORCE, formDataObj)
       .pipe(
         catchError(async (err) => {
           this.isLoading = false;
@@ -383,19 +379,15 @@ export class WorkForceComponent implements OnInit {
       )
       .subscribe(async (response) => {
         if (this.isLoading) {
-          if (this.profilePicDoc) {
-            const imageFormData = new FormData();
-            const blob = new Blob([this.profilePicDoc], {
-              type: this.profilePicDoc.type,
+          const file = this.workForceData.get('documentList')?.value;
+          if (file.length != 0) {
+            file.forEach((fileObj: File) => {
+              const blob = new Blob([fileObj], { type: fileObj.type });
+              docData.append('documentList', blob, fileObj.name);
             });
-            imageFormData.append(
-              'profilePicDoc',
-              blob,
-              this.profilePicDoc.name
-            );
-            imageFormData.append('workForceId', response);
+            docData.append('workForceId', response);
             this.apiCalls
-              .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
+              .post(this.endPoints.UPLOAD_WORK_FORCE_DOCUMENT, docData)
               .pipe(
                 catchError(async (err) => {
                   this.isLoading = false;
@@ -406,23 +398,93 @@ export class WorkForceComponent implements OnInit {
                   this.cdr.detectChanges();
                 })
               )
-              .subscribe(async (response) => {
-                this.isLoading = false;
-                await this.modalComponent.closeModal();
-                this.ngOnInit();
-                this.utils.showSnackBarMessage(
-                  this.snackBar,
-                  'Employee save successfully'
-                );
+              .subscribe(async () => {
+                if (this.isLoading) {
+                  if (this.profilePicDoc) {
+                    const imageFormData = new FormData();
+                    const blob = new Blob([this.profilePicDoc], {
+                      type: this.profilePicDoc.type,
+                    });
+                    imageFormData.append(
+                      'profilePicDoc',
+                      blob,
+                      this.profilePicDoc.name
+                    );
+                    imageFormData.append('workForceId', response);
+                    this.apiCalls
+                      .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
+                      .pipe(
+                        catchError(async (err) => {
+                          this.isLoading = false;
+                          setTimeout(() => {
+                            throw err;
+                          }, 10);
+                          this.utils.showErrorDialog(this.dialog, err);
+                          this.cdr.detectChanges();
+                        })
+                      )
+                      .subscribe(async (response) => {
+                        this.isLoading = false;
+                        await this.modalComponent.closeModal();
+                        this.ngOnInit();
+                        this.utils.showSnackBarMessage(
+                          this.snackBar,
+                          'Employee save successfully'
+                        );
+                      });
+                  } else {
+                    this.isLoading = false;
+                    await this.modalComponent.closeModal();
+                    this.ngOnInit();
+                    this.utils.showSnackBarMessage(
+                      this.snackBar,
+                      'Employee save successfully'
+                    );
+                  }
+                }
               });
           } else {
-            this.isLoading = false;
-            await this.modalComponent.closeModal();
-            this.ngOnInit();
-            this.utils.showSnackBarMessage(
-              this.snackBar,
-              'Employee save successfully'
-            );
+            if (this.profilePicDoc) {
+              const imageFormData = new FormData();
+              const blob = new Blob([this.profilePicDoc], {
+                type: this.profilePicDoc.type,
+              });
+              imageFormData.append(
+                'profilePicDoc',
+                blob,
+                this.profilePicDoc.name
+              );
+              imageFormData.append('workForceId', response);
+              this.apiCalls
+                .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
+                .pipe(
+                  catchError(async (err) => {
+                    this.isLoading = false;
+                    setTimeout(() => {
+                      throw err;
+                    }, 10);
+                    this.utils.showErrorDialog(this.dialog, err);
+                    this.cdr.detectChanges();
+                  })
+                )
+                .subscribe(async (response) => {
+                  this.isLoading = false;
+                  await this.modalComponent.closeModal();
+                  this.ngOnInit();
+                  this.utils.showSnackBarMessage(
+                    this.snackBar,
+                    'Employee save successfully'
+                  );
+                });
+            } else {
+              this.isLoading = false;
+              await this.modalComponent.closeModal();
+              this.ngOnInit();
+              this.utils.showSnackBarMessage(
+                this.snackBar,
+                'Employee save successfully'
+              );
+            }
           }
         }
       });

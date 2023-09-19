@@ -31,12 +31,16 @@ const EndPoints = {
   UPDATE_APPL_STATUS: '/hourglass/job-application/updateStatus',
   GET_USER: '/hourglass/user/getUserByUserId',
   APPLY_JOB_VENDOR: '/hourglass/vendor/createJobApplication.api',
+  APPLY_JOB_VENDOR_DOCUMENT:
+    '/hourglass/vendor/uploadFilesForJobApplication.api',
   JOB_COUNTS: '/hourglass/job-post/getJobPostCounts.api',
   ALL_WORK_ORDERS: '/hourglass/work-order/listWorkOrders.api',
   ALL_WORK_ORDERS_PAGINATION:
     '/hourglass/work-order/listWorkOrdersWithPagination.api',
   ALL_WORK_ORDERS_COUNT: '/hourglass/work-order/getWorkOrdersCount.api',
   CREATE_WORK_ORDER: '/hourglass/work-order/create.api',
+  CREATE_WORK_ORDER_DOCUMENT:
+    '/hourglass/work-order/uploadFilesForWorkOrder.api',
   // WORK_ORDER_STATUS: '/hourglass/work-order/listWorkOrderStatus',
   WORK_ORDER_STATUS: '/hourglass/work-order/listWorkOrderStatusWithCode',
   GET_VENDORS_LIST: '/hourglass/common/rest/vendor/search.api',
@@ -57,7 +61,7 @@ const EndPoints = {
   GET_WORK_FORCE: '/hourglass/work-force/getWorkForceDetails.api',
   TASK_LIST_HM: '/hourglass/task/listTasks.api',
   CREATE_TASK: '/hourglass/task/create.api',
-  CREATE_TASK_DOCUMENT: 'hourglass/task/uploadFilesForTasks.api',
+  CREATE_TASK_DOCUMENT: '/hourglass/task/uploadFilesForTasks.api',
   UPDATE_TASK: '/hourglass/task/updateTask.api',
   DELETE_TASK: '/hourglass/task/delete.api',
   GET_VENDOR_DETAILS: '/hourglass/vendor/getVendorDetails.api',

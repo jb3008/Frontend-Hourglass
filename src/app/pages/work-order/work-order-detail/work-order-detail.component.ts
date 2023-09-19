@@ -76,8 +76,9 @@ export class WorkOrderDetailComponent implements OnInit {
     priority: 'All Priorities',
     status: 'All Status',
   } as FilterValue;
-
+  auth: any;
   ngOnInit(): void {
+    this.auth = this.utils.getAuth();
     this.route.queryParams.subscribe((param) => {
       this.workOrderID = param['workOrderId'];
       if (param['from'] == 'inbox') {
@@ -162,6 +163,7 @@ export class WorkOrderDetailComponent implements OnInit {
   getTaskList(obj: any) {
     this.loading = true;
     this.apiLoad = false;
+    obj.workOrderId = this.workOrderID;
     this.apiCalls
       .get(this.endpoints.TASK_LIST_HM, obj)
       .pipe(
@@ -186,6 +188,7 @@ export class WorkOrderDetailComponent implements OnInit {
     this.loading = true;
     let queryObj = {
       taskId: id,
+      workOrderId: this.workOrderID,
     };
     this.apiCalls
       .get(this.endpoints.TASK_LIST_HM, queryObj)

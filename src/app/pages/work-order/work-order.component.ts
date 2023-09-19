@@ -59,7 +59,7 @@ export class WorkOrderComponent implements OnInit {
     startDate: '',
     endDate: '',
   };
-
+  auth: any;
   pageSize = 10;
   currentPage = 0;
   totalWorkOrderCount = 0;
@@ -89,6 +89,7 @@ export class WorkOrderComponent implements OnInit {
 
   ngAfterViewInit() {
     this.apiLoad = false;
+    this.auth = this.utils.getAuth();
     this.route.queryParams.subscribe((param) => {
       this.sort.sortChange.subscribe(() => {
         this.sortBy = this.sort.active;

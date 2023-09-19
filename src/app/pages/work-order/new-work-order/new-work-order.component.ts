@@ -788,6 +788,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
 
   getTaskList(obj?: any) {
     this.isLoading = true;
+
     this.apiCalls
       .get(this.endpoints.TASK_LIST_HM, obj)
       .pipe(

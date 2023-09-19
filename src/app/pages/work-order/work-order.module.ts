@@ -21,15 +21,19 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSortModule } from '@angular/material/sort';
+import { NewWorkOrderComponent } from './new-work-order/new-work-order.component';
+import { WorkOrderNewTaskDrawerComponent } from './new-work-order/work-order-new-task-drawer/work-order-new-task-drawer.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @NgModule({
   declarations: [
     WorkOrderComponent,
     WorkOrderDetailComponent,
-
+    NewWorkOrderComponent,
     NewTaskRecrDrawerComponent,
     AddInvoiceDrawerComponent,
     TimesheetLogsComponent,
+    WorkOrderNewTaskDrawerComponent,
   ],
   imports: [
     CommonModule,
@@ -38,6 +42,7 @@ import { MatSortModule } from '@angular/material/sort';
     WorkOrderRoutingModule,
     SharedModule,
     InlineSVGModule,
+    CKEditorModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatTableModule,
