@@ -68,7 +68,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   jobPostCntrl = new FormControl();
   costCenterCntrl = new FormControl();
   payTermsCntrl = new FormControl();
-
+  todayDate: any = new Date();
   @ViewChild('siteSelect') siteSelect: MatSelect;
 
   ngOnInit(): void {
@@ -168,6 +168,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       }
       let searchData = data.toLowerCase();
       let filteredData = jobDetail.includes(searchData);
+
       return filteredData;
     });
   }
@@ -276,6 +277,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
         map((value) => this.showSearchResultForVendor(value))
       );
     } else if (key == 'jobPostId') {
+      this.jobPostCntrl.setValue({ id: '', title: 'NA' });
       this.joblistsSearchResult = this.jobPostCntrl.valueChanges.pipe(
         startWith(''),
         map((value) => this.showSearchResultFoJobPost(value))

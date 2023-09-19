@@ -53,6 +53,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
   assigneeSearch: MatAutocompleteTrigger;
 
   ngOnInit(): void {
+    console.log('CALLED');
     this.assigneeCntrl.setValue(null);
     this.route.queryParams.subscribe((param) => {
       this.workOrderID = param['workOrderId'];
@@ -125,6 +126,11 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
   setAssigneeValue(event: any) {
     let value = event.option.value.userId;
     this.taskData.controls['assigneeId'].setValue(value);
+  }
+  clearAssigneeValue() {
+    this.assigneeCntrl.setValue(null);
+    this.taskData.controls['assigneeId'].setValue('');
+    this.cdr.detectChanges();
   }
 
   getAssigneeList() {

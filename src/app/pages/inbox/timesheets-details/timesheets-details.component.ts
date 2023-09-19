@@ -60,6 +60,7 @@ export class TimesheetDetailComponent implements OnInit, AfterViewInit {
     this.route.queryParams.subscribe((param) => {
       this.queryParamData = param;
       this.auth = this.utils.getAuth();
+      console.log(this.auth);
       if (this.router.url.includes('inbox-timesheets-details')) {
         this.isInbox = true;
       } else {

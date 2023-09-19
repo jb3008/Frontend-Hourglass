@@ -175,9 +175,10 @@ export class InboxApproveDrawerComponent implements OnInit {
         }
       }
     }
-
+    const formDataObj: any = {};
+    formData.forEach((value, key) => (formDataObj[key] = value));
     this.apiCalls
-      .post(this.endPoints.UPDATE_TIMESHEET_STATUS, formData)
+      .post(this.endPoints.UPDATE_TIMESHEET_STATUS, formDataObj)
       .pipe(
         catchError(async (err) => {
           this.isLoading = false;

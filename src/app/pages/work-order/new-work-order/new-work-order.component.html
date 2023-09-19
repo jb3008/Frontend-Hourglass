@@ -332,11 +332,13 @@
                   [displayWith]="displayFnJobPost"
                   (optionSelected)="setJobPostValue($event)"
                 >
+                  <mat-option [value]="{ id: '', title: 'NA' }">NA</mat-option>
                   <mat-option
                     *ngFor="let list of joblistsSearchResult | async"
                     [value]="list"
                   >
-                    {{ list.id }} - {{ list.title }}
+                    {{ list.id }}
+                    - {{ list.title }}
                   </mat-option>
                 </mat-autocomplete>
                 <!-- <mat-select formControlName="jobPostId" placeholder="Select" class="form-select fs- py-2" (selectionChange)="getJobDetails($event.value)">
@@ -363,6 +365,7 @@
                     [matDatepicker]="picker"
                     placeholder="Start Date"
                     [max]="workOrderData.controls['endDate'].value"
+                    [min]="todayDate"
                     readonly
                   />
                   <span class="cursor-pointer" (click)="picker.open()"

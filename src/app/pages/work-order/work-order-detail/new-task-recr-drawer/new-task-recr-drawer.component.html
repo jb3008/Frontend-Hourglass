@@ -1,10 +1,12 @@
-<div *ngIf="isLoading" class="pause d-flex align-items-center justify-content-center">
+<div
+  *ngIf="isLoading"
+  class="pause d-flex align-items-center justify-content-center"
+>
   <div class="spinner"></div>
 </div>
 
 <form [formGroup]="taskData">
   <div
-
     id="kt_new_task_recr_drawerq"
     class="bg-body"
     data-kt-drawer="true"
@@ -18,140 +20,259 @@
   >
     <div class="card shadow-none rounded-0">
       <button
-      type="button"
-    class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
-      id="kt_new_task_recr_close"
-      (click)="taskData.reset()"
-    >
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
-        class="svg-icon svg-icon-1"
-      ></span>
-    </button>
-      <div class="d-flex justify-content-between px-7" >
-      <div>
-        <h3 class="card-title fw-bolder text-dark mt-4  " *ngIf="!taskDetails"> Task Creation</h3>
-        <h3 class="card-title fw-bolder text-dark mt-4  " *ngIf="taskDetails"> Task Update</h3>
-        <div> 
-          Specific activities or assignments to be completed withini a proect or worklow, ensuring clear objectives and responsibilities.
+        type="button"
+        class="btn btn-sm btn-icon btn-light-primary border pspdrawerclose"
+        id="kt_new_task_recr_close"
+        (click)="taskData.reset()"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+          class="svg-icon svg-icon-1"
+        ></span>
+      </button>
+      <div class="d-flex justify-content-between px-7">
+        <div>
+          <h3 class="card-title fw-bolder text-dark mt-4" *ngIf="!taskDetails">
+            Task Creation
+          </h3>
+          <h3 class="card-title fw-bolder text-dark mt-4" *ngIf="taskDetails">
+            Task Update
+          </h3>
+          <div>
+            Specific activities or assignments to be completed withini a proect
+            or worklow, ensuring clear objectives and responsibilities.
+          </div>
         </div>
       </div>
-        
+
+      <div class="card-body position-relative" id="kt_activities_body">
+        <div class="form-group mb-5">
+          <label class="mb-1"
+            >Task Title <span class="text-danger">*</span></label
+          >
+          <input
+            type="input"
+            class="form-control py-2 fs- fw-normal"
+            placeholder="Task Title"
+            formControlName="title"
+          />
+        </div>
+        <div class="form-group mb-5">
+          <label class="mb-1">Assignee<span class="text-danger">*</span></label>
+          <div class="d-flex align-items-center position-relative">
+            <div class="position-relative w-100">
+              <input
+                type="text"
+                class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
+                placeholder="Select"
+                [formControl]="assigneeCntrl"
+                [matAutocomplete]="auto"
+                #assigneeSearch
+                (input)="
+                  assigneeSearch.value
+                    ? ''
+                    : taskData.controls['assigneeId'].setValue('')
+                "
+              />
+              <i
+                class="bi bi-x-lg text-active-primary inp-x cursor-pointer"
+                *ngIf="assigneeSearch.value"
+                (click)="clearAssigneeValue()"
+              ></i>
+            </div>
+            <a
+              class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"
+              ><i class="bi bi-search"></i
+            ></a>
+            <i
+              class="bi bi-info-circle-fill fs-4 cursor-pointer dd-info-btn2"
+              ngbTooltip="You can type or search or pick the record from search button"
+            ></i>
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              [displayWith]="displayFn"
+              (optionSelected)="setAssigneeValue($event)"
+            >
+              <mat-option
+                *ngFor="let assignee of assigneeFilteredList | async"
+                [value]="assignee"
+              >
+                {{ assignee.firstName }} {{ assignee.lastName }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
         </div>
 
-      <div class="card-body position-relative "  id="kt_activities_body">
-          <div class="form-group  mb-5">
-              <label class="mb-1">Task Title <span class="text-danger">*</span></label>
-              <input type="input" class="form-control py-2 fs- fw-normal"
-              placeholder="Task Title" formControlName="title">
+        <div class="form-group mb-5">
+          <label class="mb-1">Priority<span class="text-danger">*</span></label>
+          <mat-select
+            formControlName="priority"
+            class="form-select fs- py-2"
+            placeholder="Select"
+          >
+            <mat-option value="Low">Low</mat-option>
+            <mat-option value="Medium">Medium</mat-option>
+            <mat-option value="High">High</mat-option>
+          </mat-select>
+          <label class="mb-1" *ngIf="taskDetails"
+            >Status<span class="text-danger">*</span></label
+          >
+          <mat-select
+            *ngIf="taskDetails"
+            formControlName="status"
+            class="form-select fs- py-2"
+            placeholder="Select"
+          >
+            <mat-option value="IN_PROGRESS">IN_PROGRESS</mat-option>
+            <mat-option value="COMPLETED">COMPLETED</mat-option>
+          </mat-select>
+        </div>
+
+        <div class="form-group mb-5 d-flex align-items-center">
+          <label class="mb-1 col-3"
+            >Estimates (in hr) <span class="text-danger">*</span></label
+          >
+          <input
+            type="input"
+            formControlName="estimatedTime"
+            class="form-control w-50 me-3 py-2 fs- fw-normal"
+            placeholder="Estimated Time"
+          />
+          <div class="py-2 fs- fw-normal">Hour</div>
+        </div>
+
+        <div
+          class="form-group d-flex justify-content-between align-items-center gap-3 mb-5"
+        >
+          <label class="col-2"
+            >Start Date <span class="text-danger">*</span></label
+          >
+          <div
+            class="input-icon position-relative min-w-120px input-icon-right"
+          >
+            <input
+              type="text"
+              formControlName="startDate"
+              class="form-control cursor-pointer py-2 fs- fw-normal"
+              (click)="picker1.open()"
+              [matDatepicker]="picker1"
+              placeholder="Start Date"
+            />
+            <span class="cursor-pointer" (click)="picker1.open()"
+              ><i class="far fa-calendar"></i
+            ></span>
+            <mat-datepicker #picker1></mat-datepicker>
           </div>
-          <div class="form-group  mb-5">
-              <label class="mb-1">Assignee<span class="text-danger">*</span></label>
-              <div class="d-flex align-items-center position-relative">
-                <div class="position-relative w-100">
-                <input type="text" class="form-control form-select cursor-pointer py-2 fw-normal pe-18 rounded-end-0"
-                          placeholder="Select"
-                          [formControl]="assigneeCntrl"
-                          [matAutocomplete]="auto"
-                          #assigneeSearch
-                          (input)="assigneeSearch.value ? '' : taskData.controls['assigneeId'].setValue('');">
-                          <i class="bi bi-x-lg text-active-primary inp-x cursor-pointer" *ngIf="assigneeSearch.value"
-                              (click)="assigneeSearch.value ? '' : taskData.controls['assigneeId'].setValue('');"></i>
-  
-                          </div>
-                           <a class="btn btn-primary btn-sm btn-icon cursor-pointer px-5 rounded-start-0"><i class="bi bi-search"></i></a>
-                   <i class="bi bi-info-circle-fill   fs-4 cursor-pointer dd-info-btn2" ngbTooltip="You can type or search or pick the record from search button"></i>
-                   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="setAssigneeValue($event)">
-                      <mat-option *ngFor="let assignee of assigneeFilteredList | async" [value]="assignee">
-                                   {{assignee.firstName}} {{assignee.lastName}}
-                      </mat-option>
-                    </mat-autocomplete>
-              </div>
+
+          <label class="min-w-150px"
+            >Excepted to Finish on <span class="text-danger">*</span></label
+          >
+          <div
+            class="input-icon position-relative min-w-120px input-icon-right"
+          >
+            <input
+              type="text"
+              formControlName="expectedFinishDate"
+              class="form-control cursor-pointer py-2 fs- fw-normal"
+              (click)="picker2.open()"
+              [matDatepicker]="picker2"
+              placeholder="End Date"
+            />
+            <span class="cursor-pointer" (click)="picker2.open()"
+              ><i class="far fa-calendar"></i
+            ></span>
+            <mat-datepicker #picker2></mat-datepicker>
           </div>
+        </div>
 
-          <div class="form-group  mb-5">
-            <label class="mb-1">Priority<span class="text-danger">*</span></label>
-              <mat-select formControlName="priority" class="form-select fs- py-2" placeholder="Select">
-                <mat-option value="Low">Low</mat-option>
-                <mat-option value="Medium">Medium</mat-option>
-                <mat-option value="High">High</mat-option>
-            </mat-select>
-            <label class="mb-1" *ngIf="taskDetails">Status<span class="text-danger">*</span></label>
-              <mat-select *ngIf="taskDetails" formControlName="status" class="form-select fs- py-2" placeholder="Select">
-                <mat-option value="IN_PROGRESS">IN_PROGRESS</mat-option>
-                <mat-option value="COMPLETED">COMPLETED</mat-option>
-            </mat-select>
-          </div>
+        <div class="form-group mb-5">
+          <label class="mb-1"
+            >Comments <span class="text-danger">*</span></label
+          >
+          <textarea
+            formControlName="comments"
+            name=""
+            id=""
+            cols="30"
+            rows="3"
+            class="form-control py-2 fs- fw-normal"
+            placeholder="Give some comments here..."
+          ></textarea>
+        </div>
 
-          <div class="form-group  mb-5 d-flex align-items-center">
-            <label class="mb-1 col-3">Estimates (in hr) <span class="text-danger">*</span></label>
-            <input type="input" formControlName="estimatedTime" class="form-control w-50 me-3 py-2 fs- fw-normal" placeholder="Estimated Time">
-            <div class="py-2 fs- fw-normal" >Hour</div>
-          </div>
+        <div class="fw-bold mb-5">
+          Attachments <span class="text-danger">*</span>
+        </div>
 
-          <div class="form-group d-flex justify-content-between align-items-center gap-3 mb-5">
-              <label class="col-2">Start Date <span class="text-danger">*</span></label>
-                  <div class="input-icon position-relative min-w-120px input-icon-right">
-
-                      <input type="text" formControlName="startDate" class="form-control cursor-pointer  py-2 fs- fw-normal" (click)="picker1.open()"
-                  [matDatepicker]="picker1" placeholder="Start Date">
-              <span class="cursor-pointer" (click)="picker1.open()"><i class="far fa-calendar"></i></span>
-              <mat-datepicker #picker1></mat-datepicker>
-              </div>
-
-              <label class="min-w-150px">Excepted to Finish on <span class="text-danger">*</span></label>
-                  <div class="input-icon position-relative min-w-120px input-icon-right">
-
-                      <input type="text" formControlName="expectedFinishDate" class="form-control cursor-pointer  py-2 fs- fw-normal" (click)="picker2.open()"
-                  [matDatepicker]="picker2" placeholder="End Date">
-              <span class="cursor-pointer" (click)="picker2.open()"><i class="far fa-calendar"></i></span>
-              <mat-datepicker #picker2></mat-datepicker>
-              </div>
-      </div>
-
-      <div class="form-group  mb-5">
-          <label class="mb-1">Comments <span class="text-danger">*</span></label>
-      <textarea formControlName="comments" name="" id="" cols="30" rows="3" class="form-control py-2 fs- fw-normal" placeholder="Give some comments here..."></textarea>
-
-      </div>
-
-    <div class="fw-bold mb-5 ">Attachments <span class="text-danger">*</span></div>
-
-      <div class="fv-row mb-5 ">
+        <div class="fv-row mb-5">
           <!--begin::Dropzone-->
-          <div class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
-          (click)="fileInput.click()" (change)="selectFile($event)" (click)="clearFileInput($event)">
-              <!--begin::Message-->
-              <div class=" text-center w-100 text-muted">
-                  <!--begin::Icon-->
-                  <i class="fas fa-cloud-upload-alt  fs-2x"></i> <!--end::Icon-->
-                  <!--begin::Info-->
-                  <div class="ms-4">
-                    <input type="file" hidden #fileInput accept=".pdf,.doc,.docx,.xls,.xlsx">
-                      <h3 class="fs-5 mb-1"> <a class=" text-primary ">Click to upload </a> or Drop files
-                          here.</h3>
-                      <span class="fs-7 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size  less than 2mb)</span>
-                  </div>
-                  <!--end::Info-->
+          <div
+            class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
+            (click)="fileInput.click()"
+            (change)="selectFile($event)"
+            (click)="clearFileInput($event)"
+          >
+            <!--begin::Message-->
+            <div class="text-center w-100 text-muted">
+              <!--begin::Icon-->
+              <i class="fas fa-cloud-upload-alt fs-2x"></i>
+              <!--end::Icon-->
+              <!--begin::Info-->
+              <div class="ms-4">
+                <input
+                  type="file"
+                  hidden
+                  #fileInput
+                  accept=".pdf,.doc,.docx,.xls,.xlsx"
+                />
+                <h3 class="fs-5 mb-1">
+                  <a class="text-primary">Click to upload </a> or Drop files
+                  here.
+                </h3>
+                <span class="fs-7 fw-semibold text-gray-400"
+                  >.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb)</span
+                >
               </div>
+              <!--end::Info-->
+            </div>
           </div>
-          <div *ngIf="taskData.controls['documentList'].value" class="d-flex flex-wrap ">
-            <a *ngFor="let doc of taskData.controls['documentList'].value; let index = index" class="me-3 mt-4 border rounded-1 py-1 px-3  text-active-primary">
-                   {{doc.name}}
-                   <span class="cursor-pointer ms-3 ">
-                    <i class="bi bi-x-circle" (click)="clearFile(index)"></i></span>
+          <div
+            *ngIf="taskData.controls['documentList'].value"
+            class="d-flex flex-wrap"
+          >
+            <a
+              *ngFor="
+                let doc of taskData.controls['documentList'].value;
+                let index = index
+              "
+              class="me-3 mt-4 border rounded-1 py-1 px-3 text-active-primary"
+            >
+              {{ doc.name }}
+              <span class="cursor-pointer ms-3">
+                <i class="bi bi-x-circle" (click)="clearFile(index)"></i
+              ></span>
             </a>
-         </div>
+          </div>
           <!--end::Dropzone-->
+        </div>
       </div>
-
-
-
-
-      </div>
-      <div class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_new_task_recr_footer">
-        <button type="button" (click)="taskData.reset()" class="btn  btn-sm btn-outline" id="kt_new_task_recr_close">Cancel</button>
-        <button type="button" class="btn  btn-sm btn-primary" (click)="submitTask()">
+      <div
+        class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10"
+        id="kt_new_task_recr_footer"
+      >
+        <button
+          type="button"
+          (click)="taskData.reset()"
+          class="btn btn-sm btn-outline"
+          id="kt_new_task_recr_close"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-primary"
+          (click)="submitTask()"
+        >
           <span *ngIf="!taskDetails">Submit</span>
           <span *ngIf="taskDetails">Update</span>
         </button>
