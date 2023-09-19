@@ -433,6 +433,12 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/job-posts/details'], {
       queryParams: {
         jobId: elementId,
+        tab:
+          this.reqParam.status == 'APPLIED'
+            ? 'AppliedJob'
+            : this.reqParam.status == 'CONFIRMED'
+            ? 'ConfirmedJob'
+            : 'newJob',
       },
     });
   }
