@@ -86,6 +86,7 @@ export class NewInvoiceComponent implements OnInit {
     });
     this.getAllPaymentTerms();
     this.getAllWorkOrders();
+    this.invoiceData.controls['subTotalAmount'].disable();
   }
 
   scrollEvent = (event: any): void => {
@@ -114,7 +115,8 @@ export class NewInvoiceComponent implements OnInit {
       this.invoiceData.controls['totalAmount'].setValue(0);
       this.selectedTask = [];
       this.dataSource = new MatTableDataSource<any>([]);
-      this.selectedWorkOrder = [];
+      this.selectedWorkOrder = null;
+      this.invoiceData.controls['subTotalAmount'].disable();
       this.cdr.detectChanges();
     }
 
@@ -169,6 +171,7 @@ export class NewInvoiceComponent implements OnInit {
     this.selectedTask = [];
     this.dataSource = new MatTableDataSource<any>([]);
     this.selectedWorkOrder = workOrder;
+
     this.cdr.detectChanges();
   }
   displayFnWorkOrder(workOrder: any): string {
@@ -251,7 +254,7 @@ export class NewInvoiceComponent implements OnInit {
     const paymentTerms = this.paymentTerms.find(
       (r: any) => r.id == workOrder.payRate
     );
-    console.log(paymentTerms, workOrder.payRate);
+
     this.invoiceData.controls['paymentTerms'].setValue(
       `(${workOrder.payRate}) ` + paymentTerms?.name
     );
@@ -275,6 +278,12 @@ export class NewInvoiceComponent implements OnInit {
     this.selectedTask = [];
     this.dataSource = new MatTableDataSource<any>([]);
     this.selectedWorkOrder = workOrder;
+    console.log(workOrder.kind);
+    if (workOrder && workOrder.kind === 'Fixed') {
+      this.invoiceData.controls['subTotalAmount'].enable();
+    } else {
+      this.invoiceData.controls['subTotalAmount'].disable();
+    }
     this.cdr.detectChanges();
   }
 
@@ -410,61 +419,56 @@ export class NewInvoiceComponent implements OnInit {
           subTotal += rate;
         }
       }
-      this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
-      const totalTax = this.percentage(
-        parseInt(this.invoiceData.controls['taxPercentage'].value),
-        subTotal
-      );
 
+      const totalTax: any = this.invoiceData.controls['taxPercentage'].value
+        ? this.percentage(
+            parseInt(this.invoiceData.controls['taxPercentage'].value),
+            subTotal
+          )
+        : 0;
+
+      this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
       this.invoiceData.controls['totalAmount'].setValue(
         parseFloat(totalTax) + subTotal
       );
 
+      if (this.selectedWorkOrder && this.selectedWorkOrder.kind === 'Fixed') {
+        this.invoiceData.controls['subTotalAmount'].enable();
+      } else {
+        this.invoiceData.controls['subTotalAmount'].disable();
+      }
       this.dataSource = new MatTableDataSource<any>(this.selectedTask);
     }
     this.cdr.detectChanges();
   }
-  onTaxChange(): void {
-    let subTotal = 0;
-    if (this.invoiceData.controls['taxPercentage'].value) {
-      for (let index = 0; index < this.selectedTask.length; index++) {
-        const element = this.selectedTask[index];
-        element.timeSpent = element.timeSpent ? parseInt(element.timeSpent) : 0;
-        const rate = this.selectedWorkOrder.rate
-          ? this.selectedWorkOrder.rate
-          : 0;
-
-        subTotal =
-          this.selectedWorkOrder.kind?.toLowerCase() === 'hourly'
-            ? element.timeSpent * rate
-            : rate;
-      }
-      this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
-      const totalTax = this.percentage(
-        parseInt(this.invoiceData.controls['taxPercentage'].value),
-        subTotal
-      );
-
+  changedAmount(value: any) {
+    if (value.target.value) {
+      const subTotal = parseInt(value.target.value);
+      const totalTax: any = this.invoiceData.controls['taxPercentage'].value
+        ? this.percentage(
+            parseInt(this.invoiceData.controls['taxPercentage'].value),
+            subTotal
+          )
+        : 0;
       this.invoiceData.controls['totalAmount'].setValue(
         parseFloat(totalTax) + subTotal
       );
-    } else {
-      for (let index = 0; index < this.selectedTask.length; index++) {
-        const element = this.selectedTask[index];
-        element.timeSpent = element.timeSpent ? parseInt(element.timeSpent) : 0;
-        const rate = this.selectedWorkOrder.rate
-          ? this.selectedWorkOrder.rate
-          : 0;
-
-        subTotal =
-          this.selectedWorkOrder.kind?.toLowerCase() === 'hourly'
-            ? element.timeSpent * rate
-            : rate;
-      }
-      this.invoiceData.controls['taxPercentage'].setValue(0);
-      this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
-      this.invoiceData.controls['totalAmount'].setValue(subTotal);
+      this.cdr.detectChanges();
     }
+  }
+  onTaxChange(): void {
+    const subTotal = this.invoiceData.controls['subTotalAmount'].value;
+    const totalTax: any = this.invoiceData.controls['taxPercentage'].value
+      ? this.percentage(
+          parseInt(this.invoiceData.controls['taxPercentage'].value),
+          subTotal
+        )
+      : 0;
+    this.invoiceData.controls['totalAmount'].setValue(
+      parseFloat(totalTax) + parseFloat(subTotal)
+    );
+
+    this.cdr.detectChanges();
   }
   percentage(percent: number, total: number) {
     return ((percent / 100) * total).toFixed(2);

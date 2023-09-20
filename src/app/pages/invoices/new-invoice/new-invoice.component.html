@@ -181,8 +181,8 @@
                   type="input"
                   class="form-control w-150px py-2 rounded-end-0 fw-normal"
                   placeholder="Number"
-                  formControlName="totalAmount"
-                  readonly
+                  formControlName="subTotalAmount"
+                  (keyup)="changedAmount($event)"
                 />
 
                 <mat-select
@@ -195,7 +195,13 @@
                   <mat-option value="USD">USD</mat-option>
                   <mat-option value="INR">INR</mat-option>
                 </mat-select>
-                <span class="text-muted ps-2">Per Hour</span>
+                <span
+                  class="text-muted ps-2"
+                  *ngIf="
+                    !selectedWorkOrder || selectedWorkOrder.kind !== 'Fixed'
+                  "
+                  >Per Hour</span
+                >
               </div>
             </div>
           </div>
