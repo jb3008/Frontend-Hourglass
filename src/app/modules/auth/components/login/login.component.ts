@@ -17,8 +17,8 @@ import EndPoints from 'src/app/common/endpoints';
 export class LoginComponent implements OnInit, OnDestroy {
   // KeenThemes mock, change it to:
   defaultAuth: any = {
-    userId: 'user-1',
-    password: '123456',
+    userId: '',
+    password: '',
   };
   loginForm: FormGroup;
   hasError: boolean;

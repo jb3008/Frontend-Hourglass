@@ -433,7 +433,7 @@
         >
         <app-new-task-recr-drawer
           #taskdrawer
-          [vendorId]="workOrderDetails?.managerDetails?.vendorId"
+          [vendorId]="workOrderDetails?.vendorId"
           [taskDetails]="taskDetails"
           (getList)="
             getTaskList({ workOrderId: workOrderDetails?.workOrderId })
