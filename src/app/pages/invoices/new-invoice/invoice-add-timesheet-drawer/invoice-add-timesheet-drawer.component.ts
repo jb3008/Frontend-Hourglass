@@ -107,8 +107,8 @@ export class InvoiceAddTimesheetDrawerComponent implements OnInit {
         })
       )
       .subscribe((response) => {
-        for (let index = 0; index < response.length; index++) {
-          const element = response[index];
+        for (let index = 0; index < response.list.length; index++) {
+          const element = response.list[index];
           element.timeSpent = 0;
 
           for (let i = 0; i < element.taskListDetails.length; i++) {
