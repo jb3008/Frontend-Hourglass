@@ -415,6 +415,7 @@ export class WorkForceComponent implements OnInit {
                       .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
                       .pipe(
                         catchError(async (err) => {
+                          console.log(err);
                           this.isLoading = false;
                           setTimeout(() => {
                             throw err;
@@ -459,6 +460,7 @@ export class WorkForceComponent implements OnInit {
                 .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
                 .pipe(
                   catchError(async (err) => {
+                    console.log(err);
                     this.isLoading = false;
                     setTimeout(() => {
                       throw err;
@@ -850,6 +852,8 @@ export class WorkForceComponent implements OnInit {
                       .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
                       .pipe(
                         catchError(async (err) => {
+                          console.log(err);
+
                           this.isLoading = false;
                           setTimeout(() => {
                             throw err;
@@ -894,6 +898,7 @@ export class WorkForceComponent implements OnInit {
                 .post(this.endPoints.UPLOAD_WORK_FORCE_PIC, imageFormData)
                 .pipe(
                   catchError(async (err) => {
+                    console.log(err);
                     this.isLoading = false;
                     setTimeout(() => {
                       throw err;

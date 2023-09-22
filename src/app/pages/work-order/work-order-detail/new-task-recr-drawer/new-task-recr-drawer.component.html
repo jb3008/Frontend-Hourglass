@@ -157,6 +157,7 @@
               (click)="picker1.open()"
               [matDatepicker]="picker1"
               placeholder="Start Date"
+              [max]="taskData.controls['expectedFinishDate'].value"
             />
             <span class="cursor-pointer" (click)="picker1.open()"
               ><i class="far fa-calendar"></i
@@ -177,6 +178,7 @@
               (click)="picker2.open()"
               [matDatepicker]="picker2"
               placeholder="End Date"
+              [min]="taskData.controls['startDate'].value"
             />
             <span class="cursor-pointer" (click)="picker2.open()"
               ><i class="far fa-calendar"></i
@@ -200,9 +202,7 @@
           ></textarea>
         </div>
 
-        <div class="fw-bold mb-5">
-          Attachments <span class="text-danger">*</span>
-        </div>
+        <div class="fw-bold mb-5">Attachments</div>
 
         <div class="fv-row mb-5">
           <!--begin::Dropzone-->

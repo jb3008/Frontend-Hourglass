@@ -51,6 +51,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
   @Input() taskDetails: any;
   @ViewChild(MatAutocompleteTrigger, { read: MatAutocompleteTrigger })
   assigneeSearch: MatAutocompleteTrigger;
+  today = new Date();
 
   ngOnInit(): void {
     this.assigneeCntrl.setValue(null);

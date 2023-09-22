@@ -464,7 +464,13 @@
               <div
                 class="d-flex flex-center flex-shrink-0 bg-light rounded w-120px h-150px w-lg-120px h-lg-120px me-7 mb-4"
               >
-                <img class="w-100 h-100" [src]="profilePic" alt="profile-pic" />
+                <img
+                  class="w-100 h-100"
+                  [src]="
+                    profilePic || '../../../../assets/media/avatars/blank.png'
+                  "
+                  alt="profile-pic"
+                />
                 <!-- <img class="w-100 h-100" src="./../../assets/media/avatars/300-7.jpg" alt="image"> -->
               </div>
               <!--end::Image-->
@@ -516,7 +522,7 @@
                   <div class="col-7 mt-1">
                     <span
                       class="d-inline bg-light-warning form-control-plaintext p-1 fw-bold"
-                      >{{ applicationDetails?.workRate }}
+                      >{{ applicationDetails?.workRate | number : "1.2-2" }}
                       {{ applicationDetails?.workRateCurrency }}/hr</span
                     >
                   </div>

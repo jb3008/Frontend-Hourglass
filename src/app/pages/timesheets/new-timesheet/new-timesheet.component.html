@@ -200,7 +200,8 @@
                     [matDatepicker]="picker"
                     placeholder="Start Date"
                     formControlName="fromDate"
-                    [max]="today"
+                    [min]="today"
+                    [max]="timeSheetData.controls['toDate'].value"
                   />
                   <span class="cursor-pointer" (click)="picker.open()"
                     ><i class="far fa-calendar"></i
@@ -219,12 +220,7 @@
                     [matDatepicker]="picker1"
                     placeholder="End Date"
                     formControlName="toDate"
-                    [min]="
-                      timeSheetData.controls['fromDate'].value
-                        ? timeSheetData.controls['fromDate'].value
-                        : ''
-                    "
-                    [max]="today"
+                    [min]="timeSheetData.controls['fromDate'].value"
                   />
                   <span class="cursor-pointer" (click)="picker1.open()"
                     ><i class="far fa-calendar"></i
@@ -320,7 +316,7 @@
           <table
             mat-table
             [dataSource]="dataSource"
-            class="table table-row-bordered text-gray-600 taskTable qfs-13 "
+            class="table table-row-bordered text-gray-600 taskTable qfs-13"
           >
             <!-- taskId Column -->
             <ng-container matColumnDef="taskId">
@@ -344,7 +340,7 @@
                   src="./assets/images/icons/text.svg"
                   alt=""
                   class="align-text-bottom me-1"
-                /> 
+                />
                 Task Name
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
@@ -359,7 +355,7 @@
                   src="./assets/images/icons/tag.svg"
                   alt=""
                   class="align-middle me-1"
-                /> 
+                />
                 Priority
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
@@ -395,7 +391,7 @@
                   src="./assets/images/icons/tclock.svg"
                   alt=""
                   class="align-text-bottom me-1"
-                /> 
+                />
                 Time Spent (hrs)
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
@@ -419,7 +415,7 @@
                   src="./assets/images/icons/tcal.svg"
                   alt=""
                   class="align-text-bottom me-1"
-                /> 
+                />
                 Start Date
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
@@ -432,7 +428,8 @@
                     [(ngModel)]="element.startDate"
                     [ngModelOptions]="{ standalone: true }"
                     [matDatepicker]="picker"
-                    [max]="today"
+                    [min]="today"
+                    [max]="timeSheetData.controls['toDate'].value"
                     placeholder="Select Start Date"
                   />
                   <span class="cursor-pointer" (click)="picker.open()"
@@ -450,7 +447,7 @@
                   src="./assets/images/icons/tcal.svg"
                   alt=""
                   class="align-text-bottom me-1"
-                /> 
+                />
                 Due Date
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">
@@ -463,7 +460,7 @@
                     [(ngModel)]="element.dueDate"
                     [ngModelOptions]="{ standalone: true }"
                     [matDatepicker]="picker"
-                    [max]="today"
+                    [min]="timeSheetData.controls['fromDate'].value"
                     placeholder="Select Due Date"
                   />
                   <span class="cursor-pointer" (click)="picker.open()"
@@ -481,7 +478,7 @@
                   src="./assets/images/icons/status.svg"
                   class="align-text-bottom me-1"
                   alt=""
-                /> 
+                />
                 Status
               </th>
               <td mat-cell *matCellDef="let element" class="align-middle">

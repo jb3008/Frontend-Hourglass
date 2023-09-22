@@ -1,13 +1,18 @@
 @import "./../../../../assets/sass/pspcustom";
 
 :host {
-    width: 100%;
-  } 
+  width: 100%;
+}
 
-  table {
-	width: 100%;
-  }
-  
-  .bx{  
-    background: #FCFCFD; 
- }
+table {
+  width: 100%;
+}
+
+.bx {
+  background: #fcfcfd;
+}
+
+::ng-deep.border-dashed {
+  border-style: dashed !important;
+  border-width: 2px !important;
+}

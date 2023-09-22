@@ -217,12 +217,12 @@
 
           <div class="form-group row mb-5 d-flex align-items-center">
             <label class="col-4"
-              >{{ jobKind == "Fixed" ? "Budget" : "Working Rate" }}
+              >{{ jobKind === "Fixed" ? "Budget" : "Working Rate" }}
               <span class="text-danger">*</span></label
             >
             <div class="col-8 d-flex align-items-center">
               <input
-                *ngIf="jobKind == 'Hourly'"
+                *ngIf="jobKind === 'Hourly'"
                 type="input"
                 formControlName="workRate"
                 class="form-control w-150px py-2 rounded-end-0 fw-normal"
@@ -230,7 +230,7 @@
                 (keypress)="numberAndDecimalOnly($event)"
               />
 
-              <ng-container *ngIf="jobKind == 'Fixed'">
+              <ng-container *ngIf="jobKind === 'Fixed'">
                 <label class="me-2">Min</label>
                 <input
                   type="input"
@@ -274,7 +274,7 @@
               </ng-container>
 
               <mat-select
-                *ngIf="jobKind == 'Hourly'"
+                *ngIf="jobKind === 'Hourly'"
                 class="form-select fs- py-2 w-100px rounded-start-0"
                 formControlName="workRateCurrency"
                 placeholder="Select"
@@ -286,7 +286,7 @@
                   {{ currency }}
                 </mat-option>
               </mat-select>
-              <span *ngIf="jobKind == 'Hourly'" class="text-muted ps-2"
+              <span *ngIf="jobKind === 'Hourly'" class="text-muted ps-2"
                 >Per Hour</span
               >
             </div>
@@ -308,7 +308,8 @@
                   [matDatepicker]="picker"
                   placeholder="Select Date"
                   readonly
-                  [min]="selectedTab != 'Draft' ? today : null"
+                  [min]="selectedTab !== 'Draft' ? today : null"
+                  [max]="jobPostData.controls['endDate'].value"
                 />
                 <span class="cursor-pointer" (click)="picker.open()"
                   ><i class="far fa-calendar"></i
@@ -359,6 +360,7 @@
                   [matDatepicker]="pickerValid"
                   placeholder="Valid Till"
                   [disabled]="true"
+                  [min]="jobPostData.controls['startDate'].value"
                 />
                 <span class="cursor-pointer" (click)="pickerValid.open()"
                   ><i class="far fa-calendar"></i
@@ -384,7 +386,7 @@
                   [matDatepicker]="pickerrd"
                   placeholder="Reporting Date"
                   readonly
-                  [min]="selectedTab != 'Draft' ? today : null"
+                  [min]="selectedTab !== 'Draft' ? today : null"
                 />
                 <span class="cursor-pointer" (click)="pickerrd.open()"
                   ><i class="far fa-calendar"></i

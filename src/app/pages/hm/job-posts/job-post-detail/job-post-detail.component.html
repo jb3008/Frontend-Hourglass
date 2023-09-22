@@ -508,6 +508,9 @@
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">
                 {{element?.firstName?.[0].toUpperCase()
 
+
+
+
                 }}{{element?.lastName?.[0].toUpperCase()}}
               </span>
             </div>
@@ -556,7 +559,8 @@
             Costing
           </th>
           <td mat-cell *matCellDef="let element" class="align-middle">
-            {{ element.workRate }} {{ element.workRateCurrency }}
+            {{ element.workRate | number : "1.2-2" }}
+            {{ element.workRateCurrency }}
           </td>
         </ng-container>
 
@@ -694,6 +698,9 @@
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">
                 {{element?.firstName?.[0].toUpperCase()
 
+
+
+
                 }}{{element?.lastName?.[0].toUpperCase()}}
               </span>
             </div>
@@ -742,7 +749,8 @@
             Costing
           </th>
           <td mat-cell *matCellDef="let element" class="align-middle">
-            {{ element.workRate }} {{ element.workRateCurrency }}
+            {{ element.workRate | number : "1.2-2" }}
+            {{ element.workRateCurrency }}
           </td>
         </ng-container>
 

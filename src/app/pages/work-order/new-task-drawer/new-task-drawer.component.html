@@ -11,15 +11,18 @@
   data-kt-drawer-close="#kt_activities_close"
 >
   <div class="card shadow-none rounded-0">
-    <div class="d-flex justify-content-between px-7" >
-    <div>
-      <h3 class="card-title fw-bolder text-dark mt-4"> Task Creation</h3>
-      <div> Specific activities or assignment to be completed within a project or workflow ensuring clear objectives and responsibilities</div>
-    </div>
+    <div class="d-flex justify-content-between px-7">
+      <div>
+        <h3 class="card-title fw-bolder text-dark mt-4">Task Creation</h3>
+        <div>
+          Specific activities or assignment to be completed within a project or
+          workflow ensuring clear objectives and responsibilities
+        </div>
+      </div>
       <div class="card-toolbar">
         <button
           type="button"
-          class="btn btn-sm btn-icon btn-active-light-primary mt-5 "
+          class="btn btn-sm btn-icon btn-active-light-primary mt-5"
           id="kt_activities_close"
         >
           <span
@@ -31,78 +34,125 @@
     </div>
 
     <div class="card-body position-relative" id="kt_activities_body">
-   
-      <div class="form-group  mb-5">
-        <label class="mb-1">Task Title <span class="text-danger">*</span></label>
-        <input type="input" class="form-control py-2 fs- fw-normal" placeholder="Enter email">
-    </div>
-
-    <div class="form-group  mb-5">
-      <label class="mb-1">Assignee <span class="text-danger">*</span></label>
-      <div class="input-icon position-relative input-icon-right">
-  
-        <input type="text" class="form-control py-2 fs- fw-normal"   placeholder="Assignee">
-        <span><i class="fa fa-search"></i></span>
-    </div></div>
-  
-    <div class="form-group mb-5 d-flex align-items-center ">
-    
-      <label class="mb-1 me-4">Start Date <span class="text-danger">*</span></label>
-      <div class="input-icon position-relative input-icon-right">
-
-          <input type="text" class="form-control  w-150px py-2 fs- fw-normal cursor-pointer " (click)="picker.open()"
-          [matDatepicker]="picker"  placeholder="Start Date">
-          <span class="cursor-pointer" (click)="picker.open()"><i class="far fa-calendar"></i></span>
-          <mat-datepicker #picker></mat-datepicker>
+      <div class="form-group mb-5">
+        <label class="mb-1"
+          >Task Title <span class="text-danger">*</span></label
+        >
+        <input
+          type="input"
+          class="form-control py-2 fs- fw-normal"
+          placeholder="Enter email"
+        />
       </div>
-     
-      <label class="mb-1 mx-4">End Date <span class="text-danger">*</span></label>
-      <div class="input-icon position-relative input-icon-right">
 
-          <input type="text" class="form-control  w-150px py-2 fs- fw-normal cursor-pointer" (click)="picker1.open()"
-          [matDatepicker]="picker1"   placeholder="End Date">
-          <span class="cursor-pointer" (click)="picker1.open()"><i class="far fa-calendar"></i></span>
+      <div class="form-group mb-5">
+        <label class="mb-1">Assignee <span class="text-danger">*</span></label>
+        <div class="input-icon position-relative input-icon-right">
+          <input
+            type="text"
+            class="form-control py-2 fs- fw-normal"
+            placeholder="Assignee"
+          />
+          <span><i class="fa fa-search"></i></span>
+        </div>
+      </div>
+
+      <div class="form-group mb-5 d-flex align-items-center">
+        <label class="mb-1 me-4"
+          >Start Date <span class="text-danger">*</span></label
+        >
+        <div class="input-icon position-relative input-icon-right">
+          <input
+            type="text"
+            class="form-control w-150px py-2 fs- fw-normal cursor-pointer"
+            (click)="picker.open()"
+            [matDatepicker]="picker"
+            placeholder="Start Date"
+          />
+          <span class="cursor-pointer" (click)="picker.open()"
+            ><i class="far fa-calendar"></i
+          ></span>
+          <mat-datepicker #picker></mat-datepicker>
+        </div>
+
+        <label class="mb-1 mx-4"
+          >End Date <span class="text-danger">*</span></label
+        >
+        <div class="input-icon position-relative input-icon-right">
+          <input
+            type="text"
+            class="form-control w-150px py-2 fs- fw-normal cursor-pointer"
+            (click)="picker1.open()"
+            [matDatepicker]="picker1"
+            placeholder="End Date"
+          />
+          <span class="cursor-pointer" (click)="picker1.open()"
+            ><i class="far fa-calendar"></i
+          ></span>
           <mat-datepicker #picker1></mat-datepicker>
           <!-- <mat-datepicker #picker></mat-datepicker> -->
+        </div>
       </div>
-     
-  </div>
-  
-  <div class="form-group  mb-5 d-flex align-items-center">
-    <label class="mb-1 me-4" >ETA (in hr) <span class="text-danger">*</span></label>
-      <input type="text" class="form-control  w-150px py-2 fs- fw-normal"   placeholder="ETA (in hr)">
 
-  </div>
-  <div class="form-group  mb-5">
-    <label class="mb-1">Comments</label>
-    <textarea  name="" id="" cols="30" rows="3" class="form-control py-2 fs- fw-normal"></textarea>
-  </div>
+      <div class="form-group mb-5 d-flex align-items-center">
+        <label class="mb-1 me-4"
+          >ETA (in hr) <span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          class="form-control w-150px py-2 fs- fw-normal"
+          placeholder="ETA (in hr)"
+        />
+      </div>
+      <div class="form-group mb-5">
+        <label class="mb-1">Comments</label>
+        <textarea
+          name=""
+          id=""
+          cols="30"
+          rows="3"
+          class="form-control py-2 fs- fw-normal"
+        ></textarea>
+      </div>
 
-  <div class="fw-bold mb-5 ">Attachments <span class="text-danger">*</span></div>
-  <div class="fv-row mb-5">
-      <!--begin::Dropzone-->
-      <div class="dropzone dz-clickable bg-white border text-center">
+      <div class="fw-bold mb-5">
+        Attachments <span class="text-danger">*</span>
+      </div>
+      <div class="fv-row mb-5">
+        <!--begin::Dropzone-->
+        <div class="dropzone dz-clickable bg-white border text-center">
           <!--begin::Message-->
-          <div class=" text-center w-100 text-muted">
-              <!--begin::Icon-->
-              <i class="fas fa-cloud-upload-alt  fs-2x"></i> <!--end::Icon-->
-              <!--begin::Info-->
-              <div class="ms-4">
-                  <h3 class="fs-5 mb-1"> <a class=" text-primary ">Click to upload </a> or Drop files
-                      here.</h3>
-                  <span class="fs-7 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size  less than 2mb)</span>
-              </div>
-              <!--end::Info-->
+          <div class="text-center w-100 text-muted">
+            <!--begin::Icon-->
+            <i class="fas fa-cloud-upload-alt fs-2x"></i>
+            <!--end::Icon-->
+            <!--begin::Info-->
+            <div class="ms-4">
+              <h3 class="fs-5 mb-1">
+                <a class="text-primary">Click to upload </a> or Drop files here.
+              </h3>
+              <span class="fs-7 fw-semibold text-gray-400"
+                >.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb)</span
+              >
+            </div>
+            <!--end::Info-->
           </div>
+        </div>
+        <!--end::Dropzone-->
       </div>
-      <!--end::Dropzone-->
-  </div>
-
-
     </div>
-    <div class="card-footer py-5   d-flex text-sm-end gap-md-5 justify-content-end p-10" id="kt_activities_footer">
-      <button type="reset" class="btn  btn-sm btn-outline"    id="kt_activities_close">Cancel</button>
-      <button type="reset" class="btn  btn-sm btn-primary">Submit</button>
+    <div
+      class="card-footer py-5 d-flex text-sm-end gap-md-5 justify-content-end p-10"
+      id="kt_activities_footer"
+    >
+      <button
+        type="reset"
+        class="btn btn-sm btn-outline"
+        id="kt_activities_close"
+      >
+        Cancel
+      </button>
+      <button type="reset" class="btn btn-sm btn-primary">Submit</button>
     </div>
   </div>
 </div>

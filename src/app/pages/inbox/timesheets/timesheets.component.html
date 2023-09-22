@@ -94,6 +94,7 @@
           [matDatepicker]="picker"
           placeholder="Select From Date"
           (dateChange)="ReloadTable()"
+          [max]="timeSheetFilter.controls['toDate'].value"
         />
         <span class="cursor-pointer" (click)="picker.open()"
           ><i class="far fa-calendar"></i
@@ -110,6 +111,7 @@
           formControlName="toDate"
           placeholder="Select To Date"
           (dateChange)="ReloadTable()"
+          [min]="timeSheetFilter.controls['fromDate'].value"
         />
         <span class="cursor-pointer" (click)="pickerTo.open()"
           ><i class="far fa-calendar"></i
@@ -141,7 +143,7 @@
       matSort
       matSortDisableClear
       [dataSource]="timeSheetList"
-      class="table border-bottom table-row-bordered text-gray-600 m-0  qfs-13 "
+      class="table border-bottom table-row-bordered text-gray-600 m-0 qfs-13"
     >
       <!-- timesheet Column -->
       <ng-container matColumnDef="timeSheetId">
@@ -149,21 +151,24 @@
           mat-header-cell
           mat-sort-header
           *matHeaderCellDef
-          class="align-middle "
+          class="align-middle"
         >
           <img
             src="./assets/images/icons/tdoc.svg"
             alt=""
             class="align-text-bottom me-1"
-          /> 
+          />
           Timesheet #
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
           <!-- <a routerLink="details" class="cursor-pointer"> -->
-          <a (click)="goDetail(element)" class="cursor-pointer text-primary fw-semibold">
+          <a
+            (click)="goDetail(element)"
+            class="cursor-pointer text-primary fw-semibold"
+          >
             {{ element.timeSheetId }}
             <img
-              class="ms-1 align-middle me-1 "
+              class="ms-1 align-middle me-1"
               src="./assets/images/icons/table-arrow.svg"
               alt=""
             />
@@ -176,9 +181,9 @@
         <th mat-header-cell *matHeaderCellDef class="align-middle">
           <img
             src="./assets/images/icons/manager.svg"
-            class="align-text-bottom me-1 "
+            class="align-text-bottom me-1"
             alt=""
-          /> 
+          />
           Employee
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
@@ -208,13 +213,13 @@
           mat-header-cell
           mat-sort-header
           *matHeaderCellDef
-          class="align-middle "
+          class="align-middle"
         >
           <img
             src="./assets/images/icons/tdoc.svg"
             alt=""
             class="align-text-bottom me-1"
-          /> 
+          />
           Work Order #
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
@@ -242,8 +247,8 @@
           <img
             src="./assets/images/icons/tcal.svg"
             alt=""
-            class="align-text-bottom me-1 "
-          /> 
+            class="align-text-bottom me-1"
+          />
           From Date
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
@@ -262,8 +267,8 @@
           <img
             src="./assets/images/icons/tcal.svg"
             alt=""
-            class="align-text-bottom me-1 "
-          /> 
+            class="align-text-bottom me-1"
+          />
           Due Date
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
@@ -277,8 +282,8 @@
           <img
             src="./assets/images/icons/tclock.svg"
             alt=""
-            class="align-text-bottom me-1 "
-          /> 
+            class="align-text-bottom me-1"
+          />
           Total Work hr
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
@@ -291,9 +296,9 @@
         <th mat-header-cell *matHeaderCellDef class="align-middle">
           <img
             src="./assets/images/icons/status.svg"
-            class="align-text-bottom me-1 "
+            class="align-text-bottom me-1"
             alt=""
-          /> 
+          />
           Status
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">

@@ -83,6 +83,7 @@
           [matDatepicker]="picker"
           placeholder="Select From Date"
           (dateChange)="ReloadTable()"
+          [max]="timeSheetFilter.controls['toDate'].value"
         />
         <span class="cursor-pointer" (click)="picker.open()"
           ><i class="far fa-calendar"></i
@@ -99,6 +100,7 @@
           formControlName="toDate"
           placeholder="Select To Date"
           (dateChange)="ReloadTable()"
+          [min]="timeSheetFilter.controls['fromDate'].value"
         />
         <span class="cursor-pointer" (click)="pickerTo.open()"
           ><i class="far fa-calendar"></i
