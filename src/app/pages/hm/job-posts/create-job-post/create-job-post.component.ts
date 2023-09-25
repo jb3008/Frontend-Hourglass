@@ -688,7 +688,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       queryParams: {
         pageNo: 1,
         pageSize: 10,
-        status: 'ACTIVE',
+        status: this.selectedTab?.toUpperCase(),
       },
     });
   }

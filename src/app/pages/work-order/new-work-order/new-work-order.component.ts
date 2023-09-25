@@ -119,7 +119,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
   }
 
   displayFnVendor(vendor: any): string {
-    return vendor ? `${vendor.vendorId} ${vendor.registerId}` : '';
+    return vendor ? `${vendor.vendorId} ${vendor.title}` : '';
   }
 
   displayFnJobPost(job: any): string {
@@ -150,9 +150,9 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
 
   showSearchResultForVendor(data: any) {
     return this.vendorList.filter((obj) => {
-      let vendorDetail = `${obj.vendorId} ${obj.registerId}`.toLowerCase();
+      let vendorDetail = `${obj.vendorId} ${obj.title}`.toLowerCase();
       if (data && typeof data === 'object') {
-        data = data.vendorId + ' ' + data.registerId;
+        data = data.vendorId + ' ' + data.title;
       }
       let searchData = data.toLowerCase();
       let filteredData = vendorDetail.includes(searchData);
@@ -265,13 +265,14 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     if (reset) {
       this.workOrderData.controls[key].setValue('');
     }
+
     if (key == 'hiringManager') {
       this.hiringManagerSearchResult =
         this.hiringManagerCntrl.valueChanges.pipe(
           startWith(''),
           map((value) => this.showSearchResult(value))
         );
-    } else if (key == 'vendor') {
+    } else if (key == 'vendorId') {
       this.vendorSearchResult = this.vendorCntrl.valueChanges.pipe(
         startWith(''),
         map((value) => this.showSearchResultForVendor(value))
@@ -500,7 +501,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       )
       .subscribe((response) => {
         this.vendorList = response;
-        this.getFilteredValues('vendor');
+        this.getFilteredValues('vendorId');
       });
   }
 

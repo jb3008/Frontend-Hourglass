@@ -150,9 +150,9 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
 
   showSearchResultForVendor(data: any) {
     return this.vendorList.filter((obj) => {
-      let vendorDetail = `${obj.vendorId} ${obj.registerId}`.toLowerCase();
+      let vendorDetail = `${obj.vendorId} ${obj.title}`.toLowerCase();
       if (data && typeof data === 'object') {
-        data = data.vendorId + ' ' + data.registerId;
+        data = data.vendorId + ' ' + data.title;
       }
       let searchData = data.toLowerCase();
       let filteredData = vendorDetail.includes(searchData);

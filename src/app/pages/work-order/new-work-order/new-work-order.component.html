@@ -287,7 +287,7 @@
                     *ngFor="let vendor of vendorSearchResult | async"
                     [value]="vendor"
                   >
-                    {{ vendor?.vendorId }} - {{ vendor?.registerId }}
+                    {{ vendor?.vendorId }} - {{ vendor?.title }}
                   </mat-option>
                 </mat-autocomplete>
               </div>

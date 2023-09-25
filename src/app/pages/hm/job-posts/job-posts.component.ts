@@ -271,25 +271,27 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
       .subscribe((response) => {
         this.dataSource = new MatTableDataSource<any>(response.list);
         this.totalJobsCount = response.TotalCount;
-        console.log(this.selectedTab);
         if (this.selectedTab == 'Active')
-          this.totalJobsCount = this.jobCount?.activeCount;
+          this.jobCount.activeCount = response.TotalCount;
         else if (this.selectedTab == 'Draft')
-          this.totalJobsCount = this.jobCount?.draftCount;
+          this.jobCount.draftCount = response.TotalCount;
         else if (this.selectedTab == 'Close')
-          this.totalJobsCount = this.jobCount?.closeCount;
+          this.jobCount.closeCount = response.TotalCount;
 
         this.dataSource.paginator = this.paginator;
         setTimeout(() => {
           this.paginator.pageIndex = this.queryParam.pageNo - 1;
           this.paginator.length = this.totalJobsCount;
         });
+
+        this.cdr.detectChanges();
         var queryParams = new URLSearchParams();
         for (var i in this.queryParam) {
           if (this.queryParam[i]) {
             queryParams.set(i, this.queryParam[i]);
           }
         }
+
         var newURL = location.href.split('?')[0];
         window.history.pushState(
           'object',
