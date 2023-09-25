@@ -1,201 +1,396 @@
-<div *ngIf="loading" class="pause d-flex align-items-center justify-content-center">
-    <div class="spinner"></div>
+<div
+  *ngIf="loading"
+  class="pause d-flex align-items-center justify-content-center"
+>
+  <div class="spinner"></div>
 </div>
 <form [formGroup]="applyJobData">
-<div class="content flex-column-fluid auto container-lg mb-4">
+  <div class="content flex-column-fluid auto container-lg mb-4">
     <div class="mb-4 fw-bold pt-4">
-        <a class="cursor-pointer text-body" (click)="goBackToDetails()">
-            <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i> Submit Job Seeker
-            <span class="text-primary">#{{jobId}} </span>
-        </a>
-        <!-- <span class="badge badge-light-success fw-normal ms-3">
+      <a class="cursor-pointer text-body" (click)="goBackToDetails()">
+        <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i>
+        Submit Job Seeker
+        <span class="text-primary">#{{ jobId }} </span>
+      </a>
+      <!-- <span class="badge badge-light-success fw-normal ms-3">
             <i class="fas fa-yin-yangfas fa-circle px-1 text-success fs-10"></i> Published </span> -->
     </div>
     <!--begin:: Top Card-->
 
     <div class="card mb-5 mb-xl-10">
-        <div class="card-body p/b-0 ">
-            <h3 class="card-title fs-4"> Job Application </h3>
-            <span class="text-muted"> Details, Qualification & Attachments. </span>
-            <div class="separator my-5"></div>
-            <div class="fw-bold mb-5 mt-4">DETAILS</div>
-            <div class="pspw60">
-                <div class="row justify-content-between m-0">
-                    <div class="col-6 p-0 pe-4">
-                        <div class="form-group">
-                            <label class="mb-1">Name <span class="text-danger">*</span></label>
-                            <!-- <input type="input" formControlName="firstName" placeholder="First Name" class="form-control py-2 fs- fw-normal"> -->
-                            <div class="mb-5">
-                                <mat-select class="form-select fs- py-2"  formControlName="workerId" placeholder="Select Candidate">
-                                    <mat-option *ngFor="let staff of staffDetails" [value]="staff.workForceId">
-                                        {{staff.firstName}} {{staff.lastName}}
-                                    </mat-option>
-                                </mat-select>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <div class="col-6 p-0 ps-4">
+      <div class="card-body p/b-0">
+        <h3 class="card-title fs-4">Job Application</h3>
+        <span class="text-muted"> Details, Qualification & Attachments. </span>
+        <div class="separator my-5"></div>
+        <div class="fw-bold mb-5 mt-4">DETAILS</div>
+        <div class="pspw60">
+          <div class="row justify-content-between m-0">
+            <div class="col-6 p-0 pe-4">
+              <div class="form-group">
+                <label class="mb-1"
+                  >Name <span class="text-danger">*</span></label
+                >
+                <!-- <input type="input" formControlName="firstName" placeholder="First Name" class="form-control py-2 fs- fw-normal"> -->
+                <div class="mb-5">
+                  <mat-select
+                    class="form-select fs- py-2"
+                    formControlName="workerId"
+                    placeholder="Select Candidate"
+                  >
+                    <mat-option
+                      *ngFor="let staff of staffDetails"
+                      [value]="staff.workForceId"
+                    >
+                      {{ staff.firstName }} {{ staff.lastName }}
+                    </mat-option>
+                  </mat-select>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-6 p-0 ps-4">
                         <div class="form-group">
                             <label class="mb-1">Last Name <span class="text-danger">*</span></label>
                             <input type="input" formControlName="lastName" placeholder="Last Name" class="form-control py-2 fs- fw-normal">
 
                         </div>
                     </div> -->
-                </div>
+          </div>
 
-                <div class="form-group row my-5 d-flex align-items-center">
-                    <label class="col-4">Working Experience <span class="text-danger">*</span></label>
-                    <div class="col-8 d-flex align-items-center justify-content-start gap-4">
-                        <div class="input-group mb-3 mw-125px">
-                            <input type="text" formControlName="workExpYears" (keypress)="numbersOnly($event)" class="form-control mw-60px py-2 px-4  fw-normal" aria-describedby="basic-addon2">
-                            <span class="input-group-text p-0 px-3 fw-normal" id="basic-addon2">Years</span>
-                          </div>
-                        <div class="input-group mb-3">
-                            <input type="text" formControlName="workExpMonths" (keypress)="numbersOnly($event)" class="form-control mw-60px py-2  px-4 fw-normal" aria-describedby="basic-addon2">
-                            <span class="input-group-text  p-0 px-3 fw-normal" id="basic-addon2">Months</span>
-                          </div>
-                    </div>
-                </div>
+          <div class="form-group row my-5 d-flex align-items-center">
+            <label class="col-4"
+              >Working Experience <span class="text-danger">*</span></label
+            >
+            <div
+              class="col-8 d-flex align-items-center justify-content-start gap-4"
+            >
+              <div class="input-group mb-3 mw-125px">
+                <input
+                  type="text"
+                  formControlName="workExpYears"
+                  (keypress)="numbersOnly($event)"
+                  class="form-control mw-60px py-2 px-4 fw-normal"
+                  aria-describedby="basic-addon2"
+                />
+                <span
+                  class="input-group-text p-0 px-3 fw-normal"
+                  id="basic-addon2"
+                  >Years</span
+                >
+              </div>
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  formControlName="workExpMonths"
+                  (keypress)="numbersOnly($event)"
+                  class="form-control mw-60px py-2 px-4 fw-normal"
+                  aria-describedby="basic-addon2"
+                />
+                <span
+                  class="input-group-text p-0 px-3 fw-normal"
+                  id="basic-addon2"
+                  >Months</span
+                >
+              </div>
+            </div>
+          </div>
 
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">Available Date <span class="text-danger">*</span></label>
-                    <div class="col-8 d-flex align-items-center gap-4">
-                        <div class="input-icon position-relative w-150px input-icon-right ">
-                            <input formControlName="availableDate"  type="text" class="form-control  cursor-pointer py-2 fs- fw-normal" (click)="pickerrd.open()"
-                                [matDatepicker]="pickerrd" placeholder="MM/DD/YYYY" readonly>
-                            <span class="cursor-pointer" (click)="pickerrd.open()"><i class="far fa-calendar"></i></span>
-                            <mat-datepicker #pickerrd></mat-datepicker> 
-                    </div>
-                    Reporting Date<a class="text-primary">{{jobDetails?.reportDate | date:'MM/dd/yyyy'}} </a>
-                    </div>
-                </div>
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >Available Date <span class="text-danger">*</span></label
+            >
+            <div class="col-8 d-flex align-items-center gap-4">
+              <div
+                class="input-icon position-relative w-150px input-icon-right"
+              >
+                <input
+                  formControlName="availableDate"
+                  type="text"
+                  class="form-control cursor-pointer py-2 fs- fw-normal"
+                  (click)="pickerrd.open()"
+                  [max]="today"
+                  [matDatepicker]="pickerrd"
+                  placeholder="MM/DD/YYYY"
+                  readonly
+                />
+                <span class="cursor-pointer" (click)="pickerrd.open()"
+                  ><i class="far fa-calendar"></i
+                ></span>
+                <mat-datepicker #pickerrd></mat-datepicker>
+              </div>
+              Reporting Date<a class="text-primary"
+                >{{ jobDetails?.reportDate | date : "MM/dd/yyyy" }}
+              </a>
+            </div>
+          </div>
 
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-4">Working Rate <span class="text-danger">*</span></label>
-                    <div class="col-8 d-flex align-items-center">
-                  
-                        <input type="input" formControlName="workRate"  class="form-control w-150px py-2 fs- fw-normal rounded-end-0" 
-                        placeholder="Enter Amount" (keypress)="numbersAndDecimalOnly($event)"> 
-                        <span class="text-muted ps-2" style="margin-left: '10px'">{{jobDetails?.currency}}</span>
-                        <!-- <mat-select class="form-select fs- py-2 w-100px rounded-start-0"  formControlName="workRateCurrency" placeholder="Select">
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-4"
+              >Working Rate <span class="text-danger">*</span></label
+            >
+            <div class="col-8 d-flex align-items-center">
+              <input
+                type="input"
+                formControlName="workRate"
+                class="form-control w-150px py-2 fs- fw-normal rounded-end-0"
+                placeholder="Enter Amount"
+                (keypress)="numbersAndDecimalOnly($event)"
+              />
+              <span class="text-muted ps-2" style="margin-left: '10px'">{{
+                jobDetails?.currency
+              }}</span>
+              <!-- <mat-select class="form-select fs- py-2 w-100px rounded-start-0"  formControlName="workRateCurrency" placeholder="Select">
                             <mat-option value="USD">USD</mat-option>
                             <mat-option value="INR">INR</mat-option>
                         </mat-select> -->
-                        <span class="text-muted ps-2" *ngIf="jobDetails?.jobKind == 'Hourly'">Per Hour</span>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-5"> Submitted to other Job posting? <span class="text-danger">*</span></label>
-                    <div class="col-7">
-                        <div class="radio-inline">
-                            <label class="radio radio-outline radio-outline-2x radio-primary me-5">
-                                <input formControlName="otherJobSummit" type="radio" value="Yes">
-                                <span></span>
-                                Yes
-                            </label>
-                            <label class="radio radio-outline radio-outline-2x radio-primary">
-                                <input formControlName="otherJobSummit" type="radio" value="No">
-                                <span></span> 
-                                No
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-5 d-flex align-items-center">
-                    <label class="col-7"> Display Candidate's Workforce record to the Buyer? <span class="text-danger">*</span></label>
-                    <div class="col-5">
-                        <div class="radio-inline">
-                            <label class="radio radio-outline radio-outline-2x radio-primary me-5">
-                                <input formControlName="displayWorkforce" type="radio" value="Yes">
-                                <span></span>
-                                Yes
-                            </label>
-                            <label class="radio radio-outline radio-outline-2x radio-primary">
-                                <input formControlName="displayWorkforce" type="radio" value="No">
-                                <span></span> 
-                                No
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group  my-5">
-                    <label class="mb-1">Comment <span class="text-danger">*</span></label>
-                 <textarea formControlName="comment" name="" id="" cols="30" rows="3" class="form-control p-2   fw-normal" placeholder="Write your comment here"></textarea>
-                </div>
-
-                <div class="form-group  mb-5">
-                    <label class="mb-1">Resume/CV <span class="text-danger">*</span></label>
-                    <input type="file" hidden #resume (change)="selectFile($event, 'resumeDoc')" (click)="clearFileInput($event)">
-                        <div><button type="button" (click)="resume.click()" class="btn btn-sm  btn-outline">Attach</button></div>
-                        <a *ngIf="applyJobData.controls['resumeDoc'].value" 
-                            class=" border rounded-1 py-1 px-3 text-active-primary mt-2 d-flex justify-content-between w-25">
-                            <div class="text-truncate pspmw95" [ngbTooltip]="applyJobData.controls['resumeDoc'].value.name" [openDelay]="600">
-
-                                {{applyJobData.controls['resumeDoc'].value.name}}
-                            </div>
-                            <span class="cursor-pointer ms-3 ">
-                                <i class="bi bi-x-circle" (click)="clearFile('resumeDoc')"></i></span>
-                        </a>
-                </div>
-                <div class="form-group  mb-5">
-                    <label class="mb-1">Profile Picture</label>
-                    <input type="file" hidden #profile (change)="selectFile($event, 'profilePictureDoc')" accept="image/*">
-                    <div><button type="button" (click)="profile.click()" class="btn btn-sm  btn-outline">Attach</button></div>
-                    <span *ngIf="applyJobData.controls['profilePictureDoc'].value">
-                        {{applyJobData.controls['profilePictureDoc'].value.name}}
-                     </span>
-                </div>
-
-                <div class="fw-bold mb-5 mt-6">QUALIFICATION</div>
-                <div class="form-group  mb-5">
-                    No Qualifications specified.
-                </div>
-
-                <div class="fw-bold mb-5 mt-6">ATTACHMENTS <span class="text-danger">*</span></div>
-                <div class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
-                DropZone  (click)="fileInputOther.click()">
-                  <!--begin::Message-->
-                  <div class=" text-center w-100 text-muted">
-                      <!--begin::Icon-->
-                      <i class="fas fa-cloud-upload-alt  fs-2x"></i> <!--end::Icon-->
-                      <!--begin::Info-->
-                      <div class="ms-4">
-                          <input type="file" hidden #fileInputOther (change)="selectFile($event, 'otherDocList')" (click)="clearFileInput($event)" accept=".pdf,.doc,.docx,.xls,.xlsx">
-                          <h3 class="fs-5 mb-1"> <a class=" text-primary ">Click to upload </a> or Drop files
-                              here.</h3>
-                          <span class="fs-7 fw-semibold text-gray-400">.pdf, .doc, .docx, .xls, .xlsx (size  less than 2mb)</span>
-                          
-                      </div>
-                      <!--end::Info-->
-                  </div>
-              </div>
-              <div *ngIf="applyJobData.controls['otherDocList'].value" class="d-flex flex-wrap">
-                <a *ngFor="let doc of applyJobData.controls['otherDocList'].value;let index = index" class="me-3  mt-4 border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between mw-325px">
-                    <div class="text-truncate pspmw95"  [ngbTooltip]="doc.name" [openDelay]="600"> 
-                        {{doc.name}}
-                        </div>
-                        <span class="cursor-pointer ms-3 ">
-                            <i class="bi bi-x-circle" (click)="clearFileOther('otherDocList', index)"></i></span>
-                </a>
-             </div>
-
+              <span
+                class="text-muted ps-2"
+                *ngIf="jobDetails?.jobKind == 'Hourly'"
+                >Per Hour</span
+              >
             </div>
-            <div class="form-group  my-5">
-                <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary fs-7">
-                    <input type="checkbox" formControlName="agreeTerms" name="Checkboxes16" [value]="agreeTerms"/>
-                    <span></span> I hereby confirm that the information provided herein is accurate, correct and complete and that the documents submitted along with this
-                    application form are genuine. I further agree to provide and/or update the above-referenced documents as and when required by the terms and conditions set by the organization to which I am subject.
+          </div>
+
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-5">
+              Submitted to other Job posting?
+              <span class="text-danger">*</span></label
+            >
+            <div class="col-7">
+              <div class="radio-inline">
+                <label
+                  class="radio radio-outline radio-outline-2x radio-primary me-5"
+                >
+                  <input
+                    formControlName="otherJobSummit"
+                    type="radio"
+                    value="Yes"
+                  />
+                  <span></span>
+                  Yes
                 </label>
+                <label
+                  class="radio radio-outline radio-outline-2x radio-primary"
+                >
+                  <input
+                    formControlName="otherJobSummit"
+                    type="radio"
+                    value="No"
+                  />
+                  <span></span>
+                  No
+                </label>
+              </div>
             </div>
-            <div class="card-footer pt-5 d-flex text-sm-end gap-md-5 justify-content-end p-10">
-                <button type="button" class="btn btn-sm btn-outline" (click)="cancelApplication()">Cancel</button>
-                <button type="button" class="btn btn-sm btn-primary w-100px" (click)="submitApplication()">Submit</button>
-            </div>
+          </div>
 
+          <div class="form-group row mb-5 d-flex align-items-center">
+            <label class="col-7">
+              Display Candidate's Workforce record to the Buyer?
+              <span class="text-danger">*</span></label
+            >
+            <div class="col-5">
+              <div class="radio-inline">
+                <label
+                  class="radio radio-outline radio-outline-2x radio-primary me-5"
+                >
+                  <input
+                    formControlName="displayWorkforce"
+                    type="radio"
+                    value="Yes"
+                  />
+                  <span></span>
+                  Yes
+                </label>
+                <label
+                  class="radio radio-outline radio-outline-2x radio-primary"
+                >
+                  <input
+                    formControlName="displayWorkforce"
+                    type="radio"
+                    value="No"
+                  />
+                  <span></span>
+                  No
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group my-5">
+            <label class="mb-1"
+              >Comment <span class="text-danger">*</span></label
+            >
+            <textarea
+              formControlName="comment"
+              name=""
+              id=""
+              cols="30"
+              rows="3"
+              class="form-control p-2 fw-normal"
+              placeholder="Write your comment here"
+            ></textarea>
+          </div>
+
+          <div class="form-group mb-5">
+            <label class="mb-1"
+              >Resume/CV <span class="text-danger">*</span></label
+            >
+            <input
+              type="file"
+              hidden
+              #resume
+              (change)="selectFile($event, 'resumeDoc')"
+              (click)="clearFileInput($event)"
+            />
+            <div>
+              <button
+                type="button"
+                (click)="resume.click()"
+                class="btn btn-sm btn-outline"
+              >
+                Attach
+              </button>
+            </div>
+            <a
+              *ngIf="applyJobData.controls['resumeDoc'].value"
+              class="border rounded-1 py-1 px-3 text-active-primary mt-2 d-flex justify-content-between w-25"
+            >
+              <div
+                class="text-truncate pspmw95"
+                [ngbTooltip]="applyJobData.controls['resumeDoc'].value.name"
+                [openDelay]="600"
+              >
+                {{ applyJobData.controls["resumeDoc"].value.name }}
+              </div>
+              <span class="cursor-pointer ms-3">
+                <i class="bi bi-x-circle" (click)="clearFile('resumeDoc')"></i
+              ></span>
+            </a>
+          </div>
+          <div class="form-group mb-5">
+            <label class="mb-1">Profile Picture</label>
+            <input
+              type="file"
+              hidden
+              #profile
+              (change)="selectFile($event, 'profilePictureDoc')"
+              accept="image/*"
+            />
+            <div>
+              <button
+                type="button"
+                (click)="profile.click()"
+                class="btn btn-sm btn-outline"
+              >
+                Attach
+              </button>
+            </div>
+            <span *ngIf="applyJobData.controls['profilePictureDoc'].value">
+              {{ applyJobData.controls["profilePictureDoc"].value.name }}
+            </span>
+          </div>
+
+          <div class="fw-bold mb-5 mt-6">QUALIFICATION</div>
+          <div class="form-group mb-5">No Qualifications specified.</div>
+
+          <div class="fw-bold mb-5 mt-6">
+            ATTACHMENTS <span class="text-danger">*</span>
+          </div>
+          <div
+            class="dropzone dz-clickable bg-light-primary border border-dashed text-center"
+            DropZone
+            (click)="fileInputOther.click()"
+          >
+            <!--begin::Message-->
+            <div class="text-center w-100 text-muted">
+              <!--begin::Icon-->
+              <i class="fas fa-cloud-upload-alt fs-2x"></i>
+              <!--end::Icon-->
+              <!--begin::Info-->
+              <div class="ms-4">
+                <input
+                  type="file"
+                  hidden
+                  #fileInputOther
+                  (change)="selectFile($event, 'otherDocList')"
+                  (click)="clearFileInput($event)"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx"
+                />
+                <h3 class="fs-5 mb-1">
+                  <a class="text-primary">Click to upload </a> or Drop files
+                  here.
+                </h3>
+                <span class="fs-7 fw-semibold text-gray-400"
+                  >.pdf, .doc, .docx, .xls, .xlsx (size less than 2mb)</span
+                >
+              </div>
+              <!--end::Info-->
+            </div>
+          </div>
+          <div
+            *ngIf="applyJobData.controls['otherDocList'].value"
+            class="d-flex flex-wrap"
+          >
+            <a
+              *ngFor="
+                let doc of applyJobData.controls['otherDocList'].value;
+                let index = index
+              "
+              class="me-3 mt-4 border rounded-1 py-1 px-3 text-active-primary d-flex justify-content-between mw-325px"
+            >
+              <div
+                class="text-truncate pspmw95"
+                [ngbTooltip]="doc.name"
+                [openDelay]="600"
+              >
+                {{ doc.name }}
+              </div>
+              <span class="cursor-pointer ms-3">
+                <i
+                  class="bi bi-x-circle"
+                  (click)="clearFileOther('otherDocList', index)"
+                ></i
+              ></span>
+            </a>
+          </div>
         </div>
+        <div class="form-group my-5">
+          <label
+            class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary fs-7"
+          >
+            <input
+              type="checkbox"
+              formControlName="agreeTerms"
+              name="Checkboxes16"
+              [value]="agreeTerms"
+            />
+            <span></span> I hereby confirm that the information provided herein
+            is accurate, correct and complete and that the documents submitted
+            along with this application form are genuine. I further agree to
+            provide and/or update the above-referenced documents as and when
+            required by the terms and conditions set by the organization to
+            which I am subject.
+          </label>
+        </div>
+        <div
+          class="card-footer pt-5 d-flex text-sm-end gap-md-5 justify-content-end p-10"
+        >
+          <button
+            type="button"
+            class="btn btn-sm btn-outline"
+            (click)="cancelApplication()"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-primary w-100px"
+            (click)="submitApplication()"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
     </div>
-    </div>
+  </div>
 </form>

@@ -312,7 +312,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
 
   reloadTable() {
     this.reqParam = {
-      status: 'ACTIVE',
+      status: this.reqParam.status,
       pageNo: 1,
       pageSize: 10,
       searchText: '',

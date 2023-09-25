@@ -32,7 +32,7 @@ export class JobSeekerComponent implements OnInit {
   loading = false;
   endPoints = EndPoints;
   dialogRef: MatDialogRef<DialogComponent>;
-
+  today: any = new Date();
   allFiles: File[] = [];
   jobDetails: any;
   staffDetails: any;
