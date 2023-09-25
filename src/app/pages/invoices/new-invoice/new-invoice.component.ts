@@ -86,7 +86,7 @@ export class NewInvoiceComponent implements OnInit {
     });
     this.getAllPaymentTerms();
     this.getAllWorkOrders();
-    this.invoiceData.controls['subTotalAmount'].disable();
+    // this.invoiceData.controls['subTotalAmount'].disable();
   }
 
   scrollEvent = (event: any): void => {
@@ -116,7 +116,7 @@ export class NewInvoiceComponent implements OnInit {
       this.selectedTask = [];
       this.dataSource = new MatTableDataSource<any>([]);
       this.selectedWorkOrder = null;
-      this.invoiceData.controls['subTotalAmount'].disable();
+      // this.invoiceData.controls['subTotalAmount'].disable();
       this.cdr.detectChanges();
     }
 
@@ -279,11 +279,11 @@ export class NewInvoiceComponent implements OnInit {
     this.dataSource = new MatTableDataSource<any>([]);
     this.selectedWorkOrder = workOrder;
     console.log(workOrder.kind);
-    if (workOrder && workOrder.kind === 'Fixed') {
-      this.invoiceData.controls['subTotalAmount'].enable();
-    } else {
-      this.invoiceData.controls['subTotalAmount'].disable();
-    }
+    // if (workOrder && workOrder.kind === 'Fixed') {
+    //   this.invoiceData.controls['subTotalAmount'].enable();
+    // } else {
+    //   this.invoiceData.controls['subTotalAmount'].disable();
+    // }
     this.cdr.detectChanges();
   }
 
@@ -432,29 +432,56 @@ export class NewInvoiceComponent implements OnInit {
         parseFloat(totalTax) + subTotal
       );
 
-      if (this.selectedWorkOrder && this.selectedWorkOrder.kind === 'Fixed') {
-        this.invoiceData.controls['subTotalAmount'].enable();
-      } else {
-        this.invoiceData.controls['subTotalAmount'].disable();
-      }
+      // if (this.selectedWorkOrder && this.selectedWorkOrder.kind === 'Fixed') {
+      //   this.invoiceData.controls['subTotalAmount'].enable();
+      // } else {
+      //   this.invoiceData.controls['subTotalAmount'].disable();
+      // }
       this.dataSource = new MatTableDataSource<any>(this.selectedTask);
     }
     this.cdr.detectChanges();
   }
-  changedAmount(value: any) {
-    if (value.target.value) {
-      const subTotal = parseInt(value.target.value);
-      const totalTax: any = this.invoiceData.controls['taxPercentage'].value
-        ? this.percentage(
-            parseInt(this.invoiceData.controls['taxPercentage'].value),
-            subTotal
-          )
-        : 0;
-      this.invoiceData.controls['totalAmount'].setValue(
-        parseFloat(totalTax) + subTotal
-      );
-      this.cdr.detectChanges();
+
+  changedAmount() {
+    let subTotal = 0;
+
+    for (let index = 0; index < this.selectedTask.length; index++) {
+      const element = this.selectedTask[index];
+      const amount = element.amount ? parseInt(element.amount) : 0;
+      subTotal += amount;
     }
+
+    const totalTax: any = this.invoiceData.controls['taxPercentage'].value
+      ? this.percentage(
+          parseInt(this.invoiceData.controls['taxPercentage'].value),
+          subTotal
+        )
+      : 0;
+
+    this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
+    this.invoiceData.controls['totalAmount'].setValue(
+      parseFloat(totalTax) + subTotal
+    );
+
+    // if (this.selectedWorkOrder && this.selectedWorkOrder.kind === 'Fixed') {
+    //   this.invoiceData.controls['subTotalAmount'].enable();
+    // } else {
+    //   this.invoiceData.controls['subTotalAmount'].disable();
+    // }
+    this.cdr.detectChanges();
+    // if (value.target.value) {
+    //   const subTotal = parseInt(value.target.value);
+    //   const totalTax: any = this.invoiceData.controls['taxPercentage'].value
+    //     ? this.percentage(
+    //         parseInt(this.invoiceData.controls['taxPercentage'].value),
+    //         subTotal
+    //       )
+    //     : 0;
+    //   this.invoiceData.controls['totalAmount'].setValue(
+    //     parseFloat(totalTax) + subTotal
+    //   );
+    //   this.cdr.detectChanges();
+    // }
   }
   onTaxChange(): void {
     const subTotal = this.invoiceData.controls['subTotalAmount'].value;
@@ -573,6 +600,13 @@ export class NewInvoiceComponent implements OnInit {
           }
         }
       });
+  }
+  numberOnly(event: any): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
   }
 }
 

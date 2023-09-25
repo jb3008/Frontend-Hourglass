@@ -247,7 +247,13 @@ export class JobPostDetailComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((response) => {
-        // response = response.filter((list: any) => list.status == 'ACTIVE')
+        response = response.filter((list: any) => {
+          list.workRateCurrency =
+            this.jobDetails.jobKind == 'Hourly'
+              ? 'USD/hr'
+              : list.workRateCurrency;
+          return list;
+        });
         this.dataSource = new MatTableDataSource<any>(response);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -507,6 +513,7 @@ export class JobPostDetailComponent implements OnInit, AfterViewInit {
     let statusClass: string;
     switch (statusCode) {
       case 'REJECTED':
+      case 'OFFER_REJECTED':
         statusClass = 'badge-light-danger';
         break;
 
