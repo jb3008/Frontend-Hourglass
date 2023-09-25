@@ -81,7 +81,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       vendorId: ['', Validators.required],
       jobPostId: [''],
       startDate: ['', Validators.required],
-      kind: ['', Validators.required],
+      kind: ['Hourly', Validators.required],
       endDate: ['', Validators.required],
       timesheetFreq: ['Weekly (Default)', Validators.required],
       workHourInterval: ['', Validators.required],
