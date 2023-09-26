@@ -71,8 +71,9 @@
                 (input)="
                   assigneeSearch.value
                     ? ''
-                    : taskData.controls['assigneeId'].setValue('')
+                    : taskData.controls['assigneeSearch'].setValue('')
                 "
+                (keyup)="getVendors(assigneeSearch.value)"
               />
               <i
                 class="bi bi-x-lg text-active-primary inp-x cursor-pointer"

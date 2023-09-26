@@ -84,7 +84,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       newTimeSheetTaskList: [[]],
       documentList: [[]],
     });
-    this.getAllWorkForceList();
+    // this.getAllWorkForceList();
     // this.getAllWorkOrders();
   }
   scrollEvent = (event: any): void => {
@@ -191,7 +191,10 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
 
   getAllWorkForceList() {
     this.apiCalls
-      .get(this.endPoints.LIST_WORK_FORCE, {})
+      .get(this.endPoints.SEARCH_WORK_FORCE, {
+        text: '',
+        vendorId: this.utils.getAuth()?.vendorId,
+      })
       .pipe(
         catchError(async (err) => {
           this.utils.showErrorDialog(this.dialog, err);
@@ -204,26 +207,6 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
         this.cdr.detectChanges();
       });
   }
-
-  getAllWorkOrders() {
-    this.apiCalls
-      .get(this.endPoints.ALL_WORK_ORDERS, {
-        vendorId: this.utils.getAuth()?.vendorId,
-      })
-      .pipe(
-        catchError(async (err) => {
-          this.utils.showErrorDialog(this.dialog, err);
-          this.cdr.detectChanges();
-          throw err;
-        })
-      )
-      .subscribe((response) => {
-        this.workOrderList = response.list;
-        this.getFilteredValuesForWorkOrder();
-        this.cdr.detectChanges();
-      });
-  }
-
   geWorkOrders(event: any) {
     let searchTerm = '';
     searchTerm = event;
@@ -254,6 +237,60 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
         });
     } else {
       this.WorkOrderSearchResult = this.WorkOrderCntrl.valueChanges.pipe(
+        startWith(''),
+        map((value) => [])
+      );
+    }
+  }
+  getAllWorkOrders() {
+    this.apiCalls
+      .get(this.endPoints.ALL_WORK_ORDERS, {
+        vendorId: this.utils.getAuth()?.vendorId,
+      })
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showErrorDialog(this.dialog, err);
+          this.cdr.detectChanges();
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        this.workOrderList = response.list;
+        this.getFilteredValuesForWorkOrder();
+        this.cdr.detectChanges();
+      });
+  }
+
+  geWorkForce(event: any) {
+    let searchTerm = '';
+    searchTerm = event;
+
+    let queryParams = {
+      text: searchTerm,
+      vendorId: this.utils.getAuth()?.vendorId,
+    };
+    if (searchTerm.length > 0) {
+      this.apiCalls
+        .get(this.endPoints.SEARCH_WORK_FORCE, queryParams)
+        .pipe(
+          catchError(async (err) => {
+            this.utils.showErrorDialog(this.dialog, err);
+            setTimeout(() => {
+              throw err;
+            }, 10);
+            this.cdr.detectChanges();
+          })
+        )
+        .subscribe((response) => {
+          this.WorkForceSearchResult = this.WorkForceCntrl.valueChanges.pipe(
+            startWith(''),
+            map((value) => response.list)
+          );
+
+          this.cdr.detectChanges();
+        });
+    } else {
+      this.WorkForceSearchResult = this.WorkForceCntrl.valueChanges.pipe(
         startWith(''),
         map((value) => [])
       );

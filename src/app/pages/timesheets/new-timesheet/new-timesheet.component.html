@@ -45,6 +45,7 @@
                     placeholder="Select"
                     [formControl]="WorkForceCntrl"
                     [matAutocomplete]="auto"
+                    (keyup)="geWorkForce(WorkForceSearch.value)"
                     (input)="
                       WorkForceSearch.value
                         ? ''

@@ -58,6 +58,7 @@ const EndPoints = {
   GET_USER_FOR_JOBS: '/hourglass/work-force/listWorkForceForVendor',
   CREATE_WORK_FORCE: '/hourglass/work-force/create.api',
   LIST_WORK_FORCE: '/hourglass/work-force/listAllWorkForce.api',
+  SEARCH_WORK_FORCE: '/hourglass/work-force/searchWorkForceForVendor',
   GET_WORK_FORCE: '/hourglass/work-force/getWorkForceDetails.api',
   TASK_LIST_HM: '/hourglass/task/listTasks.api',
   CREATE_TASK: '/hourglass/task/create.api',

@@ -72,6 +72,7 @@
                     ? ''
                     : taskData.controls['assigneeId'].setValue('')
                 "
+                (keyup)="getVendors(assigneeSearch.value)"
               />
               <i
                 class="bi bi-x-lg text-active-primary inp-x cursor-pointer"

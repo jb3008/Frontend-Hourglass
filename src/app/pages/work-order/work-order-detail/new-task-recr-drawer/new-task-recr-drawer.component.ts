@@ -54,6 +54,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
   today = new Date();
 
   ngOnInit(): void {
+    console.log(this.vendorId);
     this.assigneeCntrl.setValue(null);
     this.route.queryParams.subscribe((param) => {
       this.workOrderID = param['workOrderId'];
@@ -70,7 +71,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
       documentList: [[]],
     });
 
-    this.getAssigneeList();
+    // this.getAssigneeList();
   }
 
   ngOnChanges(changes: any) {
@@ -141,6 +142,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
       vendorId: this.utils.getVendorId()
         ? this.utils.getVendorId()
         : this.vendorId,
+      text: 'vi',
     };
     this.apiCalls
       .get(this.endpoints.GET_VENDOR_STAFF_DETAILS, queryParam)
@@ -153,6 +155,43 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
         this.assigneeList = response;
         this.getFilteredListForAssignee();
       });
+  }
+  getVendors(event: any) {
+    let searchTerm = '';
+    searchTerm = event;
+
+    let queryParams = {
+      text: searchTerm,
+      vendorId: this.utils.getVendorId()
+        ? this.utils.getVendorId()
+        : this.vendorId,
+    };
+    if (searchTerm.length > 0) {
+      this.apiCalls
+        .get(this.endpoints.GET_VENDOR_STAFF_DETAILS, queryParams)
+        .pipe(
+          catchError(async (err) => {
+            this.utils.showErrorDialog(this.dialog, err);
+            setTimeout(() => {
+              throw err;
+            }, 10);
+            this.cdr.detectChanges();
+          })
+        )
+        .subscribe((response) => {
+          this.assigneeFilteredList = this.assigneeCntrl.valueChanges.pipe(
+            startWith(''),
+            map((value) => response)
+          );
+
+          this.cdr.detectChanges();
+        });
+    } else {
+      this.assigneeFilteredList = this.assigneeCntrl.valueChanges.pipe(
+        startWith(''),
+        map((value) => [])
+      );
+    }
   }
 
   getFilteredListForAssignee(reset?: string) {
@@ -240,7 +279,9 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
       }
 
       if (!this.taskDetails) formData.append('status', 'IN_PROGRESS');
-
+      if (!this.utils.getAuth()?.vendorId) {
+        formData.append('vendorId', this.vendorId);
+      }
       formData.append('workOrderId', this.workOrderID);
       const formDataObj: any = {};
       formData.forEach((value, key) => (formDataObj[key] = value));
