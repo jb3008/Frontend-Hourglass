@@ -75,8 +75,9 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: any) {
     if (changes?.taskDetails?.currentValue) {
+      console.log(this.taskDetails);
       this.taskDetails = changes.taskDetails.currentValue;
-      this.taskData.addControl('status', ['', Validators.required]);
+      // this.taskData?.addControl('status', ['', Validators.required]);
       this.setEditValuesOnUi();
     }
   }
@@ -93,6 +94,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
       estimatedTime: this.taskDetails.estimatedTime,
       status: this.taskDetails.status,
     });
+    this.taskData.controls.status.setValue(this.taskDetails.status);
   }
 
   allFiles: File[] = [];

@@ -1,17 +1,28 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { ModalConfig, ModalComponent } from 'src/app/_metronic/partials';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
-import { Utils } from  'src/app/services/utils';
+import { Utils } from 'src/app/services/utils';
 
 @Component({
   selector: 'app-view-offer-letter-drawer',
   templateUrl: './view-offer-letter-drawer.component.html',
 })
 export class ViewOfferLetterDrawerComponent implements OnInit, OnChanges {
-
-  constructor(private apiCalls: ApiCallsService, private cdr: ChangeDetectorRef, private utils: Utils) {}
+  constructor(
+    private apiCalls: ApiCallsService,
+    private cdr: ChangeDetectorRef,
+    private utils: Utils
+  ) {}
 
   @Input() offerDetails: any[] = [];
   @Input() rate: any;
@@ -29,18 +40,18 @@ export class ViewOfferLetterDrawerComponent implements OnInit, OnChanges {
   documentsList: any[] = [];
   endPoints = EndPoints;
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes?.offerDetails?.currentValue.length > 0){
+    if (changes?.offerDetails?.currentValue.length > 0) {
       this.offerDetails = changes.offerDetails.currentValue;
+      console.log(this.offerDetails);
       this.getOfferDocuments();
     }
-    if(changes?.rate?.currentValue){
+    if (changes?.rate?.currentValue) {
       this.rate = changes.rate.currentValue;
     }
-    if(changes?.currency?.currentValue){
+    if (changes?.currency?.currentValue) {
       this.currency = changes.currency.currentValue;
     }
   }
@@ -49,23 +60,26 @@ export class ViewOfferLetterDrawerComponent implements OnInit, OnChanges {
     return true;
   }
 
-  getOfferDocuments(){
+  getOfferDocuments() {
     let queryParam = {
-      id : this.offerDetails[0]?.id,
-      attachmentType : 'JOB_OFFER'
-    }
-    this.apiCalls.get(this.endPoints.GET_DOCUMENTS, queryParam)
-      .pipe(catchError(async (error) => {
-        this.cdr.detectChanges();
-        throw error;
-      }))
+      id: this.offerDetails[0]?.id,
+      attachmentType: 'JOB_OFFER',
+    };
+    this.apiCalls
+      .get(this.endPoints.GET_DOCUMENTS, queryParam)
+      .pipe(
+        catchError(async (error) => {
+          this.cdr.detectChanges();
+          throw error;
+        })
+      )
       .subscribe((response) => {
         this.documentsList = response;
         this.cdr.detectChanges();
-      })
+      });
   }
 
-  selectFile(event: any, name: any){
+  selectFile(event: any, name: any) {
     // if(event.target.files[0].type.indexOf('image') == 0){
     //   alert('Please upload documents only');
     // }else{
@@ -75,26 +89,25 @@ export class ViewOfferLetterDrawerComponent implements OnInit, OnChanges {
     //     this.jobPostData.controls[name].setValue(event.target.files[0]);
     //   }
     //   console.log(this.jobPostData.value);
-      
     // }
   }
-    allFiles: File[] = []; 
+  allFiles: File[] = [];
 
   droppedFiles(allFiles: File[]): void {
-    console.log('this.allFiles')
+    console.log('this.allFiles');
     const filesAmount = allFiles.length;
     for (let i = 0; i < filesAmount; i++) {
       const file = allFiles[i];
       this.allFiles.push(file);
     }
-    console.log(this.allFiles)
+    console.log(this.allFiles);
   }
 
   getDocIcon(fileName: string) {
-    return  this.utils.getDocIcon(fileName);
+    return this.utils.getDocIcon(fileName);
   }
 
-  getAttachment(id: string, name: string){
+  getAttachment(id: string, name: string) {
     this.loading = true;
     let queryParam = {
       documentId: id,
@@ -140,7 +153,4 @@ export class ViewOfferLetterDrawerComponent implements OnInit, OnChanges {
         return await this.modalComponent.open();
       });
   }
-  
 }
-
-
