@@ -265,7 +265,9 @@ export class InvoicesComponent implements OnInit {
     }
   }
   onKeypressEvent(event: any) {
-    this.ReloadTable();
+    setTimeout(() => {
+      this.ReloadTable();
+    });
   }
   goDetail(element: any) {
     this.readNotification(element);
