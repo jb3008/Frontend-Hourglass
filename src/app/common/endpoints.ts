@@ -71,8 +71,7 @@ const EndPoints = {
   GET_TIME_SHEET_COUNT: '/hourglass/timesheet/listTimeSheetCount.api',
   GET_TIME_SHEET_WITH_PAGINATION:
     '/hourglass/timesheet/listTimeSheetWithPagination.api',
-  GET_TIME_SHEET_NOTIFICATION:
-    '/hourglass/timesheet/notification/listInbox.api',
+  GET_TIME_SHEET_NOTIFICATION: '/hourglass/timesheet/notification/getInbox.api',
   GET_TIME_SHEET_NOTIFICATION_COUNT:
     '/hourglass/timesheet/notification/listInboxCount.api',
   GET_TIME_SHEET_DETAILS: '/hourglass/timesheet/getTimeSheetDetails.api',
@@ -92,11 +91,11 @@ const EndPoints = {
   UPLOAD_INVOICE_DOCUMENT:
     '/hourglass/payment/invoice/uploadFilesForInvoice.api',
   REMOVE_TASK_FROM_TIMESHEET: '/hourglass/timesheet/removeTaskForTimeSheet.api',
-  WORKORDER_NOTIFICATION: '/hourglass/work-order/notification/listInbox.api',
+  WORKORDER_NOTIFICATION: '/hourglass/work-order/notification/getInbox.api',
   WORKORDER_NOTIFICATION_COUNT:
     '/hourglass/work-order/notification/listInboxCount.api',
   WORKORDER_NOTIFICATION_OUTBOX:
-    '/hourglass/work-order/notification/listOutbox.api',
+    '/hourglass/work-order/notification/getOutbox.api',
   WORKORDER_NOTIFICATION_OUTBOX_COUNT:
     '/hourglass/work-order/notification/listOutboxCount.api',
   GET_TIMESHEET_STATUS: '/hourglass/common/listTimeSheetStatus.api',
@@ -107,14 +106,14 @@ const EndPoints = {
   TIMESHEET_LIST_FOR_INVOICE:
     '/hourglass/timesheet/listTimeSheetForInvoice.api',
   CREATE_INVOICE: '/hourglass/payment/invoice/create.api',
-  GET_TIME_SHEET_OUTBOX: '/hourglass/timesheet/notification/listOutbox.api',
+  GET_TIME_SHEET_OUTBOX: '/hourglass/timesheet/notification/getOutbox.api',
   GET_TIME_SHEET_OUTBOX_COUNT:
     '/hourglass/timesheet/notification/listOutboxCount.api',
   GET_PAYMENT_TERM: '/hourglass/common/pay-term/search.api',
   TASK_STATUS: '/hourglass/common/listAllTaskStaus.api',
   GET_CURRENCY: '/hourglass/common/listAllcurrencies.api',
-  INVOICE_INBOX_NOTIFICATION: '/hourglass/invoice/notification/listInbox.api',
-  INVOICE_OUTBOX_NOTIFICATION: '/hourglass/invoice/notification/listOutbox.api',
+  INVOICE_INBOX_NOTIFICATION: '/hourglass/invoice/notification/getInbox.api',
+  INVOICE_OUTBOX_NOTIFICATION: '/hourglass/invoice/notification/getOutbox.api',
   INVOICE_INBOX_NOTIFICATION_COUNT:
     '/hourglass/invoice/notification/listInboxCount.api',
   INVOICE_OUTBOX_NOTIFICATION_COUNT:

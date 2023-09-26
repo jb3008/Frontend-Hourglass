@@ -148,7 +148,7 @@ export class WorkOrderDetailComponent implements OnInit {
 
   getAllStatus() {
     this.apiCalls
-      .get(this.endpoints.WORK_ORDER_STATUS)
+      .get(this.endpoints.TASK_STATUS)
       .pipe(
         catchError(async (err) => {
           this.utils.showErrorDialog(this.dialog, err);

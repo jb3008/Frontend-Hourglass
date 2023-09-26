@@ -142,7 +142,11 @@ export class SendOfferLetterDrawerComponent implements OnInit {
     formData.append('jobPostId', this.jobDetails.id);
     formData.append('jobAppId', this.jobSeeker.id);
     formData.append('offerMsg', this.jobPostData.controls['offerMsg'].value);
-    formData.append('rate', this.jobPostData?.controls['workRate'].value);
+    if (this.jobDetails?.jobKind == 'Hourly') {
+      formData.append('rate', this.jobPostData?.controls['workRate'].value);
+    } else {
+      formData.append('budget', this.jobPostData?.controls['workRate'].value);
+    }
     // formData.append('budget', this.jobDetails.jobKind == 'Fixed' ? this.rate: '0');
     imageFormData.append('otherDocList', this.jobPostData.value['offerLetter']);
     const formDataObj: any = {};

@@ -201,296 +201,140 @@ export class WorkOrderComponent implements OnInit {
   }
 
   getAllWorkOrders(filterObj: any) {
-    if (!this.isFromInbox) {
-      this.loading = true;
-      this.apiLoad = false;
-      const endPoint = this.isFromInbox
-        ? this.getNotificationEndPoints()
-        : this.endPoints.ALL_WORK_ORDERS;
+    this.loading = true;
+    this.apiLoad = false;
+    const endPoint = this.isFromInbox
+      ? this.getNotificationEndPoints()
+      : this.endPoints.ALL_WORK_ORDERS;
 
-      //sort by
+    //sort by
 
-      switch (this.sort.active) {
-        case 'workOrderId':
-          filterObj.sortingType =
-            this.sort.direction === 'desc'
-              ? 'WorkOrder_ID_Descending'
-              : 'WorkOrder_ID';
-          break;
-        case 'type':
-          filterObj.sortingType =
-            this.sort.direction === 'desc' ? 'JobType_Descending' : 'JobType';
-          break;
-        case 'title':
-          filterObj.sortingType =
-            this.sort.direction === 'desc' ? 'Title_Descending' : 'Title';
-          break;
-        case 'jobPostId':
-          filterObj.sortingType =
-            this.sort.direction === 'desc'
-              ? 'JobPost_ID_Descending'
-              : 'JobPost_ID';
-          break;
-        case 'priority':
-          filterObj.sortingType =
-            this.sort.direction === 'desc' ? 'Priority_Descending' : 'Priority';
-          break;
-        case 'startDate':
-          filterObj.sortingType =
-            this.sort.direction === 'desc' ? 'FromDate_Descending' : 'FromDate';
-          break;
-        case 'endDate':
-          filterObj.sortingType =
-            this.sort.direction === 'desc' ? 'To_Date_Descending' : 'To_Date';
-          break;
-        case 'managerDetails':
-          filterObj.sortingType =
-            this.sort.direction === 'desc'
-              ? 'Manager_Name_Descending'
-              : 'Manaer_Name';
-          break;
-        case 'status':
-          filterObj.sortingType =
-            this.sort.direction === 'desc'
-              ? 'By_Status_Descending'
-              : 'By_Status';
-          break;
-        default:
-          filterObj.sortingType =
-            this.sort.direction === 'desc'
-              ? 'WorkOrder_ID_Descending'
-              : 'WorkOrder_ID';
-          break;
-      }
-      if (!filterObj.vendorId) {
-        delete filterObj.vendorId;
-      }
-
-      this.apiCalls
-        .get(endPoint, filterObj)
-        .pipe(
-          catchError(async (err) => {
-            this.utils.showErrorDialog(this.dialog, err);
-            this.loading = false;
-            this.apiLoad = true;
-            this.totalWorkOrderCount = 0;
-            this.cdr.detectChanges();
-            throw err;
-          })
-        )
-        .subscribe((response) => {
-          if (this.loading) {
-            this.totalWorkOrderCount = response ? response.TotalCount : 0;
-            this.dataSource = new MatTableDataSource<any>(response.list);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-
-            setTimeout(() => {
-              this.paginator.pageIndex = this.filterObj.pageNo - 1;
-              this.paginator.length = this.totalWorkOrderCount;
-            });
-            this.loading = false;
-            this.apiLoad = true;
-
-            const queryParamObj: any = {
-              pageNo: this.filterObj.pageNo,
-              pageSize: this.paginator.pageSize.toString(),
-              sortBy: this.sort.active,
-              sortOrder: this.sort.direction,
-            };
-
-            for (var i in filterObj) {
-              if (filterObj[i]) {
-                if (
-                  i === 'status' ||
-                  i === 'type' ||
-                  i === 'workOrderId' ||
-                  i === 'startDate' ||
-                  i === 'endDate' ||
-                  i === 'searchByManager'
-                ) {
-                  queryParamObj[i] = filterObj[i];
-                }
-              }
-            }
-
-            var queryParams = new URLSearchParams();
-
-            // // Set new or modify existing parameter value.
-            for (var i in queryParamObj) {
-              if (queryParamObj[i]) {
-                queryParams.set(i, queryParamObj[i]);
-              }
-            }
-
-            if (this.isFromInbox) {
-              queryParams.set('from', this.flag);
-            }
-
-            this.queryParamData = queryParamObj;
-            var newURL = location.href.split('?')[0];
-            window.history.pushState(
-              'object',
-              document.title,
-              newURL + '?' + queryParams.toString()
-            );
-
-            this.cdr.detectChanges();
-          }
-        });
-    } else {
-      this.loading = true;
-      this.apiLoad = false;
-      const endPoint = this.isFromInbox
-        ? this.getNotificationEndPoints()
-        : this.endPoints.ALL_WORK_ORDERS;
-
-      //sort by
-
-      switch (this.sort.active) {
-        case 'workOrderId':
-          filterObj.sortingType =
-            this.sort.direction === 'desc'
-              ? 'WorkOrder_ID_Descending'
-              : 'WorkOrder_ID';
-          break;
-        case 'type':
-          filterObj.sortingType =
-            this.sort.direction === 'desc' ? 'JobType_Descending' : 'JobType';
-          break;
-        case 'title':
-          filterObj.sortingType =
-            this.sort.direction === 'desc' ? 'Title_Descending' : 'Title';
-          break;
-        case 'jobPostId':
-          filterObj.sortingType =
-            this.sort.direction === 'desc'
-              ? 'JobPost_ID_Descending'
-              : 'JobPost_ID';
-          break;
-        case 'priority':
-          filterObj.sortingType =
-            this.sort.direction === 'desc' ? 'Priority_Descending' : 'Priority';
-          break;
-        case 'startDate':
-          filterObj.sortingType =
-            this.sort.direction === 'desc' ? 'FromDate_Descending' : 'FromDate';
-          break;
-        case 'endDate':
-          filterObj.sortingType =
-            this.sort.direction === 'desc' ? 'To_Date_Descending' : 'To_Date';
-          break;
-        case 'managerDetails':
-          filterObj.sortingType =
-            this.sort.direction === 'desc'
-              ? 'Manager_Name_Descending'
-              : 'Manaer_Name';
-          break;
-        case 'status':
-          filterObj.sortingType =
-            this.sort.direction === 'desc'
-              ? 'By_Status_Descending'
-              : 'By_Status';
-          break;
-        default:
-          filterObj.sortingType =
-            this.sort.direction === 'desc'
-              ? 'WorkOrder_ID_Descending'
-              : 'WorkOrder_ID';
-          break;
-      }
-      if (!filterObj.vendorId) {
-        delete filterObj.vendorId;
-      }
-
-      this.apiCalls
-        .get(endPoint, filterObj)
-        .pipe(
-          catchError(async (err) => {
-            this.utils.showErrorDialog(this.dialog, err);
-            this.loading = false;
-            this.apiLoad = true;
-            this.totalWorkOrderCount = 0;
-            this.cdr.detectChanges();
-            throw err;
-          })
-        )
-        .subscribe((response) => {
-          if (this.loading) {
-            this.apiCalls
-              .get(this.getNotificationEndPointsCounts())
-              .pipe(
-                catchError(async (err) => {
-                  this.utils.showErrorDialog(this.dialog, err);
-                  this.loading = false;
-                  this.apiLoad = true;
-                  this.totalWorkOrderCount = 0;
-                  this.cdr.detectChanges();
-                  throw err;
-                })
-              )
-              .subscribe((responseCount) => {
-                console.log('responseCount', responseCount);
-                this.totalWorkOrderCount = responseCount;
-                this.dataSource = new MatTableDataSource<any>(response);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
-
-                setTimeout(() => {
-                  this.paginator.pageIndex = this.filterObj.pageNo - 1;
-                  this.paginator.length = this.totalWorkOrderCount;
-                });
-                this.loading = false;
-                this.apiLoad = true;
-
-                const queryParamObj: any = {
-                  pageNo: this.filterObj.pageNo,
-                  pageSize: this.paginator.pageSize.toString(),
-                  sortBy: this.sort.active,
-                  sortOrder: this.sort.direction,
-                };
-
-                for (var i in filterObj) {
-                  if (filterObj[i]) {
-                    if (
-                      i === 'status' ||
-                      i === 'type' ||
-                      i === 'workOrderId' ||
-                      i === 'startDate' ||
-                      i === 'endDate' ||
-                      i === 'searchByManager'
-                    ) {
-                      queryParamObj[i] = filterObj[i];
-                    }
-                  }
-                }
-
-                var queryParams = new URLSearchParams();
-
-                // // Set new or modify existing parameter value.
-                for (var i in queryParamObj) {
-                  if (queryParamObj[i]) {
-                    queryParams.set(i, queryParamObj[i]);
-                  }
-                }
-
-                if (this.isFromInbox) {
-                  queryParams.set('from', this.flag);
-                }
-
-                this.queryParamData = queryParamObj;
-                var newURL = location.href.split('?')[0];
-                window.history.pushState(
-                  'object',
-                  document.title,
-                  newURL + '?' + queryParams.toString()
-                );
-
-                this.cdr.detectChanges();
-              });
-          }
-        });
+    switch (this.sort.active) {
+      case 'workOrderId':
+        filterObj.sortingType =
+          this.sort.direction === 'desc'
+            ? 'WorkOrder_ID_Descending'
+            : 'WorkOrder_ID';
+        break;
+      case 'type':
+        filterObj.sortingType =
+          this.sort.direction === 'desc' ? 'JobType_Descending' : 'JobType';
+        break;
+      case 'title':
+        filterObj.sortingType =
+          this.sort.direction === 'desc' ? 'Title_Descending' : 'Title';
+        break;
+      case 'jobPostId':
+        filterObj.sortingType =
+          this.sort.direction === 'desc'
+            ? 'JobPost_ID_Descending'
+            : 'JobPost_ID';
+        break;
+      case 'priority':
+        filterObj.sortingType =
+          this.sort.direction === 'desc' ? 'Priority_Descending' : 'Priority';
+        break;
+      case 'startDate':
+        filterObj.sortingType =
+          this.sort.direction === 'desc' ? 'FromDate_Descending' : 'FromDate';
+        break;
+      case 'endDate':
+        filterObj.sortingType =
+          this.sort.direction === 'desc' ? 'To_Date_Descending' : 'To_Date';
+        break;
+      case 'managerDetails':
+        filterObj.sortingType =
+          this.sort.direction === 'desc'
+            ? 'Manager_Name_Descending'
+            : 'Manaer_Name';
+        break;
+      case 'status':
+        filterObj.sortingType =
+          this.sort.direction === 'desc' ? 'By_Status_Descending' : 'By_Status';
+        break;
+      default:
+        filterObj.sortingType =
+          this.sort.direction === 'desc'
+            ? 'WorkOrder_ID_Descending'
+            : 'WorkOrder_ID';
+        break;
     }
+    if (!filterObj.vendorId) {
+      delete filterObj.vendorId;
+    }
+
+    this.apiCalls
+      .get(endPoint, filterObj)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showErrorDialog(this.dialog, err);
+          this.loading = false;
+          this.apiLoad = true;
+          this.totalWorkOrderCount = 0;
+          this.cdr.detectChanges();
+          throw err;
+        })
+      )
+      .subscribe((response) => {
+        if (this.loading) {
+          this.totalWorkOrderCount = response ? response.TotalCount : 0;
+          this.dataSource = new MatTableDataSource<any>(response.list);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+
+          setTimeout(() => {
+            this.paginator.pageIndex = this.filterObj.pageNo - 1;
+            this.paginator.length = this.totalWorkOrderCount;
+          });
+          this.loading = false;
+          this.apiLoad = true;
+
+          const queryParamObj: any = {
+            pageNo: this.filterObj.pageNo,
+            pageSize: this.paginator.pageSize.toString(),
+            sortBy: this.sort.active,
+            sortOrder: this.sort.direction,
+          };
+
+          for (var i in filterObj) {
+            if (filterObj[i]) {
+              if (
+                i === 'status' ||
+                i === 'type' ||
+                i === 'workOrderId' ||
+                i === 'startDate' ||
+                i === 'endDate' ||
+                i === 'searchByManager'
+              ) {
+                queryParamObj[i] = filterObj[i];
+              }
+            }
+          }
+
+          var queryParams = new URLSearchParams();
+
+          // // Set new or modify existing parameter value.
+          for (var i in queryParamObj) {
+            if (queryParamObj[i]) {
+              queryParams.set(i, queryParamObj[i]);
+            }
+          }
+
+          if (this.isFromInbox) {
+            queryParams.set('from', this.flag);
+          }
+
+          this.queryParamData = queryParamObj;
+          var newURL = location.href.split('?')[0];
+          window.history.pushState(
+            'object',
+            document.title,
+            newURL + '?' + queryParams.toString()
+          );
+
+          this.cdr.detectChanges();
+        }
+      });
   }
 
   getNotificationEndPoints() {
@@ -498,11 +342,7 @@ export class WorkOrderComponent implements OnInit {
       ? this.endPoints.WORKORDER_NOTIFICATION
       : this.endPoints.WORKORDER_NOTIFICATION_OUTBOX;
   }
-  getNotificationEndPointsCounts() {
-    return this.flag === 'Inbox'
-      ? this.endPoints.WORKORDER_NOTIFICATION_COUNT
-      : this.endPoints.WORKORDER_NOTIFICATION_OUTBOX_COUNT;
-  }
+
   getWorkOrderCount() {
     // this.isLoading = true;
     this.apiCalls

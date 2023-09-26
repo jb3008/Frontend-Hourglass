@@ -145,11 +145,7 @@ export class TimesheetsComponent implements OnInit {
   }
   onKeypressEvent(event: any) {
     setTimeout(() => {
-      if (event.target.value.length > 2) {
-        this.ReloadTable();
-      } else if (event.target.value.length === 0) {
-        this.ReloadTable();
-      }
+      this.ReloadTable();
     });
   }
 
