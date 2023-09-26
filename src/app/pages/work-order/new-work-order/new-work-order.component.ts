@@ -341,18 +341,18 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       this.hiringManagerSearchResult =
         this.hiringManagerCntrl.valueChanges.pipe(
           startWith(''),
-          map((value) => this.showSearchResult(value))
+          map((value) => [])
         );
     } else if (key == 'vendorId') {
       this.vendorSearchResult = this.vendorCntrl.valueChanges.pipe(
         startWith(''),
-        map((value) => this.showSearchResultForVendor(value))
+        map((value) => [])
       );
     } else if (key == 'jobPostId') {
       // this.jobPostCntrl.setValue({ id: '', title: 'NA' });
       this.joblistsSearchResult = this.jobPostCntrl.valueChanges.pipe(
         startWith(''),
-        map((value) => this.showSearchResultFoJobPost(value))
+        map((value) => [])
       );
     }
   }

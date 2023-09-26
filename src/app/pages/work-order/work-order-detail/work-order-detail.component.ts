@@ -140,6 +140,20 @@ export class WorkOrderDetailComponent implements OnInit {
       )
       .subscribe((response) => {
         this.workOrderDetails = response.list[0];
+        if (!this.workOrderDetails.minBudget) {
+          this.workOrderDetails.minBudget = parseFloat('0').toFixed(2);
+        } else {
+          this.workOrderDetails.minBudget = parseFloat(
+            this.workOrderDetails.minBudget
+          ).toFixed(2);
+        }
+        if (!this.workOrderDetails.maxBudget) {
+          this.workOrderDetails.maxBudget = parseFloat('0').toFixed(2);
+        } else {
+          this.workOrderDetails.maxBudget = parseFloat(
+            this.workOrderDetails.maxBudget
+          ).toFixed(2);
+        }
         this.filterObj.workOrderId = this.workOrderDetails.workOrderId;
         this.loading = false;
         this.cdr.detectChanges();

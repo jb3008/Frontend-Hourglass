@@ -260,25 +260,97 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     }
   }
 
+  geVendorByKey(event: any) {
+    let searchTerm = '';
+    searchTerm = event;
+
+    let queryParams = {
+      text: searchTerm,
+    };
+    if (searchTerm.length > 0) {
+      this.apiCalls
+        .get(this.endpoints.GET_VENDORS_LIST, queryParams)
+        .pipe(
+          catchError(async (err) => {
+            this.utils.showErrorDialog(this.dialog, err);
+            setTimeout(() => {
+              throw err;
+            }, 10);
+            this.cdr.detectChanges();
+          })
+        )
+        .subscribe((response) => {
+          this.vendorSearchResult = this.vendorCntrl.valueChanges.pipe(
+            startWith(''),
+            map((value) => response)
+          );
+
+          this.cdr.detectChanges();
+        });
+    } else {
+      this.vendorSearchResult = this.vendorCntrl.valueChanges.pipe(
+        startWith(''),
+        map((value) => [])
+      );
+    }
+  }
+  geJobsByKey(event: any) {
+    let searchTerm = '';
+    searchTerm = event;
+
+    let queryParams = {
+      searchText: searchTerm,
+      status: 'ACTIVE',
+    };
+
+    if (searchTerm.length > 0) {
+      this.apiCalls
+        .get(this.endpoints.LIST_JOBS, queryParams)
+        .pipe(
+          catchError(async (err) => {
+            this.utils.showErrorDialog(this.dialog, err);
+            setTimeout(() => {
+              throw err;
+            }, 10);
+            this.cdr.detectChanges();
+          })
+        )
+        .subscribe((response) => {
+          this.joblistsSearchResult = this.jobPostCntrl.valueChanges.pipe(
+            startWith(''),
+            map((value) => response.list)
+          );
+
+          this.cdr.detectChanges();
+        });
+    } else {
+      this.joblistsSearchResult = this.jobPostCntrl.valueChanges.pipe(
+        startWith(''),
+        map((value) => [])
+      );
+    }
+  }
   getFilteredValues(key: string, reset?: string) {
     if (reset) {
       this.workOrderData.controls[key].setValue('');
     }
+
     if (key == 'hiringManager') {
       this.hiringManagerSearchResult =
         this.hiringManagerCntrl.valueChanges.pipe(
           startWith(''),
-          map((value) => this.showSearchResult(value))
+          map((value) => [])
         );
-    } else if (key == 'vendor') {
+    } else if (key == 'vendorId') {
       this.vendorSearchResult = this.vendorCntrl.valueChanges.pipe(
         startWith(''),
-        map((value) => this.showSearchResultForVendor(value))
+        map((value) => [])
       );
     } else if (key == 'jobPostId') {
+      // this.jobPostCntrl.setValue({ id: '', title: 'NA' });
       this.joblistsSearchResult = this.jobPostCntrl.valueChanges.pipe(
         startWith(''),
-        map((value) => this.showSearchResultFoJobPost(value))
+        map((value) => [])
       );
     }
   }

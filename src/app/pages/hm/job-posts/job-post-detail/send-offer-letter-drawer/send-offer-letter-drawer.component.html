@@ -42,7 +42,8 @@
               >
 
               <div class="col-8 fw-bold">
-                {{ jobSeeker?.workRate }} {{ jobSeeker?.workRateCurrency }}
+                {{ jobSeeker?.workRate | number : "1.2-2" }}
+                {{ jobSeeker?.workRateCurrency }}
               </div>
             </div>
 

@@ -99,24 +99,28 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
     if (reset) {
       this.timeSheetData.controls['employeeId'].setValue('');
     }
-    const auth = this.utils.getAuth();
-    if (!auth?.isAdmin && this.workForceList.length) {
-      this.timeSheetData.controls['employeeId'].setValue(
-        this.workForceList[0].workForceId
-      );
-      this.WorkForceSearchResult = this.WorkForceCntrl.valueChanges.pipe(
-        startWith(''),
-        map((value) => this.showSearchResult(value)),
-        tap(() => this.WorkForceCntrl.setValue(this.workForceList[0]))
-      );
-      this.WorkForceCntrl.disable();
-      this.cdr.detectChanges();
-    } else {
-      this.WorkForceSearchResult = this.WorkForceCntrl.valueChanges.pipe(
-        startWith(''),
-        map((value) => this.showSearchResult(value))
-      );
-    }
+    // this.WorkOrderSearchResult = this.WorkOrderCntrl.valueChanges.pipe(
+    //   startWith(''),
+    //   map((value) => [])
+    // );
+    // const auth = this.utils.getAuth();
+    // if (!auth?.isAdmin && this.workForceList.length) {
+    //   this.timeSheetData.controls['employeeId'].setValue(
+    //     this.workForceList[0].workForceId
+    //   );
+    //   this.WorkForceSearchResult = this.WorkForceCntrl.valueChanges.pipe(
+    //     startWith(''),
+    //     map((value) => this.showSearchResult(value)),
+    //     tap(() => this.WorkForceCntrl.setValue(this.workForceList[0]))
+    //   );
+    //   this.WorkForceCntrl.disable();
+    //   this.cdr.detectChanges();
+    // } else {
+    //   this.WorkOrderSearchResult = this.WorkOrderCntrl.valueChanges.pipe(
+    //     startWith(''),
+    //     map((value) => [])
+    //   );
+    // }
   }
   showSearchResult(data: any) {
     return this.workForceList.filter((obj) => {
@@ -149,7 +153,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
 
     this.WorkOrderSearchResult = this.WorkOrderCntrl.valueChanges.pipe(
       startWith(''),
-      map((value) => this.showSearchResultForWorkOrder(value))
+      map((value) => [])
     );
   }
   showSearchResultForWorkOrder(data: any) {
@@ -207,7 +211,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
         this.cdr.detectChanges();
       });
   }
-  geWorkOrders(event: any) {
+  getWorkOrders(event: any) {
     let searchTerm = '';
     searchTerm = event;
 
@@ -261,7 +265,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       });
   }
 
-  geWorkForce(event: any) {
+  getWorkForce(event: any) {
     let searchTerm = '';
     searchTerm = event;
 
@@ -286,7 +290,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
             startWith(''),
             map((value) => response.list)
           );
-
+          this.workForceList = response.list;
           this.cdr.detectChanges();
         });
     } else {
@@ -294,6 +298,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
         startWith(''),
         map((value) => [])
       );
+      this.workForceList = [];
     }
   }
   changeEmp(workForceId: number) {

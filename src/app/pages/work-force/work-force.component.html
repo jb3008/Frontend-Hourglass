@@ -351,7 +351,7 @@
             </label>
             <input
               type="text"
-              (keypress)="numbersOnly($event)"
+              (keypress)="numbersDecimalOnly($event)"
               formControlName="workExperience"
               class="form-control py-2 fs- fw-normal"
               placeholder="Enter Work Exp."
@@ -883,6 +883,7 @@
               formControlName="workExperience"
               class="form-control py-2 fs- fw-normal"
               placeholder="Enter Work Exp."
+              (keypress)="numbersDecimalOnly($event)"
             />
           </div>
           <div

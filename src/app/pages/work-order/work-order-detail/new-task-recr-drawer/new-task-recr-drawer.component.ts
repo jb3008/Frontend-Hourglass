@@ -67,7 +67,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
       expectedFinishDate: ['', Validators.required],
       comments: ['', Validators.required],
       estimatedTime: ['', Validators.required],
-      status: ['', Validators.required],
+      status: ['IN_PROGRESS', Validators.required],
       documentList: [[]],
     });
 
@@ -95,7 +95,6 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
       estimatedTime: this.taskDetails.estimatedTime,
       status: this.taskDetails.status,
     });
-    this.taskData.controls.status.setValue(this.taskDetails.status);
   }
 
   allFiles: File[] = [];
@@ -133,6 +132,10 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
   clearAssigneeValue() {
     this.assigneeCntrl.setValue(null);
     this.taskData.controls['assigneeId'].setValue('');
+    this.assigneeFilteredList = this.assigneeCntrl.valueChanges.pipe(
+      startWith(''),
+      map((value) => [])
+    );
     this.cdr.detectChanges();
   }
 
@@ -247,9 +250,6 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
 
   submitTask() {
     this.isLoading = true;
-    if (!this.taskDetails) {
-      this.taskData.removeControl('status');
-    }
     const formData = new FormData();
     const docData = new FormData();
     if (this.taskData.valid) {
@@ -278,7 +278,7 @@ export class NewTaskRecrDrawerComponent implements OnInit, OnChanges {
         formData.append('id', this.taskDetails.taskId);
       }
 
-      if (!this.taskDetails) formData.append('status', 'IN_PROGRESS');
+      // if (!this.taskDetails) formData.append('status', 'IN_PROGRESS');
       if (!this.utils.getAuth()?.vendorId) {
         formData.append('vendorId', this.vendorId);
       }

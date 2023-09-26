@@ -101,7 +101,7 @@ export class WorkForceComponent implements OnInit {
         '',
         Validators.compose([
           Validators.required,
-          Validators.pattern('^[0-9]*$'),
+          Validators.pattern('^[0-9]{0,4}(.[0-9]{0,2})?$'),
         ]),
       ],
       mobilePhone: [
@@ -157,6 +157,8 @@ export class WorkForceComponent implements OnInit {
     this.workForceEditData.controls['mobilePhone'].setValue(item.mobilePhone);
     this.workForceEditData.controls['workExperience'].setValue(
       item.workExperience
+        ? parseFloat(item.workExperience).toFixed(2)
+        : parseFloat('0').toFixed(2)
     );
     this.workForceEditData.controls['dateOfBirth'].setValue(
       new Date(item.dateOfBirth)
@@ -228,7 +230,7 @@ export class WorkForceComponent implements OnInit {
           '',
           Validators.compose([
             Validators.required,
-            Validators.pattern('^[0-9]*$'),
+            Validators.pattern('^[0-9]{0,4}(.[0-9]{0,2})?$'),
           ]),
         ],
         mobilePhone: [
@@ -289,7 +291,7 @@ export class WorkForceComponent implements OnInit {
           '',
           Validators.compose([
             Validators.required,
-            Validators.pattern('^[0-9]*$'),
+            Validators.pattern('^[0-9]{0,4}(.[0-9]{0,2})?$'),
           ]),
         ],
         mobilePhone: [
@@ -758,6 +760,9 @@ export class WorkForceComponent implements OnInit {
 
   numbersOnly(event: any) {
     return this.utils.numberOnly(event);
+  }
+  numbersDecimalOnly(event: any) {
+    return this.utils.numbersAndDecimal(event);
   }
 
   async saveEditWorkForce() {

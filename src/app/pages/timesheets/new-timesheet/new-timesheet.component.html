@@ -45,7 +45,7 @@
                     placeholder="Select"
                     [formControl]="WorkForceCntrl"
                     [matAutocomplete]="auto"
-                    (keyup)="geWorkForce(WorkForceSearch.value)"
+                    (keyup)="getWorkForce(WorkForceSearch.value)"
                     (input)="
                       WorkForceSearch.value
                         ? ''
@@ -58,6 +58,7 @@
                     *ngIf="WorkForceSearch.value"
                     (click)="
                       WorkForceSearch.value = '';
+                      getWorkForce(WorkForceSearch.value);
                       getFilteredValuesForWorkForce('reset')
                     "
                   ></i>
@@ -137,7 +138,7 @@
                         : timeSheetData.controls['workOrderId'].setValue('')
                     "
                     #WorkOrderSearch
-                    (keyup)="geWorkOrders(WorkOrderSearch.value)"
+                    (keyup)="getWorkOrders(WorkOrderSearch.value)"
                   />
                   <i
                     class="bi bi-x-lg text-active-primary inp-x cursor-pointer"

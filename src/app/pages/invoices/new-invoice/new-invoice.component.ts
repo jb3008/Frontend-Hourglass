@@ -82,7 +82,7 @@ export class NewInvoiceComponent implements OnInit {
       companyAddress: [''],
       subTotalAmount: [0],
       taxPercentage: [0, [Validators.max(100), Validators.min(0)]],
-      totalAmount: [0],
+      totalAmount: [parseFloat('0').toFixed(2)],
     });
     this.getAllPaymentTerms();
     // this.getAllWorkOrders();
@@ -112,7 +112,9 @@ export class NewInvoiceComponent implements OnInit {
 
       this.invoiceData.controls['taxPercentage'].setValue(0);
       this.invoiceData.controls['subTotalAmount'].setValue(0);
-      this.invoiceData.controls['totalAmount'].setValue(0);
+      this.invoiceData.controls['totalAmount'].setValue(
+        parseFloat('0').toFixed(2)
+      );
       this.selectedTask = [];
       this.dataSource = new MatTableDataSource<any>([]);
       this.selectedWorkOrder = null;
@@ -174,7 +176,9 @@ export class NewInvoiceComponent implements OnInit {
 
     this.invoiceData.controls['taxPercentage'].setValue(0);
     this.invoiceData.controls['subTotalAmount'].setValue(0);
-    this.invoiceData.controls['totalAmount'].setValue(0);
+    this.invoiceData.controls['totalAmount'].setValue(
+      parseFloat('0').toFixed(2)
+    );
     this.selectedTask = [];
     this.dataSource = new MatTableDataSource<any>([]);
     this.selectedWorkOrder = workOrder;
@@ -235,7 +239,7 @@ export class NewInvoiceComponent implements OnInit {
       });
   }
 
-  geWorkOrders(event: any) {
+  getWorkOrders(event: any) {
     let searchTerm = '';
     searchTerm = event;
 
@@ -321,7 +325,9 @@ export class NewInvoiceComponent implements OnInit {
 
     this.invoiceData.controls['taxPercentage'].setValue(0);
     this.invoiceData.controls['subTotalAmount'].setValue(0);
-    this.invoiceData.controls['totalAmount'].setValue(0);
+    this.invoiceData.controls['totalAmount'].setValue(
+      parseFloat('0').toFixed(2)
+    );
     this.selectedTask = [];
     this.dataSource = new MatTableDataSource<any>([]);
     this.selectedWorkOrder = workOrder;
@@ -449,10 +455,11 @@ export class NewInvoiceComponent implements OnInit {
           timeSheetId: element.timeSheetId,
           timeSpent: element.timeSpent,
           unitPrice: parseFloat(rate),
-          amount:
+          amount: parseFloat(
             this.selectedWorkOrder.kind?.toLowerCase() === 'hourly'
               ? element.timeSpent * rate
-              : rate,
+              : rate
+          ).toFixed(2),
         });
       }
       for (let index = 0; index < this.selectedTask.length; index++) {
@@ -475,8 +482,9 @@ export class NewInvoiceComponent implements OnInit {
         : 0;
 
       this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
+      const amtValue: any = parseFloat(totalTax) + subTotal;
       this.invoiceData.controls['totalAmount'].setValue(
-        parseFloat(totalTax) + subTotal
+        parseFloat(amtValue).toFixed(2)
       );
 
       // if (this.selectedWorkOrder && this.selectedWorkOrder.kind === 'Fixed') {
@@ -494,7 +502,7 @@ export class NewInvoiceComponent implements OnInit {
 
     for (let index = 0; index < this.selectedTask.length; index++) {
       const element = this.selectedTask[index];
-      const amount = element.amount ? parseInt(element.amount) : 0;
+      const amount = element.amount ? parseFloat(element.amount) : 0;
       subTotal += amount;
     }
 
@@ -506,8 +514,10 @@ export class NewInvoiceComponent implements OnInit {
       : 0;
 
     this.invoiceData.controls['subTotalAmount'].setValue(subTotal);
+
+    const amtValue: any = parseFloat(totalTax) + subTotal;
     this.invoiceData.controls['totalAmount'].setValue(
-      parseFloat(totalTax) + subTotal
+      parseFloat(amtValue).toFixed(2)
     );
 
     // if (this.selectedWorkOrder && this.selectedWorkOrder.kind === 'Fixed') {
@@ -538,10 +548,10 @@ export class NewInvoiceComponent implements OnInit {
           subTotal
         )
       : 0;
+    const amtValue: any = parseFloat(totalTax) + parseFloat(subTotal);
     this.invoiceData.controls['totalAmount'].setValue(
-      parseFloat(totalTax) + parseFloat(subTotal)
+      parseFloat(amtValue).toFixed(2)
     );
-
     this.cdr.detectChanges();
   }
   percentage(percent: number, total: number) {
@@ -648,12 +658,8 @@ export class NewInvoiceComponent implements OnInit {
         }
       });
   }
-  numberOnly(event: any): boolean {
-    const charCode = event.which ? event.which : event.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      return false;
-    }
-    return true;
+  numberOnly(event: any) {
+    return this.utils.numbersAndDecimal(event);
   }
 }
 

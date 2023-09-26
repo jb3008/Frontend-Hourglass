@@ -69,7 +69,9 @@ export class SendOfferLetterDrawerComponent implements OnInit {
       this.jobDetails?.jobKind == 'Hourly'
         ? this.jobDetails?.rate
         : this.jobDetails?.minBudget;
-
+    this.rate = this.rate
+      ? parseFloat(this.rate).toFixed(2)
+      : parseFloat('0').toFixed(2);
     this.jobPostData?.controls['workRate'].setValue(this.rate);
     this.jobPostData?.controls['offerMsg'].setValue(this.data);
   }

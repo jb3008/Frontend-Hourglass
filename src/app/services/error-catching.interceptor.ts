@@ -34,6 +34,8 @@ export class ErrorCatchingInterceptor implements HttpInterceptor {
             ? error.error.msg
               ? error.error.msg
               : error.error.message
+              ? error.error.message
+              : error.error
             : error.message;
           // if (error.error instanceof ErrorEvent) {
           //   // console.log('This is client side error');

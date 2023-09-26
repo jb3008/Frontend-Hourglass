@@ -46,13 +46,14 @@
                         : invoiceData.controls['workOrderId'].setValue('')
                     "
                     #WorkOrderSearch
-                    (keyup)="geWorkOrders(WorkOrderSearch.value)"
+                    (keyup)="getWorkOrders(WorkOrderSearch.value)"
                   />
                   <i
                     class="bi bi-x-lg text-active-primary inp-x cursor-pointer"
                     *ngIf="WorkOrderSearch.value"
                     (click)="
                       WorkOrderSearch.value = '';
+                      getWorkOrders(WorkOrderSearch.value);
                       getFilteredValuesForWorkOrder('reset')
                     "
                   ></i>
