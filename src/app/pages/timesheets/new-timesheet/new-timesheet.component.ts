@@ -85,7 +85,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
       documentList: [[]],
     });
     this.getAllWorkForceList();
-    this.getAllWorkOrders();
+    // this.getAllWorkOrders();
   }
   scrollEvent = (event: any): void => {
     let element = document.querySelector('.mat-autocomplete-panel');
@@ -222,6 +222,42 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
         this.getFilteredValuesForWorkOrder();
         this.cdr.detectChanges();
       });
+  }
+
+  geWorkOrders(event: any) {
+    let searchTerm = '';
+    searchTerm = event;
+
+    let queryParams = {
+      title: searchTerm,
+      vendorId: this.utils.getAuth()?.vendorId,
+    };
+    if (searchTerm.length > 0) {
+      this.apiCalls
+        .get(this.endPoints.ALL_WORK_ORDERS, queryParams)
+        .pipe(
+          catchError(async (err) => {
+            this.utils.showErrorDialog(this.dialog, err);
+            setTimeout(() => {
+              throw err;
+            }, 10);
+            this.cdr.detectChanges();
+          })
+        )
+        .subscribe((response) => {
+          this.WorkOrderSearchResult = this.WorkOrderCntrl.valueChanges.pipe(
+            startWith(''),
+            map((value) => response.list)
+          );
+
+          this.cdr.detectChanges();
+        });
+    } else {
+      this.WorkOrderSearchResult = this.WorkOrderCntrl.valueChanges.pipe(
+        startWith(''),
+        map((value) => [])
+      );
+    }
   }
   changeEmp(workForceId: number) {
     this.selectedEmpObj = this.workForceList.find(

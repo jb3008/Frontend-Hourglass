@@ -85,7 +85,7 @@ export class NewInvoiceComponent implements OnInit {
       totalAmount: [0],
     });
     this.getAllPaymentTerms();
-    this.getAllWorkOrders();
+    // this.getAllWorkOrders();
     // this.invoiceData.controls['subTotalAmount'].disable();
   }
 
@@ -141,13 +141,20 @@ export class NewInvoiceComponent implements OnInit {
     let value = event.option.value.workOrderId;
     this.invoiceData.controls['workOrderId'].setValue(value);
     this.workOrderId = value;
+    console.log(value);
     const workOrder: any = this.workOrderList.find(
       (r: any) => r.workOrderId === value
     );
-
-    const paymentTerms = this.paymentTerms.find(
+    console.log(this.paymentTerms, workOrder.paymentTerm);
+    let paymentTerms = this.paymentTerms.find(
       (r: any) => r.code == workOrder.paymentTerm
     );
+    if (!paymentTerms) {
+      console.log(this.paymentTerms);
+      paymentTerms = this.paymentTerms.find(
+        (r: any) => r.id == workOrder.paymentTerm
+      );
+    }
     this.invoiceData.controls['paymentTerms'].setValue(
       `(${workOrder.payRate}) ` + paymentTerms?.name
     );
@@ -228,6 +235,42 @@ export class NewInvoiceComponent implements OnInit {
       });
   }
 
+  geWorkOrders(event: any) {
+    let searchTerm = '';
+    searchTerm = event;
+
+    let queryParams = {
+      title: searchTerm,
+    };
+    if (searchTerm.length > 0) {
+      this.apiCalls
+        .get(this.endPoints.ALL_WORK_ORDERS, queryParams)
+        .pipe(
+          catchError(async (err) => {
+            this.utils.showErrorDialog(this.dialog, err);
+            setTimeout(() => {
+              throw err;
+            }, 10);
+            this.cdr.detectChanges();
+          })
+        )
+        .subscribe((response) => {
+          this.WorkOrderSearchResult = this.WorkOrderCntrl.valueChanges.pipe(
+            startWith(''),
+            map((value) => response.list)
+          );
+          this.workOrderList = response.list;
+          this.cdr.detectChanges();
+        });
+    } else {
+      this.WorkOrderSearchResult = this.WorkOrderCntrl.valueChanges.pipe(
+        startWith(''),
+        map((value) => [])
+      );
+      this.workOrderList = [];
+    }
+  }
+
   getAllPaymentTerms() {
     this.apiCalls
       .get(this.endPoints.GET_PAYMENT_TERM, {})
@@ -251,10 +294,14 @@ export class NewInvoiceComponent implements OnInit {
     const workOrder: any = this.workOrderList.find(
       (r: any) => r.workOrderId === workOrderId
     );
-    const paymentTerms = this.paymentTerms.find(
+    let paymentTerms = this.paymentTerms.find(
       (r: any) => r.id == workOrder.payRate
     );
-
+    if (!paymentTerms) {
+      paymentTerms = this.paymentTerms.find(
+        (r: any) => r.code == workOrder.payRate
+      );
+    }
     this.invoiceData.controls['paymentTerms'].setValue(
       `(${workOrder.payRate}) ` + paymentTerms?.name
     );

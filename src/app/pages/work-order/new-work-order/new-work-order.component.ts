@@ -101,9 +101,10 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
 
     const userId = this.utils.getUser()!;
     // this.getUserByUserId(userId);
-    this.vendorsList();
+    // this.vendorsList();
     // this.getHiringManagers();
-    this.getAllJobs();
+    // this.getAllJobs();
+    // this.jobPostCntrl.setValue({ id: '', title: 'NA' });
     this.getJobType();
     this.getTimeSheetFrequency();
     this.getCostCenter();
@@ -261,6 +262,76 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
     }
   }
 
+  geVendorByKey(event: any) {
+    let searchTerm = '';
+    searchTerm = event;
+
+    let queryParams = {
+      text: searchTerm,
+    };
+    if (searchTerm.length > 0) {
+      this.apiCalls
+        .get(this.endpoints.GET_VENDORS_LIST, queryParams)
+        .pipe(
+          catchError(async (err) => {
+            this.utils.showErrorDialog(this.dialog, err);
+            setTimeout(() => {
+              throw err;
+            }, 10);
+            this.cdr.detectChanges();
+          })
+        )
+        .subscribe((response) => {
+          this.vendorSearchResult = this.vendorCntrl.valueChanges.pipe(
+            startWith(''),
+            map((value) => response)
+          );
+
+          this.cdr.detectChanges();
+        });
+    } else {
+      this.vendorSearchResult = this.vendorCntrl.valueChanges.pipe(
+        startWith(''),
+        map((value) => [])
+      );
+    }
+  }
+  geJobsByKey(event: any) {
+    let searchTerm = '';
+    searchTerm = event;
+
+    let queryParams = {
+      searchText: searchTerm,
+      status: 'ACTIVE',
+    };
+
+    if (searchTerm.length > 0) {
+      this.apiCalls
+        .get(this.endpoints.LIST_JOBS, queryParams)
+        .pipe(
+          catchError(async (err) => {
+            this.utils.showErrorDialog(this.dialog, err);
+            setTimeout(() => {
+              throw err;
+            }, 10);
+            this.cdr.detectChanges();
+          })
+        )
+        .subscribe((response) => {
+          this.joblistsSearchResult = this.jobPostCntrl.valueChanges.pipe(
+            startWith(''),
+            map((value) => response.list)
+          );
+
+          this.cdr.detectChanges();
+        });
+    } else {
+      this.joblistsSearchResult = this.jobPostCntrl.valueChanges.pipe(
+        startWith(''),
+        map((value) => [])
+      );
+    }
+  }
   getFilteredValues(key: string, reset?: string) {
     if (reset) {
       this.workOrderData.controls[key].setValue('');
@@ -278,7 +349,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
         map((value) => this.showSearchResultForVendor(value))
       );
     } else if (key == 'jobPostId') {
-      this.jobPostCntrl.setValue({ id: '', title: 'NA' });
+      // this.jobPostCntrl.setValue({ id: '', title: 'NA' });
       this.joblistsSearchResult = this.jobPostCntrl.valueChanges.pipe(
         startWith(''),
         map((value) => this.showSearchResultFoJobPost(value))

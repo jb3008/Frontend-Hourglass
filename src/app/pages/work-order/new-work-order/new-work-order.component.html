@@ -28,7 +28,7 @@
               <a
                 class="nav-link cursor-pointer text-active-primary me-6 active"
                 (click)="getSelectedTab('Details')"
-                [ngClass]="{ active: isSelectedTab == 'Details' }"
+                [ngClass]="{ active: isSelectedTab === 'Details' }"
               >
                 Details
               </a>
@@ -42,7 +42,7 @@
           </ul>
         </div>
         <!-- Tabs End:: -->
-        <ng-container *ngIf="isSelectedTab == 'Details'">
+        <ng-container *ngIf="isSelectedTab === 'Details'">
           <div class="fw-bold mb-5 mt-9">Basic Details</div>
 
           <div class="form-group pspw60 mb-5">
@@ -183,12 +183,12 @@
 
             <div class="form-group row mb-5 d-flex align-items-center">
               <label class="col-4"
-                >{{ workOrderKind == "Fixed" ? "Budget" : "Working Rate" }}
+                >{{ workOrderKind === "Fixed" ? "Budget" : "Working Rate" }}
                 <span class="text-danger">*</span></label
               >
               <div class="col-8 d-flex align-items-center">
                 <input
-                  *ngIf="workOrderKind == 'Hourly'"
+                  *ngIf="workOrderKind === 'Hourly'"
                   type="input"
                   formControlName="workRate"
                   class="form-control w-150px py-2 rounded-end-0 fw-normal"
@@ -196,7 +196,7 @@
                   (keypress)="numbersAndDecimalOnly($event)"
                 />
 
-                <ng-container *ngIf="workOrderKind == 'Fixed'">
+                <ng-container *ngIf="workOrderKind === 'Fixed'">
                   <input
                     type="input"
                     formControlName="minBudget"
@@ -221,7 +221,7 @@
                     {{ currency }}
                   </mat-option>
                 </mat-select>
-                <span *ngIf="workOrderKind == 'Hourly'" class="text-muted ps-2"
+                <span *ngIf="workOrderKind === 'Hourly'" class="text-muted ps-2"
                   >Per Hour</span
                 >
               </div>
@@ -259,6 +259,7 @@
                         ? ''
                         : workOrderData.controls['vendorId'].setValue('')
                     "
+                    (keyup)="geVendorByKey(vendorSearch.value)"
                     #vendorSearch
                   />
                   <i
@@ -308,6 +309,7 @@
                         ? ''
                         : workOrderData.controls['jobPostId'].setValue('')
                     "
+                    (keyup)="geJobsByKey(jobSearch.value)"
                     #jobSearch
                   />
                   <i
@@ -733,7 +735,7 @@
           </div>
         </ng-container>
 
-        <ng-container *ngIf="isSelectedTab == 'Task'">
+        <ng-container *ngIf="isSelectedTab === 'Task'">
           <a
             id="kt_work_order_new_task_drawer_toggle"
             class="btn btn-primary btn-sm cursor-pointer mb-6"
