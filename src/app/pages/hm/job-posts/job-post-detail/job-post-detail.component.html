@@ -351,13 +351,18 @@
                     >Preferred Working Rate</label
                   >
                   <div class="col-8">
-                    <span class="form-control-plaintext"
+                    <span
+                      class="form-control-plaintext"
+                      *ngIf="jobDetails?.jobKind !== 'Hourly'"
                       >{{
-                        jobDetails?.minBudget
-                          ? jobDetails?.minBudget + "-" + jobDetails?.maxBudget
-                          : jobDetails?.rate
+                        jobDetails?.minBudget + "-" + jobDetails?.maxBudget
                       }}
                       {{ jobDetails?.currency }}</span
+                    >
+                    <span
+                      class="form-control-plaintext"
+                      *ngIf="jobDetails?.jobKind === 'Hourly'"
+                      >{{ jobDetails?.rate }} {{ jobDetails?.currency }}</span
                     >
                   </div>
                 </div>
@@ -511,6 +516,9 @@
             <div class="symbol symbol-35px rounded-1 me-3">
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">
                 {{element?.firstName?.[0].toUpperCase()
+
+
+
 
 
 
@@ -709,6 +717,9 @@
             <div class="symbol symbol-35px rounded-1 me-3">
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">
                 {{element?.firstName?.[0].toUpperCase()
+
+
+
 
 
 

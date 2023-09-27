@@ -165,8 +165,12 @@ export class JobPostDetailComponent implements OnInit, AfterViewInit {
             this.jobDetails.maxBudget
           ).toFixed(2);
         }
-        console.log(this.jobDetails);
 
+        if (!this.jobDetails.rate) {
+          this.jobDetails.rate = parseFloat('0').toFixed(2);
+        } else {
+          this.jobDetails.rate = parseFloat(this.jobDetails.rate).toFixed(2);
+        }
         this.cdr.detectChanges();
       });
   }

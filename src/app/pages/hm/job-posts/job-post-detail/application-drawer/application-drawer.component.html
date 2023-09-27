@@ -83,7 +83,10 @@
             <div class="col-7">
               <span class="form-control-plaintext p-1 fw-bold"
                 >{{ applicationDetails?.workRate | number : "1.2-2" }}
-                {{ applicationDetails?.workRateCurrency }}</span
+                {{ applicationDetails?.workRateCurrency
+                }}<span *ngIf="jobDetails?.jobKind === 'Hourly'"
+                  >/hr</span
+                ></span
               >
             </div>
           </div>
