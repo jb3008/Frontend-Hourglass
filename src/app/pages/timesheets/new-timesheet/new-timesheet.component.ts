@@ -481,7 +481,7 @@ export class NewTimesheetComponent implements OnInit, AfterViewInit {
   async save(status: string) {
     this.timeSheetData.controls['newTimeSheetTaskList'].setValue([]);
     var checkTimeSpent = this.selectedTask.filter(
-      (i: any) => i.timeSpent === 0
+      (i: any) => i.timeSpent === '0' || i.timeSpent === 0
     );
     if (checkTimeSpent.length) {
       this.utils.showSnackBarMessage(
