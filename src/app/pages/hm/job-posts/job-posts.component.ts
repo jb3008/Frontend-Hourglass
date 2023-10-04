@@ -263,7 +263,12 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     if (payload.types.length == this.jobTypes.length) {
       delete payload.types;
     }
-
+    payload.listType =
+      this.selectedTab === 'Active'
+        ? 'COMPANY_PUBLISHED'
+        : this.selectedTab === 'Draft'
+        ? 'COMPANY_DRAFT'
+        : 'COMPANY_CLOSED';
     this.isLoading = true;
     this.apiCalls
       .get(this.endpoints.LIST_JOBS, payload)

@@ -354,6 +354,13 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     ) {
       delete payload.jobStatus;
     }
+    payload.listType =
+      this.reqParam.status === 'ACTIVE'
+        ? 'VENDOR_PUBLISHED'
+        : this.reqParam.status === 'APPLIED'
+        ? 'VENDOR_APPLIED'
+        : 'VENDOR_CONFIRMED';
+
     this.apiCalls
       .get(this.endpoints.LIST_JOBS, payload)
       .pipe(
