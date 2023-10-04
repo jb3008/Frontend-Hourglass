@@ -258,9 +258,15 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     // };
     // sessionStorage.setItem('searchFilters', JSON.stringify(this.queryParam));
     // sessionStorage.setItem('filterData', JSON.stringify(filterData));
+
+    const payload = JSON.parse(JSON.stringify(this.queryParam));
+    if (payload.types.length == this.jobTypes.length) {
+      delete payload.types;
+    }
+
     this.isLoading = true;
     this.apiCalls
-      .get(this.endpoints.LIST_JOBS, this.queryParam)
+      .get(this.endpoints.LIST_JOBS, payload)
       .pipe(
         catchError(async (err) => {
           this.utils.showErrorDialog(this.dialog, err);

@@ -192,21 +192,21 @@
           <div class="d-flex flex-stack mb-3 fs-7">
             <div class="fw-semibold pe-10 text-gray-600">SUB TOTAL</div>
             <div class="text-end fw-bo/ld text-gray-800">
-              {{ invoiceDetails?.subAmount | number : "1.2-2"
+              {{ invoiceDetails?.subAmount | number : "1.2-2" }}{{ " "
               }}{{ invoiceDetails?.currency }}
             </div>
           </div>
           <div class="d-flex flex-stack mb-3 fs-7">
             <div class="fw-semibold pe-10 text-gray-600">TAX AMOUNT</div>
             <div class="text-end fw-bo/ld text-gray-800">
-              {{ invoiceDetails?.taxAmount | number : "1.2-2"
+              {{ invoiceDetails?.taxAmount | number : "1.2-2" }}{{ " "
               }}{{ invoiceDetails?.currency }}
             </div>
           </div>
           <div class="d-flex flex-stack mb-3 fs-6">
             <div class="fw-semibold pe-10 text-gray-600">TOTAL AMOUNT</div>
             <div class="text-end fw-bold text-gray-800">
-              {{ invoiceDetails?.totalAmount | number : "1.2-2" }}
+              {{ invoiceDetails?.totalAmount | number : "1.2-2" }}{{ " " }}
               {{ invoiceDetails?.currency }}
             </div>
           </div>

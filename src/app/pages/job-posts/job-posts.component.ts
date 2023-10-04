@@ -340,9 +340,22 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     if (param.status === 'APPLIED') {
       delete param.status;
     }
+    var payload = JSON.parse(JSON.stringify(param));
+    if (payload.jobKind && payload.jobKind.length == this.jobKind.length) {
+      delete payload.jobKind;
+    }
+    if (payload.types && payload.types.length == this.jobTypes.length) {
+      delete payload.types;
+    }
 
+    if (
+      payload.jobStatus &&
+      payload.jobStatus.length == this.jobStatus.length
+    ) {
+      delete payload.jobStatus;
+    }
     this.apiCalls
-      .get(this.endpoints.LIST_JOBS, param)
+      .get(this.endpoints.LIST_JOBS, payload)
       .pipe(
         catchError(async (err) => {
           this.utils.showErrorDialog(this.dialog, err);

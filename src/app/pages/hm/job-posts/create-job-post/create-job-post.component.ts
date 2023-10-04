@@ -252,6 +252,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
     this.costCenterCntrl.setValue(this.draftJobDetails.costCenterDetails);
     this.payTermsCntrl.setValue(this.draftJobDetails.payTermDetails);
     this.businessUnitsCntrl.setValue(this.draftJobDetails.businessUnitDetails);
+
     setTimeout(() => {
       this.jobPostData.patchValue({
         jobTitle: this.draftJobDetails.title,
@@ -259,7 +260,7 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
         hiringManager: this.draftJobDetails.managerDetails?.userId,
         priority: this.draftJobDetails.priority,
         openPosition: this.draftJobDetails.openPosition,
-        jobType: this.draftJobDetails.type,
+        jobType: this.draftJobDetails.jobTypeCode,
         jobKind: this.draftJobDetails.jobKind,
         workRate: this.draftJobDetails?.rate,
         minBudget: this.draftJobDetails?.minBudget,

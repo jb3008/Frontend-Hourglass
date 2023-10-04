@@ -68,14 +68,12 @@ export class InvoicesDetailsComponent implements OnInit {
       .subscribe((response) => {
         this.invoiceDetails = response ? response.list[0] : null;
         if (this.invoiceDetails) {
-          this.invoiceDetails.taxAmount = this.percentage(
-            this.invoiceDetails?.totalAmount || 0,
-            this.invoiceDetails?.taxPercentage || 0
-          );
+          this.invoiceDetails.taxAmount =
+            this.invoiceDetails.totalAmount -
+            this.invoiceDetails?.subTotalAmount;
+
           this.invoiceDetails.subAmount =
-            this.invoiceDetails?.totalAmount ||
-            0 - this.invoiceDetails?.taxPercentage ||
-            0;
+            this.invoiceDetails?.subTotalAmount || 0;
         }
         this.isLoading = false;
         this.cdr.detectChanges();
