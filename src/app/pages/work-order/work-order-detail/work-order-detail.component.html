@@ -342,8 +342,8 @@
                       {{
                         workOrderDetails?.kind == "Fixed"
                           ? workOrderDetails?.minBudget +
-                            "-" +
-                            workOrderDetails?.maxBudget
+                            " " +
+                            workOrderDetails?.rateCurrency
                           : workOrderDetails?.rate +
                             " " +
                             workOrderDetails?.rateCurrency

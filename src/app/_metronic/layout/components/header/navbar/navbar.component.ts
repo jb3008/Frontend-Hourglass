@@ -53,6 +53,14 @@ export class NavbarComponent implements OnInit {
       )
       .subscribe((response) => {
         this.notificationCount = response.count ? response.count : 0;
+        try {
+          setTimeout(() => {
+            var els: any =
+              document.getElementsByClassName('mat-badge-content')[0];
+            els.innerHTML = this.notificationCount;
+          }, 1000);
+        } catch (ex) {}
+
         this.cdr.detectChanges();
       });
   }

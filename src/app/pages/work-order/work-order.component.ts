@@ -10,6 +10,7 @@ import { Utils } from 'src/app/services/utils';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { NavbarComponent } from 'src/app/_metronic/layout/components/header/navbar/navbar.component';
 
 @Component({
   selector: 'app-work-order',
@@ -481,7 +482,11 @@ export class WorkOrderComponent implements OnInit {
       this.apiCalls
         .post(this.endPoints.READ_NOTIFICATION, formData)
         .pipe(catchError(async (err) => {}))
-        .subscribe(async (response) => {});
+        .subscribe(async (response) => {
+          let notify = new NavbarComponent(this.utils, this.apiCalls, this.cdr);
+          notify.getNotificationCounter();
+          this.cdr.detectChanges();
+        });
     }
   }
 }

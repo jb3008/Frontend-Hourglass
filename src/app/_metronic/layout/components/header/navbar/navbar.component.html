@@ -50,7 +50,7 @@
   <div
     *ngIf="notificationCount > 0"
     [ngClass]="btnClass"
-    matBadge="{{ notificationCount }}"
+    [matBadge]="notificationCount"
     matBadgeColor="warn"
   >
     <i class="bi bi-envelope bi bi-envelope fs-3 text-primary"></i>

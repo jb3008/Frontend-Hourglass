@@ -18,6 +18,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { NavbarComponent } from 'src/app/_metronic/layout/components/header/navbar/navbar.component';
 
 @Component({
   selector: 'app-timesheets',
@@ -360,7 +361,10 @@ export class TimesheetsComponent implements OnInit {
             }, 10);
           })
         )
-        .subscribe(async (response) => {});
+        .subscribe(async (response) => {
+          let notify = new NavbarComponent(this.utils, this.apiCalls, this.cdr);
+          notify.getNotificationCounter();
+        });
     }
   }
   onKeypressEvent(event: any) {
