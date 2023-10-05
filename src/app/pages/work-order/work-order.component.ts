@@ -363,6 +363,7 @@ export class WorkOrderComponent implements OnInit {
       });
   }
   goToDetails(element: any) {
+    this.readNotification(element);
     this.router.navigate(['/work-order/details'], {
       queryParams: { workOrderId: element.workOrderId },
     });
@@ -471,6 +472,17 @@ export class WorkOrderComponent implements OnInit {
     this.sort.active = 'workOrderId';
     this.sort.direction = 'desc';
     this.getAllWorkOrders(this.filterObj);
+  }
+
+  readNotification(obj: any) {
+    if (obj.readStatus === 'UNREAD') {
+      var formData = new FormData();
+      formData.append('notificationId', obj.notificationId);
+      this.apiCalls
+        .post(this.endPoints.READ_NOTIFICATION, formData)
+        .pipe(catchError(async (err) => {}))
+        .subscribe(async (response) => {});
+    }
   }
 }
 
