@@ -197,6 +197,7 @@
                 />
 
                 <ng-container *ngIf="workOrderKind === 'Fixed'">
+                  <label class="me-2">Min</label>
                   <input
                     type="input"
                     formControlName="minBudget"
@@ -221,6 +222,21 @@
                     {{ currency }}
                   </mat-option>
                 </mat-select>
+                <label class="me-2">Max</label>
+                <input
+                  type="input"
+                  formControlName="maxBudget"
+                  class="form-control w-100px py-2 rounded-end-0 fw-normal"
+                  placeholder="Enter amount"
+                  (keypress)="numbersAndDecimalOnly($event)"
+                  (focusout)="checkMaxBudget($event, 'max')"
+                />
+                <input
+                  type="input"
+                  class="form-control w-50px py-2 rounded-start-0 fw-normal"
+                  [value]="workOrderData.controls['workRateCurrency'].value"
+                  readonly
+                />
                 <span *ngIf="workOrderKind === 'Hourly'" class="text-muted ps-2"
                   >Per Hour</span
                 >

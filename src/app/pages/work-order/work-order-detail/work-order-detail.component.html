@@ -99,7 +99,7 @@
                 <div class="me-5 my-1">
                   <span class="d-flex text-muted fs-8">Vendor</span>
                   <span class="fw-bold d-flex s-"
-                    >{{ vendorDetails?.vendorId }}
+                    >{{ workOrderDetails?.vendorId }}
                     {{ vendorDetails?.title }}</span
                   >
                 </div>
@@ -342,6 +342,16 @@
                       {{
                         workOrderDetails?.kind == "Fixed"
                           ? workOrderDetails?.minBudget +
+                            " " +
+                            workOrderDetails?.rateCurrency
+                          : workOrderDetails?.rate +
+                            " " +
+                            workOrderDetails?.rateCurrency
+                      }}
+                      -
+                      {{
+                        workOrderDetails?.kind == "Fixed"
+                          ? workOrderDetails?.maxBudget +
                             " " +
                             workOrderDetails?.rateCurrency
                           : workOrderDetails?.rate +

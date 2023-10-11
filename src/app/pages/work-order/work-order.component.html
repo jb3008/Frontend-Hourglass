@@ -259,13 +259,16 @@
           Job Post #
         </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
-          <a class="cursor-pointer text-primary fw-semibold">
+          <a
+            *ngIf="element.jobPostId"
+            class="cursor-pointer text-primary fw-semibold"
+          >
             {{ element.jobPostId }}
-            <img
+            <!-- <img
               class="ms-1 align-middle"
               src="./assets/images/icons/table-arrow.svg"
               alt=""
-            />
+            /> -->
           </a>
         </td>
       </ng-container>

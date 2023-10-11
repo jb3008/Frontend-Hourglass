@@ -656,8 +656,31 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       this.workOrderData.controls['minBudget'].setValue(null);
       this.workOrderData.controls['maxBudget'].setValue(null);
     }
+    console.log(this.workOrderKind);
+    this.cdr.detectChanges();
   }
-
+  checkMaxBudget(event: any, type: string) {
+    const currentValue = Number(event.target.value);
+    const minValue = Number(this.workOrderData.controls['minBudget'].value);
+    const maxValue = Number(this.workOrderData.controls['maxBudget'].value);
+    if (type == 'max') {
+      if (minValue && currentValue <= minValue) {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Please enter max amount greater than min amount'
+        );
+        this.workOrderData.controls['maxBudget'].setValue(null);
+      }
+    } else if (type == 'min') {
+      if (maxValue && currentValue >= maxValue) {
+        this.utils.showSnackBarMessage(
+          this.snackBar,
+          'Please enter min amount less than max amount'
+        );
+        this.workOrderData.controls['minBudget'].setValue(null);
+      }
+    }
+  }
   numbersOnly(event: any) {
     return this.utils.numberOnly(event);
   }
@@ -746,7 +769,7 @@ export class NewWorkOrderComponent implements OnInit, AfterViewInit {
       );
     }
 
-    this.workOrderData.controls['maxBudget'].setValue(minBudget);
+    // this.workOrderData.controls['maxBudget'].setValue(minBudget);
     let maxBudget = this.workOrderData.controls['maxBudget'].value;
     if (
       this.workOrderData.valid &&
