@@ -38,6 +38,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   apiLoad: boolean = false;
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
   endpoints = EndPoints;
   reqParam: any = {
     status: 'ACTIVE',
@@ -332,6 +333,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.getAllJobs();
   }
   getAllJobs() {
+    this.isLoading = true;
     this.apiLoad = false;
     let param = JSON.parse(JSON.stringify(this.reqParam));
     if (param.status !== 'ACTIVE') {

@@ -69,7 +69,10 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   costCenterCntrl = new FormControl();
   payTermsCntrl = new FormControl();
   businessUnitsCntrl = new FormControl();
-
+  pageNo: string;
+  pageSize: string;
+  sortBy: string;
+  sortOrder: string;
   @ViewChild('siteSelect') siteSelect: MatSelect;
 
   constructor(
@@ -84,6 +87,15 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((param) => {
+      this.selectedTab = param['tab'];
+      this.pageNo = param['pageNo'];
+      this.pageSize = param['pageSize'];
+      this.sortBy = param['sortBy'];
+      this.sortOrder = param['sortOrder'];
+    });
+    console.log(this.pageNo, this.pageSize, this.sortBy, this.sortOrder);
+
     this.jobPostData = this.fb.group({
       jobTitle: ['', Validators.required],
       jobDescription: ['', Validators.required],
@@ -685,10 +697,14 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
   }
 
   cancelJobPost() {
+    console.log(this.pageNo, this.pageSize, this.sortBy, this.sortOrder);
+
     this.router.navigate(['/hm/job-posts'], {
       queryParams: {
-        pageNo: 1,
-        pageSize: 10,
+        pageNo: this.pageNo,
+        pageSize: this.pageSize,
+        sortBy: this.sortBy,
+        sortOrder: this.sortOrder,
         status: this.selectedTab?.toUpperCase(),
       },
     });
@@ -949,8 +965,10 @@ export class CreateJobPostComponent implements OnInit, OnDestroy {
       // }) ;
       this.router.navigate(['/hm/job-posts'], {
         queryParams: {
-          pageNo: 1,
-          pageSize: 10,
+          pageNo: this.pageNo,
+          pageSize: this.pageSize,
+          sortBy: this.sortBy,
+          sortOrder: this.sortOrder,
           status: status == 'draft' ? 'DRAFT' : 'ACTIVE',
         },
       });

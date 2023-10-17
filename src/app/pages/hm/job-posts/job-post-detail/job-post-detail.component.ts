@@ -36,6 +36,8 @@ export class JobPostDetailComponent implements OnInit, AfterViewInit {
   selectedTab: string;
   pageNo: string;
   pageSize: string;
+  sortBy: string;
+  sortOrder: string;
   applicationDetails: any;
   applicantsDetails: any;
   costCenterList: any[] = [];
@@ -97,6 +99,8 @@ export class JobPostDetailComponent implements OnInit, AfterViewInit {
       this.selectedTab = param['tab'];
       this.pageNo = param['pageNo'];
       this.pageSize = param['pageSize'];
+      this.sortBy = param['sortBy'];
+      this.sortOrder = param['sortOrder'];
     });
     this.getCostCenterList();
     this.getPaymentTermsList();

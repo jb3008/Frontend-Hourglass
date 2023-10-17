@@ -10,9 +10,11 @@
       class="cursor-pointer text-body"
       routerLink="/hm/job-posts"
       [queryParams]="{
-        pageNo: 1,
-        pageSize: 10,
-        status: selectedTab?.toUpperCase()
+        pageNo: pageNo,
+        pageSize: pageSize,
+        status: selectedTab?.toUpperCase(),
+        sortBy: sortBy,
+        sortOrder: sortOrder
       }"
     >
       <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i> #{{
@@ -539,6 +541,10 @@
 
 
 
+
+
+
+
                 }}{{element?.lastName?.[0].toUpperCase()}}
               </span>
             </div>
@@ -726,6 +732,10 @@
             <div class="symbol symbol-35px rounded-1 me-3">
               <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">
                 {{element?.firstName?.[0].toUpperCase()
+
+
+
+
 
 
 

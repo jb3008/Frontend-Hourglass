@@ -1,22 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { JobPostsRoutingModule } from './job-posts-routing.module';
 import { JobPostsComponent } from './job-posts.component';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { JobPostDetailComponent } from './job-post-detail/job-post-detail.component';
 import { CreateJobPostComponent } from './create-job-post/create-job-post.component';
-import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDropdownModule,
+  NgbTooltipModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { AddInvoiceDrawerComponent } from './job-post-detail/add-invoice-drawer/add-invoice-drawer.component';
 import { ApplicationDrawerComponent } from './job-post-detail/application-drawer/application-drawer.component';
 import { SharedModule } from '../../shared.modules';
@@ -27,8 +30,8 @@ import { LogsDrawerComponent } from './job-post-detail/logs-drawer/logs-drawer.c
 import { ChatDrawerComponent } from './job-post-detail/chat-drawer/chat-drawer.component';
 import { ModalsModule } from 'src/app/_metronic/partials';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -39,15 +42,14 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     AddInvoiceDrawerComponent,
     SendOfferLetterDrawerComponent,
     LogsDrawerComponent,
-    ChatDrawerComponent
-    
+    ChatDrawerComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     CKEditorModule,
-    NgbDropdownModule ,
+    NgbDropdownModule,
     JobPostsRoutingModule,
     SharedModule,
     MatTableModule,
@@ -63,9 +65,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     NgbTooltipModule,
     ModalsModule,
     NgxDocViewerModule,
-    MatAutocompleteModule
-
-
-  ]
+    MatAutocompleteModule,
+    MatSortModule,
+  ],
 })
-export class JobPostsModule { }
+export class JobPostsModule {}

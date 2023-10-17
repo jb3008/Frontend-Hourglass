@@ -13,9 +13,11 @@
             class="cursor-pointer"
             routerLink="/hm/job-posts"
             [queryParams]="{
-              pageNo: 1,
-              pageSize: 10,
-              status: selectedTab?.toUpperCase()
+              pageNo: pageNo,
+              pageSize: pageSize,
+              status: selectedTab?.toUpperCase(),
+              sortBy: sortBy,
+              sortOrder: sortOrder
             }"
           >
             <i class="fas fa-arrow-left me-2 text-body fs-6 align-middle"></i>

@@ -15,6 +15,7 @@ import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-job-posts',
@@ -33,6 +34,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     'position',
     'seekers',
   ];
+  @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource<any>();
   endpoints = EndPoints;
   selectedTab = 'Active';
@@ -52,7 +54,8 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
   selectedJobTypes: boolean[] = [];
   filter: Filter = {} as Filter;
   apiLoad = false;
-
+  sortBy: string = 'id';
+  sortOrder: string = 'desc';
   // searchFilter:string ='';
   @ViewChild('searchFilterInp') searchFilterInp: any;
 
@@ -106,6 +109,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         // } else {
         //   this.getAllJobs();
         // }
+        console.log(param);
         this.queryParam.status = param['status'] ? param['status'] : 'ACTIVE';
         this.selectedTab =
           this.queryParam.status.charAt(0).toUpperCase() +
@@ -148,6 +152,10 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         if (this.jobTypes.length === this.queryParam?.types?.length) {
           this.selected = true;
         }
+        this.sortBy = param['sortBy'] ? param['sortBy'] : 'id';
+        this.sortOrder = param['sortOrder'] ? param['sortOrder'] : 'desc';
+        this.sort.active = this.sortBy;
+        this.sort.direction = this.sortOrder === 'desc' ? 'desc' : 'asc';
         this.getAllJobs();
       });
     }, 100);
@@ -155,6 +163,12 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.sort.sortChange.subscribe(() => {
+      this.sortBy = this.sort.active;
+      this.sortOrder = this.sort.direction;
+      this.paginator.pageIndex = 0;
+      this.getAllJobs();
+    });
   }
 
   isMat: boolean = true;
@@ -269,6 +283,51 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         : this.selectedTab === 'Draft'
         ? 'COMPANY_DRAFT'
         : 'COMPANY_CLOSED';
+
+    switch (this.sort.active) {
+      case 'id':
+        payload.sortType =
+          this.sort.direction === 'desc' ? 'By_ID_Descending' : 'By_ID';
+        break;
+      case 'type':
+        payload.sortType =
+          this.sort.direction === 'desc'
+            ? 'By_JobTyp_Descending'
+            : 'By_JobType';
+        break;
+      case 'businessUnit':
+        payload.sortType =
+          this.sort.direction === 'desc'
+            ? 'By_BusinessUnit_Descending'
+            : 'By_BusinessUnit';
+        break;
+      case 'site':
+        payload.sortType =
+          this.sort.direction === 'desc' ? 'By_Site_Descending' : 'By_Site';
+        break;
+      case 'position':
+        payload.sortType =
+          this.sort.direction === 'desc'
+            ? 'By_JobPositions_Descending'
+            : 'By_JobPositions';
+        break;
+      case 'startDate':
+        payload.sortType =
+          this.sort.direction === 'desc'
+            ? 'By_StartDate_Descending'
+            : 'By_StartDate';
+        break;
+      case 'endDate':
+        payload.sortType =
+          this.sort.direction === 'desc'
+            ? 'By_EndDate_Descending'
+            : 'By_EndDate';
+        break;
+      default:
+        payload.sortType =
+          this.sort.direction === 'desc' ? 'By_ID_Descending' : 'By_ID';
+        break;
+    }
     this.isLoading = true;
     this.apiCalls
       .get(this.endpoints.LIST_JOBS, payload)
@@ -302,6 +361,8 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
             queryParams.set(i, this.queryParam[i]);
           }
         }
+        queryParams.set('sortBy', this.sort.active);
+        queryParams.set('sortOrder', this.sort.direction);
 
         var newURL = location.href.split('?')[0];
         window.history.pushState(
@@ -323,6 +384,8 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
           tab: this.selectedTab,
           pageNo: this.queryParam.pageNo,
           pageSize: this.queryParam.pageSize,
+          sortBy: this.sort.active,
+          sortOrder: this.sort.direction,
         },
       });
     else if (this.selectedTab == 'Draft')
@@ -332,6 +395,8 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
           tab: this.selectedTab,
           pageNo: this.queryParam.pageNo,
           pageSize: this.queryParam.pageSize,
+          sortBy: this.sort.active,
+          sortOrder: this.sort.direction,
         },
       });
   }
@@ -359,26 +424,36 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.paginator.pageSize = 10;
     this.selectedTab = tab;
     this.queryParam.status = this.selectedTab.toUpperCase();
+    this.sort.active = 'id';
+    this.sort.direction = 'desc';
     this.getAllJobs();
   }
 
   searchFilter(event: any) {
     if (event.target.value && event.target.value.length > 2) {
       this.queryParam.searchText = event.target.value;
-      this.getAllJobs();
+      this.reloadTable();
     } else {
       this.clearSearch();
     }
   }
 
+  reloadTable() {
+    this.queryParam.pageNo = 1;
+    this.queryParam.pageSize = 10;
+    this.paginator.pageSize = 10;
+    this.sort.active = 'id';
+    this.sort.direction = 'desc';
+    this.getAllJobs();
+  }
   filterSite(event: any) {
     this.queryParam.site = event.value;
-    this.getAllJobs();
+    this.reloadTable();
   }
 
   filterBusinessUnit(event: any) {
     this.queryParam.businessUnit = event.value;
-    this.getAllJobs();
+    this.reloadTable();
   }
 
   selected = false;
@@ -412,7 +487,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         this.selectedJobTypes[index] = false;
       }
     }
-    this.getAllJobs();
+    this.reloadTable();
   }
 
   getDate(event: any, dateType: 'startDate' | 'endDate') {
@@ -421,7 +496,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     // if (dateType == 'startDate' && !!this.queryParam.endDate && this.queryParam.endDate > date) {
     //   this.queryParam.endDate = this.changeDateToUtc(new Date(date).setDate(new Date(date).))
     // } // TODO: end date  should be automatically increased to next date when start date is  changed.
-    this.getAllJobs();
+    this.reloadTable();
   }
 
   changeDateToUtc(dateObj: any) {
@@ -446,12 +521,14 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     this.selected = false;
     this.queryParam.pageNo = 1;
     this.queryParam.pageSize = 10;
+    this.sort.active = 'id';
+    this.sort.direction = 'desc';
     if (!tab) this.getAllJobs();
   }
 
   clearSearch() {
     delete this.queryParam.searchText;
-    this.getAllJobs();
+    this.reloadTable();
   }
 
   getJobNameFromType(jobType: string) {
