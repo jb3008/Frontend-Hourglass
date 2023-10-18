@@ -332,7 +332,7 @@
                 <div class="form-group row">
                   <label class="col-4 col-form-label text-muted">
                     {{
-                      workOrderDetails?.kind == "Fixed"
+                      workOrderDetails?.kind === "Fixed"
                         ? "Budget"
                         : "Working Rate"
                     }}
@@ -340,7 +340,7 @@
                   <div class="col-8">
                     <span class="form-control-plaintext text-end">
                       {{
-                        workOrderDetails?.kind == "Fixed"
+                        workOrderDetails?.kind === "Fixed"
                           ? workOrderDetails?.minBudget +
                             " " +
                             workOrderDetails?.rateCurrency
@@ -348,7 +348,7 @@
                             " " +
                             workOrderDetails?.rateCurrency
                       }}
-                      -
+                      <!-- -
                       {{
                         workOrderDetails?.kind == "Fixed"
                           ? workOrderDetails?.maxBudget +
@@ -357,7 +357,7 @@
                           : workOrderDetails?.rate +
                             " " +
                             workOrderDetails?.rateCurrency
-                      }}
+                      }} -->
                     </span>
                   </div>
                 </div>
