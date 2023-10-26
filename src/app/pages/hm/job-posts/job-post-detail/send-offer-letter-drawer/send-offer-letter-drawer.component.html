@@ -157,6 +157,14 @@
         class="btn btn-sm btn-outline"
         #cancel
         id="kt_send_offer_letter_close"
+        (click)="
+          jobPostData.controls['workRate'].setValue(
+            this.jobDetails.jobKind === 'Hourly'
+              ? this.jobDetails.rate
+              : this.jobDetails?.minBudget
+          );
+          clearFile('offerLetter')
+        "
       >
         Cancel
       </button>

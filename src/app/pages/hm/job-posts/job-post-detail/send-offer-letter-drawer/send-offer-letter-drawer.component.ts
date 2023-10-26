@@ -191,6 +191,12 @@ export class SendOfferLetterDrawerComponent implements OnInit {
                   'offer sent successfully',
                   () => {
                     //close drawer
+                    this.jobPostData.controls['workRate'].setValue(
+                      this.jobDetails.jobKind == 'Hourly'
+                        ? this.jobDetails.rate
+                        : this.jobDetails?.minBudget
+                    );
+                    this.clearFile('offerLetter');
                     this.cancelBtn.nativeElement.click();
                   }
                 );
