@@ -226,7 +226,7 @@
                 >
                   {{ element.id }}
                 </div>
-                <div class="text-muted text-truncate mw-325px">
+                <div class="text-muted text-truncate mw-200px">
                   {{ element.title }}
                 </div>
               </div>
@@ -260,14 +260,19 @@
             </th>
             <td mat-cell *matCellDef="let element" class="align-middle">
               <!-- <i class="far fa-building"></i> -->
-              <img
-                src="./assets/images/icons/building.svg"
-                alt=""
-                class="me-1"
-              />
-              {{ element.businessUnitDetails?.name }} ({{
-                element.businessUnitDetails?.code
-              }})
+           <div class="d-flex align-items-center">
+            <img
+            src="./assets/images/icons/building.svg"
+            alt=""
+            class="me-1"
+          />
+          <div class="text-truncate mw-225px">
+            {{ element.businessUnitDetails?.name }} ({{
+              element.businessUnitDetails?.code
+            }})
+          </div>
+
+           </div>
             </td>
           </ng-container>
 
@@ -282,7 +287,9 @@
               Site
             </th>
             <td mat-cell *matCellDef="let element" class="align-middle">
-              {{ element.siteDetails?.name }} ({{ element?.siteDetails?.code }})
+              <div class="text-truncate mw-225px">
+                {{ element.siteDetails?.name }} ({{ element?.siteDetails?.code }})
+              </div>
             </td>
           </ng-container>
 
