@@ -5,3 +5,7 @@
 ::ng-deep.modal-content {
   width: 800px;
 }
+::ng-deep .mat-sort-header-arrow {
+  transform: none !important;
+  opacity: 1 !important;
+}

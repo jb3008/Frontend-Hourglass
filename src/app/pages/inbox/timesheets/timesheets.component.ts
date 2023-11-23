@@ -174,9 +174,21 @@ export class TimesheetsComponent implements OnInit {
   isSelectedTab: string = 'Inbox';
   changeFlag(flag: string) {
     if (flag === 'Inbox') {
+      this.timeSheetFilter.controls['status'].setValue('All');
+      this.timeSheetFilter.controls['searchByEmployee'].setValue('');
+      this.timeSheetFilter.controls['timeSheetId'].setValue('');
+      this.timeSheetFilter.controls['workOrderId'].setValue('');
+      this.timeSheetFilter.controls['fromDate'].setValue('');
+      this.timeSheetFilter.controls['toDate'].setValue('');
       this.flag = 'Inbox';
       this.isSelectedTab = flag;
     } else {
+      this.timeSheetFilter.controls['status'].setValue('All');
+      this.timeSheetFilter.controls['searchByEmployee'].setValue('');
+      this.timeSheetFilter.controls['timeSheetId'].setValue('');
+      this.timeSheetFilter.controls['workOrderId'].setValue('');
+      this.timeSheetFilter.controls['fromDate'].setValue('');
+      this.timeSheetFilter.controls['toDate'].setValue('');
       this.flag = 'Outbox';
       this.isSelectedTab = flag;
     }

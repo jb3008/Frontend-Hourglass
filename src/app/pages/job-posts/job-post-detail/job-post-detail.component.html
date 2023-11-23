@@ -355,8 +355,10 @@
                     <span class="form-control-plaintext"
                       >{{
                         jobDetails?.minBudget
-                          ? jobDetails?.minBudget + "-" + jobDetails?.maxBudget
-                          : jobDetails?.rate
+                          ? (jobDetails?.minBudget | number : "1.2-2") +
+                            " - " +
+                            (jobDetails?.maxBudget | number : "1.2-2")
+                          : (jobDetails?.rate | number : "1.2-2")
                       }}
                       {{ jobDetails?.currency }}</span
                     >

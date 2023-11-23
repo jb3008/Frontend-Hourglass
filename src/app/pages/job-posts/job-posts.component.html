@@ -223,7 +223,7 @@
           [(ngModel)]="reqParam.site"
           (selectionChange)="searchFilter()"
         >
-          <mat-option value="">All</mat-option>
+          <!-- <mat-option value="">All</mat-option> -->
           <mat-option *ngFor="let sites of sitesList" [value]="sites.code">
             {{ sites.name }} ({{ sites.code }})
           </mat-option>
@@ -237,7 +237,7 @@
           [(ngModel)]="reqParam.businessUnit"
           (selectionChange)="searchFilter()"
         >
-          <mat-option value="">All</mat-option>
+          <!-- <mat-option value="">All</mat-option> -->
           <mat-option *ngFor="let units of businessUnits" [value]="units.code">
             {{ units.name }}
           </mat-option>
@@ -428,8 +428,10 @@
                         <span class="fw-bold d-flex"
                           >{{
                             details.jobKind === "Fixed"
-                              ? details.minBudget + " ~ " + details.maxBudget
-                              : details.rate
+                              ? (details.minBudget | number : "1.2-2") +
+                                " ~ " +
+                                (details.maxBudget | number : "1.2-2")
+                              : (details.rate | number : "1.2-2")
                           }}
                           {{ details.currency }}</span
                         >
@@ -532,8 +534,10 @@
                         <span class="fw-bold d-flex"
                           >{{
                             details.jobKind === "Fixed"
-                              ? details.minBudget + " ~ " + details.maxBudget
-                              : details.rate
+                              ? (details.minBudget | number : "1.2-2") +
+                                " ~ " +
+                                (details.maxBudget | number : "1.2-2")
+                              : (details.rate | number : "1.2-2")
                           }}
                           {{ details.currency }}</span
                         >
@@ -646,8 +650,10 @@
                         <span class="fw-bold d-flex"
                           >{{
                             details.jobKind === "Fixed"
-                              ? details.minBudget + " ~ " + details.maxBudget
-                              : details.rate
+                              ? (details.minBudget | number : "1.2-2") +
+                                " ~ " +
+                                (details.maxBudget | number : "1.2-2")
+                              : (details.rate | number : "1.2-2")
                           }}
                           {{ details.currency }}</span
                         >

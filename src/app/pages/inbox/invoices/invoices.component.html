@@ -6,7 +6,7 @@
       <a class="cursor-pointer" routerLink="/inbox">
         <i class="fas fa-arrow-left text-body fs-3 me-3"></i>
       </a>
-      Invoices
+      Invoices123
     </h6>
     <ul class="nav nav-line-tabs nav-stretch">
       <li class="nav-item">
@@ -281,11 +281,7 @@
         *matHeaderRowDef="displayedColumns"
         class="bg-light-primary highlight"
       ></tr>
-      <tr
-        mat-row
-        [ngClass]="{ highlight: row?.notificationStatus === 'UNREAD' }"
-        *matRowDef="let row; columns: displayedColumns"
-      ></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <div
       *ngIf="isApiLoad && invoiceList.length === 0"

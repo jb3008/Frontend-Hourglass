@@ -321,11 +321,7 @@
         *matHeaderRowDef="displayedColumns"
         class="bg-light-primary"
       ></tr>
-      <tr
-        [ngClass]="{ highlight: row?.notificationStatus === 'UNREAD' }"
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-      ></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <div
       *ngIf="isApiLoad && timeSheetList.length === 0"

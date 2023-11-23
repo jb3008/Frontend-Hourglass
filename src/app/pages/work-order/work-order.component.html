@@ -423,11 +423,7 @@
         *matHeaderRowDef="displayedColumns"
         class="bg-light-primary highlight"
       ></tr>
-      <tr
-        [ngClass]="{ highlight: row?.readStatus === 'UNREAD' }"
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-      ></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <div
       *ngIf="apiLoad && dataSource.data.length == 0"

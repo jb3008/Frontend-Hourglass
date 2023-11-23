@@ -1,112 +1,179 @@
 <!-- <p  routerLink="details">work-order works!</p>
 <p  routerLink="new-work-order">new-order works!</p> -->
 <div class="content flex-column-fluid auto container-lg mb-4">
-    <div class="d-flex gap-4 align-items-center my-5">
-  
-        <h6 class="text-dark  text-gray-800 fs-2 m-0">
-            <a class="cursor-pointer " routerLink="/hm/inbox"> <i class="fas fa-arrow-left text-body fs-3 me-3"></i> </a>
-            Invoices</h6>
-    <ul class="nav nav-line-tabs   nav-stretch ">
-                <li class="nav-item">
-                    <a data-bs-toggle="tab" class="nav-link text-primary fw-semibold px-4 cursor-pointer active"> Inbox</a>
-                </li>
-                <li class="nav-item">
-                    <a data-bs-toggle="tab" class="nav-link px-4 cursor-pointer"> Outbox</a>
-                </li>
-    
-            
-            </ul>
-          </div>
-    
-    <div class="d-flex align-items-start gap-4 ">
-        <div class="position-relative input-icon input-icon-right">
-            <input type="text" class="form-control py-2 px-3 fs- fw-normal pe-10" placeholder="Search by Invoice # "/>
-            <span><i class="fa fa-search "></i></span>
-        </div>
-      
-        <select  name="" id="" class="form-select fs- py-2  w-200px">
-            <option  value="">All Status</option>
-        </select>
-        
-   
-        <div class="position-relative input-icon input-icon-right">
-            <input type="text" class="form-control cursor-pointer py-2 fs- fw-normal" (click)="picker1.open()"
-            [matDatepicker]="picker1" placeholder="Select Date">
-            <span class="cursor-pointer" (click)="picker1.open()"><i class="far fa-calendar"></i></span>
-            <mat-datepicker #picker1></mat-datepicker>
-        </div>
+  <div class="d-flex gap-4 align-items-center my-5">
+    <h6 class="text-dark text-gray-800 fs-2 m-0">
+      <a class="cursor-pointer" routerLink="/hm/inbox">
+        <i class="fas fa-arrow-left text-body fs-3 me-3"></i>
+      </a>
+      Invoices
+    </h6>
+    <ul class="nav nav-line-tabs nav-stretch">
+      <li class="nav-item">
+        <a
+          data-bs-toggle="tab"
+          class="nav-link text-primary fw-semibold px-4 cursor-pointer active"
+        >
+          Inbox</a
+        >
+      </li>
+      <li class="nav-item">
+        <a data-bs-toggle="tab" class="nav-link px-4 cursor-pointer"> Outbox</a>
+      </li>
+    </ul>
+  </div>
 
-
-   
-        <a class="btn btn-light-primary btn-sm cursor-pointer" >Search</a>
-        <a class="btn btn-light-primary btn-sm cursor-pointer" > Reset</a>
-
+  <div class="d-flex align-items-start gap-4">
+    <div class="position-relative input-icon input-icon-right">
+      <input
+        type="text"
+        class="form-control py-2 px-3 fs- fw-normal pe-10"
+        placeholder="Search by Invoice # "
+      />
+      <span><i class="fa fa-search"></i></span>
     </div>
-    
 
-    <div class="mt-5 mb-7 border">
-        <table mat-table [dataSource]="dataSource" class="table  border-bottom table-row-bordered text-gray-600 qfs-13 m-0" >
-          <!-- invoice Column -->
-          <ng-container matColumnDef="invoice">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tdoc.svg" alt="" class="align-text-bottom me-1 ">  Invoices #</th>
-            <td mat-cell *matCellDef="let element" class="align-middle">
-                <!-- <a routerLink="details" class="cursor-pointer"> -->
-                  <a  class="cursor-pointer text-primary fw-semibold" routerLink="../invoices-details">
+    <select name="" id="" class="form-select fs- py-2 w-200px">
+      <option value="">All Status</option>
+    </select>
 
-                    {{element.invoice}}  <img class="ms-1 align-middle" src="./assets/images/icons/table-arrow.svg" alt="">
-                </a>
-            </td>
-          </ng-container>
-              <!-- invoiceDate Column -->
-    <ng-container matColumnDef="invoiceDate">
-        <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/tcal.svg" alt="" class="align-text-bottom me-1 "> Invoice Date</th>
-        <td mat-cell *matCellDef="let element" class="align-middle"> {{element.invoiceDate}} </td>
+    <div class="position-relative input-icon input-icon-right">
+      <input
+        type="text"
+        class="form-control cursor-pointer py-2 fs- fw-normal"
+        (click)="picker1.open()"
+        [matDatepicker]="picker1"
+        placeholder="Select Date"
+      />
+      <span class="cursor-pointer" (click)="picker1.open()"
+        ><i class="far fa-calendar"></i
+      ></span>
+      <mat-datepicker #picker1></mat-datepicker>
+    </div>
+
+    <a class="btn btn-light-primary btn-sm cursor-pointer">Search</a>
+    <a class="btn btn-light-primary btn-sm cursor-pointer"> Reset</a>
+  </div>
+
+  <div class="mt-5 mb-7 border">
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      class="table border-bottom table-row-bordered text-gray-600 qfs-13 m-0"
+    >
+      <!-- invoice Column -->
+      <ng-container matColumnDef="invoice">
+        <th mat-header-cell *matHeaderCellDef class="align-middle">
+          <img
+            src="./assets/images/icons/tdoc.svg"
+            alt=""
+            class="align-text-bottom me-1"
+          />
+          Invoices #
+        </th>
+        <td mat-cell *matCellDef="let element" class="align-middle">
+          <!-- <a routerLink="details" class="cursor-pointer"> -->
+          <a
+            class="cursor-pointer text-primary fw-semibold"
+            routerLink="../invoices-details"
+          >
+            {{ element.invoice }}
+            <img
+              class="ms-1 align-middle"
+              src="./assets/images/icons/table-arrow.svg"
+              alt=""
+            />
+          </a>
+        </td>
       </ng-container>
-          <!-- submittedby Column -->
-          <ng-container matColumnDef="submittedby">
-            <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/manager.svg" class="align-text-bottom me-1 " alt="">  Submitted By</th>
-            <td mat-cell *matCellDef="let element" class="align-middle"> 
-              <div  class="me-10 my-1 d-flex">
-                <div  class="symbol symbol-35px  rounded-1 me-3">
-                    <span  class="symbol-label fs-5 fw-bolder bg-light-warning fs-4">SL </span>
-                </div>
-                    <div >
-                        <span >{{element.submittedby}}</span>
-                        <span  class="d-flex text-muted fs-8">username@example.com</span>
-                    </div>
-                </div>
-              
-              
-              </td>
-          </ng-container>
-    
+      <!-- invoiceDate Column -->
+      <ng-container matColumnDef="invoiceDate">
+        <th mat-header-cell *matHeaderCellDef class="align-middle">
+          <img
+            src="./assets/images/icons/tcal.svg"
+            alt=""
+            class="align-text-bottom me-1"
+          />
+          Invoice Date
+        </th>
+        <td mat-cell *matCellDef="let element" class="align-middle">
+          {{ element.invoiceDate }}
+        </td>
+      </ng-container>
+      <!-- submittedby Column -->
+      <ng-container matColumnDef="submittedby">
+        <th mat-header-cell *matHeaderCellDef class="align-middle">
+          <img
+            src="./assets/images/icons/manager.svg"
+            class="align-text-bottom me-1"
+            alt=""
+          />
+          Submitted By
+        </th>
+        <td mat-cell *matCellDef="let element" class="align-middle">
+          <div class="me-10 my-1 d-flex">
+            <div class="symbol symbol-35px rounded-1 me-3">
+              <span class="symbol-label fs-5 fw-bolder bg-light-warning fs-4"
+                >SL
+              </span>
+            </div>
+            <div>
+              <span>{{ element.submittedby }}</span>
+              <span class="d-flex text-muted fs-8">username@example.com</span>
+            </div>
+          </div>
+        </td>
+      </ng-container>
 
+      <!-- amount Column -->
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef class="align-middle">
+          <img
+            src="./assets/images/icons/tcost.svg"
+            class="align-text-bottom me-1"
+            alt=""
+          />
+          Invoice Amount
+        </th>
+        <td mat-cell *matCellDef="let element" class="align-middle">
+          {{ element.amount }}
+        </td>
+      </ng-container>
 
-  
-
-    <!-- amount Column -->
-    <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef class="align-middle"> <img src="./assets/images/icons/tcost.svg" class="align-text-bottom me-1 " alt=""> Invoice Amount </th>
-      <td mat-cell *matCellDef="let element" class="align-middle"> {{element.amount}} </td>
-    </ng-container>
-     
       <!-- status Column -->
       <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef class="align-middle"><img src="./assets/images/icons/status.svg" class="align-text-bottom me-1 " alt="">  Status </th>
+        <th mat-header-cell *matHeaderCellDef class="align-middle">
+          <img
+            src="./assets/images/icons/status.svg"
+            class="align-text-bottom me-1"
+            alt=""
+          />
+          Status
+        </th>
         <td mat-cell *matCellDef="let element" class="align-middle">
-          <span class="fw-semibold" 
-          [ngClass]="{' text-warning': element.status === 'In-Progress',
-            'text-success' : element.status === 'Approved' , 'text-danger' : element.status === 'Rejected' }">{{element.status}}</span>
-      </td>
+          <span
+            class="fw-semibold"
+            [ngClass]="{
+              ' text-warning': element.status === 'In-Progress',
+              'text-success': element.status === 'Approved',
+              'text-danger': element.status === 'Rejected'
+            }"
+            >{{ element.status }}</span
+          >
+        </td>
       </ng-container>
-        
-        
-          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-light-primary"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-          </tr>
-        </table>
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"  [pageSize]="10" aria-label="Select page of users"></mat-paginator>
 
-      </div>
-
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns"
+        class="bg-light-primary"
+      ></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      [pageSize]="10"
+      aria-label="Select page of users"
+    ></mat-paginator>
+  </div>
 </div>

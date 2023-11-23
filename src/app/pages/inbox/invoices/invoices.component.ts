@@ -108,11 +108,18 @@ export class InvoicesComponent implements OnInit {
   }
   flag: any = 'Inbox';
   isSelectedTab: string = 'Inbox';
+
   changeFlag(flag: string) {
     if (flag === 'Inbox') {
+      this.invoiceFilter.controls['status'].setValue('All');
+      this.invoiceFilter.controls['invoiceId'].setValue('');
+      this.invoiceFilter.controls['invoiceDate'].setValue('');
       this.flag = 'Inbox';
       this.isSelectedTab = flag;
     } else {
+      this.invoiceFilter.controls['status'].setValue('All');
+      this.invoiceFilter.controls['invoiceId'].setValue('');
+      this.invoiceFilter.controls['invoiceDate'].setValue('');
       this.flag = 'Outbox';
       this.isSelectedTab = flag;
     }
