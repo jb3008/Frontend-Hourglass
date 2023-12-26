@@ -30,13 +30,16 @@ export class HeaderMenuComponent implements OnInit {
   jobPostsUrl: string = '/job-posts';
   timeSheetUrl: string = '/timesheets';
   workOrderUrl: string = '/work-order';
+  isActiveLinkJobPost = false;
   isActiveLink = false;
   auth: any;
 
   ngOnInit(): void {
+    this.setJobPostActive();
     this.setWorkOrderActive();
     this.router.events.subscribe((ev) => {
       if (ev instanceof NavigationEnd) {
+        this.setJobPostActive();
         this.setWorkOrderActive();
       }
     });
@@ -88,6 +91,14 @@ export class HeaderMenuComponent implements OnInit {
       this.utils.setUser(auth?.['user-id'] || '');
       this.jobPostsUrl = '/job-posts';
       this.workOrderUrl = '/work-order';
+    }
+  }
+
+  setJobPostActive() {
+    if (this.router.url.includes('/job-posts')) {
+      this.isActiveLinkJobPost = true;
+    } else {
+      this.isActiveLinkJobPost = false;
     }
   }
 

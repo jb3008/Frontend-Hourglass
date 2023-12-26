@@ -196,7 +196,12 @@ export class WorkOrderComponent implements OnInit {
         })
       )
       .subscribe((response) => {
-        this.workOrderStatus = response;
+        this.workOrderStatus = response.length ? response : [];
+        // this.workOrderStatus = response.filter((obj: any) => {
+        //   if (obj.code !== 'IN_ACTIVE') {
+        //     return obj;
+        //   }
+        // });
         this.cdr.detectChanges();
       });
   }
@@ -365,9 +370,15 @@ export class WorkOrderComponent implements OnInit {
   }
   goToDetails(element: any) {
     this.readNotification(element);
-    this.router.navigate(['/work-order/details'], {
-      queryParams: { workOrderId: element.workOrderId },
-    });
+    if (this.isFromInbox) {
+      this.router.navigate(['/work-order/details'], {
+        queryParams: { workOrderId: element.workOrderId, from: this.flag },
+      });
+    } else {
+      this.router.navigate(['/work-order/details'], {
+        queryParams: { workOrderId: element.workOrderId },
+      });
+    }
   }
 
   truncateText(text: string, maxLength: number): string {

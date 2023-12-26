@@ -81,7 +81,7 @@ export class WorkOrderDetailComponent implements OnInit {
     this.auth = this.utils.getAuth();
     this.route.queryParams.subscribe((param) => {
       this.workOrderID = param['workOrderId'];
-      if (param['from'] == 'inbox') {
+      if (param['from'] == 'Inbox' || param['from'] == 'Outbox') {
         this.isFromInbox = true;
         setTimeout(() => {
           DrawerComponent.reinitialization();

@@ -140,14 +140,22 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         this.filter.businessUnit = this.queryParam.businessUnit;
 
         this.queryParam.types = param['types'] ? param['types'].split(',') : [];
-
-        if (this.queryParam.types) {
+        if (this.queryParam.types?.length) {
+          this.jobTypes.forEach((type, index) => {
+            this.selectedJobTypes[index] = false;
+          });
           this.jobTypes.forEach((type, index) => {
             if (this.queryParam?.types?.indexOf(type.code) !== -1) {
               this.selectedJobTypes[index] = true;
             }
           });
         }
+        // else {
+        //   this.jobTypes.forEach((type, index) => {
+        //     this.queryParam.types?.push(type.code);
+        //     this.selectedJobTypes[index] = true;
+        //   });
+        // }
 
         if (this.jobTypes.length === this.queryParam?.types?.length) {
           this.selected = true;
@@ -158,7 +166,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         this.sort.direction = this.sortOrder === 'desc' ? 'desc' : 'asc';
         this.getAllJobs();
       });
-    }, 100);
+    }, 1000);
   }
 
   ngAfterViewInit() {
@@ -234,7 +242,6 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((response) => {
-        console.log('??????', response);
         this.jobTypes = response;
         this.cdr.detectChanges();
       });
@@ -274,6 +281,7 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
     // sessionStorage.setItem('filterData', JSON.stringify(filterData));
 
     const payload = JSON.parse(JSON.stringify(this.queryParam));
+    console.log(payload);
     if (payload.types.length == this.jobTypes.length) {
       delete payload.types;
     }
@@ -458,35 +466,66 @@ export class JobPostsComponent implements OnInit, AfterViewInit {
 
   selected = false;
   filterJobType(event: any, index: any) {
-    if (event.checked) {
-      if (event.source.value == 'All') {
-        this.selected = true;
-        this.queryParam.types = []; //if we click select all with any other already selected
-        this.jobTypes.forEach((type, index) => {
-          this.queryParam.types?.push(type.code);
-          this.selectedJobTypes[index] = true;
-        });
-      } else {
-        this.queryParam.types?.push(event.source.value);
-        this.selectedJobTypes[index] = true;
+    // if (event.checked) {
+    //   if (event.source.value == 'All') {
+    //     this.selected = true;
+    //     this.queryParam.types = []; //if we click select all with any other already selected
+    //     this.jobTypes.forEach((type, index) => {
+    //       this.queryParam.types?.push(type.code);
+    //       this.selectedJobTypes[index] = true;
+    //     });
+    //   } else {
+    //     this.queryParam.types?.push(event.source.value);
+    //     this.selectedJobTypes[index] = true;
 
-        this.selected = this.queryParam.types?.length == this.jobTypes.length;
-      }
+    //     this.selected = this.queryParam.types?.length == this.jobTypes.length;
+    //   }
+    // } else {
+    //   if (event.source.value == 'All') {
+    //     this.selected = false;
+    //     this.queryParam.types = [];
+    //     this.jobTypes.forEach((type, index) => {
+    //       this.selectedJobTypes[index] = false;
+    //     });
+    //   } else {
+    //     this.selected = false;
+    //     console.log(event.source.value);
+    //     this.queryParam.types = this.queryParam?.types?.filter(
+    //       (val) => val != event.source.value
+    //     );
+    //     this.selectedJobTypes[index] = false;
+    //   }
+    // }
+    // this.selected = this.queryParam.types?.length == this.jobTypes.length;
+    // console.log(this.queryParam);
+    if (index == -1) {
+      this.jobTypes.forEach((type, index) => {
+        this.selectedJobTypes[index] = event.checked;
+        if (event.checked) {
+          this.queryParam.types?.push(type.code);
+        } else {
+          this.queryParam.types = this.queryParam.types?.filter(function (
+            item: any
+          ) {
+            return item !== type.code;
+          });
+        }
+      });
     } else {
-      if (event.source.value == 'All') {
-        this.selected = false;
-        this.queryParam.types = [];
-        this.jobTypes.forEach((type, index) => {
-          this.selectedJobTypes[index] = false;
-        });
+      this.selectedJobTypes[index] = event.checked;
+      if (event.checked) {
+        this.queryParam.types?.push(this.jobTypes[index].code);
       } else {
-        this.selected = false;
-        this.queryParam.types = this.queryParam?.types?.filter(
-          (val) => val != event.source.value
-        );
-        this.selectedJobTypes[index] = false;
+        this.queryParam.types = this.queryParam.types?.filter((item: any) => {
+          return item !== this.jobTypes[index].code;
+        });
+      }
+      this.selected = false;
+      if (this.queryParam.types?.length === this.jobTypes.length) {
+        this.selected = true;
       }
     }
+    this.cdr.detectChanges();
     this.reloadTable();
   }
 

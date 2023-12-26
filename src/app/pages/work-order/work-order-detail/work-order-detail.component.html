@@ -438,6 +438,7 @@
           id="kt_new_task_recr_drawer_toggle"
           class="btn btn-primary btn-sm cursor-pointer mb-6"
           (click)="taskDetails = ''; showTaskDrawer()"
+          *ngIf="!isFromInbox"
         >
           <i class="bi bi-plus-lg"></i>New Task</a
         >
@@ -700,6 +701,7 @@
                   id="kt_new_task_recr_drawer_toggle"
                   (click)="editTask(element.taskId)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3"
+                  *ngIf="!isFromInbox"
                 >
                   <!-- <i class="bi bi-pencil"></i> -->
                   <img src="./assets/images/icons/table-edit.svg" alt="" />
@@ -707,6 +709,7 @@
                 <a
                   (click)="deleteTask(element.taskId)"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+                  *ngIf="!isFromInbox"
                 >
                   <!-- <i class="bi bi-trash"></i> -->
                   <img src="./assets/images/icons/table-delete.svg" alt="" />

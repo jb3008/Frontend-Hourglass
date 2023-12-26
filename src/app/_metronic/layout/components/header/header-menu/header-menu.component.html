@@ -9,7 +9,8 @@
 <div class="menu-item me-lg-1 q_menu" *ngIf="auth?.isAdmin">
   <a
     class="menu-link py-2"
-    routerLinkActive="active menu-here"
+    [class.active]="isActiveLinkJobPost"
+    routerLinkActive="menu-here"
     [routerLink]="jobPostsUrl"
     [queryParams]="{
       pageNo: 1,

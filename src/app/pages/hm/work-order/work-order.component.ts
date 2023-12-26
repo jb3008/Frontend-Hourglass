@@ -1,31 +1,53 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import EndPoints from 'src/app/common/endpoints';
 import { ApiCallsService } from 'src/app/services/api-calls.service';
 import { Utils } from 'src/app/services/utils';
-import {MatSort, SortDirection} from '@angular/material/sort';
-import {Sort} from '@angular/material/sort';
+import { MatSort, SortDirection } from '@angular/material/sort';
+import { Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-work-order',
   templateUrl: './work-order.component.html',
-  styleUrls: ['./work-order.component.scss']
+  styleUrls: ['./work-order.component.scss'],
 })
 export class WorkOrderComponent implements OnInit, AfterViewInit {
-
-  constructor(private apiCalls: ApiCallsService,private utils: Utils, private snackBar: MatSnackBar, private cdr: ChangeDetectorRef,
-      private router: Router,private dialog: MatDialog, private route: ActivatedRoute) { }
+  constructor(
+    private apiCalls: ApiCallsService,
+    private utils: Utils,
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private dialog: MatDialog,
+    private route: ActivatedRoute
+  ) {}
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['workOrderId', 'type', 'title', 'jobPostId', 'priority', 'startDate', 'endDate', 'managerDetails', 'status'];
+  displayedColumns: string[] = [
+    'workOrderId',
+    'type',
+    'title',
+    'jobPostId',
+    'priority',
+    'startDate',
+    'endDate',
+    'managerDetails',
+    'status',
+  ];
   dataSource = new MatTableDataSource<any>();
-  loading= false;
+  loading = false;
   jobTypes: any[] = [];
   workOrderStatus: any[] = [];
   endPoints = EndPoints;
@@ -34,8 +56,8 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
     status: [],
     type: [],
     pageNo: 1,
-    pageSize: 10
-  }
+    pageSize: 10,
+  };
 
   pageSize = this.filterObj.pageSize;
   currentPage = 0;
@@ -44,27 +66,29 @@ export class WorkOrderComponent implements OnInit, AfterViewInit {
 
   filterValue: FilterValue = {
     type: 'All Types',
-    status: 'All Status'
+    status: 'All Status',
   } as FilterValue;
 
   ngOnInit(): void {
     this.apiLoad = false;
-    this.route.queryParams.subscribe(param => {
-      if(param['from'] == 'inbox'){
+    this.route.queryParams.subscribe((param) => {
+      if (param['from'] == 'inbox') {
         this.isFromInbox = true;
-      }else{
+      } else {
         this.isFromInbox = false;
       }
-   
 
+      // console.log(param['pS'] )
+      // console.log(param['pN'] )
 
-// console.log(param['pS'] )
-// console.log(param['pN'] )
-
-!param['pN'] ?this.filterObj.pageNo = 1 : this.filterObj.pageNo = param['pN'];
-!param['pS']?this.filterObj.pageSize = 10 : this.filterObj.pageSize = param['pS'] ;
-// console.log(this.filterObj )
-this.getAllWorkOrders(this.filterObj);
+      !param['pN']
+        ? (this.filterObj.pageNo = 1)
+        : (this.filterObj.pageNo = param['pN']);
+      !param['pS']
+        ? (this.filterObj.pageSize = 10)
+        : (this.filterObj.pageSize = param['pS']);
+      // console.log(this.filterObj )
+      this.getAllWorkOrders(this.filterObj);
     });
 
     // this.filterObj.pageNo = 1;
@@ -72,7 +96,6 @@ this.getAllWorkOrders(this.filterObj);
     this.getJobTypes();
     this.getWorkOrderStatus();
     this.getWorkOrderCount();
-
   }
 
   ngAfterViewInit() {
@@ -89,17 +112,18 @@ this.getAllWorkOrders(this.filterObj);
     // console.log( this.filterObj.pageNo)
     // console.log(  this.filterObj.pageSize)
 
-    const pagenatorInfo:Params = {pS: this.filterObj.pageSize ,pN: this.filterObj.pageNo } 
+    const pagenatorInfo: Params = {
+      pS: this.filterObj.pageSize,
+      pN: this.filterObj.pageNo,
+    };
 
-    this.router.navigate(
-      [],
-      {
-        relativeTo:this.route,
-        queryParams: pagenatorInfo
-      })
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: pagenatorInfo,
+    });
   }
   sortData(sort: any) {
-    const data = this.dataSource.data
+    const data = this.dataSource.data;
 
     if (!sort.active || sort.direction === '') {
       this.dataSource.data = data;
@@ -115,37 +139,47 @@ this.getAllWorkOrders(this.filterObj);
       this.paginator.length = this.totalWorkOrderCount;
     });
   }
-  getJobTypes(){
-    this.apiCalls.get(this.endPoints.JOB_TYPE)
-    .pipe(
-      catchError(async (err) => {
-        this.utils.showErrorDialog(this.dialog, err);
-      })
-    )
-    .subscribe((response) => {
-      this.jobTypes = response;
-      this.cdr.detectChanges();
-    });
+  getJobTypes() {
+    this.apiCalls
+      .get(this.endPoints.JOB_TYPE)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showErrorDialog(this.dialog, err);
+        })
+      )
+      .subscribe((response) => {
+        this.jobTypes = response;
+        this.cdr.detectChanges();
+      });
   }
 
-  getWorkOrderStatus(){
-    this.apiCalls.get(this.endPoints.WORK_ORDER_STATUS)
-    .pipe(
-      catchError(async (err) => {
-        this.utils.showErrorDialog(this.dialog, err);
-      })
-    )
-    .subscribe((response) => {
-      this.workOrderStatus = response;
-      this.cdr.detectChanges();
-    });
+  getWorkOrderStatus() {
+    this.apiCalls
+      .get(this.endPoints.WORK_ORDER_STATUS)
+      .pipe(
+        catchError(async (err) => {
+          this.utils.showErrorDialog(this.dialog, err);
+        })
+      )
+      .subscribe((response) => {
+        this.workOrderStatus = response.length ? response : [];
+        this.workOrderStatus = response.filter((obj: any) => {
+          if (obj.code !== 'IN_ACTIVE') {
+            return obj;
+          }
+        });
+        this.cdr.detectChanges();
+      });
   }
 
-  getAllWorkOrders(filterObj?: any){
+  getAllWorkOrders(filterObj?: any) {
     this.loading = true;
     this.apiLoad = false;
-    const endPoint = this.isFromInbox ? this.endPoints.WORKORDER_NOTIFICATION : this.endPoints.ALL_WORK_ORDERS;
-    this.apiCalls.get(endPoint, filterObj)
+    const endPoint = this.isFromInbox
+      ? this.endPoints.WORKORDER_NOTIFICATION
+      : this.endPoints.ALL_WORK_ORDERS;
+    this.apiCalls
+      .get(endPoint, filterObj)
       .pipe(
         catchError(async (err) => {
           this.utils.showErrorDialog(this.dialog, err);
@@ -157,9 +191,9 @@ this.getAllWorkOrders(this.filterObj);
       )
       .subscribe((response) => {
         console.log(filterObj);
-        
+
         // this.dataSource = new MatTableDataSource<any>(response);
-        this.dataSource = new MatTableDataSource(response)
+        this.dataSource = new MatTableDataSource(response);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
@@ -168,22 +202,17 @@ this.getAllWorkOrders(this.filterObj);
           this.paginator.length = this.totalWorkOrderCount;
         });
 
-     
-
         this.loading = false;
         this.apiLoad = true;
         this.cdr.detectChanges();
-   
       });
   }
 
-  
-
-  applySearchFilter(event: any){
-    if(event.target.value){
+  applySearchFilter(event: any) {
+    if (event.target.value) {
       this.filterObj.workOrderId = event.target.value;
       this.getAllWorkOrders(this.filterObj);
-    }else{
+    } else {
       this.clearSearch('workOrderId');
     }
   }
@@ -201,59 +230,57 @@ this.getAllWorkOrders(this.filterObj);
         })
       )
       .subscribe((response) => {
-        console.log('response', response)
+        console.log('response', response);
         // this.jobCount = response;
-        this.totalWorkOrderCount = response
+        this.totalWorkOrderCount = response;
         this.cdr.detectChanges();
       });
   }
 
-
-
-  numbersOnly(event: any){
+  numbersOnly(event: any) {
     return this.utils.numberOnly(event);
   }
 
-  filterByManager(event: any){
-    if(event.target.value && event.target.value.length >= 3){
+  filterByManager(event: any) {
+    if (event.target.value && event.target.value.length >= 3) {
       this.filterObj.searchByManager = event.target.value;
       this.getAllWorkOrders(this.filterObj);
-    }else{
+    } else {
       this.clearSearch('searchByManager');
     }
   }
 
-  filterByType(event: any){
-    if(event.value == 'All Types'){
+  filterByType(event: any) {
+    if (event.value == 'All Types') {
       this.filterObj.type = [];
-    }else{
+    } else {
       this.filterObj.type = event.value;
     }
     this.getAllWorkOrders(this.filterObj);
   }
 
-  filterByStatus(event: any){
-    if(event.value == 'All Status'){
+  filterByStatus(event: any) {
+    if (event.value == 'All Status') {
       this.filterObj.status = [];
-    }else{
+    } else {
       this.filterObj.status = event.value;
     }
     this.getAllWorkOrders(this.filterObj);
   }
 
-  filterByDate(event: any, dateType: 'startDate' | 'endDate'){
+  filterByDate(event: any, dateType: 'startDate' | 'endDate') {
     let date = this.changeDateToUtc(event);
     this.filterObj[dateType] = date;
     this.getAllWorkOrders(this.filterObj);
   }
 
-  changeDateToUtc(dateObj: any){
+  changeDateToUtc(dateObj: any) {
     const date = new Date(dateObj);
     const utcDate = date.toISOString();
     return utcDate;
   }
 
-  clearFilters(){
+  clearFilters() {
     delete this.filterObj.workOrderId;
     delete this.filterObj.searchByManager;
     delete this.filterObj.type;
@@ -277,28 +304,28 @@ this.getAllWorkOrders(this.filterObj);
 
   truncateText(text: string, maxLength: number): string {
     if (!text) return '';
-    let truncateText =  text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    let truncateText =
+      text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
     const div = document.createElement('div');
     div.innerHTML = truncateText;
     return div.textContent || div.innerText || '';
   }
-  
-  goToDetails(element: any){
-    const queryParams = this.isFromInbox ? 
-    { workOrderId: element.workOrderId, from: 'inbox', } : 
-    { workOrderId: element.workOrderId,};
-    this.router.navigate(['/hm/work-order/details'], { queryParams})
-  } 
 
+  goToDetails(element: any) {
+    const queryParams = this.isFromInbox
+      ? { workOrderId: element.workOrderId, from: 'inbox' }
+      : { workOrderId: element.workOrderId };
+    this.router.navigate(['/hm/work-order/details'], { queryParams });
+  }
 }
 
 type FilterValue = {
-  status?: string,
-  workOrderId?: string,
-  searchByManager?: string,
-  startDate?: string,
-  endDate?: string,
-  type?: string
+  status?: string;
+  workOrderId?: string;
+  searchByManager?: string;
+  startDate?: string;
+  endDate?: string;
+  type?: string;
 };
 
 type FilterObj = {
@@ -307,9 +334,9 @@ type FilterObj = {
   searchByManager?: string;
   type?: string[];
   startDate?: string;
-  endDate?:string;
-  pageNo:number;
-  pageSize:number;
+  endDate?: string;
+  pageNo: number;
+  pageSize: number;
 };
 export interface PeriodicElement {
   workOrder: number;
@@ -321,24 +348,172 @@ export interface PeriodicElement {
   tDate: string;
   manager: string;
   status: string;
-
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'High', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Medium', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  {workOrder: 2786111763, type: 'WO Type 1', title:' A Sample Work Order', jobPost:2786111763, priority: 'Low', fDate: 'May 30, 2023',tDate: 'May 30, 2023',manager:'Wade Warren', status: 'In-progress'},
-  
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'High',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Medium',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
+  {
+    workOrder: 2786111763,
+    type: 'WO Type 1',
+    title: ' A Sample Work Order',
+    jobPost: 2786111763,
+    priority: 'Low',
+    fDate: 'May 30, 2023',
+    tDate: 'May 30, 2023',
+    manager: 'Wade Warren',
+    status: 'In-progress',
+  },
 ];
